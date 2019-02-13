@@ -1,0 +1,10 @@
+<apex:page standardController="Account" extensions="enterAccountContact" 
+	standardStylesheets="false" showheader="true">
+<apex:form > 
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+<apex:pageMessages />
+<p class="gen_text">Success.  Just entered the {!acct.name} account.</p>
+<apex:commandButton value="Enter another new account and contact" action="{!nextEntry}"/><br/>
+<apex:commandButton value="Done entering accounts and contacts" action="{!done}"/><br/>
+</apex:form>
+</apex:page>

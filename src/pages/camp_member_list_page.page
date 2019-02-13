@@ -1,0 +1,34 @@
+<apex:page showHeader="false" sidebar="false" standardController="Campaign" extensions="camp_members_list">
+<apex:form > 
+<apex:sectionHeader id="contactsList" title="{!numberMembers} contacts and leads in campaign {!campaignName}"/>
+                <apex:dataTable value="{!list_contacts}" var="cmpmbr" cellPadding="10" border="0">
+                  <apex:column width="100px" style="vertical-align: top;">
+                    <apex:facet name="header">Delete?</apex:facet>
+                  <apex:inputfield value="{!cmpmbr.To_Delete__c}"/>
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">First Name</apex:facet>
+                    {!IF(cmpmbr.contact.firstname==null, cmpmbr.lead.firstname, cmpmbr.contact.firstname)}
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Last Name</apex:facet>
+                    {!IF(cmpmbr.contact.lastname==null, cmpmbr.lead.lastname, cmpmbr.contact.lastname)}          
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Account or Company</apex:facet>
+                    {!IF(cmpmbr.contact.account.name==null, cmpmbr.lead.company, cmpmbr.contact.account.name)} 
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Email</apex:facet>
+                    {!IF(cmpmbr.contact.email==null, cmpmbr.lead.email, cmpmbr.contact.email)} 
+                    </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Lead?</apex:facet>
+                    {!IF(cmpmbr.contact.lastname==null, 'Lead', '')} 
+                  </apex:column>
+
+                </apex:dataTable>
+                
+<apex:commandButton action="{!deleteRefresh}" value="Delete checked contacts from campaign." id="deleteRefresh" />
+                </apex:form>
+</apex:page>

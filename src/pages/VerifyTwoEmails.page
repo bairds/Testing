@@ -1,0 +1,36 @@
+<!--
+ - Created by Baird on 11/21/2018.
+ -->
+
+<apex:page id="VerifyTwoEmails">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
+    <apex:includeScript value="{!$Resource.JoseJS}"/>
+    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
+    <apex:stylesheet value="{!$Resource.BairdCSS}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+    <script>
+          function validate() {
+          var email1 = document.getElementById("email1").value;
+          var email2 = document.getElementById("email2").value;
+          alert ("Your email \"" + email1 + "\" does not match your confirmation email \"" + email2 + "\".");
+          if (email1 != email2) alert ("Your email \"" + email1 + "\" does not match your confirmation email \"" + email2 + "\".");
+          }
+
+
+    </script>
+    <apex:form >
+
+        <input id="email1" placeholder="your email here" styleClass="input-field" required="true"/><br/>
+        <input id="email2" placeholder="confirm your email here" styleClass="input-field" required="true"/><br/>
+        <apex:commandButton value="Compare emails" onclick="validate()"/>
+
+    </apex:form>
+
+</apex:page>

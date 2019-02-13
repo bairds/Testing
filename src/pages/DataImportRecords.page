@@ -1,0 +1,396 @@
+<!--
+ - Created by PeterChurchill on 2/6/2018.
+ -->
+
+<apex:page id="DataImportRecords" controller="DataImportRecords" cache="false" standardStylesheets="false" sidebar="false" docType="html-5.0" tabStyle="Process_Import_Records__tab">
+
+    <head>
+        <apex:slds />
+        <title>Process Import Records</title>
+        <p align="right">Instructions: <a href="https://docs.google.com/document/d/1H7cfxG1BqCGJMEVi41b4YAGFoh1wHHBj3IREozy7SoI/edit#heading=h.lfto30cm1z1" target="_blank">Enter Accounts, Contacts, Contributions</a></p>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+    </head>
+
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.4/jquery-ui.min.js"/>
+
+    <style>
+        .slds-spinner_container {
+
+            right: 0;
+            position: fixed !important;
+        }
+    </style>
+
+
+    <div class="slds-page-header" role="banner">
+
+
+        <!-- LAYOUT GRID -->
+        <div class="slds-grid slds-wrap">
+
+
+
+            <!-- GRID COL -->
+            <div class="slds-col">
+
+                <!-- HEADING AREA -->
+                <!-- MEDIA OBJECT = FIGURE + BODY -->
+                <div class="slds-media">
+                    <div class="slds-media__figure">
+                       <span class="slds-icon_container slds-icon--small slds-icon-standard-account" title="Account Standard Icon">
+                        <img src="{!URLFOR($Asset.SLDS, 'assets/icons/standard-sprite/svg/symbols.svg#account')}" alt="ContactStandard Icon" />
+                        </span>
+
+
+                    </div>
+                    <div class="slds-media__body">
+
+                        <p class="slds-text-heading--label">Watergrass</p>
+                        <h1 class="slds-text-heading--medium">Import Records</h1>
+                    </div>
+                </div>
+                <!-- / MEDIA OBJECT -->
+                <!-- /HEADING AREA -->
+
+            </div>
+            <!-- GRID COL -->
+            <div class="slds-col slds-no-flex slds-align-middle">
+
+                <!-- SPINNER -->
+
+                <div id="spinner" class="slds-spinner_container">
+                    <div role="status" class="slds-spinner slds-spinner_large slds-spinner_brand">
+                        <span class="slds-assistive-text">Loading</span>
+                        <div class="slds-spinner__dot-a"></div>
+                        <div class="slds-spinner__dot-b"></div>
+                    </div>
+                </div>
+
+                <!-- / SPINNER -->
+
+
+
+                <div class="slds-button-group" role="group">
+                    <button id="matchSelected" onclick="submitListToProcess();" class="slds-button slds-button--neutral">
+                        Match Selected Records
+                    </button>
+
+                    <button id="processSelected" onclick="processMatchedList();" class="slds-button slds-button--neutral">
+                        Process Matched Records
+                    </button>
+
+                    <button id="deleteALL" onclick="deleteALL();" class="slds-button slds-button--neutral">
+                        Delete Selected Records
+                    </button>
+
+
+
+
+                </div>
+
+            </div>
+            <!-- / GRID COL -->
+
+        </div>
+
+    </div>
+    <!-- / LAYOUT GRID -->
+    <apex:form >
+
+
+
+
+
+    <apex:actionFunction name="submitList" action="{!submitListToProcess}" reRender="matchedrecords,refreshtabvalue" oncomplete="onmatchcompleted();"/>
+    <apex:actionFunction name="processList" action="{!process}" reRender="matchedrecords" onComplete="completeMatchedList();"/>
+    <apex:actionFunction name="selectALL" action="{!selectALL}" reRender="records"/>
+    <apex:actionFunction name="deleteALL" action="{!submitListToDelete}" reRender="records"/>
+
+
+    <div id="kwtabs" class="slds-tabs--default">
+
+
+        <ul class="slds-tabs--default__nav" role="tablist">
+            <li id="li-tab-default-0" class="slds-tabs__item slds-text-heading--label slds-active" title="Overview" role="presentation"><a href="#tab-default-0" role="tab" tabindex="0" aria-selected="true" aria-controls="tab-default-0">Record To Process</a></li>
+            <li id="li-tab-default-1" class="slds-tabs__item slds-text-heading--label" title="New Records" role="presentation"><a href="#tab-default-1" role="tab" tabindex="-1" aria-selected="false" aria-controls="tab-default-1">Create New Records</a></li>
+            <li id="li-tab-default-2" class="slds-tabs__item slds-text-heading--label" title="Name Match Only" role="presentation"><a href="#tab-default-2" role="tab" tabindex="-2" aria-selected="false" aria-controls="tab-default-2">Matched on Last/First/Zip</a></li>
+            <li id="li-tab-default-3" class="slds-tabs__item slds-text-heading--label" title="Email Only" role="presentation"><a href="#tab-default-3" role="tab" tabindex="-3" aria-selected="false" aria-controls="tab-default-3">Matched on Email Only</a></li>
+            <li id="li-tab-default-4" class="slds-tabs__item slds-text-heading--label" title="Email and LN FI" role="presentation"><a href="#tab-default-4" role="tab" tabindex="-4" aria-selected="false" aria-controls="tab-default-4">Matched on Email + Last Name</a></li>
+            <li id="li-tab-default-5" class="slds-tabs__item slds-text-heading--label" title="Email + Full Name" role="presentation"><a href="#tab-default-5" role="tab" tabindex="-5" aria-selected="false" aria-controls="tab-default-5">Matched on Email + Last + First Name</a></li>
+            <li id="li-tab-default-6" class="slds-tabs__item slds-text-heading--label" title="Watergrass Id" role="presentation"><a href="#tab-default-6" role="tab" tabindex="-6" aria-selected="false" aria-controls="tab-default-6">Matched on Watergrass Id</a></li>
+        </ul>
+
+        <div id="tab-default-0" class="slds-tabs_default__content slds-show" role="tabpanel" aria-labelledby="tab-default-0__item">
+
+
+
+                    <apex:outputPanel id="records" layout="block">
+           <!--             <div class="title">
+                            <apex:outputText value="Please select records to edit or process" rendered="{!StringA == '1'}" />
+                            <apex:outputText value="Edit your records" rendered="{!StringA == '3'}" />
+                        </div>
+           -->
+                        <table class="slds-table slds-table_bordered slds-table_cell-buffer">
+                            <thead>
+                            <tr class="slds-text-title_caps">
+
+                                <th class="slds-text-align_left slds-m-right_medium" scope="col" style="width: 3.25rem;">
+                                    <div class="">
+                                        <label class="slds-checkbox">
+                                            <apex:inputCheckbox onClick="selectALL();" value="{!bSelectALL}" styleclass="slds-input"/>
+                                            <span class="slds-checkbox--faux"></span>
+                                            <span class="slds-form-element__label slds-assistive-text">Select item</span>
+                                        </label>
+                                    </div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Opportunity Name">Contact Legacy Id</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Close Date">First Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Stage">Last Name</div>
+                                </th>
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Amount">Email Addresses</div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Contact">Address</div>
+                                </th>
+
+                                <th scope="col">
+                                    <div class="slds-truncate" title="Amount">Phone Numbers </div>
+                                </th>
+
+                            </tr>
+
+<!--                                    <apex:outputPanel layout="none" rendered="{!StringA == '3'}">
+                                        <td> Street </td>
+                                        <td> City </td>
+                                        <td> State </td>
+                                        <td> Zip Code </td>
+                                        <td> Country </td>
+                                    </apex:outputPanel>
+
+                                    <td> Company </td>
+                                    <td> Account Name </td>
+                                    <td> Account Record Type </td>
+
+                                </tr>
+-->
+                            </thead>
+                            <tbody>
+
+                            <apex:repeat value="{!iowrappers}" var="r">
+                            <tr>
+                                <td role="gridcell">
+                                                    <label class="slds-checkbox">
+                                                        <apex:inputCheckbox value="{!r.bSelected}" styleclass="slds-input"/>
+                                                        <span class="slds-checkbox--faux"></span>
+                                                        <span class="slds-form-element__label slds-assistive-text">Select item</span>
+                                                    </label>
+                                </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <apex:outputField value="{!r.eio.matchIO.Person_LegacyID__c}" />
+                                                </div>
+                                            </td>
+
+                                <td>
+                                                <div class="slds-truncate">
+                                                    <apex:outputField value="{!r.eio.matchIO.Person_FirstName__c}" />
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="slds-truncate">
+                                                    <apex:outputField value="{!r.eio.matchIO.Person_LastName__c}" />
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="slds-truncate">
+                                                <apex:outputField value="{!r.eio.matchIO.Person_EmailPersonal__c}" /> <br/>
+                                                <apex:outputField value="{!r.eio.matchIO.Person_EmailWork__c}" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                <apex:outputField value="{!r.eio.matchIO.Address__c}" />
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="slds-truncate">
+                                                <apex:outputField value="{!r.eio.matchIO.Person_PhoneMobile__c}" /> <br/>
+                                                <apex:outputField value="{!r.eio.matchIO.Person_PhoneHome__c}" /> <br/>
+                                                <apex:outputField value="{!r.eio.matchIO.Person_PhoneWork__c}" />
+                                                </div>
+                                            </td>
+
+
+                                          <!--  <td> <apex:outputField value="{!r.Company_or_Organization__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Account_Name__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Account_Record_Type__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Campaign_LegacyID__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Campaign_Name__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Campaign_Type__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Campaign_IsActive__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_RecordType__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_Type__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_Stage__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_TransactionDate__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_Amount__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_HoursActual__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Contribution_Description__c}" /> </td>
+                                            <td> <apex:outputField value="{!r.Note__c}" /> </td>
+                                            -->
+                                        </tr>
+
+                                </apex:repeat>
+                            </tbody>
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+        </div>
+
+        <apex:outputPanel id="matchedrecords" layout="block" styleClass="table">
+        <div id="tab-default-1" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-1__item">
+            <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[5]}" CreateNewRecord="true"/>
+        </div>
+
+            <div id="tab-default-2" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-2__item">
+                <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[0]}" CreateNewRecord="false"/>
+        </div>
+
+        <div id="tab-default-3" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-3__item">
+            <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[1]}" CreateNewRecord="false"/>
+        </div>
+
+        <div id="tab-default-4" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-4__item">
+            <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[2]}" CreateNewRecord="false"/>
+        </div>
+        <div id="tab-default-5" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-5__item">
+            <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[3]}" CreateNewRecord="false"/>
+        </div>
+        <div id="tab-default-6" class="slds-tabs_default__content slds-hide" role="tabpanel" aria-labelledby="tab-default-6__item">
+            <c:DataImportMatches EIORecords="{!matchprocess.EIMatches[4]}" CreateNewRecord="false"/>
+        </div>
+        </apex:outputPanel>
+
+<!--
+                        <div class="buttons">
+                            <apex:outputPanel layout="none" rendered="{!StringA == '1'}">
+                                <apex:commandButton value="edit" action="{!edit}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />
+                                <apex:commandButton value="process" action="{!process}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />
+                            </apex:outputPanel>
+
+                            <apex:outputPanel layout="none" rendered="{!StringA == '3'}">
+                                <apex:commandButton value="cancel" action="{!cancel}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />
+                                <apex:commandButton value="save" action="{!save}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />
+                            </apex:outputPanel>
+                        </div>
+
+
+                <c:Loading Position="fixed" />
+-->
+        <script>
+            var j$ = jQuery.noConflict();
+            var refreshtabvalue = 1;
+
+            j$( document ).ready(function() {
+                j$('#spinner').removeClass('slds-show').addClass('slds-hide');
+                /*
+                j$(function() {
+                    j$( "#kwtabs" ).tabs({
+                    active: 0,
+                        beforeActivate: function (event, ui) {
+                          if (ui.newPanel.attr('id') === 'tab-default-1') {
+                            //getEmailTargetList('');
+                            //alert(ui.newPanel.attr('id'));
+                          }
+                        }
+                    });
+                });
+                */
+
+                j$('.slds-tabs__item a').click(function () {
+                    desiredTab = j$(this).attr('aria-controls');
+                    console.log(desiredTab);
+                    j$('.slds-tabs_default__content.slds-show').removeClass('slds-show').addClass('slds-hide');
+                    j$('#' + desiredTab).addClass('slds-show');
+                    j$('.slds-tabs__item.slds-text-heading--label.slds-active').removeClass('slds-active');
+                    j$(this).parent().addClass('slds-active');
+                });
+
+            });
+
+
+            function submitListToProcess() {
+                j$('#spinner').removeClass('slds-hide').addClass('slds-show');
+                submitList();
+            }
+            function processMatchedList() {
+                j$('#spinner').removeClass('slds-hide').addClass('slds-show');
+                processList();
+            }
+
+            function completeMatchedList() {
+                j$('#spinner').removeClass('slds-show').addClass('slds-hide');
+                j$('#results').removeClass('slds-hide').addClass('slds-show');
+            }
+
+            function onmatchcompleted () {
+                console.log('mc' + refreshtabvalue);
+                j$('#spinner').removeClass('slds-show').addClass('slds-hide');
+                j$('.slds-tabs_default__content.slds-show').removeClass('slds-show').addClass('slds-hide');
+                j$('.slds-tabs__item.slds-text-heading--label.slds-active').removeClass('slds-active');
+                var sActiveTabValue = '#tab-default-' + refreshtabvalue
+                var sActiveTabValueDef = '#li-tab-default-' + refreshtabvalue
+                j$(sActiveTabValue).addClass('slds-show');
+                j$(sActiveTabValueDef).addClass('slds-active');
+            }
+
+            </script>
+
+        <apex:outputPanel id="refreshtabvalue">
+        <script>
+                refreshtabvalue = '{!sActiveTab}';
+                console.log(refreshtabvalue);
+            </script>
+        </apex:outputPanel>
+
+        <div id="results" class="slds-hide" style="height: 640px;">
+            <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+                <div class="slds-modal__container">
+                    <header class="slds-modal__header">
+                        <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" title="Close">
+                            <svg class="slds-button__icon slds-button__icon_large" aria-hidden="true">
+                                <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#close" />
+                            </svg>
+                            <span class="slds-assistive-text">Close</span>
+                        </button>
+                        <h2 id="modal-heading-01" class="slds-text-heading_medium slds-hyphenate">Results from Import</h2>
+                    </header>
+                    <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                        <p>Done.  In the Import Report below, you can view the results.</p>
+                        <apex:outputLink target="_blank" value="/00O50000005mTPT">View Import Report</apex:outputLink>
+                        <br/><br/>
+                        <apex:outputLink target="_blank" value="/00O50000005mVmU">View Error Report</apex:outputLink>
+
+                    </div>
+                    <footer class="slds-modal__footer">
+                        <button class="slds-button slds-button_neutral">OK</button>
+                    </footer>
+                </div>
+            </section>
+            <div class="slds-backdrop slds-backdrop_open"></div>
+        </div>
+
+        </apex:form>
+
+
+</apex:page>

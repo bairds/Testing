@@ -1,0 +1,14 @@
+<apex:page showHeader="false" standardStylesheets="false" controller="Print" docType="html-5.0">
+               
+    <!--
+<apex:iframe src="{!src}" scrolling="false" id="template" frameborder="false" html-onload="print(this.id)" />
+-->
+ 
+    <script>
+    window.location="{!src}";
+    function print(id) {
+        //window.frames[id].focus();
+        // window.frames[id].print();
+        }
+    </script>
+</apex:page>

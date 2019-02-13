@@ -1,0 +1,34 @@
+<apex:component selfClosing="true">    
+    <apex:attribute name="Id" description="Id" type="String" default="1" />
+    <apex:attribute name="Position" description="Position" default="absolute" type="String" />
+    
+	 <style>
+        div.loading 
+         {
+            left: 0;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;	
+         	background-color: white;
+         	display: none;
+         	opacity: .44;
+         	border: none;
+        }
+         
+         img.loading
+         {
+        	max-width: 50%;
+         	max-height: 50%;
+         	margin: auto;
+         	border: none;
+        	background-color: initial;
+         }
+    </style>
+    
+    <div class="loading" id="loading_request_{!Id}" style="position: {!Position}">
+       <apex:image styleClass="loading" value="{!$Resource.Loading}" />
+    </div>
+    
+    
+</apex:component>

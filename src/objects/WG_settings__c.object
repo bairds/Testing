@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customSettingsType>List</customSettingsType>
+    <enableFeeds>false</enableFeeds>
+    <fields>
+        <fullName>AccountAfterInsertTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>When true, AccountCustom controller calculates HUCs.  Otherwise, not.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When true, AccountCustom controller calculates HUCs.  Otherwise, not.  Turn off for data loads.</inlineHelpText>
+        <label>AccountAfterInsertTrigger</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ContactBeforeAfterInsertTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Turn off for data loads.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Turn off for data loads.</inlineHelpText>
+        <label>ContactBeforeAfterInsertTrigger</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>DontUseLeads__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>DontUseLeads</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FamilyAccountThreshhold__c</fullName>
+        <description>Above what level should an  membership be considered a family membership andinclude all the active members in the account?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Above what level should an  membership be considered a family membership andinclude all the active members in the account?</inlineHelpText>
+        <label>FamilyAccountThreshhold</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FinalDonationCampaignStatus__c</fullName>
+        <description>After a donation is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Donated.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>After a donation is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Donated.</inlineHelpText>
+        <label>FinalDonationCampaignStatus</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FinalVolunteerCampaignStatus__c</fullName>
+        <description>After a volunteer hours contribution is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Completed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>After a volunteer hours contribution is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Completed.</inlineHelpText>
+        <label>FinalVolunteerCampaignStatus</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>HourlyVolunteerRate__c</fullName>
+        <description>From independent Sector. Change this each year.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>From independent Sector. Change this each year.</inlineHelpText>
+        <label>HourlyVolunteerRate</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>LeadSource_QuestionCnP__c</fullName>
+        <defaultValue>&apos;If this is your first donation or payment to our organization, please tell us how you first heard about us.&apos;</defaultValue>
+        <description>The question used in CnP Custom Questions to find out the registrant&apos;s leadsource</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The question used in CnP Custom Questions to find out the registrant&apos;s leadsource</inlineHelpText>
+        <label>LeadSource_QuestionCnP</label>
+        <length>252</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ManageContribsTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Turns off the ManageContribsTrigger to facilitate data loads.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Turns off the ManageContribsTrigger to facilitate data loads.</inlineHelpText>
+        <label>ManageContribsTrigger</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Membership_Grace_Period__c</fullName>
+        <defaultValue>90</defaultValue>
+        <description>How many days before or ever the expiration date should a new membership payment be considered a renewal.  Default 90.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How many days before or ever the expiration date should a new membership payment be considered a renewal.  Default 90.</inlineHelpText>
+        <label>Membership Grace Period</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Online_signup_newsletter__c</fullName>
+        <externalId>false</externalId>
+        <label>Online_signup_newsletter</label>
+        <length>50</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>WG_settings</label>
+    <visibility>Public</visibility>
+</CustomObject>

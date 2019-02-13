@@ -1,0 +1,4 @@
+<apex:page standardController="Opportunity">
+    Hello {!$User.FirstName}!
+    <p>You are viewing the {!opportunity.name} opportunity.</p>
+</apex:page>

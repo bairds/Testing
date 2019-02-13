@@ -1,0 +1,11 @@
+<apex:page Controller="requestHUCInvokeBatch" showheader="false" 
+    action="{!InvokeBatch}">
+<h1>You will receive an email when all the account HUC watershed fields have been recalculated.</h1><br/>
+<br/>
+The new HUC watershed values won't show until you've closed this window and refreshed the Account
+page as well.<br/>
+    <br/>
+<apex:form >
+    <apex:commandButton action="{!Finished}" value="Back to WaterGrass"/>
+</apex:form>
+</apex:page>

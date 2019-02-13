@@ -1,0 +1,8 @@
+<!--
+ - Created by Baird on 1/17/2019.  Copied from https://help.salesforce.com/articleView?id=000066915&language=en_US&type=1
+ -->
+
+<apex:component access="global" controller="Formatted_DateTime_Controller">{!FormattedDatetime}
+    <apex:attribute assignTo="{!date_time}" description="The DateTime value to be rendered" name="date_time_value" type="DateTime"></apex:attribute>
+    <apex:attribute assignTo="{!defined_format}" description="The optional format to use for the DateTime value to be rendered" name="date_time_format" type="String"></apex:attribute>
+</apex:component>

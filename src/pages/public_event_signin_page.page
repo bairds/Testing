@@ -1,0 +1,65 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Signin_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+<apex:stylesheet value="{!$Resource.bootstrapcss}"/>
+<apex:stylesheet value="{!$Resource.bootstrapresponsivecss}"/>
+<apex:stylesheet value="{!$Resource.customboostrapcss}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+<body>
+    <div class="container">
+        <h3 class="headtitle">{!camp.name} Sign-In Sheet.</h3>
+        <apex:form styleClass="form-horizontal">
+            <div class="row-fluid" id="Admin_Link">
+                <div class="pull-right">
+                    <apex:commandButton styleClass="btn btn-primary" action="{!AdminPage}" value="Link to Admin Page" immediate="true" />
+                </div>
+            </div>
+
+            <fieldset>
+                <legend>Ready to sign up?</legend>
+
+                <!-- THIS OUTPUTPANEL DISPLAYS FIRST-->
+                <apex:messages styleClass="help-block" />
+                
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your First Name" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.FirstName}"/></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your Last Name" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.LastName}"/></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Contact Email" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.Email}" required="true" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your Zip Code" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.mailingPostalcode}" required="true" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="How did you hear about this event?" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcampmmbr.How_Heard_About_Event__c}" required="true" /></div>
+                </div>              
+
+                <div class="row-fluid">
+                    <div class="span11 offset1">
+                        <label class="checkbox"><apex:inputCheckbox value="{!enewsletters}"></apex:inputCheckbox>I would like to receive WaterGrass River Alliance email newsletters.</label>
+                    </div>
+                </div>
+                         
+                <apex:outputPanel id="bottombuttons">
+                    <div class="row-fluid">
+                        <div class="span1 offset2"><apex:commandButton styleClass="btn btn-primary" action="{!SignMeIn}" value="Sign Me In!" /></div>                   
+                    </div>
+                </apex:outputPanel>
+            </fieldset>         
+        </apex:form>
+    </div>
+</body>
+</apex:page>

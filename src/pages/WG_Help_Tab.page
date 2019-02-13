@@ -1,0 +1,29 @@
+<apex:page >
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+
+<p align="right"><apex:image url="{!$Resource.WGHelpLogo}" width="400" height="123"/></p>
+
+<strong>WAYS TO GET HELP:</strong>
+<body ><b>
+<br/>
+
+<p><li><a href = "https://drive.google.com/drive/folders/0B2qHbib2sh5rTE1lbkt3dkoxVG8" target="_blank">Check our help documentation, videos and cheat sheets</a> stored on Google Docs.  You may need to log in to your Google account.</li></p>
+
+<p><li><a href = "mailto:support@watergrass.org">Send an email about your problem</a> to begin a case.  We should get back to you within 2 hours.  We'll track the case until it's resolved.</li></p>
+
+<p><li><a href = "https://groups.google.com/forum/?hl=en&fromgroups#!forum/watergrass-users-group" target="_blank">Post to the WaterGrass Users Group </a> on Google Groups.  You may need to log in to your Google account.</li></p>
+
+<p><li>Call us.  (Don't get frustrated, call us.)
+<blockquote>
+Carl: (603) 749-2310 or Baird: (301) 775-5944
+</blockquote>
+We won't always be available, but if we are we'll try to help out quickly.</li></p>
+
+<p><li>Check out Salesforce's extensive online help - click on the "Help" link at the top right of your screen.</li></p>
+
+<p><li>If you're on a Salesforce page (looking at a contact, for instance) and you need help on the functions available on that 
+specific page, you will find a help link specific to the page in the upper left".</li></p>
+
+</b>
+</body>
+</apex:page>

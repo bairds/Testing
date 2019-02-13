@@ -1,0 +1,9 @@
+<apex:component >    
+    <apex:attribute name="value" description="True or False" type="Boolean" required="true" />
+    <apex:attribute name="rendered" description="True or False" type="Boolean" required="true" />    
+    
+    <apex:outputPanel rendered="{!rendered}" styleClass="checkbox" layout="block"> 
+        <apex:image value="{!$Resource.Checkmark}" style="width:3.33vw" rendered="{!value}" /> 
+        <apex:outputPanel layout="block" styleClass="emptyBox" rendered="{!!value}" /> 
+    </apex:outputPanel>    
+</apex:component>

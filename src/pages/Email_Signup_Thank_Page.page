@@ -1,0 +1,22 @@
+<apex:page standardController="Contact" extensions="Email_Signup_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}" />
+<body bgcolor="#dce9f7">
+<apex:form >
+<p align="left"><apex:image url="{!$Resource.HeaderForEmailSignup}" width="1057" height="123"/></p>
+<apex:pageBlock id="NoCampaign" rendered="{!if(Camp == null || Camp=='',true,false)}" >
+<p><font face="georgia"><b>Thank you for signing up for WaterGrass River Alliance emails!  Please look for your first email now.</b></font></p>
+<p><font face="georgia"><b>If you don't hear from us shortly, please check your spam folder or contact <a href="info@watergrass.org">info@watergrass.org</a> and we will make sure we have the right email address for you.</b></font></p>
+    </apex:pageBlock>
+    <apex:pageBlock id="YesCampaign" rendered="{!if(Camp == null || Camp=='',false,true)}" >
+<p><font face="georgia"><b>Thank you for signing up for our {!Camp.name}.  Please look for your first email now.</b></font></p>
+<p><font face="georgia"><b>If you don't hear from us shortly, please check your spam folder or contact <a href="info@watergrass.org">info@watergrass.org</a> and we will make sure we have the right email address for you.</b></font></p>
+    </apex:pageBlock>
+
+    
+    <p><font face="georgia"><b>Sincerely,</b></font></p>
+    <p><font face="georgia"><b>Your friends at {!$Organization.Name}</b></font></p>
+
+</apex:form>
+</body>
+</apex:page>

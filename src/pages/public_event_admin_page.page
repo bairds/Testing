@@ -1,0 +1,80 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Signin_Controller" showHeader="false" 
+        standardStylesheets="false" action="{!calculateTotals}">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+<apex:stylesheet value="{!$Resource.bootstrapcss}"/>
+<apex:stylesheet value="{!$Resource.bootstrapresponsivecss}"/>
+<apex:stylesheet value="{!$Resource.customboostrapcss}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+<body>
+  <div class="container">
+
+      <h3 class="headtitle">{!camp.name} Admin Page</h3>
+      <apex:form styleClass="form-horizontal">
+      <fieldset>        
+      
+      <div id="Signin_Link" class="row-fluid">
+        <div class="pull-right">
+          <apex:commandButton styleClass="btn btn-primary" action="{!returnToSignin}" value="Return to Signin Page" immediate="true" />
+        </div>
+      </div>
+
+      <apex:pageBlock id="AdminDisplay">
+      <p class = "section_header">Event Capacity: {!camp.Capacity__c}</p>
+	  <p class = "section_header">{!signinsNumber} people signed in.  (View list <apex:outputText value=" "/>
+      <apex:inputCheckbox id="ListSignins" value="{!showSignins}"> 
+                  <Apex:actionSupport event="onclick" rerender="AdminDisplay"/>
+              </apex:inputCheckbox>)</p>
+       <apex:dataTable rendered="{!showSignIns}" value="{!signins}" var="s" styleClass="table table-bordered table-striped table-hover">
+		   <apex:column >
+			   <apex:facet name="header">First name</apex:facet>
+              {!if(isnull(s.lead.firstname), s.contact.firstname, s.lead.firstname)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Last name</apex:facet>
+              {!if(isnull(s.lead.lastname), s.contact.lastname, s.lead.lastname)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Company or Account</apex:facet>
+              {!if(isnull(s.lead.company), s.contact.account.name, s.lead.company)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Phone</apex:facet>
+              {!if(isnull(s.lead.phone), s.contact.phone, s.lead.phone)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Signed waiver?</apex:facet>
+              {!s.Agreed_to_Waiver__c}
+            </apex:column>
+          </apex:dataTable>  
+		  <p class = "section_header">{!NotYetHereNumber} people registered but not yet signed in.  (View list <apex:outputText value=" "/>
+      <apex:inputCheckbox id="ListNotYetHere" value="{!showNotYetHere}">: 
+                  <Apex:actionSupport event="onclick" rerender="AdminDisplay"/>
+              </apex:inputCheckbox>)</p>
+       <apex:dataTable rendered="{!showNotYetHere}" value="{!notYetHere}" var="n" styleClass="table table-bordered table-striped table-hover" >
+          <apex:column >
+			   <apex:facet name="header">First name</apex:facet>
+              {!if(isnull(n.lead.firstname), n.contact.firstname, n.lead.firstname)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Last name</apex:facet>
+              {!if(isnull(n.lead.lastname), n.contact.lastname, n.lead.lastname)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Company or Account</apex:facet>
+              {!if(isnull(n.lead.company), n.contact.account.name, n.lead.company)}
+            </apex:column>
+            <apex:column >
+			   <apex:facet name="header">Phone</apex:facet>
+              {!if(isnull(n.lead.phone), n.contact.phone, n.lead.phone)}
+            </apex:column>
+            <apex:column >
+              {!n.Agreed_to_Waiver__c}
+            </apex:column>
+          </apex:dataTable>   
+      </apex:pageBlock>
+        </fieldset>
+          </apex:form>
+  </div>
+</body>
+</apex:page>

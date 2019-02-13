@@ -1,0 +1,11 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Controller" showHeader="false" cache="false" standardStylesheets="true">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+  <h3>Thanks, {!pcontact.firstname}!</h3>
+  <p>You've signed up for our {!camp.name}. <br/><br/>
+  
+  Event location: {!camp.Event_Location__c}<br/>
+  Event time: <apex:outputfield value=" {!camp.Event_Date_Time__c}"/><br/>
+  Event description: {!camp.Description_Long__c}<br/><br/>
+  
+  You'll also be receiving a confirmation email from us shortly.</p>
+</apex:page>

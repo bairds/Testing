@@ -1,0 +1,59 @@
+<apex:page controller="Petition_controller" sidebar="false" cache="false" showHeader="false">
+
+<apex:pageBlock id="Petition">
+<apex:form >
+<apex:facet name="footer">
+        <apex:outputPanel >
+          <apex:commandButton action="{!goBack}" value="Return to WVRC website" immediate="true"
+                              styleClass="btn"/>
+          <apex:commandButton action="{!submit}" value="Submit"
+                              styleClass="btn"/>
+        </apex:outputPanel>
+      </apex:facet>
+
+<apex:pageBlockSection rendered="{!WrongCampaignID}">
+    <h1>I'm sorry, I couldn't find the campaign referred to in that link.  The administrator will need to adjust it.  
+        Please send this message to support@watergrass.org - 
+        Organization: {!$Organization.Name} URL = {!$CurrentPage.URL}</h1>
+</apex:pageBlockSection>
+
+<table cellpadding="5">
+<tr>
+<td align="left" valign="middle">First name: </td>
+<td align="left" valign="middle"><apex:inputField value="{!signer.FirstName}" required="true" /></td>
+<td align="left" valign="middle">Last name: </td>
+<td colspan="3" align="left" valign="middle"><apex:inputField value="{!signer.LastName}" required="true" /></td></tr>
+<tr>
+<td align="left" valign="middle">Email: </td>
+<td  align="left" valign="middle"><apex:inputField value="{!signer.email}" required="true" /></td>
+<td align="left" valign="middle">Phone number: </td>
+<td colspan="5" align="left" valign="middle"><apex:inputField value="{!signer.phone}"  /></td>
+</tr>
+<tr></tr>
+<tr><td align="left" valign="top">Street address: </td>
+<td colspan="5" align="left" valign="top"><apex:inputTextArea value="{!signer.MailingStreet}" rows="2" cols="80" /></td></tr>
+<tr>
+<td align="left" valign="middle">City: </td>
+<td align="left" valign="middle"><apex:inputField value="{!signer.MailingCity}" required="true"/></td>
+<td align="left" valign="middle">State: </td>
+<td align="left" valign="middle"><apex:inputField value="{!signer.MailingState}" required="true" /></td> 
+</tr>
+<tr>
+<td align="left" valign="middle">Zip or postal code: </td>
+<td align="left" valign="middle"><apex:inputField value="{!signer.MailingPostalCode}" required="true"/></td></tr>
+</table>
+<blockquote ><font color="red">(We ask for address and email so we can verify signatures if necessary.)</font></blockquote>
+<table cellpadding="5">
+
+</table>
+
+        <apex:outputPanel >
+          <apex:commandButton action="{!goBack}" value="Return to West Virginia Rivers Coalition website." immediate="true"
+                              styleClass="btn"/>
+          <apex:commandButton action="{!submit}" value="Submit my name."
+                              styleClass="btn"/>
+        </apex:outputPanel>
+
+</apex:form>
+</apex:pageBlock>
+</apex:page>

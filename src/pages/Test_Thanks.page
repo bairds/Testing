@@ -1,0 +1,5 @@
+<apex:page standardController="Contact" extensions="AddPicklistValue">
+  <!-- Begin Default Content REMOVE THIS -->
+  <h1>Please enter</h1>
+  <!-- End Default Content REMOVE THIS -->
+</apex:page>

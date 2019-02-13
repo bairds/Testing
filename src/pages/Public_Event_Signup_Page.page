@@ -1,0 +1,198 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+
+<body>
+
+<apex:form >
+<apex:messages />
+
+<apex:outputPanel id="Must_Sign_Waiver" rendered="{!AND(Must_Sign_Waiver,ISNULL(pcontact.name),!createNewLead)}">
+    <p style="font-weight: bold; color: red;">In order to participate, you must agree to the Terms and Conditions below.</p>
+    </apex:outputPanel> 
+
+<apex:outputPanel id="campaigntable" rendered="{!!createNewLead}">
+
+<div class="topsection">
+<p class="section_header">To register, complete this form. If you have questions, please contact our coordinator at<apex:outputText value=" "/><apex:outputlink value="mailto:volunteer@WaterGrassRiverAlliance.org">volunteer@WaterGrassRiverAlliance.org</apex:outputlink>.
+    </p>
+    </div>
+
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Event Name:" ></apex:outputLabel></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Name}" /></td></tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Description:" ></apex:outputLabel></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Description_Long__c}" /></td></tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Date and Time:" ></apex:outputLabel></td>
+<td align="left" valign="top">
+<apex:outputField value="{!camp.Event_Date_Time__c}" ></apex:outputField>
+
+</td></tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Location:" ></apex:outputLabel></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Event_Location__c}" /></td></tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Cost per person:" ></apex:outputLabel></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Event_Cost__c}" /></td></tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Spaces remaining:" ></apex:outputLabel></td>
+<td align="left" valign="top"><apex:outputText value="{!if(camp.Slots_Remaining__c==0,'Event Full',text(camp.Slots_Remaining__c))}" >
+                     </apex:outputText></td>
+</tr>
+</table>
+</apex:outputPanel>
+
+<apex:outputPanel id="ReadyToSignUp" rendered="{!camp.Slots_Remaining__c>=1}" >
+<div class="topsection">
+<p class="section_header">Ready to sign up?  Then please enter your name, email and zipcode below:</p></div>
+
+<!-- THIS OUTPUTPANEL DISPLAYS FIRST-->
+<apex:outputpanel id="pContactInfo" rendered="{!NOT(createNewLead)}" >
+<apex:messages style="color: #red;" />
+
+
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="100px" align="left" valign="top">
+<apex:outputLabel value="Your First Name" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.FirstName}"/></td>
+</tr>
+
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Your Last Name" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.LastName}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Contact Email" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.Email}" required="true" /></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Your Zip Code" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.mailingPostalcode}" required="true" /></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="How did you hear about this activity?" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.How_Heard_About_Event__c}" required="true" /></td>
+</tr>
+
+
+
+</table>
+</apex:outputPanel> 
+
+<apex:outputPanel id="NewContactInfo" rendered="{!createNewLead}">
+<apex:messages />
+
+<p style="font-weight: bold; color: red;"><em>Thank you! Please take a minute to fill out this additional information, then click submit again to complete your event signup.</em></p>
+<table>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="First Name" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.FirstName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Last Name" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.LastName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Email" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Email}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Organization, if any" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.description}" style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Street Address" styleClass="gtrlcLabel"/></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingStreet}"  style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="City" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.mailingCity}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="State or Province" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingState}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Zip or Postal Code" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingPostalcode}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Phone" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.phone}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Volunteer interests (optional):" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Volunteer_Interests__c}"/></td>
+</tr>
+
+</table>
+
+</apex:outputpanel>
+</apex:outputPanel>
+
+<apex:outputPanel id="Waiver" rendered="{!camp.Waiver_Required__c && !createNewLead && (camp.Slots_Remaining__c>=1)}">
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Terms and Conditions" /></td>
+<td align="left" valign="top"><textArea readonly="true" rows="5" cols="40">I am volunteering for this activity or event and understand that, as a volunteer, I may be involved in activities that have a risk of injury.  I agree that I will only perform volunteer activities that I am comfortable doing and that I am solely responsible for my safety.  I also agree that I will not hold the WaterGrass River Alliance and its officers, directors, employees, or volunteers responsible for any injury to me or my property as a result of my participation in this activity or event.  By providing my email address, I request to be included on the Alliance email list.  I understand that my and/or my child’s name, photograph, voice, or likeness may be used by the Alliance.  I consent to and authorize in advance such use, waive my rights of privacy, agree that such materials shall become the sole and exclusive property of the WaterGrass River Alliance and give up all rights, title, and interest in such property.  This release constitutes a complete release, discharge, and waiver of any and all actions or causes of action against officers, directors. employees, agents, and volunteers of the Alliance.</textarea></td>
+</tr>
+
+<br/>
+By registering for this event, I acknowledge that I have carefully read this Liability Waiver in its entirety, fully understand its contents, and voluntarily assume all risks and dangers inherent in participating in this activity or event.
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:inputCheckbox value="{!Agreed_to_Waiver}"></apex:inputCheckbox></td>
+<td align="left" valign="top">I agree to the Terms and Conditions above.</td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:inputCheckbox value="{!pcontact.Over_18__c}"></apex:inputCheckbox></td>
+<td align="left" valign="top">I am over 18 years of age.</td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:inputCheckbox value="{!enewsletters}"></apex:inputCheckbox></td>
+<td align="left" valign="top">I would like to receive WaterGrass River Alliance email newsletters.</td>
+</tr>
+</table>
+</apex:outputPanel>
+
+<apex:outputPanel id="bottombuttons">
+
+<div style="margin-left: 253px;">
+<apex:commandButton action="{!submit}" value="Submit" rendered="{!!isEventFull}" />
+
+<apex:commandButton action="{!ReturnToList}" value="Return to the List of Events" immediate="true"/>
+</div>
+</apex:outputPanel>
+
+</apex:form>
+
+</body>
+</apex:page>

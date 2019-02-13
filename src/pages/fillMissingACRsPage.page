@@ -1,0 +1,11 @@
+<apex:page Controller="fillMissingACRsInvokeBatch" showheader="false" 
+    action="{!InvokeBatch}">
+<h1>You will receive an email when WaterGrass is done looking for Accounts which have contacts but
+    no Primary Account Contact role.</h1><br/>
+<br/>
+It may take an hour or more to go through the whole database.<br/>
+    <br/>
+<apex:form >
+    <apex:commandButton action="{!Finished}" value="Back to WaterGrass"/>
+</apex:form>
+</apex:page>

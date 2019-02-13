@@ -1,0 +1,45 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Signin_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+<apex:stylesheet value="{!$Resource.bootstrapcss}"/>
+<apex:stylesheet value="{!$Resource.bootstrapresponsivecss}"/>
+<apex:stylesheet value="{!$Resource.customboostrapcss}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+<body>
+    <div class="container">
+        <apex:form >        
+            <fieldset>
+                <legend>This event requires a liability waiver.  Please read our waiver and check the box below to indicate that you accept it.</legend>
+                <apex:outputPanel id="Must_Sign_Waiver" rendered="{!Must_Sign_Waiver}">
+                    <p class="help-block">In order to participate, you must agree to the Terms and Conditions below.</p>
+                </apex:outputPanel>
+
+                <apex:outputPanel id="Waiver" title="Waiver Required" rendered="{!camp.Waiver_Required__c}">
+                    <div class="control-group">
+                        <apex:outputLabel styleClass="control-label" value="Terms and Conditions" />
+                        <div class="controls">
+                            <textArea readonly="true" class="input-block-level" >I am volunteering for this activity or event and understand that, as a volunteer, I may be involved in activities that have a risk of injury.  I agree that I will only perform volunteer activities that I am comfortable doing and that I am solely responsible for my safety.  I also agree that I will not hold the WaterGrass River Alliance and its officers, directors, employees, or volunteers responsible for any injury to me or my property as a result of my participation in this activity or event.  By providing my email address, I request to be included on the Alliance email list.  I understand that my and/or my child’s name, photograph, voice, or likeness may be used by the Alliance.  I consent to and authorize in advance such use, waive my rights of privacy, agree that such materials shall become the sole and exclusive property of the WaterGrass River Alliance and give up all rights, title, and interest in such property.  This release constitutes a complete release, discharge, and waiver of any and all actions or causes of action against officers, directors. employees, agents, and volunteers of the Alliance.
+                            By registering for this event, I acknowledge that I have carefully read this Liability Waiver in its entirety, fully understand its contents, and voluntarily assume all risks and dangers inherent in participating in this activity or event.</textArea>
+                        </div>
+                    </div>
+
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <label class="checkbox"><apex:inputCheckbox value="{!Agreed_to_Waiver}"></apex:inputCheckbox>I agree to the Terms and Conditions above.</label>
+                            <label class="checkbox"><apex:inputCheckbox value="{!pcontact.Over_18__c}"></apex:inputCheckbox>I am over 18 years of age.</label>
+                            <label class="checkbox"><apex:inputCheckbox value="{!enewsletters}"></apex:inputCheckbox>I would like to receive WaterGrass River Alliance email newsletters.</label>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+
+                <apex:outputPanel id="bottombuttons">
+                    <div class="row-fluid">
+                        <div class="span2"><apex:commandButton styleClass="btn btn-primary" action="{!submit2}" value="Submit" /></div>
+                    </div>
+                </apex:outputPanel>                      
+            </fieldset>
+        </apex:form>
+    </div>
+</body>
+</apex:page>

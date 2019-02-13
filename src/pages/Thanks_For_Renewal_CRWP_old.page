@@ -1,0 +1,56 @@
+<!--
+ - Created by Baird on 12/5/2018.
+ -->
+
+<apex:page renderAs="pdf" showHeader="false" id="Thanks_For_Renewal_CRWP_old"
+           standardController="Opportunity"
+           extensions="Thanks_Template_Controller" standardStylesheets="false" >
+
+    <apex:form >
+
+        <!--apex:image id="theImage" value="{!$Resource.Thanks_Header_Standard}" width="700" height="200"/>-->
+
+        <br/>
+        <br/>
+        <apex:outputText value="{0,date,MMMM d, yyyy}"> <br/>
+            <apex:param value="{!TODAY()}" />
+            <br/>
+            <br/>
+        </apex:outputText> <br/>
+        <br/>
+
+        {!Opportunity.Contact__r.Name}<br/>
+        {!Opportunity.Account.BillingStreet} <br/>
+        {!Opportunity.Account.BillingCity}, {!Opportunity.Account.BillingState} {!Opportunity.Account.BillingPostalCode}<br/>
+        <br/>
+        <br/>
+        <br/>
+        Dear {!Opportunity.Account.Dear__c}: <br/>
+        <br/>
+        Thank you for renewing your membership with your gift of <apex:outputText value=" "/><apex:outputfield value="{!Opportunity.Amount}"  /> on <apex:outputText value=" "/><apex:outputField value="{!Opportunity.CloseDate}"/> to the Cannon River Watershed Partnership.<br/>
+        <br/>
+
+        With the help of members like you, we are able to work toward a day when everyone can swim and fish in healthy rivers and lakes and drink clean water from our wells.<br/>
+        <br/>
+
+
+        You care about clean water in Minnesota and we are grateful that you have chosen to act on that concern by supporting the Cannon River Watershed Partnership.  If you would like to do more for clean water, visit our website at www.crwp.net and click the "Volunteer" button at the top of the page to find other ways to help out.<br/>
+        <br/>
+        Thanks again for your support!<br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+
+        Sincerely,<br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        Kristi Pursell,
+        Executive Director
+        <!--
+        <div style="position: fixed; bottom: 0px; text-align:center; color: rgb(0,105,153); font-size: 10pt; font-family: sans-serif "> The Cannon River Watershed Partnership is a 501(c)3 nonprofit organization working for Healthy Waters, Healthy Families, and Healthy Communities in Southeastern Minnesota.  To learn more about our Education, Research, and Conservation programs and projects, visit us at www.crwp.net.</div>-->
+
+    </apex:form>
+</apex:page>

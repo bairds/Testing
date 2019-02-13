@@ -1,0 +1,199 @@
+<apex:page controller="RegisterEmail" showheader="false" sidebar="false" docType="html-5.0" action="{!setRegisterEmail}">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <apex:form html-autocomplete="off">
+        <div class="bPageBlock mobile">
+                       
+            <apex:outputPanel layout="block" styleClass="df" html-color="blue">                 
+                <div class="input container ma w100" style="{!st.container}">
+                    <div class="title df">                         
+                        <div class="df bcw mw33"> <apex:image value="{!$Resource.OrgLogo}" styleClass="ma w100" /> </div> 
+                        
+                        <div class="text" style="{!st.title}">                         
+                            <div class="name"> <div class="ma"> Email Newsletters Sign Up </div> </div>
+                        </div>  
+                    </div>
+
+                    <div color="green" id="content">  
+                        <div class="p11 input">                        
+                            <apex:outputPanel layout="block" styleClass="table" id="signee">
+                                <div class="title"> 
+                                    <apex:outputText value="Please enter your information" rendered="{!s == '1'}" />
+                                    <apex:outputText value="Here's your information. Is this right?" rendered="{!s == '2'}" />
+                                </div>        
+                                
+                                <table>  
+                                    <tr class="input-row"> 
+                                        <td> first name </td> 
+                                        <td> 
+                                            <apex:inputField value="{!co.FirstName}" required="true" styleClass="input-field" rendered="{!s == '1'}" />
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.FirstName}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> last name </td> 
+                                        <td> 
+                                            <apex:inputField value="{!co.LastName}" styleClass="input-field" rendered="{!s == '1'}" /> 
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.LastName}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> email </td> 
+                                        <td id="email"> 
+                                            <apex:inputField type="email" required="true" value="{!co.Email}" styleClass="input-field" rendered="{!s == '1'}" />
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.Email}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <apex:outputPanel layout="none" rendered="{!s == '1'}">   
+                                        <tr class="input-row"> 
+                                            <td> confirm email </td> 
+                                            <td id="confirm_email">
+                                                <div class="requiredInput">
+                                                    <div class="requiredBlock" />
+                                                    <apex:input type="email" required="true" value="{!coc.email}" styleClass="input-field" />
+                                                </div>
+                                            </td> 
+                                        </tr>
+                                    </apex:outputPanel>                                    
+                                    
+                                    <tr class="input-row">
+                                        <td> company or organization (if applicable)</td> 
+                                        <td> 
+                                            <apex:inputText value="{!coc.company}" styleClass="input-field" rendered="{!s == '1'}" /> 
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!l.Company}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> street </td> 
+                                        <td > 
+                                            <apex:inputField value="{!co.MailingStreet}" styleClass="input-field" rendered="{!s == '1'}" />
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.MailingStreet}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> city </td> 
+                                        <td > 
+                                            <apex:inputField value="{!co.MailingCity}" styleClass="input-field" rendered="{!s == '1'}" />
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.MailingCity}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> state </td> 
+                                        <td > 
+                                            <apex:inputField value="{!co.MailingState}" styleClass="input-field" rendered="{!s == '1'}" />
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.MailingState}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> zip </td> 
+                                        <td> 
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:input value="{!coc.zip}" type="tel" styleClass="input-field" rendered="{!s == '1'}" required="true" /> 
+                                            </div>
+                                            
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.MailingPostalCode}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> phone </td> 
+                                        <td> 
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:input value="{!coc.phone}" type="tel" styleClass="input-field" required="true" rendered="{!s == '1'}" /> 
+                                            </div>
+                                            
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.Phone}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> issues you want to receive information about </td> 
+                                        <td> 
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:selectCheckboxes value="{!coc.MailingLists}" styleClass="selectcheckboxes" layout="pageDirection" rendered="{!s == '1'}">
+                                                    <apex:selectOptions value="{!Picklist}" html-class="input-field" />
+                                                </apex:selectCheckboxes>
+                                            </div>
+                                            
+                                            <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> <apex:outputField value="{!co.Mailing_Lists__c}" /> </apex:outputPanel>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <apex:repeat value="{!cofs}" var="cof"> 
+                                        <tr class="input-row"> 
+                                            <td class="ttl"> {!cof.Label} </td> 
+                                            <td> 
+                                                <apex:outputPanel rendered="{!s == '1'}">
+                                                    <apex:inputField value="{!co[cof.Name]}" styleClass="input-field" rendered="{!cof.Type == 'field'}" />
+                                                    
+                                                    <apex:selectRadio value="{!cof.Value.Str}" rendered="{!cof.Type == 'PICKLIST'}" layout="pageDirection" styleClass="selectcheckboxes">
+                                                        <apex:selectOptions value="{!cof.Picklist}" html-class="input-field" />                                    
+                                                    </apex:selectRadio>
+                                                    
+                                                    <apex:selectCheckboxes value="{!cof.Value.StrL}" styleClass="selectcheckboxes" rendered="{!cof.Type == 'MULTIPICKLIST'}" layout="pageDirection">
+                                                        <apex:selectOptions value="{!cof.Picklist}" html-class="input-field" />
+                                                    </apex:selectCheckboxes>
+                                                    
+                                                    <apex:input value="{!cof.Value.Str}" type="tel" styleClass="input-field" rendered="{!cof.Type == 'PHONE'}" /> 
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputPanel rendered="{!s == '2'}" styleClass="tal" layout="block"> 
+                                                    <apex:outputField value="{!co[cof.Name]}" rendered="{!co[cof.Name] != null}"/> 
+                                                </apex:outputPanel>
+                                            </td> 
+                                        </tr>                  
+                                    </apex:repeat>
+                                </table>
+                                
+                                <div class="buttons">                                
+                                    <apex:commandButton action="{!review}" value="Next" reRender="signee" rendered="{!s == '1'}" 
+                                                        oncomplete="setAttribute('content', 'color', 'red'); window.scrollTo(0,0)"  />
+                                    
+                                    <apex:outputPanel layout="none" rendered="{!s == '2'}">
+                                        <apex:commandButton action="{!back}" value="Back" reRender="signee" oncomplete="setAttribute('content', 'color', 'green'); window.scrollTo(0,0)" />
+                                        <apex:commandButton action="{!registerEmail}" value="Save" />
+                                    </apex:outputPanel>
+                                </div>
+                                
+                                <apex:outputPanel layout="none" rendered="{!s == '1'}">
+                                    <script>
+                                        var email = document.getElementById('email').firstElementChild.firstElementChild.nextElementSibling;
+                                        var confirm_email = document.getElementById('confirm_email').firstElementChild.firstElementChild.nextElementSibling;
+                                        
+                                        function validate() {
+                                            if(email.value != confirm_email.value)
+                                                confirm_email.setCustomValidity('emails don\'t match');
+                                            else
+                                                confirm_email.setCustomValidity('');                          
+                                        }
+                                        
+                                        email.onchange = validate;
+                                        confirm_email.onkeyup = validate;
+                                    
+                                        replaceEnter(); 
+                                    </script>
+                                </apex:outputPanel>
+                            </apex:outputPanel>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>   
+        </div>
+    </apex:form>    
+    
+</apex:page>

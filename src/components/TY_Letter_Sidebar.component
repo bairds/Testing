@@ -1,0 +1,25 @@
+<apex:component >
+  <!-- Do not remove this note, it will not print.  Place any content and HTML below. For assistance, see 
+  https://docs.google.com/document/d/1zacKF_91lDEiaOe9tr_D1CcSO005vs6i-zzrxtMznNE/edit#heading=h.28di9ipjmtj -->
+
+<br/>
+<b>Board of Directors</b><br/>
+<br/>
+Josephine Smith, Chair<br/>
+Boscawen, NH<br/>
+<br/>
+Joe Jones, Vice Chair<br/>
+Concord, NH<br/>
+<br/>
+Mary Bitten, Treasurer<br/>
+Dover, NH<br/>
+<br/>
+Max Paine, Secretary<br/>
+Hooksett, NH<br/>
+<br/>
+Sue Black<br/>
+Tilton, NH<br/>
+<br/>
+Etc.<br/>
+
+</apex:component>

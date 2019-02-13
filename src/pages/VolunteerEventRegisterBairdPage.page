@@ -1,0 +1,552 @@
+<apex:page controller="VolunteerEventRegisterBaird" showheader="false" sidebar="false" docType="html-5.0" action="{!setSignUp}" cache="false">   
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+<apex:includeScript value="{!$Resource.JoseJS}" />
+<apex:stylesheet value="{!$Resource.JoseCSS}" />
+
+    <script>
+    function SorryYouCantSign() {
+        alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with Milwaukee Riverkeeper in the future");
+        CallRestOfDeclineWaiver();
+    }
+    </script>
+
+<apex:form >
+    <div class="bPageBlock mobile" color="blue">  
+        <div class="container ma w100">
+            <apex:outputPanel layout="none" rendered="{!errors != null}">
+                <div color="red">
+                    <div class="errors"> 
+                        {!errors}
+                    </div>
+                </div>
+            </apex:outputPanel>
+            
+            <apex:outputPanel layout="none">
+                <div class="title df">                         
+                    <div class="df bcw mw33"> <apex:image value="{!$Resource[lo]}" styleClass="ma w100" /> </div> 
+                    <div class="text">                         
+                        <div class="name"> <div class="ma"> {!title} </div> </div>
+                    </div>                        
+                </div>
+                
+                <apex:outputPanel layout="block" styleClass="p11 output" rendered="{!step == '1'}">      
+                    <apex:outputPanel layout="block" styleClass="table">
+                        <table>  
+                            <tr> 
+                                <td> date  </td> 
+                                <td>
+                                    <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                        <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                    </apex:outputText>
+                                </td> 
+                            </tr>
+                            
+                            <tr> 
+                                <td> start time</td> 
+                                <td> 
+                                    <apex:outputText value="{0, date, hh:mm a}">
+                                        <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                    </apex:outputText>
+                                </td> 
+                            </tr>
+                            
+                            <tr> 
+                                <td> end time </td> 
+                                <td>
+                                    <apex:outputText value="{0, date, hh:mm a}">
+                                        <apex:param value="{!c.Event_End_Time__c + tzoffset}" /> 
+                                    </apex:outputText>
+                                </td> 
+                            </tr>
+                            
+                            <tr> 
+                                <td> location </td> 
+                                <td> 
+                                    <apex:outputField value="{!c.Event_Location__c}" rendered="{!step == '1'}" />
+                                </td> 
+                            </tr>                                
+                            
+                            <apex:outputPanel layout="none" rendered="{!c.Host__c != null}">
+                                <tr> 
+                                    <td> event contact </td> 
+                                    <td> 
+                                        <apex:outputField value="{!c.Host__c}" rendered="{!step == '1'}" />
+                                    </td> 
+                                </tr>
+                            </apex:outputPanel>
+                            
+                            <tr> 
+                                <td> description </td> 
+                                <td> 
+                                    <apex:outputField value="{!c.Description_Long__c}" rendered="{!step == '1'}" />
+                                </td> 
+                            </tr>
+                            
+                            <tr> 
+                                <td> spaces remaining </td> 
+                                <td> 
+                                    <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}" rendered="{!step == '1'}" />
+                                </td> 
+                            </tr>
+                        </table>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                
+                <div color="green">  
+                    <div class="p11 input">                        
+                        <apex:outputPanel layout="block" styleClass="table">
+                            <apex:outputPanel rendered="{!step == '1'}" layout="none">
+                                <div class="title"> 
+                                    Ready to sign up for this event? <br /> 
+                                    Then, please fill out the following form:
+                                </div>  
+                                
+                                <table>  
+                                    <tr class="input-row"> 
+                                        <td> first name </td> 
+                                        <td>                                             
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:inputText value="{!coc.FirstName}" styleClass="input-field" required="true" />
+                                            </div>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> last name </td> 
+                                        <td> 
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:inputText value="{!coc.LastName}" styleClass="input-field" required="true" />
+                                            </div>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> email </td> 
+                                        <td>                                             
+                                            <div class="requiredInput">
+                                                <div class="requiredBlock" />
+                                                <apex:input value="{!coc.Email}" styleClass="input-field" type="email" required="true" />
+                                            </div>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> zip code </td> 
+                                        <td> 
+                                            <apex:inputText value="{!coc.Zip}" styleClass="input-field" />
+                                        </td> 
+                                    </tr>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> phone </td> 
+                                        <td> 
+                                            <apex:inputText value="{!coc.Phone}" styleClass="input-field" />
+                                        </td> 
+                                    </tr>
+                                </table>
+                                
+                                <div class="buttons">
+                                    <input type="button" class="btn" onclick="window.location='{!$Site.Prefix}/apex/volunteerEventSelectPage?mid={!cc.MasterCampaign}{!query}'" 
+                                           value="return to list of events" />
+                                    
+                                    <apex:commandButton action="{!setSignee}" value="next" />
+                                </div>
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel rendered="{!step == '2'}" layout="none">
+                                <div class="title"> 
+                                    Please fill out this missing information:
+                                </div>    
+                                
+                                <table>  
+                                    <apex:outputPanel rendered="{!coc.street == null}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> street </td> 
+                                            <td> <apex:inputText value="{!coc.street}" styleClass="input-field" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!coc.city == null}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> city </td> 
+                                            <td> <apex:inputText value="{!coc.city}" styleClass="input-field" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!coc.state == null}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> state </td> 
+                                            <td> <apex:inputText value="{!coc.state}" styleClass="input-field" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!coc.volunteerInterests.size == 0}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> volunteer interests </td> 
+                                            <td>                                                         
+                                                <apex:selectCheckboxes value="{!coc.volunteerInterests}" styleClass="selectcheckboxes" layout="pageDirection">
+                                                    <apex:selectOptions value="{!coc.volunteerInterestsList}" html-class="input-field" />
+                                                </apex:selectCheckboxes>
+                                            </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!coc.howHeard == null}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> how did you hear about us? </td> 
+                                            <td> <apex:inputText value="{!coc.howHeard}" styleClass="input-field" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                </table>
+                                
+                                <div class="buttons">
+                                    <input type="button" class="btn" onclick="window.location='{!$Site.Prefix}/apex/volunteerEventRegisterBairdPage?{!query}&step=1'" value="back" />
+                                    <apex:commandButton action="{!updateSignee}" value="next" />
+                                </div>
+                            </apex:outputPanel>
+                            
+                            <apex:outputPanel rendered="{!step == '3'}" layout="none">
+                                <apex:outputPanel rendered="{!(c.Type == 'Corporate volunteer event' && (c.Slots_Reserved__c == null || c.Slots_Reserved__c == 0)) || (c.Type != 'Corporate volunteer event' && c.Allow_Group_Signup__c == true)}" layout="none">    
+                                    <div class="title"> 
+                                        Group Questions:                                   
+                                    </div>  
+                                    
+                                    <table>  
+                                        <tr class="input-row"> 
+                                            <td> are you signing up for yourself or for a group? </td> 
+                                            <td> 
+                                                <apex:actionRegion >
+                                                    <apex:selectRadio styleClass="input-field selectcheckboxes" value="{!cc.signUpScopeType}" layout="pageDirection" required="true">
+                                                        <apex:selectOptions value="{!cc.signUpScopeTypes}"/>
+                                                        
+                                                        <apex:actionSupport event="onchange" rerender="wrapperPanel"/>
+                                                    </apex:selectRadio>
+                                                </apex:actionRegion>
+                                            </td> 
+                                        </tr>
+                                    </table>
+                                    
+                                    <apex:outputPanel id="wrapperPanel" layout="block">
+                                        <table>
+                                            <apex:outputPanel id="GroupSignupQuestions" layout="none" rendered="{!IF(cc.signUpScopeType == 'Yourself only' || cc.signUpScopeType == null,false,true)}">
+                                                
+                                                <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Group'),true,false)}" layout="none">
+                                                    <tr class="input-row"> 
+                                                        <td> What is the name of your business, organization or group? </td> 
+                                                        <td> <apex:inputField value="{!cm.Group__c}" required="true" /> </td> 
+                                                    </tr>
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Nr_in_Group'),true,false)}" layout="none">
+                                                    <tr class="input-row"> 
+                                                        <td> How many individuals are you bringing in your group? </td> 
+                                                        <td> <apex:inputField value="{!cm.Nr_in_Group__c}" required="true" /> </td> 
+                                                    </tr>
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Adults in group'),true,false)}" layout="none">
+                                                    <tr class="input-row"> 
+                                                        <td> How many adults (over 18) are you bringing in your group? </td> 
+                                                        <td> <apex:inputField value="{!cm.Nr_Adults__c}" required="true" /> </td> 
+                                                    </tr>
+                                                </apex:outputPanel>
+                                                
+                                                <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Teammates'),true,false)}" layout="none">
+                                                    <tr class="input-row"> 
+                                                        <td> Please list full name of anyone you would like on your team, as well as ages of any children. <br />
+                                                            (All adults need to register separately.) </td> 
+                                                        <td> <apex:inputField value="{!cm.Teammates__c}" required="true" /> </td> 
+                                                    </tr>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>                                            
+                                        </table>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                                
+                        <!--        <apex:outputPanel layout="none" rendered="{!cm.Role__c == 'Group leader'}">                 
+                                    <div class="title"> Info about group:  </div>
+                                    
+                                    <table>                                            
+                                        <tr class="input-row"> 
+                                            <td> corporation </td> 
+                                            <td>
+                                                <div class="requiredInput">
+                                                    <div class="requiredBlock" />
+                                                    <apex:inputText value="{!cm.Group__c}" styleClass="input-field" required="true" />
+                                                </div>
+                                            </td> 
+                                        </tr>
+                                        
+                                        <tr class="input-row"> 
+                                            <td> # of adults </td> 
+                                            <td> 
+                                                <div class="requiredInput">
+                                                    <div class="requiredBlock" />
+                                                    <apex:inputText value="{!cm.Nr_Adults__c}" styleClass="input-field" required="true" />
+                                                </div>
+                                            </td> 
+                                        </tr>
+                                        
+                                        <tr class="input-row"> 
+                                            <td> # of individuals total </td> 
+                                            <td>
+                                                <div class="requiredInput">
+                                                    <div class="requiredBlock" />
+                                                    <apex:inputText value="{!cm.Nr_in_Group__c}" styleClass="input-field" required="true" />
+                                                </div>
+                                            </td> 
+                                        </tr>
+                                    </table>                                    
+                                </apex:outputPanel>
+                        -->
+                                
+                                <div class="title"> 
+                                    Please tell us:
+                                </div>  
+                                
+                                <table>
+                                    <tr class="input-row"> 
+                                        <td> How did you hear about this activity? </td> 
+                                        <td> 
+                                            <apex:selectRadio styleClass="input-field selectcheckboxes" value="{!cm.How_Heard_About_Event__c}" layout="pageDirection">
+                                                <apex:selectOptions value="{!cc.howHeardAboutEvent}"/>
+                                            </apex:selectRadio>
+                                        </td> 
+                                    </tr>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Availability'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> When will you be available for this work?  What days of the week?  Morning or afternoon?  What periods will you be unavailable? </td> 
+                                            <td> <apex:inputField value="{!cm.Availability__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Carpool'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Car pooling </td> 
+                                            <td> <apex:inputField value="{!cm.Car_pooling__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Pref_Location'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Tell us if you have any sampling location or activity preferences.e.g. preferred sites, no storm sampling, etc. </td> 
+                                            <td> <apex:inputField value="{!cm.Pref_Location__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Special_Needs'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Check here if you prefer not to be on brambly or uneven ground. </td> 
+                                            <td> <apex:inputField value="{!cm.Special_Location_Preference__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Waders'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Will you need to borrow waders? </td> 
+                                            <td> <apex:inputField value="{!cm.Waders__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Boat'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Do you have a canoe, kayak, or other boat that you can use? If so, what is it and do you have room for others? </td> 
+                                            <td> <apex:inputField value="{!cm.Boat__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Shirt_Size'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Your shirt size </td> 
+                                            <td> 
+                                                <apex:selectRadio styleClass="input-field selectcheckboxes" value="{!cm.Shirt_Size__c}" layout="pageDirection">
+                                                    <apex:selectOptions value="{!cc.shirtSizes}"/>
+                                                </apex:selectRadio>
+                                            </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Dietary_Restrictions'),true,false)}" layout="none">
+                                        <tr class="input-row"> 
+                                            <td> Your dietary restrictions </td> 
+                                            <td> <apex:inputField value="{!cm.Dietary_Restrictions__c}" /> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel layout="none" rendered="{!c.Custom_Signup_Question__c != null}">
+                                        <tr class="input-row"> 
+                                            <td> {!c.Custom_Signup_Question__c} </td> 
+                                            <td> <apex:inputField value="{!cm.SignupQuestionAnswer__c}" styleClass="input-field"/> </td> 
+                                        </tr>
+                                    </apex:outputPanel>
+                                    
+                                    <apex:outputPanel layout="none" rendered="{!c.Custom_Signup_Question_2__c != null}">
+                                        <tr class="input-row"> 
+                                            <td> {!c.Custom_Signup_Question_2__c} </td> 
+                                            <td> <apex:inputField value="{!cm.SignupQuestionAnswer2__c}" styleClass="input-field" /> </td> 
+                                        </tr>       
+                                    </apex:outputPanel>
+                                    
+                                    <apex:repeat value="{!cofs}" var="cof"> 
+                                        <tr class="input-row"> 
+                                            <td class="ttl"> {!cof.Label} </td> 
+                                            <td> 
+                                                <apex:outputPanel >
+                                                    <apex:inputField value="{!co[cof.Name]}" styleClass="input-field" rendered="{!cof.Type == 'field'}" />
+                                                    
+                                                    <apex:selectRadio value="{!cof.Value.Str}" rendered="{!cof.Type == 'PICKLIST'}" layout="pageDirection" styleClass="selectcheckboxes">
+                                                        <apex:selectOptions value="{!cof.Picklist}" html-class="input-field" />                                    
+                                                    </apex:selectRadio>
+                                                    
+                                                    <apex:selectCheckboxes value="{!cof.Value.StrL}" styleClass="selectcheckboxes" rendered="{!cof.Type == 'MULTIPICKLIST'}" layout="pageDirection">
+                                                        <apex:selectOptions value="{!cof.Picklist}" html-class="input-field" />
+                                                    </apex:selectCheckboxes>
+                                                    
+                                                    <apex:input value="{!cof.Value.Str}" type="tel" styleClass="input-field" rendered="{!cof.Type == 'PHONE'}" /> 
+                                                </apex:outputPanel>
+                                            </td> 
+                                        </tr>                  
+                                    </apex:repeat>
+                                    
+                                    <apex:repeat value="{!cmfs}" var="cmf"> 
+                                        <tr class="input-row"> 
+                                            <td class="ttl"> {!cmf.Label} </td> 
+                                            <td> 
+                                                <apex:outputPanel >
+                                                    <apex:inputField value="{!cm[cmf.Name]}" styleClass="input-field" rendered="{!cmf.Type == 'field'}" />
+                                                    
+                                                    <apex:selectRadio value="{!cmf.Value.Str}" rendered="{!cmf.Type == 'PICKLIST'}" layout="pageDirection" styleClass="selectcheckboxes">
+                                                        <apex:selectOptions value="{!cmf.Picklist}" html-class="input-field" />                                    
+                                                    </apex:selectRadio>
+                                                    
+                                                    <apex:selectCheckboxes value="{!cmf.Value.StrL}" styleClass="selectcheckboxes" rendered="{!cmf.Type == 'MULTIPICKLIST'}" layout="pageDirection">
+                                                        <apex:selectOptions value="{!cmf.Picklist}" html-class="input-field" />
+                                                    </apex:selectCheckboxes>
+                                                    
+                                                    <apex:input value="{!cmf.Value.Str}" type="tel" styleClass="input-field" rendered="{!cmf.Type == 'PHONE'}" /> 
+                                                </apex:outputPanel>
+                                            </td> 
+                                        </tr>                  
+                                    </apex:repeat>
+                                    
+                                    <tr class="input-row"> 
+                                        <td> Questions, comments, expectations, needs </td> 
+                                        <td> <apex:inputField value="{!cm.Questions_or_Comments__c}" /> </td> 
+                                    </tr>
+                                </table>
+                                                
+                                                <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Require Emergency Contact Info'),true,false)}" layout="block" styleClass="p22"> 
+                                                    <div class="table">
+                                                        <div class="title"> 
+                                                            Emergency Contact (Required)
+                                                        </div>
+                                                        
+                                                        <table>  
+                                                            <tr class="input-row"> 
+                                                                <td> Name </td> 
+                                                                <td> <apex:inputField value="{!cm.Emergency_Contact_Name__c}" /> </td> 
+                                                            </tr>
+                                                            
+                                                            <tr class="input-row"> 
+                                                                <td> Phone </td> 
+                                                                <td> <apex:inputField value="{!cm.Emergency_Contact_Phone__c}" /> </td> 
+                                                            </tr>
+                                                        </table>  
+                                                    </div>
+                                                </apex:outputPanel>
+								<apex:actionRegion id="WaiverActionRegion">                               
+                                <apex:outputPanel layout="none" rendered="{!c.Waiver__c != null}">
+                                    <div color="red">  
+                                        <div class="p6 input">                        
+                                            <apex:outputPanel layout="block" styleClass="table">
+                                                <div class="title"> 
+                                                    Please read our required liability waiver and check the box below to indicate that you accept it.
+                                                </div>
+                                                
+                                                <div class="black scrollable_box"> <apex:outputText value="{!c.Waiver__r.Body__c}" escape="false" /> </div>
+                                                
+                                                <apex:outputPanel id="AcceptDeclineWaiverRegion">
+                                                <table class="checkbox" style="border-top: 1px solid #DE2C58">  
+                                                    <tr class="input-row"> 
+                                                        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> I agree to the Terms and Conditions above. </td>                  
+                                                        <td>    <apex:inputCheckbox id="AcceptCheckbox" styleClass="checkbox" value="{!AcceptWaiver}"> 
+                                                                <apex:actionSupport event="onclick" action="{!toggleAccept}" rerender="AcceptDeclineWaiverRegion">
+                                                                <apex:param assignto="{!AcceptWaiver}" name="AcceptWaiver" value="true"></apex:param>
+                                                                </apex:actionSupport>
+                                                                <apex:actionSupport event="oncomplete" rerender="AcceptDeclineWaiverRegion">
+                                                                </apex:actionSupport>
+                                                            </apex:inputCheckbox>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> I decline the Terms and Conditions above. </td>                  
+                                                        <td>                                                             
+                                                            <apex:inputCheckbox id="DeclineCheckbox" value="{!DeclineWaiver}" styleClass="checkbox" onclick="SorryYouCantSign()">  
+                                                                </apex:inputCheckbox>
+                                                            <apex:actionFunction name="CallRestOfDeclineWaiver" action="{!toggleAccept}" rerender="AcceptDeclineWaiverRegion">
+                                                            <apex:param assignto="{!AcceptWaiver}" name="AcceptWaiver" value="false"></apex:param>
+                                                            </apex:actionFunction>     
+                                                        </td>
+                                                    </tr> 
+                                                      
+    <tr class="input-row"> 
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> AcceptWaiver is </td>                  
+        <td> {!AcceptWaiver}
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> DeclineWaiver is </td>                  
+        <td>   {!DeclineWaiver}
+        </td>
+    </tr>                                                      
+                                                    <tr class="input-row"> 
+                                                        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> I am over 18 years of age. </td>                  
+                                                        <td>                                                             
+                                                            <apex:inputCheckbox value="{!coc.Over18}" styleClass="checkbox" /> 
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </div>                                        
+                                </apex:outputPanel> 
+                                    </apex:actionRegion> 
+                                
+                                <div color="olive">
+                                    <table class="checkbox input">
+                                        <tr class="input-row">
+                                            <td> Would you like to receive periodic emails about our work? </td>                                            
+                                            <td> <apex:inputCheckbox value="{!coc.newsletter}" styleClass="checkbox" /> </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                
+                                <apex:outputPanel layout="none" rendered="{!cm.Role__c == 'Leader'}">
+                                    <div>
+                                        <div class="olive tac p11 fs266"> 
+                                            There’s a standard donation to book a corporate volunteer day, and each person in the group will have to sign the waiver.  
+                                            You will receive an email with a link you can send to each participant.  
+                                            By clicking on the link, they can complete their registration and sign the waiver as members of your corporate group.
+                                        </div>
+                                    </div>
+                                </apex:outputPanel>
+                                
+                                <div class="buttons">    
+                                    <input type="button" class="btn" onclick="window.location='{!$Site.Prefix}/apex/volunteerEventRegisterBairdPage?{!query}&step=1'" value="back" />
+                                    <apex:commandButton action="{!signUp}" value="submit" />
+                                </div>
+                            </apex:outputPanel>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </div>
+    </div>
+</apex:form>        
+</apex:page>

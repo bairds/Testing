@@ -1,0 +1,131 @@
+<apex:component controller="createAccountAndContacts_Con" allowDML="true">
+    
+    <apex:attribute name="src" type="String" required="true" assignTo="{!source}" description="Indicate where is the component being used" />
+     <apex:attribute name="title" type="String" description="Title of the form" default="Create Account & Contact(s) " />
+    
+     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!URLFOR($Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.min.js')}" />
+   
+     <apex:includeScript value="{!$Resource.EnterAccountContactJS}" />
+      <apex:includeScript value="{!$Resource.JoseJS}" />
+    
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.min.css')}"  />
+    
+     <apex:stylesheet value="{!$Resource.JoseCSS}"/>
+   
+    
+<apex:pageMessages />
+    <apex:actionRegion immediate="true">
+        <apex:actionFunction name="setContacts" action="{!setContacts}" rerender="contacts" onbeforedomupdate="hideLoading(1)">
+            <apex:param name="contactsInAccount" assignTo="{!acct.Contacts_in_Account__c}" value="{!acct.Contacts_in_Account__c}" />
+            <apex:param name="createDummyContact" assignTo="{!createDummyContact}" value="{!createDummyContact}" />
+    
+         </apex:actionFunction>
+    </apex:actionRegion>
+    
+<div color="blue">
+    <div class="input container ma" id="account_contacts" style="border: initial">
+        <div class="table" style="width: initial">
+       
+        <div class="title"> {!title} </div>        
+     
+        <div class="df p11 pr ">       
+            <div class="table input" id="account" style="width: initial">
+           		<div class="title"> Enter Account </div>
+                
+            	<table id="account_input">             
+       		    	<tr> <td> type </td> <td id="record_type"> <apex:inputField value="{!acct.RecordTypeID}" onchange="setRequiredFields(this)" /> </td> </tr>                   
+                	<tr>
+                        <td> name </td>
+                        <td> 
+                            <div class="requiredInput" id="account_name">
+                        		<div class="requiredBlock dn" />
+                        		<apex:inputText value="{!aname}" html-placeholder="leave empty for Family" /> 
+                            </div>
+                        </td>
+                    </tr>     
+                	<tr> <td> phone </td> <td> <apex:inputField value="{!acct.Phone}" /> </td> </tr>
+                   	<tr> <td> street </td> <td> <apex:inputField value="{!acct.BillingStreet}" /> </td> </tr>
+                   	<tr> <td> city </td> <td> <apex:inputField value="{!acct.BillingCity}" /> </td> </tr>
+                   	<tr> <td> state </td> <td> <apex:inputField value="{!acct.BillingState}" /> </td> </tr>
+                   	<tr> <td> zip code </td> <td> <apex:inputField value="{!acct.BillingPostalCode}" /> </td> </tr>
+                    
+                    <apex:repeat value="{!$ObjectType.Account.FieldSets.eACAccountFields}" var="fa"> 
+                    	<tr> <td > {!fa.Label} </td> <td> <apex:inputField value="{!acct[fa]}"> </apex:inputField> </td> </tr>                        
+                    </apex:repeat>
+                </table>
+            </div>
+            
+            <div color="green" class="ml11">
+                <div class="table input">                      
+                <div class="title df" style="padding: initial">
+                    <div class="f1 p6 tac wsn"> Enter Contact(s) </div>
+                    
+                    <div class="cg bcw f1 p6 tac">
+                        <div class="dib">
+                        	<div class="dib"> # </div>
+
+                            <div class="dib">
+                                <div class="requiredInput" id="contacts_in_account">
+                            		<div class="requiredBlock dn" />
+                               		<apex:inputField value="{!acct.Contacts_in_Account__c}" onchange="validateContacts()" style="width: initial; padding: 1px" /> 
+                            	</div>  
+                        	</div>
+                        </div>
+                	</div>
+                </div>
+                
+                <apex:outputPanel layout="block" styleClass="df p6" id="contacts">
+                    <apex:outputPanel layout="block" rendered="{!acct.Contacts_in_Account__c != ''}">   
+                        <table> 
+                            <tr> <td> first name</td><td> <apex:inputfield value="{!ctct.FirstName}" required="true" /> </td></tr>
+                            <tr> <td> last name </td> <td> <apex:inputfield value="{!ctct.LastName}" /> </td> </tr> 
+                            <tr> <td> dear ___ </td> <td> <apex:inputfield value="{!ctct.Dear__c}" html-placeholder="leave blank for autofill" /> </td> </tr>   
+                            <tr> <td> title </td> <td> <apex:inputfield value="{!ctct.Title}" /> </td> </tr>   
+                            <tr> <td> home phone </td> <td> <apex:inputfield value="{!ctct.HomePhone}" /> </td> </tr>   
+                            <tr> <td> cell phone </td> <td> <apex:inputfield value="{!ctct.MobilePhone}" /> </td> </tr>   
+                            <tr> <td> email </td> <td> <apex:inputfield value="{!ctct.Email}" /> </td> </tr>   
+                            
+                            <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}" var="fc"> 
+                                <tr> <td> {!fc.Label} </td> <td> <apex:inputField value="{!ctct[fc]}" /> </td> </tr>                        
+                            </apex:repeat>
+                        </table>
+                    </apex:outputPanel>
+                    
+                    <apex:outputPanel layout="block" rendered="{!acct.Contacts_in_Account__c == '2'}" styleClass="ml6">                        
+                        <table> 
+                            <tr> <td> first name</td><td> <apex:inputfield value="{!ctct2.FirstName}" required="true" /> </td></tr>
+                            <tr> <td> last name </td> <td> <apex:inputfield value="{!ctct2.LastName}" /> </td> </tr> 
+                            <tr> <td> dear ___ </td> <td> <apex:inputfield value="{!ctct2.Dear__c}" html-placeholder="leave blank for autofill" /> </td> </tr>   
+                            <tr> <td> title </td> <td> <apex:inputfield value="{!ctct2.Title}" /> </td> </tr>   
+                            <tr> <td> home phone </td> <td> <apex:inputfield value="{!ctct2.HomePhone}" /> </td> </tr>   
+                            <tr> <td> cell phone </td> <td> <apex:inputfield value="{!ctct2.MobilePhone}" /> </td> </tr>   
+                            <tr> <td> email </td> <td> <apex:inputfield value="{!ctct2.Email}" /> </td> </tr>   
+                            
+                            <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}" var="fc"> 
+                                <tr> <td> {!fc.Label} </td> <td> <apex:inputField value="{!ctct2[fc]}" /> </td> </tr>                        
+                            </apex:repeat>
+                        </table>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </div>
+                </div>
+             <c:Loading />
+	    </div>
+        
+         <div class="buttons" id="buttons">
+             <input type="button" class="btn" value="cancel" onclick="window.history.back()" />        	
+			<apex:commandButton action="{!submit}" value="submit" />
+        </div>
+             </div>
+	</div>    
+
+</div>
+    
+    <script>
+    	contactsInAccount = document.getElementById('contacts_in_account').lastElementChild;
+   		contactsInAccount.lastIndex = contactsInAccount.selectedIndex;
+    
+    	setRequiredFields(document.getElementById('record_type').firstElementChild);
+    </script>
+</apex:component>

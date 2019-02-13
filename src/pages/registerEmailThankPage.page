@@ -1,0 +1,32 @@
+<apex:page controller="RegisterEmail" showheader="false" sidebar="false" docType="html-5.0">
+   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <apex:form html-autocomplete="off">
+        <div class="bPageBlock mobile">
+                       
+            <apex:outputPanel layout="block" styleClass="df" html-color="blue">       
+                <div class="input container ma w100" style="{!st.container}; border: none">                    
+                    <div class="title df">                         
+                        <div class="df bcw"> <apex:image value="{!$Resource.OrgLogo}" styleClass="ma" /> </div> 
+                        
+                        <div class="text" style="{!st.title}">                         
+                            <div class="name"> <div class="ma"> Email Newsletters Sign Up </div> </div>
+                        </div>  
+                    </div>
+
+                    <div class="blue2 highlight">
+                        <div class="tal fs266">
+                            <p> Thank You for signing up for our Email Newsletters! </p>
+                        </div>
+               		 </div>
+                </div>
+            </apex:outputPanel>   
+        </div>
+    </apex:form>    
+    
+</apex:page>

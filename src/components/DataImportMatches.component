@@ -1,0 +1,107 @@
+<!--
+ - Created by PeterChurchill on 3/2/2018.
+ -->
+
+<apex:component id="DataImportMatches">
+
+    <apex:attribute name="EIORecords"  required="true" type="EnhancedIOProcess" description="The matches records for this tab."/>
+    <apex:attribute name="CreateNewRecord"  required="true" type="boolean" description="This EIORecords list is for creating new records."/>
+
+    <table class="slds-table slds-table_bordered slds-table_striped" role="grid">
+        <thead>
+        <tr scope="col">
+
+
+
+            <th scope="col">
+                <div class="slds-truncate" title="Opportunity Name">Contact Legacy Id</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Close Date">First Name</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Stage">Last Name</div>
+            </th>
+            <th scope="col">
+                <div class="slds-truncate" title="Amount">Email Addresses</div>
+            </th>
+
+            <th scope="col">
+                <div class="slds-truncate" title="Lookup Match">Matched Record(s)</div>
+            </th>
+
+        </tr>
+
+        </thead>
+        <tbody>
+
+
+        <apex:repeat value="{!EIORecords}" var="r">
+        <apex:variable var="eoid" value="{!r.matchIO.Id}" />
+
+            <tr>
+
+
+                <td> <apex:outputField value="{!r.matchIO.Person_LegacyID__c}" /> </td>
+                <td> <apex:outputField value="{!r.matchIO.Person_FirstName__c}" /> </td>
+                <td> <apex:outputField value="{!r.matchIO.Person_LastName__c}" /> </td>
+                <td>
+                    <apex:outputField value="{!r.matchIO.Person_EmailPersonal__c}" /> <br/>
+                    <apex:outputField value="{!r.matchIO.Person_EmailWork__c}" />
+                </td>
+
+                <td>
+                    <apex:outputPanel rendered="{!r.eioResults.size> 0}">
+                        <div class="slds-box">
+                            <apex:repeat value="{!r.eioResults}" var="matchedrecords">
+
+                                <article class="slds-tile slds-media">
+                                    <div class="slds-media__figure">
+                                        <label class="slds-checkbox">
+                                            <apex:inputCheckbox value="{!matchedrecords.bUseThisRecord}" styleclass="slds-input usecb usecb-{!r.matchIO.Id}"/>
+                                            <span class="slds-checkbox--faux"></span>
+                                            <span class="slds-form-element__label slds-assistive-text">Select item</span>
+                                        </label>
+                                    </div>
+
+                                    <div class="slds-media__body">
+                                        <h3 class="slds-tile__title slds-truncate" title="">
+                                            <apex:outputText rendered="{!matchedrecords.matchedsObject['Id']==null && CreateNewRecord==false}" value="Matched to previous ImportObject row"/>
+                                            <apex:outputLink rendered="{!matchedrecords.matchedsObject['Id']!=null || CreateNewRecord==true }" target="_blank" value="/{!matchedrecords.matchedsObject['Id']}">{!matchedrecords.matchedsObject['Name']} ({!matchedrecords.sType})</apex:outputLink></h3>
+                                        <div class="slds-tile__detail">
+                                            <p class="slds-truncate" title="Assignee">Type: {!matchedrecords.MatchReliability}</p>
+                                        </div>
+                                        <div class="slds-tile__detail">
+                                            <p class="slds-truncate" title="Assignee">{!matchedrecords.matchedsObject['Email']}</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                            </apex:repeat>
+                        </div>
+                    </apex:outputPanel>
+                </td>
+
+            </tr>
+
+        </apex:repeat>
+        </tbody>
+    </table>
+
+    <script>
+
+        var j$ = jQuery.noConflict();
+
+        j$(".usecb").on("click", function(){
+            //console.log('eoid' + j$(this).attr('class') );
+            var class_name = '.' + j$(this).attr('class').split(' ')[2];
+            //console.log('div' + j$(this).prop('checked') );
+            j$(class_name).not(this).prop('checked', false);
+
+        });
+
+
+
+    </script>
+
+</apex:component>

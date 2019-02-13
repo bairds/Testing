@@ -1,0 +1,8 @@
+<apex:page standardController="Contact" extensions="Vol_Reg_Controller" showHeader="false" cache="false" standardStylesheets="true">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+  <h3>Thanks, {!pcontact.firstname}!</h3>
+  
+  <p>We'll be in touch with volunteer opportunities that meet your interests.</p>
+  
+  <p class="section_header">To return to the Huron River Watershed Council website, close this window by clicking on the X in the upper right corner.</p>
+</apex:page>

@@ -1,0 +1,460 @@
+<apex:page standardController="Campaign" extensions="Volunteer_Event_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/> 
+    
+
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <script type="text/javascript">
+        jQuery.noConflict();
+    </script>
+
+<body bgcolor="white">
+<style type="text/css">
+body{font-family:Arial,Helvetica,sans-serif; font-size:14px;}
+    
+    div.scrollable_box {
+    font-size: 12pt;
+    text-align: left;
+    padding: 6px;
+    height: 200px;
+    width: 400px;
+    overflow: scroll;
+}
+
+</style>
+<apex:form >
+
+<apex:pageMessages id="errormessages" />
+    
+<apex:outputPanel id="Must_Sign_Waiver" rendered="{!Must_Sign_Waiver}">
+    <p style="font-weight: bold; color: red;">In order to participate, you must agree to the Terms and Conditions below.</p>
+    </apex:outputPanel> 
+
+<apex:outputPanel id="campaigntable" rendered="{!!createNewLead}">
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Event Name:" /></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Name}" /></td></tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Description:" /></td>
+<td valign="top"><apex:outputField value="{!camp.Description_Long__c}" /></td></tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Date and Time:" /></td>
+<td align="left" valign="top">
+    <c:VFFormattedLocalTimeComponent date_time_value="{!camp.Event_Date_Time__c}" date_time_format="EEE MMM d', ' yyyy ' at ' h:mm a" />
+</td></tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Location:" /></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Event_Location__c}" /></td></tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Spaces remaining:" /></td>
+<td align="left" valign="top"><apex:outputText value="{!if(camp.Slots_Remaining__c==0,'Event Full',text(camp.Slots_Remaining__c))}" >
+                     </apex:outputText></td>
+</tr>
+</table>
+
+<apex:outputPanel rendered="{!camp.Signup_Template__c=='Standard'}">
+    <table>
+        <tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Location:" /></td>
+<td align="left" valign="top"><apex:outputField value="{!camp.Event_Location__c}" /></td></tr>
+    </table>
+</apex:outputPanel>
+
+</apex:outputPanel>
+<apex:outputPanel id="ReadyToSignUp" rendered="{!camp.Slots_Remaining__c>=1 && showNextPage!=true}" >
+<apex:outputPanel id="pContactInfo" rendered="{!NOT(createNewLead)}" >
+<apex:messages style="color: #red;" />
+<div class="topsection" cellpadding="5">
+<p class="section_header">Ready to sign up?  Then please enter your name, email and zipcode below:</p></div>
+
+
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="100px" align="left" valign="top">
+<apex:outputLabel styleClass="grey_header" value="Your First Name"  style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td width="150px" align="left" valign="top"><apex:inputField style="width:200px; padding:10px; border:0; background:#cacaca;" value="{!pcontact.FirstName}"/></td>
+</tr>
+
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Your Last Name"  style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField style="width:200px; padding:10px; border:0; background:#cacaca;" value="{!pcontact.LastName}"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Contact Email" style="color:#585858; font-size:15px;"/></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField style="width:200px; padding:10px; border:0; background:#cacaca;" value="{!pcontact.Email}" required="true" /></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Your Zip Code"  style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField style="width:200px; padding:10px; border:0; background:#cacaca;" value="{!pcontact.mailingPostalcode}" required="true" /></td>
+</tr>
+
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Your Phone (so we can reach you with last-minute info)" style="color:#585858; font-size:15px;"/></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField style="width:200px; padding:10px; border:0; background:#cacaca;" value="{!pcontact.phone}" required="true" /></td>
+</tr>
+    </table>
+    </apex:outputpanel>
+
+<apex:actionRegion id="SignupForGroup">   
+<table cellpadding="10" border="0">
+<apex:outputPanel id="SignupForGroupPanel" rendered="{!camp.Allow_Group_Signup__c}">
+    <tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Are you signing up for yourself or for a group?" style="color:#585858; font-size:15px;"/></td>
+</tr>
+    <tr>
+    <td align="left" valign="top">
+    <apex:selectRadio style="width:100%;" label="Are you signing up for yourself or for a group?" value="{!selectedSignupForGroup}" layout="pagedirection" > 
+        <apex:selectOptions value="{!SignupForGroupOptions}"/>                                       
+        <apex:actionSupport event="onchange" rerender="wrapperPanel"/>
+    </apex:selectRadio>
+</td>
+</tr>
+</apex:outputPanel>   
+    </table>    
+
+<apex:outputPanel id="wrapperPanel">
+<apex:outputPanel id="GroupSignupQuestions" rendered="{!if(selectedSignupForGroup=='Yourself only' || selectedSignupForGroup == null,false,true)}">
+  
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Group'),true,false)}" >
+<table cellpadding="10" border="0">
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="What is the name of your business, organization or group?"  /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Group__c}" style="width: 300px;" required="true"/></td>
+</tr>
+    </table>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Nr_in_Group'),true,false)}" >
+<table cellpadding="10" border="0">
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="How many individuals are you bringing in your group?"  /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Nr_in_Group__c}" style="width: 300px;" required="true"/></td>
+</tr>
+    </table>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS(camp.Signup_Questions__c,'Adults in group'),true,false)}" >
+<table cellpadding="10" border="0">
+    <tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="How many adults (over 18) are you bringing in your group?"  /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Nr_Adults__c}" style="width: 300px;" required="true" /></td>
+</tr>
+    </table>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Teammates'),true,false)}" >
+<table cellpadding="10" border="0">
+    <tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Please list full name of anyone you would like on your team, as well as ages of any children. (All adults need to register separately.)" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Teammates__c}" style="width: 300px;"  required="true"/></td>
+</tr>
+    </table>
+</apex:outputPanel>
+    </apex:outputPanel>     
+    </apex:outputPanel>    
+	</apex:actionRegion>
+    
+<apex:outputPanel id="NewContactInfo" rendered="{!createNewLead}">
+<apex:messages />
+<div class="topsection">
+<p class="section_header"> We do not have that email address in our database of volunteers.  Please provide your volunteer registration below.</p>
+</div>
+<table>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="First Name" styleClass="gtrlcLabel" style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.FirstName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Last Name" styleClass="gtrlcLabel" style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.LastName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Email" styleClass="gtrlcLabel" style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Email}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Organization, if any" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.description}" style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Street Address" styleClass="gtrlcLabel"/></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingStreet}"  style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="City" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.mailingCity}"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="State or Province" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingState}"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Zip or Postal Code" styleClass="gtrlcLabel"  /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingPostalcode}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="Phone" styleClass="gtrlcLabel" style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.phone}" required="true"/></td>
+</tr>
+
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="How did you find out about our organization?" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.description}" style="width:300px;"/></td>
+</tr>
+
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="What volunteer projects are you interested in?" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top">    
+    <apex:selectCheckboxes value="{!selectedVolunteerInterests}" layout="pageDirection"> 
+        <apex:selectOptions value="{!VolInterestOptions}"/>
+    </apex:selectCheckboxes>
+    </td>
+</tr>
+
+<!--    
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="What expertise would you like to offer?" styleClass="gtrlcLabel" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Volunteer_Skills__c}"/></td>
+</tr>
+-->
+</table>
+    </apex:outputPanel>    
+    
+<div>
+<apex:commandButton action="{!Page2}" value="Next" style="margin:15px; padding:12px 40px; font-size:18px; background:#0b6dc4; color:#fff; border:0;" rendered="{!!isEventFull}" />
+
+<apex:commandButton action="{!ReturnToList}" value="Return to the List of Events" style="margin:15px; padding:12px 5px; font-size:18px; background:#0b6dc4; color:#fff; border:0;" immediate="true"/>
+</div>
+    
+    
+    </apex:outputPanel>
+
+<apex:outputPanel id="nextPage" rendered="{!showNextPage}">   
+<table cellpadding="10" border="0">
+<tr><td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="How did you hear about this activity?" style="color:#585858; font-size:15px;" /></td>
+</tr>
+<tr>
+<td align="left" valign="top" style=" width:100%; display:block; ">
+    <apex:selectRadio style="width:100%;" label="How_Did_You_Hear_About_This_Activity" value="{!selectedHearAboutActivity}" layout="pagedirection" required="true">
+        <apex:selectOptions value="{!hearAboutActivityOptions}"/>
+    </apex:selectRadio>
+</td>
+</tr>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Availability'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="When will you be available for this work?  What days of the week?  Morning or afternoon?  What periods will you be unavailable?"  /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Availability__c}" style="width: 300px;" /></td>
+</tr>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Carpool'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Car pooling" /></td>
+</tr>
+<tr>
+<td align="left" valign="top">
+    <apex:selectRadio style="width:100%;" value="{!selectedCarPooling}" layout="pagedirection"> 
+        <apex:selectOptions value="{!carPoolingOptions}"/>
+    </apex:selectRadio>
+</td>
+</tr>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Pref_Location'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Tell us if you have any sampling location or activity preferences.e.g. preferred sites, no storm sampling, etc." /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Pref_Location__c}" style="width: 300px;"  /></td>
+</tr>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Special_Needs'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Check here if you prefer not to be on brambly or uneven ground." /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Special_Location_Preference__c}" /></td>
+</tr>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Waders'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Will you need to borrow waders?" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Waders__c}" style="width: 300px;" /></td>
+</tr>
+</apex:outputPanel>
+
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Boat'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Do you have a canoe, kayak, or other boat that you can use? If so, what is it and do you have room for others?" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Boat__c}" style="width: 300px;"  /></td>
+</tr>
+</apex:outputPanel>
+
+<apex:outputPanel rendered="{!IF(CONTAINS( camp.Signup_Questions__c,'Shirt_Size'),true,false)}" >
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Your shirt size" /></td>
+</tr>
+<tr>
+<td align="left" valign="top">
+    <apex:selectRadio style="width:100%;" value="{!selectedShirtSize}"> 
+        <apex:selectOptions value="{!ShirtSizeOptions}"/>
+    </apex:selectRadio>
+</td>
+</tr>
+</apex:outputPanel>
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel styleClass="grey_header" value="Questions, comments, expectations, needs" /></td>
+</tr>
+<tr>
+<td align="left" valign="top"><apex:inputField value="{!pcampmmbr.Questions_or_Comments__c}" style="width:300px; background:#cacaca; border:0;" /></td>
+</tr>
+</table>
+
+    <apex:outputPanel rendered="{!IF(CONTAINS(camp.Signup_Questions__c,'Require Emergency Contact Info'),true,false)}" layout="block" styleClass="p22">
+        <div class="table">
+            <div class="title">
+                Emergency Contact (Required)
+            </div>
+
+            <table>
+                <tr class="input-row">
+                    <td> Name </td>
+                    <td> <apex:inputField value="{!pcampmmbr.Emergency_Contact_Name__c}" required="true" /> </td>
+                </tr>
+
+                <tr class="input-row">
+                    <td> Phone </td>
+                    <td> <apex:inputField value="{!pcampmmbr.Emergency_Contact_Phone__c}" required="true" /> </td>
+                </tr>
+            </table>
+        </div>
+    </apex:outputPanel>
+
+<apex:outputPanel >
+<apex:outputPanel id="Waiver" rendered="{!camp.Waiver_Required__c && camp.Slots_Remaining__c>=1}">
+<div class="fields-wrapper">
+<p>
+    Terms and Conditions
+    </p>
+    <div class="black scrollable_box"> <apex:outputText value="{!camp.Waiver__r.Body__c}" escape="false"/> </div>
+ <!--<textArea readonly="true" rows="5" cols="40">
+    
+   I am volunteering for this activity or event and understand that, as a volunteer, I may be involved in activities that have a risk of injury.  I agree that I will only perform volunteer activities that I am comfortable doing and that I am solely responsible for my safety.  I also agree that I will not hold the WaterGrass River Alliance and its officers, directors, employees, or volunteers responsible for any injury to me or my property as a result of my participation in this activity or event.  By providing my email address, I request to be included on the Alliance email list.  I understand that my and/or my child’s name, photograph, voice, or likeness may be used by the Alliance.  I consent to and authorize in advance such use, waive my rights of privacy, agree that such materials shall become the sole and exclusive property of the WaterGrass River Alliance and give up all rights, title, and interest in such property.  This release constitutes a complete release, discharge, and waiver of any and all actions or causes of action against officers, directors. employees, agents, and volunteers of the Alliance.
+
+By registering for this event, I acknowledge that I have carefully read this Liability Waiver in its entirety, fully understand its contents, and voluntarily assume all risks and dangers 
+inherent in participating in this activity or event.
+</textArea>-->
+<br /></div>
+
+<div>
+<p class="checkbox"><apex:inputCheckbox value="{!AgreedToWaiver}">
+         </apex:inputCheckbox>
+         I agree to the Terms and Conditions above.</p>
+    </div>
+    </apex:outputPanel>
+    
+    
+    
+<table class="last-styling">
+<tr>
+<td align="left" valign="top"><apex:inputCheckbox value="{!pcontact.Over_18__c}"></apex:inputCheckbox></td>
+<td align="left" valign="top">I am over 18 years of age.</td>
+</tr>
+
+<tr>
+<td align="left" valign="top"><apex:inputCheckbox value="{!enewsletters}"></apex:inputCheckbox></td>
+<td align="left" valign="top">Please send me WaterGrass River Alliance email newsletters.</td>
+</tr>
+</table>
+</apex:outputPanel>
+
+<apex:outputPanel id="bottombuttons">
+
+<div>
+<apex:commandButton action="{!page1}" value="Back" style="margin:15px; padding:12px 5px; font-size:18px; background:#0b6dc4; color:#fff; border:0;" immediate="true"/>
+    
+<apex:commandButton action="{!submit}" value="Submit" style="margin:15px; padding:12px 40px; font-size:18px; background:#0b6dc4; color:#fff; border:0;" rendered="{!!isEventFull}" />
+</div>
+</apex:outputPanel>    
+
+</apex:outputPanel>
+    </apex:form>
+
+</body>
+</apex:page>

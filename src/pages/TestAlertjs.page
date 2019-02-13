@@ -1,0 +1,39 @@
+<apex:page standardcontroller="Campaign" extensions="testAlertjs" showHeader="false" sidebar="false">
+    
+<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+<apex:includeScript value="{!$Resource.JoseJS}" />
+<apex:stylesheet value="{!$Resource.JoseCSS}" />
+
+    <script>
+    function SorryYouCantSign() {
+        alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with our organization in the future");
+        CallRestOfDeclineWaiver();
+    }
+    
+    function Oversubscribed() {
+        console.log('XXX');
+        var slotsremaining = '{!campaign.Slots_Remaining__c}';
+        var slotsdesired = document.getElementById('{!$Component.j_id0:TestAlertjsform:NrInGroup}').value;
+        console.log('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired + '.');
+        alert('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired);
+        if (slotsremaining < slotsdesired) {
+        alert('Sorry, we only have ' + {!campaign.Slots_Remaining__c} + ' slots left.');
+        }
+    }
+    </script>
+
+
+<apex:form id="TestAlertjsform">
+                                      
+                                                
+    <apex:outputPanel rendered="{!IF(CONTAINS(campaign.Signup_Questions__c,'Nr_in_Group'),true,false)}" layout="none" id="NrInGroupPanel">
+        <tr class="input-row"> 
+            <td> How many individuals are you bringing in your group? </td> 
+            <td> <apex:inputField value="{!cm.Nr_in_Group__c}" required="true" id="NrInGroup" onchange="Oversubscribed()">
+                <!--<apex:actionSupport event="onchange" oncomplete="Oversubscribed()" status="status"/>-->
+                </apex:inputField></td> 
+        </tr>
+    </apex:outputPanel>
+                                                
+</apex:form>                                                    
+</apex:page>

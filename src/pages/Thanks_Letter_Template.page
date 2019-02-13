@@ -1,0 +1,57 @@
+<apex:page renderAs="{!renderAs}" showHeader="false" 
+    standardController="Opportunity" extensions="Thanks_Template_Controller" 
+    applyHTMLtag="false" standardStylesheets="false" >
+    <apex:stylesheet value="{!$Resource.Thanks_CSS_Header}"/>
+   
+<apex:form >  
+<!-- Notes and comments go between these brackets.  This letter is a starting point for all plain TY letters.  Do not edit this letter.  Clone it and edit the cloned letter -->
+
+<!-- <apex:inputHidden value="{!Opportunity.Contact__c}"/> -->
+
+<!-- Header image (logo) goes here -->
+<apex:image id="theImage" value="{!$Resource.Thanks_Header_Standard}" width="650"/> 
+
+<!-- Body of text goes here, including date and address block -->
+<br/>
+<apex:outputText value="{0,date,MMMM d, yyyy}"> <br/>
+       <apex:param value="{!TODAY()}" />
+</apex:outputText> <br/>
+<br/>
+
+{!Opportunity.Account.Addressee__c}<br/>
+{!Opportunity.Account.BillingStreet} <br/>
+{!Opportunity.Account.BillingCity}, {!Opportunity.Account.BillingState} {!Opportunity.Account.BillingPostalCode}<br/>
+<br/>
+
+Dear {!Opportunity.Account.Dear__c}: <br/>
+<br/>
+Thank you for your generous gift of <apex:outputText value=" "/><apex:outputfield value="{!Opportunity.Amount}"/> 
+on <apex:outputText value=" {0,date,MMMM d, yyyy}"> <apex:param value="{!TODAY()}"/> </apex:outputText> 
+to the WaterGrass River Alliance for our {!Opportunity.Campaign.Name} campaign.<br/>
+<br/>  
+Thanks to the support of members like you, we are able to continue our proud fourteen year history 
+of protecting the health of the WaterGrass River.<br/>
+<br/>
+This July we unveiled our revised WaterGrass Water Agenda.  This comprehensive guide for protecting 
+the WaterGrass River has been providing strategic direction for river advocates all across the state since 2007.  
+The updated version focuses on goal-oriented solutions to achieving healthy waters in the state.<br/>
+<br/>
+Additionally, we continue to provide leadership in networking and supporting an alliance of more than 
+sixty local community groups working across the state to protect their local waterways.  
+This alliance of concerned citizens, which recently came together for our 13th annual conference, 
+Water Rally, is the backbone of our river movement and we are proud to play such an important role.<br/>
+<br/>
+You care and we are grateful that you have chosen to act on that concern by giving to the WaterGrass River Alliance.  
+Together we can protect healthy rivers and healthy people!<br/>
+<br/>
+
+<!-- Signature block here, from VF Component -->
+<c:TY_Letter_Signature_Block > </c:TY_Letter_Signature_Block>
+
+
+<footer style="position:fixed; bottom:0; text-align:center; width:100%; color:rgb(82,92,153);">
+<c:TY_Letter_Footer > </c:TY_Letter_Footer>
+</footer>
+
+</apex:form>
+</apex:page>

@@ -1,0 +1,8 @@
+<apex:component >
+  <!-- Do not remove this note, it will not print.  Place any content and HTML below. For assistance, see 
+  https://docs.google.com/document/d/1zacKF_91lDEiaOe9tr_D1CcSO005vs6i-zzrxtMznNE/edit#heading=h.28di9ipjmtj -->
+
+MyOrganization &middot; 845 Myorg Rd. &middot; MyOrg City, VA 00000 &middot; 202-111-2222 <br/>
+www.myorgwebpage.org<br/>
+ 
+</apex:component>

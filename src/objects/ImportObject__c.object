@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <allowInChatterGroups>false</allowInChatterGroups>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Accepts data from Excel through the Salesforce import wizard and inserts it correctly into WaterGrass.</description>
+    <enableActivities>false</enableActivities>
+    <enableBulkApi>true</enableBulkApi>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <enableSearch>true</enableSearch>
+    <enableSharing>true</enableSharing>
+    <enableStreamingApi>true</enableStreamingApi>
+    <fields>
+        <fullName>Account_LegacyID__c</fullName>
+        <description>The ID from the previous database, if there is one.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The ID from the previous database, if there is one.</inlineHelpText>
+        <label>Account_LegacyID</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Account Name</label>
+        <length>222</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Account_Record_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Account Record Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Business</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Education</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Family</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Foundation</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Government</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Internal</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Media</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Nonprofit</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Watershed Group</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Address_City__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_City</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_Country__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_Country</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_County__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_County</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_State__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_State</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_StreetLine1__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_StreetLine1</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_StreetLine2__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_StreetLine2</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Address_StreetLine3__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_StreetLine3</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address_ZipCode__c</fullName>
+        <externalId>false</externalId>
+        <label>Address_ZipCode</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Address__c</fullName>
+        <externalId>false</externalId>
+        <formula>Address_StreetLine1__c &amp; BR() &amp;
+IF(Address_StreetLine2__c != NULL, Address_StreetLine2__c &amp; BR(), &apos;&apos;) &amp;
+Address_City__c &amp; &apos;, &apos; &amp; Address_State__c &amp; &apos; &apos; &amp; Address_ZipCode__c &amp; BR() &amp;
+Address_Country__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Address</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Batch__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Batch</label>
+        <referenceTo>Data_Import_Batch__c</referenceTo>
+        <relationshipLabel>Imported Records</relationshipLabel>
+        <relationshipName>ImportedRecords</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>CampaignMember_Status__c</fullName>
+        <description>Accepted values are the campaignmember.status field values.  Currently Attended; RSVPed and Attended; Donated; Communication sent; Signed e-petition; No Show; Responded No; Responded Yes; Added to campaign;Contributed; Took action</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Accepted values are the campaignmember.status field values.  Currently Attended; RSVPed and Attended; Donated; Communication sent; Signed e-petition; No Show; Responded No; Responded Yes; Added to campaign;Contributed; Took action</inlineHelpText>
+        <label>CampaignMember_Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Attended</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>RSVPed and Attended</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Donated</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Communication sent</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Signed e-petition</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>No Show</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Responded No</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Responded Yes</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Added to campaign</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Contributed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Took action</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Campaign_IsActive__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If the campaign is still active, &quot;1&quot;.  Otherwise blank or 0.  This helps filter out campaigns which are already completed.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the campaign is still active, &quot;1&quot;.  Otherwise blank or 0.  This helps filter out campaigns which are already completed.</inlineHelpText>
+        <label>Campaign_IsActive</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_LegacyID__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign_LegacyID</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Campaign_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign_Name</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Campaign_Record_Type__c</fullName>
+        <description>A restricted picklist of campaign types that exist in WaterGrass.  If you have added a type of campaign and you&apos;re adding records that include the new type, then it also has to be added to the values picklist of Campaign_Type.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A restricted picklist of campaign types that exist in WaterGrass.  If you have added a type of campaign and you&apos;re adding records that include the new type, then it also has to be added to the values picklist of Campaign_Type.</inlineHelpText>
+        <label>Campaign Record Type</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Fundraising_Activity</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Good_or_Service</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Outreach_Campaign</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Public_Event</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Signup</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Volunteer_Event</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Campaign_TypeText__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign_TypeText</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Company_or_Organization__c</fullName>
+        <description>Name of the company or organization the person should be linked to, if any.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of the company or organization the person should be linked to, if any.</inlineHelpText>
+        <label>Company or Organization</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ContactCalculated__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The data import controller calculates this import object is related to this contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The data import controller calculates this import object is related to this contact.</inlineHelpText>
+        <label>ContactCalculated</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>ImportObjects</relationshipLabel>
+        <relationshipName>Source_ImportObjects</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_Amount__c</fullName>
+        <description>The amount of the donation, worth of the inkind donation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The amount of the donation, worth of the inkind donation.</inlineHelpText>
+        <label>Contribution_Amount</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contribution_Anonymous__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>When checked, will mark contribution as anonymous</description>
+        <externalId>false</externalId>
+        <inlineHelpText>When checked, will mark contribution as anonymous</inlineHelpText>
+        <label>Contribution Anonymous?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_Description__c</fullName>
+        <externalId>false</externalId>
+        <label>Contribution Description</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_HoursActual__c</fullName>
+        <externalId>false</externalId>
+        <label>Contribution_HoursActual</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackTrending>false</trackTrending>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contribution_MmbrEndDate__c</fullName>
+        <description>Membership End Date</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Membership End Date</inlineHelpText>
+        <label>Contribution_MmbrEndDate</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_MmbrStartDate__c</fullName>
+        <externalId>false</externalId>
+        <label>Contribution_MmbrStartDate</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_RecordType__c</fullName>
+        <description>Uses only values accepted by WaterGrass.  If you have other values, either put this data into Contribution_Type, which is a Text field, or change the values in your spreadsheet before you import it.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Uses only values accepted by WaterGrass.  If you have other values, either put this data into Contribution_Type, which is a Text field, or change the values in your spreadsheet before you import it.</inlineHelpText>
+        <label>Contribution_RecordType</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Challenge</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Donation</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Event</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>InKind</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Major Donation</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Membership</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pledge</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Service</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Volunteer Task</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Contribution_Stage__c</fullName>
+        <description>Only WaterGrass values accepted.  &quot;Closed/Won&quot; can be used for any completed contribution - donation, hours of volunteer work, inkind donation.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Only WaterGrass values accepted.  &quot;Closed/Won&quot; can be used for any completed contribution - donation, hours of volunteer work, inkind donation.</inlineHelpText>
+        <label>Contribution_Stage</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Closed/Won</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Closed Lost</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Planned</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Orphan</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Adopted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Completed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Abandoned</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Promised</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Payment Received</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Thank you mailed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant Prep</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant Submitted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant Under Review</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant Awarded</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Grant Denied</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Prospect</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Letter Sent</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Meeting scheduled</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ask Under Review</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ask Denied</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Ask Accepted</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Donation Received</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Paid / Current</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Unpaid</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Send Pledge Reminder</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Pledge Recorded</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Prospecting</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Qualification</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Needs Analysis</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Value Proposition</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Id. Decision Makers</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Perception Analysis</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Proposal/Price Quote</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Negotiation/Review</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Contribution_TransactionDate__c</fullName>
+        <description>In format &quot;yyyy-mm-dd&quot;</description>
+        <externalId>false</externalId>
+        <inlineHelpText>In format &quot;yyyy-mm-dd&quot;</inlineHelpText>
+        <label>Contribution_TransactionDate</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Contribution_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Contribution_Type</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Created_Campaign_Member_Record__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Created Campaign Member Record?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Created_Contribution_Record__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Created Contribution Record?</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Created_Second_Contact__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Created Second Contact</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>LeadCalculated__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The LeadId calculated by the data import controller.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The LeadId calculated by the data import controller.</inlineHelpText>
+        <label>LeadCalculated</label>
+        <referenceTo>Lead</referenceTo>
+        <relationshipLabel>ImportObjects</relationshipLabel>
+        <relationshipName>Source_ImportObjects</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>MatchReliability__c</fullName>
+        <description>How did the data import controller match this record to the contact or lead?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How did the data import controller match this record to the contact or lead?</inlineHelpText>
+        <label>MatchReliability</label>
+        <length>100</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_Address__c</fullName>
+        <externalId>false</externalId>
+        <formula>if( ContactCalculated__c = null, 
+
+LeadCalculated__r.Street &amp; BR() &amp;  
+LeadCalculated__r.City &amp; &apos;,  &apos; &amp; LeadCalculated__r.State &amp; &apos; &apos; &amp; LeadCalculated__r.PostalCode &amp; BR() &amp; 
+LeadCalculated__r.Country,
+
+
+ ContactCalculated__r.MailingStreet &amp; BR() &amp;  
+ContactCalculated__r.MailingCity &amp; &apos;,  &apos; &amp; ContactCalculated__r.MailingState &amp; &apos; &apos; &amp; ContactCalculated__r.MailingPostalCode &amp; BR() &amp; 
+ContactCalculated__r.MailingCountry )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Match_Address</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_EmailWork__c</fullName>
+        <externalId>false</externalId>
+        <formula>If(
+
+If(ContactCalculated__c = null,
+ LeadCalculated__r.Work_Email__c,
+ ContactCalculated__r.Work_Email__c )
+
+=  Person_EmailWork__c ,
+
+
+If(ContactCalculated__c = null,
+ LeadCalculated__r.Work_Email__c,
+ ContactCalculated__r.Work_Email__c ),
+
+
+UPPER(If(ContactCalculated__c = null,
+ LeadCalculated__r.Work_Email__c,
+ ContactCalculated__r.Work_Email__c ))
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Match_EmailWork</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(
+ ContactCalculated__c = null,
+
+ ContactCalculated__r.Email ,
+
+ LeadCalculated__r.Email )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Match_Email</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_PhoneMobile__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ContactCalculated__c = null,
+
+ ContactCalculated__r.MobilePhone  ,
+
+LeadCalculated__r.MobilePhone)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Match_PhoneMobile</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_PhoneWork__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF(ContactCalculated__c = null, 
+
+ContactCalculated__r.Account.Phone , 
+
+LeadCalculated__r.Phone)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Match_PhoneWork</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Match_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Match Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Matched to Contact</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Matched to Lead</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>New Contact Created</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>New Lead Created</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Error with New Record Creation</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Matched to Converted Lead</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Missing_Campaign__c</fullName>
+        <externalId>false</externalId>
+        <formula>AND (
+NOT(ISBLANK(Campaign_Name__c)),
+Created_Campaign_Member_Record__c = FALSE
+)</formula>
+        <label>Missing Campaign</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Missing_Contribution__c</fullName>
+        <externalId>false</externalId>
+        <formula>AND (
+
+NOT(ISBLANK(Contribution_Amount__c)),
+Created_Contribution_Record__c = false
+)</formula>
+        <label>Missing Contribution</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Missing_Second_Contact__c</fullName>
+        <description>Flag to identify missing Second Contacts</description>
+        <externalId>false</externalId>
+        <formula>AND (
+NOT(ISBLANK(Person2_LastName__c)),
+Created_Second_Contact__c= FALSE
+)</formula>
+        <inlineHelpText>Flag to identify missing Second Contacts</inlineHelpText>
+        <label>Missing Second Contact</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Note__c</fullName>
+        <externalId>false</externalId>
+        <label>Note</label>
+        <length>2000</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Person2_FirstName__c</fullName>
+        <externalId>false</externalId>
+        <label>Person2_FirstName</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person2_LastName__c</fullName>
+        <externalId>false</externalId>
+        <label>Person2_LastName</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_DoNot__c</fullName>
+        <description>Restrictions on how you contact this person.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Restrictions on how you contact this person.</inlineHelpText>
+        <label>Person_DoNot</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>DoNot</valueSetName>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Person_EmailOther__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_EmailOther</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_EmailPersonal__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_EmailPersonal</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_EmailWork__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_EmailWork</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_FirstName__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_FirstName</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_LastName__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_LastName</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_LegacyID__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_LegacyID</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_MailingListsText__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_MailingListsText</label>
+        <length>1000</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Person_PhoneHome__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_PhoneHome</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Person_PhoneMobile__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_PhoneMobile</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Person_PhoneOther__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_PhoneOther</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Person_PhoneWork__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_PhoneWork</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Person_Prefix__c</fullName>
+        <description>Mr., Ms., etc.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Mr., Ms., etc.</inlineHelpText>
+        <label>Person_Prefix</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_Title__c</fullName>
+        <description>Professional Title, ie. Director of Fundraising</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Professional Title, ie. Director of Fundraising</inlineHelpText>
+        <label>Person_Title</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Person_VolunteerInterestsText__c</fullName>
+        <externalId>false</externalId>
+        <label>Person_VolunteerInterestsText</label>
+        <length>1000</length>
+        <trackTrending>false</trackTrending>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Processed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Processed_Date</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Processed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If the record has already been processed and inserted into the database, this field is true.  Otherwise null or false.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If the record has already been processed and inserted into the database, this field is true.  Otherwise null or false.</inlineHelpText>
+        <label>Processed</label>
+        <trackTrending>false</trackTrending>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>SalesforceOwnerID__c</fullName>
+        <externalId>false</externalId>
+        <label>SalesforceOwnerID</label>
+        <length>255</length>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Status</label>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>To Process</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Processed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Error with Processing</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Holding</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <label>ImportObject</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Processed_Date__c</columns>
+        <columns>CREATED_DATE</columns>
+        <columns>Person_LastName__c</columns>
+        <columns>Person_FirstName__c</columns>
+        <columns>Company_or_Organization__c</columns>
+        <columns>Batch__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>Imported_this_week</fullName>
+        <columns>OBJECT_ID</columns>
+        <columns>NAME</columns>
+        <columns>Batch__c</columns>
+        <columns>Account_Name__c</columns>
+        <columns>Address_City__c</columns>
+        <columns>Person_EmailPersonal__c</columns>
+        <columns>Campaign_Name__c</columns>
+        <columns>Contribution_Amount__c</columns>
+        <columns>OWNER.ALIAS</columns>
+        <columns>Processed__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CREATED_DATE</field>
+            <operation>equals</operation>
+            <value>THIS_WEEK</value>
+        </filters>
+        <label>Imported this week</label>
+    </listViews>
+    <listViews>
+        <fullName>Not_Processed</fullName>
+        <columns>NAME</columns>
+        <columns>Person_FirstName__c</columns>
+        <columns>Person_LastName__c</columns>
+        <columns>Person_EmailPersonal__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Status__c</field>
+            <operation>equals</operation>
+            <value>To Process</value>
+        </filters>
+        <label>Not Processed</label>
+    </listViews>
+    <nameField>
+        <displayFormat>ImportObject-{0000}</displayFormat>
+        <label>ImportObject Name</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>ImportObjects</pluralLabel>
+    <searchLayouts>
+        <searchFilterFields>Person_EmailPersonal__c</searchFilterFields>
+        <searchResultsAdditionalFields>Person_EmailPersonal__c</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <startsWith>Vowel</startsWith>
+</CustomObject>

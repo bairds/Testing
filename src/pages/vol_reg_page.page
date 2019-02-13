@@ -1,0 +1,110 @@
+<apex:page standardController="Contact" extensions="Vol_Reg_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/> 
+
+<body bgcolor="white">
+
+<apex:form >
+<apex:messages />
+
+<apex:outputpanel id="pContactInfo" >
+<apex:messages style="color: #red;" />
+<div class="topsection">
+<p class="section_header">First time volunteer registration</p></div>
+
+
+<table cellpadding="10" border="0">
+
+<tr>
+<td width="150px" align="left" valign="top"><apex:outputLabel value="First Name" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.FirstName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Last Name" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pcontact.LastName}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Email" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Email}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Organization, if any" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputText value="{!Company}" style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Street Address" styleClass="gtrlcLabel"/></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingStreet}" required="true" style="width:250px;height:20px"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="City" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.mailingCity}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="State or Province" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingState}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Zip or Postal Code" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.mailingPostalcode}" required="true"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Phone" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputfield value="{!pContact.phone}"/></td>
+</tr>
+
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="How did you find out about HRWC?" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputtextarea value="{!HowHeardAbout}" style="width:300px;" required="true"/></td>
+</tr>
+
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="What volunteer projects are you interested in?" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Volunteer_Interests__c}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="What expertise would you like to offer?" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputField value="{!pContact.Volunteer_Skills__c}"/></td>
+</tr>
+
+<tr>
+<td width="100px" align="left" valign="top"><apex:outputLabel value="Do you have any questions or comments for us?" styleClass="gtrlcLabel" /></td>
+<td align="left" valign="top"><apex:inputTextarea value="{!Comments}" style="width:300px;"/></td>
+</tr>
+
+</table>
+
+</apex:outputpanel>
+<apex:outputPanel >
+<table>
+<tr>
+<td width="100px" align="left" valign="top"><apex:inputCheckbox value="{!pcontact.Over_18__c}"></apex:inputCheckbox></td>
+<td align="left" valign="top">I am over 18 years of age.</td>
+</tr>
+
+</table>
+</apex:outputPanel>
+
+<apex:outputPanel id="bottombuttons">
+
+<div style="margin-left: 253px;">
+<apex:commandButton action="{!submit}" value="Submit"/>
+
+<apex:commandButton action="{!Cancel}" value="Cancel" immediate="true"/>
+</div>
+</apex:outputPanel>
+
+</apex:form>
+
+</body>
+</apex:page>

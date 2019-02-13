@@ -1,0 +1,25 @@
+<apex:page showheader="false" cache="false" standardController="Opportunity" extensions="Thanks_List_Controller" 
+    sidebar="false" standardStylesheets="false" >
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+
+<apex:outputPanel rendered="false">{!Opportunity.Name}
+</apex:outputPanel>
+            <p class="header">Which template do you want to use?  (Must have Thanks in its title.)  Click your selection.</p>
+            
+            
+<apex:form >
+                <apex:dataTable value="{!Thanks_Templates}" var="tt" cellPadding="5" border="1">
+                  <apex:column >
+                   <apex:facet name="header">Name</apex:facet>
+                   <apex:commandLink action="{!saveAttach}" value="{!tt.Name}">
+                        <apex:param assignTo="{!TemplateName}" value="{!tt.Name}" name="abc"/>
+                   </apex:CommandLink>
+                  </apex:column>
+                  <apex:column >
+                   <apex:facet name="header">Description</apex:facet>
+                   {!tt.description}
+                  </apex:column>
+                </apex:dataTable>
+            </apex:form>
+ 
+        </apex:page>

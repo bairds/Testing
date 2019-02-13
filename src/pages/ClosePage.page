@@ -1,0 +1,6 @@
+<apex:page sidebar="false" showHeader="false" controller="Petition_controller">
+<font color="grey">
+<h1>Your name has been entered on the petition.</h1><br/><br/><br/>
+<h1>You can now close this window, or continue to another page in the website.</h1>
+</font>
+</apex:page>

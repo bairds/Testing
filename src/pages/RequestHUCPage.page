@@ -1,0 +1,18 @@
+<apex:page showHeader="false" sidebar="false" standardController="Account" extensions="requestHUCValues" action="{!callFromVFPage}">
+<h1>
+    Requested watershed and subwatershed from USGS watershed database.
+    </h1>
+<apex:pageBlock >
+    <apex:pageBlockSection columns="2">
+        <apex:outputField label="Watershed:" value="{!acct.HUC_Watershed__c}"/>
+        <apex:outputField label="Subwatershed:" value="{!acct.HUC_Subwatershed__c}"/>
+        <apex:outputField label="Code:" value="{!acct.HUC_Code__c}"/>
+        <apex:outputField label="Status:" value="{!acct.HUC_Status__c}"/>
+        <apex:outputField label="Errors:" value="{!acct.HUC_Errors__c}"/>
+    </apex:pageBlockSection>
+    </apex:pageBlock>
+<h1>
+    Refresh the Account Detail page to see the new watershed values in the record.
+    </h1>    
+    
+</apex:page>

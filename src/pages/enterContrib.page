@@ -1,0 +1,471 @@
+<apex:page standardController="Opportunity" extensions="enterContrib" showheader="true" sidebar="false" docType="html-5.0">
+    
+     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+
+<apex:pageMessages id="ErrorMessages"/>
+<apex:form >
+<apex:actionFunction name="SubmitAcct" action="{!submitAcct}" />
+<apex:actionFunction name="SubmitCtct" action="{!submitCtct}"/>
+<apex:actionFunction name="SubmitLead" action="{!submitLead}"/>
+
+
+    <style>
+        .sample-form { 
+            margin: 20px;
+            width: 400px;
+            font-size: 16px; 
+        }
+        .sample-form h3 { 
+            margin:8px 0; 
+            display:block; 
+        }
+        .sample-form button { 
+            margin: 18px 0; 
+            padding: 5px 10px;
+        }
+    </style>
+  
+<h1><apex:outputText rendered="{!acct.id==null && ctct.id==null && ld.id==null}"><center>Enter New Contribution</center></apex:outputText></h1>
+
+    <apex:outputPanel layout="block" styleClass="container" id="select_contributor">
+<apex:pageBlock id="EnterAccountBlock" helpTitle="Help for this page" helpURL="https://docs.google.com/document/d/1-uPZMZA28t0NlLUbS2WghgY6StnqmCsP-D6wqG1A0Hg">
+    
+        <apex:actionRegion >  
+            <div class="control">            
+                <div class="p11">
+                    <c:AutoCompleteV2 labelField="Name" SObject="Account;Contact;Lead" valueField="Id" syncManualEntry="false" targetField="{!contributorId}" styleClass="autocomplete ma" 
+                              autoSubmit="true" placeholder="search & select contributor" allowClear="false" />
+                    
+                    <apex:actionFunction action="{!selectContributor}" name="selectOption" reRender="select_contributor" />
+                </div>
+                
+                <div class="p11"> <apex:commandButton value="Create New Account and Contact(s)" style="color: red;" action="{!createNewAccountContact}" rendered="{!!readyforContrib}" /> </div>      
+                <div class="p11"> <apex:commandButton value="Exit" style="color: red;" action="{!exit}" immediate="true" rendered="{!!readyforContrib}" /> </div>
+            </div>
+        </apex:actionRegion>
+    
+<apex:actionRegion id="AcctCtctLeadRegion">
+       <table width="100%" align="left">
+       <tr>
+       <td width="25%" style="vertical-align: top; padding-top: 15px;">
+
+<apex:outputPanel styleclass="page_header" rendered="{!ctct.id!=null && acct.id==null}">Please choose an account:</apex:outputPanel> 
+<p style="color:red"><apex:outputPanel rendered="{!ctct.id!=null && acct.id==null}">
+    <apex:commandLink action="{!choseAccount}" value="{!ctct.account.name}" immediate="true"/>
+                     <br/><br/>
+</apex:outputPanel></p>
+
+<apex:outputPanel styleclass="page_header"  rendered="{!acct.id!=null || ctct.id==null}">Account {!if(acct.ID==null,""," - "&acct.name)}</apex:outputPanel>
+           
+ <!--          
+<c:Typeahead searchBoxId="acctSearchBox" object="Account" primaryField="Name" secondaryField="BillingCity" 
+                searchScope="NAME" placeholder="{!if(acct.id==null, if(ctct.id==null || acct.id!=null,"Find Name of Organization or Household","  or Search for Other Account Here"), "  
+or Search for Other Account Here")}" minSearchLength="3" 
+                destinationForSelectedId="accountId" destinationForSelectedValue="accountName" stealFocus="false"/>
+        <input type="hidden" name="accountId" id="accountId" value="{!acct.id}"/>     
+        <input type="hidden" name="accountName" id="accountName" value="{!acct.Name}"/>-->
+
+<br/>
+        
+<apex:outputPanel id="EditAccount" rendered="{!acct.id!=null && readyForContrib!=true}">
+<apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+            <apex:outputText value="Type of account:"/>
+            <apex:inputfield value="{!acct.RecordTypeID}" />
+            <apex:outputText value="Phone: "/>
+            <apex:inputfield value="{!acct.Phone}"/>
+            <apex:outputText value="Street address: "/>
+            <apex:inputfield value="{!acct.BillingStreet}"/>
+            <apex:outputText value="City:  "/>
+            <apex:inputfield value="{!acct.BillingCity}"/>
+            <apex:outputText value="State or province"/>
+            <apex:inputfield value="{!acct.BillingState}"/>
+            <apex:outputText value="Zip code:"/>
+            <apex:inputfield value="{!acct.BillingPostalCode}"/>
+            <apex:commandButton action="{!cancelnewAcctCtct}"  style="color: red;" value="Cancel" immediate="true"/>
+            <apex:commandButton value="Update Account Only" style="color: red;" action="{!UpdateAcct}"/>
+            <apex:outputText value=" "/>
+            <apex:commandButton value="Update Account & All Contacts" style="color: red;" action="{!UpdateAcct_Ctcts}"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="_________________"/>
+</apex:panelGrid>
+        </apex:outputPanel>
+        
+       
+        <br/><br/>
+        
+<apex:outputPanel id="EnterAccountContactBlock">
+<apex:actionRegion rendered="{!newAcctCtct}">
+<apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+            <apex:outputText value="Account Name (leave blank for Family:)"/>
+            <apex:inputText value="{!aname}"/>
+            <apex:outputText value="Type of account:"/>
+            <apex:inputfield value="{!acct.RecordTypeID}"/>
+            <apex:outputText value="Phone: "/>
+            <apex:inputfield value="{!acct.Phone}"/>
+            <apex:outputText value="Street address: "/>
+            <apex:inputfield value="{!acct.BillingStreet}"/>
+            <apex:outputText value="City:  "/>
+            <apex:inputfield value="{!acct.BillingCity}"/>
+            <apex:outputText value="State or province"/>
+            <apex:inputfield value="{!acct.BillingState}"/>
+            <apex:outputText value="Zip code:"/>
+            <apex:inputfield value="{!acct.BillingPostalCode}"/>
+            <apex:outputLabel value="Number of Contacts:"/>
+                         <apex:outputPanel >
+              <apex:inputField value="{!acct.Contacts_in_Account__c}">
+                <apex:actionSupport event="onchange"
+                                    rerender="EnterAccountContactBlock, enterNewContacts"
+                                    status="status"/>
+              </apex:inputField>
+              <apex:actionStatus startText="applying value..." id="status"/>
+       </apex:outputPanel> 
+       <apex:outputText value=" "/>
+        <apex:commandButton action="{!cancelnewAcctCtct}"  style="color: red;" value="Cancel" immediate="true"/>
+       <apex:outputText value=" "/>
+        <apex:commandButton action="{!submitAcctCtcts}" style="color: red;" value="Submit New Account and Contact(s)"/>
+
+</apex:panelGrid>
+</apex:actionRegion>
+</apex:outputPanel>
+        </td>
+        
+        <td width="10%"></td>
+       <td width="25%" style="vertical-align: top; padding-top: 15px;">
+<p class="page_header">Primary Contributor  {!if(ctct.ID==null,""," - " & ctct.firstname & " " & ctct.lastname & " (" & ctct.MailingCity &  ")") }</p>
+<apex:outputText rendered="{!ctct.id==null && acct.id!=null}"><b>Please choose from the contacts in the account, or find or create a new contact.</b></apex:outputText>
+
+                <apex:dataTable value="{!ListContacts}" var="c" cellPadding="10" border="0" rendered="{!showListContacts}" >
+                  <apex:column width="100px" style="vertical-align: top; padding-top : 0px;">
+                    <apex:facet name="header">First Name</apex:facet>
+                     <apex:commandLink action="{!chosePrimaryContributor}" value="{!c.firstname}" immediate="true">
+                     <apex:param name="ContactID" value="{!c.id}" assignTo="{!ContactID}"/>
+                     </apex:commandLink>
+                  </apex:column>
+                  <apex:column style="vertical-align: top; padding-top : 0px;">
+                    <apex:facet name="header">Last Name</apex:facet>
+                    {!c.LastName}
+                  </apex:column>
+                  <apex:column style="vertical-align: top; padding-top : 0px;">
+                    {!if(c.id=primCtctId,'Primary Contact','')}
+                  </apex:column>
+                </apex:dataTable>
+                
+                
+               
+        <!-- <p><b>Not listed?  Search for the contact here:</b></p> -->
+        <!--<c:Typeahead searchBoxId="ctctSearchBox" object="Contact" primaryField="Name" secondaryField="MailingCity" 
+                searchScope="NAME" placeholder="{!if(ctct.id==null && acct.id==null, "Find Name of Contact","  or Search for Other Contact Here")}" minSearchLength="3" 
+                destinationForSelectedId="contactId" destinationForSelectedValue="cName" stealFocus="false" />  
+        <input type="hidden" name="contactId" id="contactId" />     
+        <input type="hidden" name="cName" id="cName" /><br/>-->
+
+<apex:outputPanel id="enterNewContacts">
+<apex:outputPanel id="enter1Contact" rendered="{!(newAcctCtct && (acct.Contacts_in_Account__c=='1'))}">  
+<p class="section_header">Primary contact on account</p>
+<apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+<apex:outputText value="First name"/>
+<apex:inputfield value="{!ctct.FirstName}"  />
+<apex:outputText value="Last name"/>
+<apex:inputfield value="{!ctct.LastName}"  />
+<apex:outputText value="Dear__ (leave blank for autofill)"/>
+<apex:inputfield value="{!ctct.Dear__c}"/>
+<apex:outputText value="Title"/>
+<apex:inputfield value="{!ctct.Title}"/>
+<apex:outputText value="Home phone"/>
+<apex:inputfield value="{!ctct.HomePhone}"/>
+<apex:outputText value="Cell phone"/>
+<apex:inputfield value="{!ctct.MobilePhone}"/>
+<apex:outputText value="Email"/>
+<apex:inputfield value="{!ctct.email}"/>
+</apex:panelGrid>
+</apex:outputPanel>
+  
+<apex:outputPanel id="enterContact2" rendered="{!(newAcctCtct && (acct.Contacts_in_Account__c=='2'))}">      
+<p class="section_header">Primary contact on account</p>
+<apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+<apex:outputText value="First name"/>
+<apex:inputfield value="{!ctct.FirstName}"  />
+<apex:outputText value="Last name"/>
+<apex:inputfield value="{!ctct.LastName}"  />
+<apex:outputText value="Dear__ (leave blank for autofill)"/>
+<apex:inputfield value="{!ctct.Dear__c}"/>
+<apex:outputText value="Title"/>
+<apex:inputfield value="{!ctct.Title}"/>
+<apex:outputText value="Home phone"/>
+<apex:inputfield value="{!ctct.HomePhone}"/>
+<apex:outputText value="Cell phone"/>
+<apex:inputfield value="{!ctct.MobilePhone}"/>
+<apex:outputText value="Email"/>
+<apex:inputfield value="{!ctct.email}"/>
+</apex:panelGrid>
+
+<p class="section_header">Secondary contact on account</p>
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+        <apex:outputText value="First name"/>
+        <apex:inputfield value="{!ctct2.FirstName}"  />
+        <apex:outputText value="Last name"/>
+        <apex:inputfield value="{!ctct2.LastName}"  />
+        <apex:outputText value="Dear__ (leave blank for autofill)"/>
+        <apex:inputfield value="{!ctct2.Dear__c}"/>
+        <apex:outputText value="Title"/>
+        <apex:inputfield value="{!ctct2.Title}"/>
+        <apex:outputText value="Home phone"/>
+        <apex:inputfield value="{!ctct2.HomePhone}"/>
+        <apex:outputText value="Cell phone"/>
+        <apex:inputfield value="{!ctct2.MobilePhone}"/>
+        <apex:outputText value="Email"/>
+        <apex:inputField value="{!ctct2.email}"/><br/>
+</apex:panelGrid> 
+</apex:outputPanel>
+</apex:outputPanel>
+     
+<apex:commandButton action="{!createNewContact}" style="color: red;" value="Create New Contact for This Account"  rendered="{!acct.id!=null && readyForContrib!=true}" /><br/>
+     
+    <apex:outputPanel id="enterContact1" rendered="{!NewCtct && newAcctCtct!=true}">  
+    <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+    <apex:outputText value="First name"/>
+    <apex:inputfield value="{!ctct.FirstName}"  />
+    <apex:outputText value="Last name"/>
+    <apex:inputfield value="{!ctct.LastName}"  />
+    <apex:outputText value="Dear__ (leave blank for autofill)"/>
+    <apex:inputfield value="{!ctct.Dear__c}"/>
+    <apex:outputText value="Title"/>
+    <apex:inputfield value="{!ctct.Title}"/>
+    <apex:outputText value="Home phone"/>
+    <apex:inputfield value="{!ctct.HomePhone}"/>
+    <apex:outputText value="Cell phone"/>
+    <apex:inputfield value="{!ctct.MobilePhone}"/>
+    <apex:outputText value="Email"/>
+    <apex:inputfield value="{!ctct.email}"/>
+    <apex:outputText value=" "/>
+    <apex:commandButton action="{!submitCtctForAcct}" style="color: red;" value="Submit New Contact"/>
+    <apex:outputText value=" "/>
+    <apex:commandButton action="{!cancelNewCtct}" style="color: red;" value="Cancel New Contact" immediate="true"/>
+    </apex:panelGrid>
+    <table >
+    <tr><td>
+    <apex:commandButton action="{!cancelnewCtct}"  style="color: red;" value="Cancel" immediate="true" rendered="{!!newCtct}"/>
+    </td><td>
+    <apex:commandButton action="{!submitCtct}" style="color: red;" value="Submit Contact" rendered="{!!newCtct}"/>
+    </td></tr>
+    </table>
+    </apex:outputPanel>
+
+</td>
+
+<td width = "10%"></td>
+<td width = "20%" style="vertical-align: top; padding-top: 15px;"><p class="page_header">Lead  {!if(ld.ID==null,""," - " & ld.firstname & " " & ld.lastname & "   " & ld.City)}</p>
+
+    <!--<c:Typeahead object="Lead" searchBoxId="leadSearchBox" primaryField="Name" secondaryField="City" placeholder="{!if(ld.id==null, "Find Name of Lead","  or Search for Other Lead Here")}" 
+                minSearchLength="3" destinationForSelectedId="leadId" destinationForSelectedValue="lName" stealFocus="false" filterClause="IsConverted = false" />  
+        <input type="hidden" name="leadId" id="leadId" />     
+        <input type="hidden" name="lName" id="lName" />
+-->
+<br/>
+        
+        <apex:outputPanel id="EditLead" rendered="{!ld.id!=null && readyForContrib!=true}">
+<apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+            <apex:outputText value="Type of lead:"/>
+            <apex:inputfield value="{!ld.RecordTypeID}" />
+            <apex:outputText value="Phone: "/>
+            <apex:inputfield value="{!ld.Phone}"/>
+            <apex:outputText value="Street address: "/>
+            <apex:inputfield value="{!ld.Street}"/>
+            <apex:outputText value="City:  "/>
+            <apex:inputfield value="{!ld.City}"/>
+            <apex:outputText value="State or province"/>
+            <apex:inputfield value="{!ld.State}"/>
+            <apex:outputText value="Zip code:"/>
+            <apex:inputfield value="{!ld.PostalCode}"/>
+            <apex:outputText value="Company:"/>
+            <apex:inputfield value="{!ld.Company}"/>
+            <apex:commandButton action="{!cancelnewLead}"  style="color: red;" value="Cancel" immediate="true"/>
+            <apex:commandButton value="Update Lead" style="color: red;" action="{!UpdateLead}"/>
+            <apex:outputText value=" "/>
+            <apex:outputText value="_________________"/>
+</apex:panelGrid>
+        </apex:outputPanel>
+           </td>
+
+<td width = "10%"></td>
+</tr>
+    </table> 
+    
+</apex:actionRegion>
+     <c:Loading /> 
+        
+        
+    
+</apex:pageBlock>
+    <apex:OutputPanel styleclass="page_header" rendered="{!((acct.id != null && ctct.id!=null) || ld.id!=null) && readyForContrib==false}" style="padding-left:17px;">
+<apex:commandButton action="{!ReadyForContrib}" value="Enter Contribution Info"/>
+</apex:OutputPanel>
+    
+    </apex:outputPanel>
+ <apex:actionRegion >
+  <apex:outputPanel id="enterContrib" rendered="{!((ctct.id != null && acct.id!= null) || ld.id!=null) && readyForContrib==true}">
+    <apex:pageBlock id="enterContribPageBlock" >
+       
+      <p class="page_header">Contribution</p>
+      <hr />
+      <apex:panelGrid columns="1">
+        <apex:outputPanel >
+          <apex:outputText value="Record Type of Contribution"/>
+          <apex:actionStatus id="renderStatus" >
+            <apex:facet name="start" >
+              <img src="/img/loading.gif" />                    
+            </apex:facet>
+          </apex:actionStatus>
+        </apex:outputPanel>
+        <apex:actionRegion >
+          <apex:selectRadio value="{!RTName}" label="Contribution_Type" required="true">
+            <apex:selectOptions value="{!items}"/>
+            <apex:actionSupport event="onchange" reRender="enterContrib" status="renderStatus" />
+          </apex:selectRadio>
+        </apex:actionRegion>
+      </apex:panelGrid>
+      <hr />
+      <apex:outputPanel id="CheckingBlock" rendered="{!checkingBlock}" layout="block" style="display:table-cell">
+      
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="Amount"/>
+          <apex:inputfield value="{!Contrib.Amount}" required="true" />
+          <apex:outputText value="{!IF(membershipBlock, 'Campaign that Generated This Dues Payment.', 'Campaign That Generated This Donation, ie. Annual Appeal 2014, etc.')}"/>
+          <apex:inputfield value="{!Contrib.CampaignID}" required="true" />
+          <apex:outputText value="Date (leave blank for today)"/>
+          <apex:inputfield value="{!Contrib.CloseDate}"/>
+          <apex:outputText value="Check Number"/>
+          <apex:inputfield value="{!Contrib.Check_Num_Text__c}"/>
+          <apex:outputText value="Check Date"/>
+          <apex:inputfield value="{!Contrib.Check_Date__c}"/>
+          <apex:outputText value="Payment Type"/>
+          <apex:inputfield value="{!Contrib.Payment_Type__c}"/>
+          <apex:outputText value="If This is Payment Against a Challenge or Pledge, Find That Challenge or Pledge Here?"/>
+          <apex:inputfield value="{!Contrib.Matches_Which_Challenge_or_Pledge__c}"/>
+        </apex:panelGrid>
+      </apex:outputPanel>
+        
+      <apex:outputPanel id="InKindBlock" rendered="{!inKindBlock}" layout="block" style="display:table-cell">
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="In Kind Value"/>
+          <apex:inputfield value="{!Contrib.Amount}" required="true" />
+          <apex:outputText value="Campaign That Generated This Donation, ie. Annual Appeal 2014, etc."/>
+          <apex:inputfield value="{!Contrib.CampaignID}" required="true" />
+          <apex:outputText value="Description"/>
+          <apex:inputfield value="{!Contrib.Description}"/>
+        </apex:panelGrid>
+      </apex:outputPanel>
+        
+      <apex:outputPanel id="EventBlock" rendered="{!eventBlock}" layout="block" style="display:table-cell">
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="Amount"/>
+          <apex:inputfield value="{!Contrib.Amount}" required="true" />
+          <apex:outputText value="Tax Deductible Amount"/>
+          <apex:inputfield value="{!Contrib.Tax_Deductible_Amount__c}" />
+          <apex:outputText value="Campaign That Generated This Event Payment"/>
+          <apex:inputfield value="{!Contrib.CampaignID}" required="true" />
+          <apex:outputText value="Date (leave blank for today)"/>
+          <apex:inputfield value="{!Contrib.CloseDate}"/>
+          <apex:outputText value="Check Number"/>
+          <apex:inputfield value="{!Contrib.Check_Num_Text__c}"/>
+          <apex:outputText value="Check Date"/>
+          <apex:inputfield value="{!Contrib.Check_Date__c}"/>
+          <apex:outputText value="Payment Type"/>
+          <apex:inputfield value="{!Contrib.Payment_Type__c}"/>
+          <apex:outputText value="Attendees"/>
+          <apex:inputfield value="{!Contrib.Attendee__c}"/>
+        </apex:panelGrid>
+      </apex:outputPanel>
+        
+      <apex:outputPanel id="PledgeBlock" rendered="{!pledgeBlock}" layout="block" style="display:table-cell">
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="Pledge Amount"/>
+          <apex:inputfield value="{!Contrib.Pledge_Amount__c}" required="true" />
+          <apex:outputText value="Campaign That Generated This Donation, ie. Annual Appeal 2014, etc."/>
+          <apex:inputfield value="{!Contrib.CampaignID}" required="true" />
+          <apex:outputText value="Close Date (leave blank for today)"/>
+          <apex:inputfield value="{!Contrib.CloseDate}"/>
+          <apex:outputText value="Payments Begin (leave blank for today)"/>
+          <apex:inputfield value="{!Contrib.Start_Date__c}"/>
+          <apex:outputText value="Number of Payments"/>
+          <apex:inputfield value="{!Contrib.Number_of_Payments__c}" required="true" />
+          <apex:outputText value="How often will you make payments?"/>
+          <apex:inputfield value="{!Contrib.Periodicity__c}" required="true" />
+          <apex:outputText value="How much is each payment?"/>
+          <apex:inputfield value="{!Contrib.Installment_Amount__c}"  />
+        </apex:panelGrid>
+      </apex:outputPanel>
+        
+      <apex:outputPanel id="TaskBlock" rendered="{!taskBlock}" layout="block" style="display:table-cell">
+        <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="Hours"/>
+          <apex:inputfield value="{!Contrib.Hours_Actual__c}" required="true" />
+          <apex:outputText value="Hourly Rate for Task"/>
+          <apex:inputfield value="{!Contrib.Hourly_Rate_for_Vol_Task__c}" required="true" />
+          <apex:outputText value="Campaign That Generated This Volunteer Task"/>
+          <apex:inputfield value="{!Contrib.CampaignID}" required="true" />
+          <apex:outputText value="Date (leave blank for today)"/>
+          <apex:inputfield value="{!Contrib.CloseDate}"/>
+          <apex:outputText value="Supervisor Satisfaction"/>
+          <apex:inputfield value="{!Contrib.Supervisor_Satisfaction__c}"/>
+        </apex:panelGrid>
+      </apex:outputPanel>
+        
+         <div style="display:table-cell; vertical-align:top">
+        	  <apex:panelGrid columns="2" style="margin-left: 10px;" columnClasses="TwoCol1, TwoCol2">
+          <apex:outputText value="Which Thank You Letter to Print?"/>
+        
+         <apex:selectList value="{!templateId}" size="1">
+            <apex:selectOptions value="{!templates}" />
+        </apex:selectList>
+          
+        </apex:panelGrid>
+        </div>
+           
+    </apex:pageBlock>
+  </apex:outputPanel>
+
+  
+
+
+<apex:OutputPanel styleClass="page_header" rendered="{!readyForContrib==true}" style="padding-left:17px;">
+<apex:commandButton action="{!BackToAccountsContacts}" value="Back to Contributor Section" immediate="true"/>
+<apex:commandButton action="{!submitAndNext}" value="Submit and Next" oncomplete="next('{!templateId}', '{!contrib.Id}', '{!LastCampaign}', '{!LastRT}')" />
+<apex:commandButton action="{!submitAndExit}" value="Submit and Exit" oncomplete="exit('{!templateId}', '{!contrib.Id}')" />
+</apex:OutputPanel>
+ </apex:actionRegion>
+</apex:form>
+    <script type="text/javascript">
+
+    
+	function next(templateId, contribId, campaignId, recordTypeId)
+	{
+    	openTemplate(templateId, contribId, campaignId, recordTypeId);    	
+        window.location = '?lastCampaign=' + campaignId + '&lastRT=' + recordTypeId;        
+    }
+
+
+	function exit(templateId, contribId)
+	{
+    	openTemplate(templateId, contribId);    	
+        window.location = '/006/o';        
+    }
+
+	function openTemplate(templateId, contribId)
+	{
+        if(templateId != '' && contribId != '')
+        	window.open('/apex/Print?template=' + templateId + '&contrib=' + contribId);
+    }
+
+        function validateAccountName(){
+            var accValue = document.getElementById('acctSearchBox');
+            if(accValue.value == ''){
+                alert('Please Enter Account Name');
+                return false;
+            }
+        }
+    </script>
+</apex:page>

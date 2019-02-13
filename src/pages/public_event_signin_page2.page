@@ -1,0 +1,74 @@
+<apex:page standardController="Campaign" extensions="Public_Event_Signin_Controller" showHeader="false" 
+        standardStylesheets="false">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+<apex:stylesheet value="{!$Resource.bootstrapcss}"/>
+<apex:stylesheet value="{!$Resource.bootstrapresponsivecss}"/>
+<apex:stylesheet value="{!$Resource.customboostrapcss}"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+<body>
+    <div class="container">
+
+        <h3 class="headtitle">{!camp.name} Sign-In Sheet page 2.</h3>
+
+        <apex:form styleClass="form-horizontal">
+            
+            <fieldset>
+                <legend>We don't have you in our list. Please tell us:</legend>
+                <apex:messages styleClass="help-block" /> 
+                
+                <apex:outputPanel id="NewContactInfo">
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your Email:" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.Email}" required="true" /><span class="help-block">Please ensure your email is correct</span></div>                  
+                </div>
+
+        
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Organization Name:" />
+                    <div class="controls">
+                        <apex:inputField styleClass="input-xlarge textfield" value="{!pcontact.description}" />
+                        <span class="help-block">Church, or Business you're participating with, if any</span>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your Street address:" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge textfield" value="{!pcontact.mailingStreet}" required="true" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your City:" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.mailingCity}" required="true" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="State or Province:" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.mailingState}" required="true" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your phone:" />
+                    <div class="controls"><apex:inputField styleClass="input-xlarge" value="{!pcontact.phone}" /></div>
+                </div>
+
+                <div class="control-group">
+                    <apex:outputLabel styleClass="control-label" value="Your volunteer Interests (optional):" />
+                    <div class="controls">
+                        <apex:selectCheckboxes styleClass="input-xlarge select-checkboxes " value="{!interestselection}"  layout="pageDirection">
+                            <apex:selectOptions value="{!interests}"/>
+                        </apex:selectCheckboxes>
+                    </div>
+                </div>                                  
+                </apex:outputpanel>
+
+                <apex:outputPanel id="bottombuttons">
+                    <div class="row-fluid">
+                        <div class="span1 offset2"><apex:commandButton styleClass="btn btn-large btn-primary" action="{!Submit1}" value="Submit" /></div>
+                    </div>
+                </apex:outputPanel>
+            </fieldset>
+        </apex:form>
+    </div>
+</body>
+</apex:page>

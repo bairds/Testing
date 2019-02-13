@@ -1,0 +1,31 @@
+@isTest
+private class Create_Test_Variables_Test {
+/*
+    @testsetup static void setup(){
+    createCustomSettings.createCustomSettings();
+    }
+*/
+    static testMethod void Create_Test_Variables_Test() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Account TestAcct = ctv.fetchTestAccount();
+        Contact TestCtct = ctv.fetchTestContact();
+		Lead TestLead = ctv.fetchTestLead();
+        CampaignMember TestCM = ctv.fetchTestCM();
+        system.debug('In CTVTest, fetchtestcontact brought back ' + TestCtct.id);
+        Campaign TestCamp = ctv.fetchTestCampaign();
+        Opportunity TestOpp = ctv.fetchTestOpportunity();
+        Text_Document__c TD = ctv.fetchWaiver();
+
+        system.assertEquals('Testcampaign',TestCamp.Name);
+        system.assertEquals('TestAccount',TestAcct.Name);
+        system.assertEquals(TestCtct.lastname,'TestContact');
+		system.assertEquals(TestLead.lastname,'TestLead');
+        system.debug('TestOpportunity name is' + [select id, name from Opportunity where id = :TestOpp.ID].name);
+        system.assertEquals(TestCamp.Id,TestCM.CampaignId);
+        // For some reason, TestOpp.Name gives "autofill" even though the above code gives 
+        // a full "TestAccount 2012-06-04 TestCampaign."  So the system.AssertEquals below is just
+        // a workaround; I don't know what the correct test at this point would be.
+        system.assertEquals(TestOpp.Name, 'autofill');
+        system.assertEquals('TestWaiver',TD.Title__c);
+    }
+}

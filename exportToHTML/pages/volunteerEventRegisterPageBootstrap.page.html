@@ -1,0 +1,789 @@
+<html>
+<head>
+<title>volunteerEventRegisterPageBootstrap.page</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000000;}
+.s1 { color: #000080; font-weight: bold;}
+.s2 { color: #0000ff; font-weight: bold;}
+.s3 { color: #008000; font-weight: bold;}
+.s4 { color: #000080; font-weight: bold;}
+.s5 { color: #000000;}
+.s6 { color: #000000;}
+.s7 { color: #660e7a; font-style: italic;}
+.s8 { color: #660e7a; font-weight: bold; font-style: italic;}
+.s9 { color: #008000; font-weight: bold;}
+.s10 { color: #808080; font-style: italic;}
+.s11 { color: #000000; font-style: italic;}
+.s12 { color: #0000ff;}
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+volunteerEventRegisterPageBootstrap.page</font>
+</center></td></tr></table>
+<pre>&lt;<span class="s1">apex:page </span><span class="s2">controller=</span><span class="s3">&quot;VolunteerEventRegisterBS&quot; </span><span class="s2">showheader=</span><span class="s3">&quot;false&quot; </span><span class="s2">sidebar=</span><span class="s3">&quot;false&quot; </span><span class="s2">docType=</span><span class="s3">&quot;html-5.0&quot;</span>
+           <span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>setSignUp<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">cache=</span><span class="s3">&quot;false&quot;</span>&gt;
+    &lt;<span class="s1">meta </span><span class="s2">name=</span><span class="s3">&quot;viewport&quot; </span><span class="s2">content=</span><span class="s3">&quot;width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0&quot;</span>/&gt;
+
+    &lt;<span class="s1">apex:includeScript </span><span class="s2">value=</span><span class="s3">&quot;https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js&quot;</span>/&gt;
+    &lt;<span class="s1">apex:includeScript </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s7">$</span><span class="s8">Resource</span>.JoseJS<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+    &lt;<span class="s1">apex:stylesheet </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s7">$</span><span class="s8">Resource</span>.JoseCSS<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+    &lt;<span class="s1">apex:stylesheet </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s7">$</span><span class="s8">Resource</span>.BairdCSS<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+    &lt;<span class="s1">link </span><span class="s2">rel=</span><span class="s3">&quot;stylesheet&quot; </span><span class="s2">href=</span><span class="s3">&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css&quot;</span>/&gt;
+    &lt;<span class="s1">link </span><span class="s2">rel=</span><span class="s3">&quot;stylesheet&quot; </span><span class="s2">href=</span><span class="s3">&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css&quot;</span>/&gt;
+    &lt;<span class="s1">script </span><span class="s2">src=</span><span class="s3">&quot;https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js&quot;</span>&gt;&lt;/<span class="s1">script</span>&gt;
+    &lt;<span class="s1">meta </span><span class="s2">name=</span><span class="s3">&quot;viewport&quot; </span><span class="s2">content=</span><span class="s3">&quot;width=device-width, initial-scale=1&quot;</span>/&gt;
+
+    &lt;<span class="s1">script</span>&gt;
+        function SorryYouCantSign() {
+        alert(&quot;We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with our organization in the future&quot;);
+        CallRestOfDeclineWaiver();
+    }
+    
+    function Oversubscribed() {
+        var slotsremaining = '<span class="s4">{!</span>c.Slots_Remaining__c<span class="s4">}</span>';
+        var slotsdesired = document.getElementById('<span class="s4">{!</span><span class="s7">$</span><span class="s8">Component</span>.j_id0:j_id6:NrInGroup<span class="s4">}</span>').value;
+        if (slotsdesired.toString().length == 1) {
+            slotsdesired = &quot;0&quot; + slotsdesired;
+        }
+        console.log('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired + '.');
+        // alert('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired);
+        if (slotsremaining.valueOf() &lt; slotsdesired.valueOf()) {
+            alert('Sorry, we only have ' + <span class="s4">{!</span>c.Slots_Remaining__c<span class="s4">} </span>+ ' slots left.');
+            document.getElementById('<span class="s4">{!</span><span class="s7">$</span><span class="s8">Component</span>.j_id0:j_id6:NrInGroup<span class="s4">}</span>').value = 0;  
+            Slotsdesired = 0;
+            console.log('Slots desired has been reduced to: ' + slotsdesired + ' and HTML component to ' + document.getElementById('<span class="s4">{!</span><span class="s7">$</span><span class="s8">Component</span>.j_id0:j_id6:NrInGroup<span class="s4">}</span>').value);
+            document.getElementById('<span class="s4">{!</span><span class="s7">$</span><span class="s8">Component</span>.j_id0:j_id6:NrInGroup<span class="s4">}</span>').focus();
+        }
+    }
+
+    &lt;/<span class="s1">script</span>&gt;
+
+    &lt;<span class="s1">apex:form</span>&gt;
+        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;container centercontainer&quot;</span>&gt;
+            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;bPageBlock&quot; </span><span class="s2">color=</span><span class="s3">&quot;blue&quot;</span>&gt;
+                &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>errors != <span class="s4">null}</span><span class="s3">&quot;</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;errors&quot;</span>&gt;
+                            <span class="s4">{!</span>errors<span class="s4">}</span>
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                &lt;<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row match-my-cols bcw2&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-sm-4&quot;</span>&gt;
+                            &lt;<span class="s1">apex:image </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s7">$</span><span class="s8">Resource</span>[lo]<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleclass=</span><span class="s3">&quot;img-responsive logo-image&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step!=<span class="s9">'4'</span><span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;WGPageTitle col-sm-8 align-middle&quot; </span><span class="s2">color=</span><span class="s3">&quot;blue&quot;</span>&gt;
+                            <span class="s4">{!</span>title<span class="s4">}</span>
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                        &lt;<span class="s1">apex:outputPanel  </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step==<span class="s9">'4'</span><span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;WGPageTitle col-sm-8 align-middle&quot; </span><span class="s2">color=</span><span class="s3">&quot;blue&quot;</span>&gt;
+                            Thank you for signing up for our <span class="s4">{!</span>c.<span class="s8">name</span><span class="s4">}</span>.  You'll receive a confirmation email from us shortly.
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcb&quot;</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;<span class="s10">&lt;!--First column of output fields--&gt;</span>
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;<span class="s10">&lt;!--First row of output fields--&gt;</span>
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                date:
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputText </span><span class="s2">value=</span><span class="s3">&quot;{0, date, MMMM d', 'yyyy}&quot;</span>&gt;
+                                    &lt;<span class="s1">apex:param </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Event_Date_Time__c + tzoffset<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:outputText</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                starts at
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputText </span><span class="s2">value=</span><span class="s3">&quot;{0, date, h:mm a}&quot;</span>&gt;
+                                    &lt;<span class="s1">apex:param </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>DateTimeStartAdjusted<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:outputText</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                ends at
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputText </span><span class="s2">value=</span><span class="s3">&quot;{0, date, h:mm a}&quot;</span>&gt;
+                                    &lt;<span class="s1">apex:param </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>DateTimeEndAdjusted<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:outputText</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                location:
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Event_Location__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                spaces remaining
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputText</span>
+                                        <span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">if</span>(c.Slots_Remaining__c==<span class="s12">0</span>,<span class="s9">'Event Full'</span>,<span class="s11">text</span>(c.Slots_Remaining__c))<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Host__c != <span class="s4">null}</span><span class="s3">&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                    event contact
+                                &lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel&quot;</span>&gt;
+                                    &lt;<span class="s1">apex:outputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Host__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'1'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt; <span class="s10">&lt;!--End of second row--&gt;</span>
+                &lt;/<span class="s1">div</span>&gt;
+
+                &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'1'</span><span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcb&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 col-md-2 tdlabel&quot;</span>&gt;
+                            description:
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 col-md-10 tdlabel alignleft&quot;</span>&gt;
+                            &lt;<span class="s1">apex:outputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Description_Long__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'1'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt; <span class="s10">&lt;!--End of third row--&gt;</span>
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+            &lt;/<span class="s1">div</span>&gt; <span class="s10">&lt;!--End of errors, titles--&gt;</span>
+
+
+            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;bPageBlock&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'1'</span><span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row match-my-cols bcb&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                            Ready to sign up?
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                    first name
+                                &lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredInput&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredBlock&quot;</span>/&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.FirstName<span class="s4">}</span><span class="s3">&quot;</span>
+                                                        <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>/&gt;
+
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                    last name
+                                &lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredInput&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredBlock&quot;</span>/&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.LastName<span class="s4">}</span><span class="s3">&quot;</span>
+                                                        <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; email&lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredInput&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredBlock&quot;</span>/&gt;
+                                        &lt;<span class="s1">apex:input </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.<span class="s8">Email</span><span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>
+                                                    <span class="s2">type=</span><span class="s3">&quot;email&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                    zip code
+                                &lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredInput&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredBlock&quot;</span>/&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.Zip<span class="s4">}</span><span class="s3">&quot;</span>
+                                                        <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; phone&lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredInput&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;requiredBlock&quot;</span>/&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.Phone<span class="s4">}</span><span class="s3">&quot;</span>
+                                                        <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tar&quot;</span>&gt;
+                            &lt;<span class="s1">input </span><span class="s2">type=</span><span class="s3">&quot;button&quot;</span>
+                                   <span class="s2">onclick=</span><span class="s3">&quot;</span>window.location='<span class="s4">{!</span><span class="s7">$</span><span class="s8">Site</span>.<span class="s8">Prefix</span><span class="s4">}</span>/apex/volunteerEventSelectPageBootstrap?mid=<span class="s4">{!</span>cc.MasterCampaign<span class="s4">}{!</span>query<span class="s4">}</span>'<span class="s3">&quot;</span>
+                                   <span class="s2">value=</span><span class="s3">&quot;return to list of events&quot; </span><span class="s2">class=</span><span class="s3">&quot;btn&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6&quot;</span>&gt;
+                            &lt;<span class="s1">apex:commandButton </span><span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>setSignee<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">value=</span><span class="s3">&quot;next&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'2'</span><span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row  bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                            We're missing the following information about you:
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6 bcg&quot;</span>&gt;
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.street == <span class="s4">null}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot; row&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; your street address&lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.street<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.city == <span class="s4">null}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot; row input-row&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; city&lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.city<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.state == <span class="s4">null}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot; row input-row&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; state&lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.state<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.howHeard == <span class="s4">null}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot; row input-row&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; how did you hear about us?&lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputText </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.howHeard<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.volunteerInterests.size == <span class="s12">0</span><span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot; row input-row&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt; volunteer interests&lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectCheckboxes </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.volunteerInterests<span class="s4">}</span><span class="s3">&quot;</span>
+                                                               <span class="s2">styleClass=</span><span class="s3">&quot;selectcheckboxes&quot; </span><span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.volunteerInterestsList<span class="s4">}</span><span class="s3">&quot;</span>
+                                                                <span class="s2">html-class=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                        &lt;/<span class="s1">apex:selectCheckboxes</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tar&quot;</span>&gt;
+                            &lt;<span class="s1">input </span><span class="s2">type=</span><span class="s3">&quot;button&quot; </span><span class="s2">class=</span><span class="s3">&quot;btn&quot;</span>
+                                   <span class="s2">onclick=</span><span class="s3">&quot;</span>window.location='<span class="s4">{!</span><span class="s7">$</span><span class="s8">Site</span>.<span class="s8">Prefix</span><span class="s4">}</span>/apex/volunteerEventRegisterPageBootstrap?<span class="s4">{!</span>query<span class="s4">}</span>&amp;step=1'<span class="s3">&quot;</span>
+                                   <span class="s2">value=</span><span class="s3">&quot;back&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6&quot;</span>&gt;
+                            &lt;<span class="s1">apex:commandButton </span><span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>updateSignee<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">value=</span><span class="s3">&quot;next&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+
+                &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>step == <span class="s9">'3'</span><span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                    &lt;<span class="s1">apex:outputPanel</span>
+                            <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>(c.<span class="s8">Type </span>== <span class="s9">'Corporate volunteer event' </span>&amp;&amp; (c.Slots_Reserved__c == <span class="s4">null </span>|| c.Slots_Reserved__c == <span class="s12">0</span>)) || (c.<span class="s8">Type </span>!= <span class="s9">'Corporate volunteer event' </span>&amp;&amp; c.Allow_Group_Signup__c == <span class="s4">true</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                            <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                                Are you signing up for a group?
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                signing up for:
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:actionRegion</span>&gt;
+                                    &lt;<span class="s1">apex:selectRadio </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field selectcheckboxes&quot;</span>
+                                                      <span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cc.signUpScopeType<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>
+                                                      <span class="s2">required=</span><span class="s3">&quot;true&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cc.signUpScopeTypes<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+
+                                        &lt;<span class="s1">apex:actionSupport </span><span class="s2">event=</span><span class="s3">&quot;onchange&quot; </span><span class="s2">rerender=</span><span class="s3">&quot;wrapperPanel&quot;</span>/&gt;
+                                    &lt;/<span class="s1">apex:selectRadio</span>&gt;
+                                &lt;/<span class="s1">apex:actionRegion</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">apex:outputPanel </span><span class="s2">id=</span><span class="s3">&quot;wrapperPanel&quot; </span><span class="s2">layout=</span><span class="s3">&quot;block&quot;</span>&gt;
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">id=</span><span class="s3">&quot;GroupSignupQuestions&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>
+                                              <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(cc.signUpScopeType == <span class="s9">'Yourself only' </span>|| cc.signUpScopeType == <span class="s4">null</span>,<span class="s4">false</span>,<span class="s4">true</span>)<span class="s4">}</span><span class="s3">&quot;</span>&gt;
+
+                                &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Group'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                                  <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                            What is the name of your business, organization or group?
+                                        &lt;/<span class="s1">div</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Group__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>
+                                                             <span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                                        &lt;/<span class="s1">div</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                                &lt;<span class="s1">apex:outputPanel</span>
+                                        <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Nr_in_Group'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                        <span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">id=</span><span class="s3">&quot;OversubscriptionPanel&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                            How many individuals will be in your group (including yourself)?
+                                        &lt;/<span class="s1">div</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Nr_in_Group__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>
+                                                             <span class="s2">required=</span><span class="s3">&quot;true&quot; </span><span class="s2">id=</span><span class="s3">&quot;NrInGroup&quot;</span>
+                                                             <span class="s2">onchange=</span><span class="s3">&quot;</span>Oversubscribed()<span class="s3">&quot;</span>/&gt;
+                                        &lt;/<span class="s1">div</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+
+                                &lt;<span class="s1">apex:outputPanel</span>
+                                        <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Adults in group'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                        <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                            Out of the total number in your group, how many are adults (over 18)?
+                                        &lt;/<span class="s1">div</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Nr_Adults__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>
+                                                             <span class="s2">style=</span><span class="s3">&quot;</span>width:50px<span class="s3">&quot;</span>/&gt;
+                                        &lt;/<span class="s1">div</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                                &lt;<span class="s1">apex:outputPanel</span>
+                                        <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Teammates'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                        <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                            Please list full name of anyone you would like on your team, as well as ages
+                                            of any children. &lt;<span class="s1">br</span>/&gt;
+                                            (All adults need to register separately.)
+                                        &lt;/<span class="s1">div</span>&gt;
+                                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Teammates__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">required=</span><span class="s3">&quot;true&quot;</span>/&gt;
+                                        &lt;/<span class="s1">div</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                        &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                            About you:
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                            How did you hear about this activity?
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                            &lt;<span class="s1">apex:selectRadio </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field selectcheckboxes&quot;</span>
+                                              <span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.How_Heard_About_Event__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>&gt;
+                                &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cc.howHeardAboutEvent<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">apex:selectRadio</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Availability'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                When will you be available for this work? What days of the week? Morning or afternoon?
+                                What periods will you be unavailable?
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Availability__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Carpool'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Car pooling
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Car_pooling__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Pref_Location'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Tell us if you have any sampling location or activity preferences.e.g. preferred sites,
+                                no storm sampling, etc.
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Pref_Location__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Special_Needs'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Check here if you prefer not to be on brambly or uneven ground.
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;checkboxlarger col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Special_Location_Preference__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Waders'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Will you need to borrow waders?
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Waders__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Boat'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Do you have a canoe, kayak, or other boat that you can use? If so, what is it and do you
+                                have room for others?
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Boat__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Shirt_Size'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                                      <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Your shirt size
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:selectRadio </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field selectcheckboxes&quot; </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Shirt_Size__c<span class="s4">}</span><span class="s3">&quot;</span>
+                                                  <span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>&gt;
+                                    &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cc.shirtSizes<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:selectRadio</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel</span>
+                            <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Dietary_Restrictions'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>
+                            <span class="s2">layout=</span><span class="s3">&quot;none&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                Your dietary restrictions
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Dietary_Restrictions__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Custom_Signup_Question__c != <span class="s4">null}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                <span class="s4">{!</span>c.Custom_Signup_Question__c<span class="s4">} </span>&lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.SignupQuestionAnswer__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>
+                                                 <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Custom_Signup_Question_2__c != <span class="s4">null}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                <span class="s4">{!</span>c.Custom_Signup_Question_2__c<span class="s4">} </span>&lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.SignupQuestionAnswer2__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>
+                                                 <span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">apex:repeat </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cofs<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">var=</span><span class="s3">&quot;cof&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                <span class="s4">{!</span>cof.<span class="s8">Label</span><span class="s4">} </span>&lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputPanel</span>&gt;
+                                    &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>co[cof.<span class="s8">Name</span>]<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>
+                                                     <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s8">Type </span>== <span class="s9">'field'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+
+                                    &lt;<span class="s1">apex:selectRadio </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s11">Value</span>.Str<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s8">Type </span>== <span class="s9">'PICKLIST'</span><span class="s4">}</span><span class="s3">&quot;</span>
+                                                      <span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;selectcheckboxes&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.Picklist<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">html-class=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">apex:selectRadio</span>&gt;
+
+                                    &lt;<span class="s1">apex:selectCheckboxes </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s11">Value</span>.StrL<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;selectcheckboxes&quot;</span>
+                                                           <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s8">Type </span>== <span class="s9">'MULTIPICKLIST'</span><span class="s4">}</span><span class="s3">&quot;</span>
+                                                           <span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.Picklist<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">html-class=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">apex:selectCheckboxes</span>&gt;
+
+                                    &lt;<span class="s1">apex:input </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s11">Value</span>.Str<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">type=</span><span class="s3">&quot;tel&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>
+                                                <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cof.<span class="s8">Type </span>== <span class="s9">'PHONE'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:repeat</span>&gt;
+
+                    &lt;<span class="s1">apex:repeat </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmfs<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">var=</span><span class="s3">&quot;cmf&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                <span class="s4">{!</span>cmf.<span class="s8">Label</span><span class="s4">}</span>
+                            &lt;/<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputPanel</span>&gt;
+                                    &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm[cmf.<span class="s8">Name</span>]<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>
+                                                     <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s8">Type </span>== <span class="s9">'field'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+
+                                    &lt;<span class="s1">apex:selectRadio </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s11">Value</span>.Str<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s8">Type </span>== <span class="s9">'PICKLIST'</span><span class="s4">}</span><span class="s3">&quot;</span>
+                                                      <span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;selectcheckboxes&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.Picklist<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">html-class=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">apex:selectRadio</span>&gt;
+
+                                    &lt;<span class="s1">apex:selectCheckboxes </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s11">Value</span>.StrL<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;selectcheckboxes&quot;</span>
+                                                           <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s8">Type </span>== <span class="s9">'MULTIPICKLIST'</span><span class="s4">}</span><span class="s3">&quot;</span>
+                                                           <span class="s2">layout=</span><span class="s3">&quot;pageDirection&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:selectOptions </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.Picklist<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">html-class=</span><span class="s3">&quot;input-field&quot;</span>/&gt;
+                                    &lt;/<span class="s1">apex:selectCheckboxes</span>&gt;
+
+                                    &lt;<span class="s1">apex:input </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s11">Value</span>.Str<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">type=</span><span class="s3">&quot;tel&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;input-field&quot;</span>
+                                                <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cmf.<span class="s8">Type </span>== <span class="s9">'PHONE'</span><span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:repeat</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                            Questions, comments, expectations, needs
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8&quot;</span>&gt;
+                            &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Questions_or_Comments__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">style=</span><span class="s3">&quot;</span>width:350px<span class="s3">&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel</span>
+                            <span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span><span class="s11">IF</span>(<span class="s11">CONTAINS</span>(c.Signup_Questions__c,<span class="s9">'Require Emergency Contact Info'</span>),<span class="s4">true</span>,<span class="s4">false</span>)<span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;green&quot;</span>&gt;
+                                Emergency Contact (Required)
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;<span class="s10">&lt;!--First column of output fields--&gt;</span>
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot;</span>&gt;<span class="s10">&lt;!--First row of output fields--&gt;</span>
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                        name:
+                                    &lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Emergency_Contact_Name__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-md-6&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcg&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-4 tdlabel&quot;</span>&gt;
+                                        phone:
+                                    &lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-8 tdlabel alignleft&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputField </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Emergency_Contact_Phone__c<span class="s4">}</span><span class="s3">&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;<span class="s1">apex:actionRegion </span><span class="s2">id=</span><span class="s3">&quot;WaiverActionRegion&quot;</span>&gt;
+                        &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Waiver__c != <span class="s4">null</span>&amp;&amp;c.Waiver_Required__c==<span class="s4">true}</span><span class="s3">&quot;</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row bcr&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-12 WGPageTitle&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                    Please read our required liability waiver and check the box below to indicate that
+                                    you accept it.
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+
+
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row legaldoc bcr box-centerside&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                &lt;<span class="s1">apex:outputText </span><span class="s2">style=</span><span class="s3">&quot;</span>height:800px<span class="s3">&quot; </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>c.Waiver__r.Body__c<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">escape=</span><span class="s3">&quot;false&quot;</span>/&gt;
+                            &lt;/<span class="s1">div</span>&gt;
+
+
+                            &lt;<span class="s1">apex:outputPanel </span><span class="s2">id=</span><span class="s3">&quot;AcceptDeclineWaiverRegion&quot;</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tdlabel&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                        I agree to the Terms and Conditions above.
+                                    &lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 checkboxlarger&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputCheckbox </span><span class="s2">id=</span><span class="s3">&quot;AcceptCheckbox&quot;</span>
+                                                            <span class="s2">styleClass=</span><span class="s3">&quot;checkbox&quot;</span>
+                                                            <span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>AcceptWaiver<span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:actionSupport </span><span class="s2">event=</span><span class="s3">&quot;onclick&quot;</span>
+                                                                <span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>toggleAccept<span class="s4">}</span><span class="s3">&quot;</span>
+                                                                <span class="s2">rerender=</span><span class="s3">&quot;AcceptDeclineWaiverRegion&quot;</span>&gt;
+                                                &lt;<span class="s1">apex:param </span><span class="s2">assignto=</span><span class="s3">&quot;</span><span class="s4">{!</span>AcceptWaiver<span class="s4">}</span><span class="s3">&quot;</span>
+                                                            <span class="s2">name=</span><span class="s3">&quot;AcceptWaiver&quot;</span>
+                                                            <span class="s2">value=</span><span class="s3">&quot;true&quot;</span>&gt;&lt;/<span class="s1">apex:param</span>&gt;
+                                            &lt;/<span class="s1">apex:actionSupport</span>&gt;
+                                            &lt;<span class="s1">apex:actionSupport </span><span class="s2">event=</span><span class="s3">&quot;oncomplete&quot;</span>
+                                                                <span class="s2">rerender=</span><span class="s3">&quot;AcceptDeclineWaiverRegion&quot;</span>&gt;
+                                            &lt;/<span class="s1">apex:actionSupport</span>&gt;
+                                        &lt;/<span class="s1">apex:inputCheckbox</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+
+                                &lt;/<span class="s1">div</span>&gt;
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tdlabel&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt; I decline the Terms and Conditions above.
+                                    &lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 checkboxlarger&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputCheckbox </span><span class="s2">id=</span><span class="s3">&quot;DeclineCheckbox&quot;</span>
+                                                            <span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>DeclineWaiver<span class="s4">}</span><span class="s3">&quot;</span>
+                                                            <span class="s2">styleClass=</span><span class="s3">&quot;checkbox&quot;</span>
+                                                            <span class="s2">onclick=</span><span class="s3">&quot;</span>SorryYouCantSign()<span class="s3">&quot;</span>&gt;
+                                        &lt;/<span class="s1">apex:inputCheckbox</span>&gt;
+                                        &lt;<span class="s1">apex:actionFunction </span><span class="s2">name=</span><span class="s3">&quot;CallRestOfDeclineWaiver&quot;</span>
+                                                             <span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>toggleAccept<span class="s4">}</span><span class="s3">&quot;</span>
+                                                             <span class="s2">rerender=</span><span class="s3">&quot;AcceptDeclineWaiverRegion&quot;</span>&gt;
+                                            &lt;<span class="s1">apex:param </span><span class="s2">assignto=</span><span class="s3">&quot;</span><span class="s4">{!</span>AcceptWaiver<span class="s4">}</span><span class="s3">&quot;</span>
+                                                        <span class="s2">name=</span><span class="s3">&quot;AcceptWaiver&quot;</span>
+                                                        <span class="s2">value=</span><span class="s3">&quot;false&quot;</span>&gt;&lt;/<span class="s1">apex:param</span>&gt;
+                                        &lt;/<span class="s1">apex:actionFunction</span>&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+                                &lt;/<span class="s1">div</span>&gt;
+
+                                &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tdlabel &quot; </span><span class="s2">color=</span><span class="s3">&quot;red&quot;</span>&gt;
+                                        I am over 18 years of age.
+                                    &lt;/<span class="s1">div</span>&gt;
+                                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 checkboxlarger&quot;</span>&gt;
+                                        &lt;<span class="s1">apex:inputCheckbox </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.Over18<span class="s4">}</span><span class="s3">&quot;</span>
+                                                            <span class="s2">styleClass=</span><span class="s3">&quot;checkbox&quot;</span>/&gt;
+                                    &lt;/<span class="s1">div</span>&gt;
+
+                                &lt;/<span class="s1">div</span>&gt;
+                            &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                        &lt;/<span class="s1">apex:outputPanel</span>&gt;
+                    &lt;/<span class="s1">apex:actionRegion</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot; </span><span class="s2">color=</span><span class="s3">&quot;blue&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tdlabel&quot;</span>&gt; Would you like to receive periodic emails about our work?&lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tdlabel checkboxlarger&quot;</span>&gt;
+                            &lt;<span class="s1">apex:inputCheckbox </span><span class="s2">value=</span><span class="s3">&quot;</span><span class="s4">{!</span>coc.newsletter<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">styleClass=</span><span class="s3">&quot;checkbox&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+
+                    &lt;<span class="s1">apex:outputPanel </span><span class="s2">layout=</span><span class="s3">&quot;none&quot; </span><span class="s2">rendered=</span><span class="s3">&quot;</span><span class="s4">{!</span>cm.Role__c == <span class="s9">'Leader'</span><span class="s4">}</span><span class="s3">&quot;</span>&gt;
+                        &lt;<span class="s1">div</span>&gt;
+                            &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;olive tac p11 fs266&quot;</span>&gt;
+                                There’s a standard donation to book a corporate volunteer day, and each person in the
+                                group will have to sign the waiver.
+                                You will receive an email with a link you can send to each participant.
+                                By clicking on the link, they can complete their registration and sign the waiver as
+                                members of your corporate group.
+                            &lt;/<span class="s1">div</span>&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">apex:outputPanel</span>&gt;
+
+                    &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;row&quot; </span><span class="s2">color=</span><span class="s3">&quot;blue&quot;</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6 tar&quot;</span>&gt;
+                            &lt;<span class="s1">input </span><span class="s2">type=</span><span class="s3">&quot;button&quot; </span><span class="s2">class=</span><span class="s3">&quot;btn&quot;</span>
+                                   <span class="s2">onclick=</span><span class="s3">&quot;</span>window.location='<span class="s4">{!</span><span class="s7">$</span><span class="s8">Site</span>.<span class="s8">Prefix</span><span class="s4">}</span>/apex/volunteerEventRegisterPageBootstrap?<span class="s4">{!</span>query<span class="s4">}</span>&amp;step=1'<span class="s3">&quot;</span>
+                                   <span class="s2">value=</span><span class="s3">&quot;back&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                        &lt;<span class="s1">div </span><span class="s2">class=</span><span class="s3">&quot;col-xs-6&quot;</span>&gt;
+                            &lt;<span class="s1">apex:commandButton </span><span class="s2">action=</span><span class="s3">&quot;</span><span class="s4">{!</span>signUp<span class="s4">}</span><span class="s3">&quot; </span><span class="s2">value=</span><span class="s3">&quot;submit&quot;</span>/&gt;
+                        &lt;/<span class="s1">div</span>&gt;
+                    &lt;/<span class="s1">div</span>&gt;
+                &lt;/<span class="s1">apex:outputPanel</span>&gt;
+            &lt;/<span class="s1">div</span>&gt;
+        &lt;/<span class="s1">div</span>&gt;
+    &lt;/<span class="s1">apex:form</span>&gt;
+&lt;/<span class="s1">apex:page</span>&gt;</pre>
+</body>
+</html>

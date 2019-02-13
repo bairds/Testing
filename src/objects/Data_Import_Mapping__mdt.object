@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>How fields on the ImportObject should be mapped to Account,Contact,Lead,Contribution, Campaign or CampaignMember fields</description>
+    <fields>
+        <fullName>AddToExistingValue__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>On update, add the value in the ImportObject to the value in the existing record.  Otherwise, overwrite.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>On update, add the value in the ImportObject to the value in the existing record.  Otherwise, overwrite.</inlineHelpText>
+        <label>AddToExistingValue</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>IO_FieldName__c</fullName>
+        <description>The fieldname in the ImportObject.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>The fieldname in the ImportObject.</inlineHelpText>
+        <label>IO_FieldName</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Target_Field__c</fullName>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>Target_Field</label>
+        <referenceTo>FieldDefinition</referenceTo>
+        <relationshipLabel>Data_Import_Mappings</relationshipLabel>
+        <relationshipName>Data_Import_Mappings</relationshipName>
+        <required>false</required>
+        <type>MetadataRelationship</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Target_Object__c</fullName>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>Target_Object</label>
+        <referenceTo>EntityDefinition</referenceTo>
+        <relationshipLabel>Data_Import_Mappings1</relationshipLabel>
+        <relationshipName>Data_Import_Mappings1</relationshipName>
+        <required>false</required>
+        <type>MetadataRelationship</type>
+        <unique>false</unique>
+    </fields>
+    <label>Data Import Mapping</label>
+    <listViews>
+        <fullName>All_Records</fullName>
+        <columns>MasterLabel</columns>
+        <columns>IO_FieldName__c</columns>
+        <columns>Target_Object__c</columns>
+        <columns>Target_Field__c</columns>
+        <columns>AddToExistingValue__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All Records</label>
+    </listViews>
+    <pluralLabel>Data Import Mappings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

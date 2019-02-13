@@ -1,0 +1,93 @@
+<apex:page showHeader="false" sidebar="false" controller="testAdjustTZ">
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <!--<apex:includeScript value="{!$Resource.JoseJS}" />-->
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <script>
+    function SorryYouCantSign() {
+        alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with Milwaukee Riverkeeper in the future");
+        CallRestOfDeclineWaiver();
+    }
+    </script>
+    
+    <script>
+    function toggleWaiver(string) {
+    if (string=='Accept') {
+    var s= document.getElementById("AcceptCheckbox");
+    s.innerHTML = true;
+    AcceptWaiver=true;
+    
+    DeclineWaiver=false;
+    // rerenderAcceptDeclineWaiverRegion();
+    } else {
+    var s= document.getElementById("AcceptCheckbox");
+    s.innerHTML = false;
+    AcceptWaiver=false;
+    DeclineWaiver=true;
+    alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with Milwaukee Riverkeeper in the future");
+    }
+    setAccept;
+    }
+    </script>
+
+<apex:form >
+
+<apex:outputPanel id="AcceptDeclineWaiverRegion">
+<table class="checkbox" style="border-top: 1px solid #DE2C58">  
+    <tr class="input-row"> 
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> I agree to the Terms and Conditions above. </td>                  
+        <td>                                                             
+            <apex:inputCheckbox id="AcceptCheckbox" styleClass="checkbox" value="{!AcceptWaiver}"> 
+                <apex:actionSupport event="onclick" action="{!toggleAccept}">
+                <apex:param assignto="{!AcceptWaiver}" name="AcceptWaiver" value="true"></apex:param>
+                </apex:actionSupport>
+                <apex:actionSupport event="oncomplete" rerender="AcceptDeclineWaiverRegion">
+                </apex:actionSupport>
+            </apex:inputCheckbox>
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> I decline the Terms and Conditions above. </td>                  
+        <td>                                                             
+            <apex:inputCheckbox id="DeclineCheckbox" value="{!DeclineWaiver}" styleClass="checkbox" onclick="SorryYouCantSign()">
+                <!--<apex:actionSupport event="onclick" action="{!toggleAccept}">
+                <apex:param assignto="{!AcceptWaiver}" name="AcceptWaiver" value=""></apex:param>
+                </apex:actionSupport>
+                <apex:actionSupport event="oncomplete" rerender="AcceptDeclineWaiverRegion">
+                </apex:actionSupport>-->
+                </apex:inputCheckbox>
+                <apex:actionFunction name="CallRestOfDeclineWaiver" action="{!toggleAccept}">
+                <apex:param assignto="{!AcceptWaiver}" name="AcceptWaiver" value="true"></apex:param>
+                </apex:actionFunction>
+
+        </td>
+    </tr>   
+    
+    <tr class="input-row"> 
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> AcceptWaiver is </td>                  
+        <td> {!AcceptWaiver}
+        </td>
+    </tr>
+    <tr>
+        <td style="border-right: 1px solid #DE2C58; text-transform: initial"> DeclineWaiver is </td>                  
+        <td>   {!DeclineWaiver}
+        </td>
+    </tr>
+</table>
+</apex:outputPanel>
+<!--<apex:actionfunction name="setAccept" action="{!toggleAccept}" rerender="AcceptDeclineWaiverRegion">
+<apex:param assignto="{!AcceptWaiver}" name="param1" value="true">
+</apex:param></apex:actionfunction>-->
+<apex:actionFunction name="rerenderAcceptDeclineWaiverRegion" rerender="AcceptDeclineWaiverRegion" />
+<p></p>
+<table>
+<tr><td>'Event was set for 9 AM in the future.  Its time is '</td><td>{!NextEventDateTime}</td></tr>
+<tr><td>'In my timezone that is '</td><td>{!NextEventDateTimeMyTZ}</td></tr>
+<tr><td>'Event was set for 6 months and 9 hours in the future.  Its time is '</td><td>{!LastEventDateTime}</td></tr>
+<tr><td>'In my timezone that is '</td><td>{!LastEventDateTimeMyTZ}</td></tr>
+<tr><td></td><td></td></tr>
+<tr><td></td><td></td></tr>
+</table>
+</apex:form>
+</apex:page>

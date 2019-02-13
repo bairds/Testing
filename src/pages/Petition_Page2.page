@@ -1,0 +1,43 @@
+<apex:page controller="Petition_controller" sidebar="false" cache="false" showHeader="false">
+<apex:form >
+
+<apex:messages />
+
+<apex:pageBlock id="PetitionFollowUp" title="Thanks so much for signing our petition.  What more can we do for you?">
+<apex:facet name="footer">
+        <apex:outputPanel >
+          <apex:commandButton action="{!closePage}" value="All done" immediate="true"
+                              styleClass="btn"/>
+        </apex:outputPanel>
+      </apex:facet>
+
+
+<p class="checkbox"><apex:inputCheckbox value="{!Membership}">
+                <apex:actionSupport event="onclick"
+                                    rerender="PetitionFollowUp"/>
+         </apex:inputCheckbox>
+         Make a donation to the West Virginia Rivers Coalition.</p>
+
+   <apex:outputPanel id="Membership" rendered="{!Membership== TRUE}">       
+        <p style="color: red; font-weight: bold;">Click<apex:outputText value=" "/><apex:outputLink value="https://co.clickandpledge.com/advanced/default.aspx?wid=74460" target="_blank">here</apex:outputLink> to go WVRC's donations page.</p>
+    </apex:outputPanel>
+
+<p class="checkbox"><apex:inputCheckbox value="{!OrgUpdates}">
+                <apex:actionSupport event="onclick" action="{!OrgUpdates}"
+                                    rerender="PetitionFollowUp"/>
+         </apex:inputCheckbox>
+         Send me regular updates on the West Virginia Rivers Coalition.</p>
+
+   <apex:outputPanel id="OrgUpdates" rendered="{!OrgUpdates== TRUE}">       
+        <p style="color: red; font-weight: bold;">You have been signed up to receive updates on West Virginia Rivers Coalition.</p>
+    </apex:outputPanel>
+
+
+<p class="checkbox">
+
+</p>    
+    
+</apex:pageblock>
+</apex:form>
+<!-- End Default Content REMOVE THIS -->
+</apex:page>

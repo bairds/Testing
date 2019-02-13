@@ -1,0 +1,8 @@
+<apex:page Controller="recalcContactInvokeBatch" showheader="false" 
+    action="{!InvokeBatch}">
+<h1>You will receive an email when the summary fields have been recalculated for all Contacts.</h1><br/>
+<br/>
+The new amounts won't show until you've closed this window and refreshed the Contact
+page as well.<br/>
+<h1>Click the back arrow to return to Salesforce.</h1><br/>
+</apex:page>

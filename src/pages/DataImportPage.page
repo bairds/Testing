@@ -1,0 +1,147 @@
+<apex:page controller="DataImport" sidebar="false" docType="html-5.0" action="{!setList}" tabStyle="DataImport__tab">
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <apex:form >
+        <div class="bPageBlock" color="blue" style="border:none; position: absolute; left: 0; top: 0; right: 0">  
+            <div class="container ma miw100" style="max-width: 100%">     
+                <apex:outputPanel id="records" layout="block" styleClass="table" rendered="{!records.size > 0}">
+                    <div class="title"> 
+                        <apex:outputText value="Please select records to edit or process" rendered="{!StringA == '1'}" />
+                        <apex:outputText value="Edit your records" rendered="{!StringA == '3'}" />
+                    </div>                    
+                    
+                    <div style="overflow: auto">                                        
+                        <table class="miw100">                                    
+                            <tr class="col-header">
+                                <apex:outputPanel layout="none" rendered="{!StringA == '1'}"> 
+                                    <td> All?  <br  /> <input type="checkbox" onclick="toggle(this, 'checkbox')" /> </td> 
+                                </apex:outputPanel> 
+                                
+                                <td> Contact Legacy Id </td>
+                                <td> Full Name </td>
+                                <td> First Name </td>
+                                <td> Last Name </td>
+                                <td> Do Not </td>
+                                <td> Email Personal </td>
+                                <td> Email Work </td>
+                                <td> Phone Mobile </td>
+                                <td> Phone Home </td>
+                                <td> Phone Work </td>
+                                
+                                <apex:outputPanel layout="none" rendered="{!StringA == '1'}"> 
+                                    <td> Address </td>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!StringA == '3'}"> 
+                                    <td> Street </td>
+                                    <td> City </td>
+                                    <td> State </td>
+                                    <td> Zip Code </td>
+                                    <td> Country </td>
+                                </apex:outputPanel>
+                                
+                                <td> Company </td>
+                                <td> Account Name </td>
+                                <td> Account Record Type </td>
+                                <td> Campaign Legacy Id </td>
+                                <td> Campaign Name </td>
+                                <td> Campaign Type </td>
+                                <td> Campaign Is Active </td>
+                                <td> Contribution Record Type </td>
+                                <td> Contribution Type </td>
+                                <td> Contribution Stage </td>
+                                <td> Contribution Close Date </td>
+                                <td> Contribution Amount </td>
+                                <td> Contribution Hours Actual </td>
+                                <td> Contribution Description </td>
+                                <td> Notes </td>
+                            </tr>
+                            
+                            <apex:repeat value="{!records}" var="r">
+                                <apex:outputPanel layout="none" rendered="{!StringA == '1'}">
+                                    <tr class="row">
+                                        <td> <apex:inputCheckbox value="{!r.Processed__c}" styleClass="checkbox" /> </td>
+                                        <td> <apex:outputField value="{!r.Person_LegacyID__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Person_FirstName__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Person_LastName__c}" /> </td>  
+                                        <td> <apex:outputField value="{!r.Person_DoNot__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Person_EmailPersonal__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Person_EmailWork__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Person_PhoneMobile__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Person_PhoneHome__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Person_PhoneWork__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Address__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Company_or_Organization__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Account_Name__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Account_Record_Type__c}" /> </td> 
+                                        <td> <apex:outputField value="{!r.Campaign_LegacyID__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Campaign_Name__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Campaign_Record_Type__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Campaign_IsActive__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_RecordType__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_Type__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_Stage__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_TransactionDate__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_Amount__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_HoursActual__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Contribution_Description__c}" /> </td>
+                                        <td> <apex:outputField value="{!r.Note__c}" /> </td>
+                                    </tr>
+                                </apex:outputPanel>
+                                
+                                <apex:outputPanel layout="none" rendered="{!StringA == '3'}">
+                                    <tr class="row">
+                                        <td> <apex:inputField value="{!r.Person_LegacyID__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_FirstName__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_LastName__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_DoNot__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_EmailPersonal__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_EmailWork__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Person_PhoneMobile__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Person_PhoneHome__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Person_PhoneWork__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Address_StreetLine1__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Address_City__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Address_State__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Address_ZipCode__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Address_Country__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Company_or_Organization__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Account_Name__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Account_Record_Type__c}" /> </td> 
+                                        <td> <apex:inputField value="{!r.Campaign_LegacyID__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Campaign_Name__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Campaign_Record_Type__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Campaign_IsActive__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_RecordType__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_Type__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_Stage__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_TransactionDate__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_Amount__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_HoursActual__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Contribution_Description__c}" /> </td>
+                                        <td> <apex:inputField value="{!r.Note__c}" /> </td>
+                                    </tr>
+                                </apex:outputPanel>
+                            </apex:repeat>
+                        </table>
+                    </div>                              
+                    
+                    <div class="buttons">     
+                        <apex:outputPanel layout="none" rendered="{!StringA == '1'}">
+                            <apex:commandButton value="edit" action="{!edit}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />   
+                            <apex:commandButton value="process" action="{!process}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />   
+                        </apex:outputPanel>
+                        
+                        <apex:outputPanel layout="none" rendered="{!StringA == '3'}">
+                            <apex:commandButton value="cancel" action="{!cancel}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />  
+                            <apex:commandButton value="save" action="{!save}" reRender="records" onclick="showLoading(1)" oncomplete="hideLoading(1)" />   
+                        </apex:outputPanel>
+                    </div>
+                </apex:outputPanel>     
+            </div>
+            
+            <c:Loading Position="fixed" /> 
+        </div>
+    </apex:form>
+</apex:page>

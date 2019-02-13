@@ -1,0 +1,21 @@
+<apex:page renderAs="{!renderAs}" showHeader="false"  
+    standardController="Opportunity" extensions="Thanks_Template_Controller" 
+    applyHTMLtag="false" standardStylesheets="false" >
+   
+<apex:styleSheet value="{!URLFOR($Resource.envelope_CSS)}" />
+
+<br/>
+<br/>
+<br/>
+
+    <apex:panelGrid columns="1" style="padding-left:300px; margin-top:100px;width:100%">
+        <apex:outputField value="{!Opportunity.Account.Addressee__c}"/>
+        <apex:outputField value="{!Opportunity.Account.BillingStreet}"/>
+        <apex:panelGroup >
+            <apex:outputField value="{!Opportunity.Account.BillingCity}"/>,&nbsp;
+            <apex:outputField value="{!Opportunity.Account.BillingState}"/>&nbsp;
+            <apex:outputField value="{!Opportunity.Account.BillingPostalCode}"/>
+        </apex:panelGroup>
+    </apex:panelGrid>
+
+</apex:page>

@@ -1,0 +1,48 @@
+<apex:page showheader="false" cache="false" standardController="Campaign" extensions="Volunteer_Event_Controller">
+    <apex:stylesheet value="{!$Resource.wg_styles}"/>
+    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
+
+        <apex:detail subject="{!$CurrentPage.parameters.cid}" relatedList="false" title="false"/>
+
+            <apex:form >
+               <div class="bPageBlock mobile" color="blue">
+                    <div class="container ma miw100">
+                        <div class="title df">
+                            <div class="df bcw"> <apex:image value="{!$Resource.OrgLogo}" styleClass="ma" /> </div>
+                            <div class="text">
+                                <div class="name"> <div class="ma"> {!if(MasterCampTitle != null, MasterCampTitle,'Register for Upcoming Events')} </div> </div>
+                            </div>
+                        </div>
+                    </div>
+               </div>
+                            <apex:pageMessages ></apex:pageMessages>
+                <apex:dataTable value="{!campaign}" var="c" cellPadding="10" border="0">
+                  <apex:column width="100px" style="vertical-align: top;">
+                     <apex:outputLink value="{!$Site.Prefix}/apex/Volunteer_Event_Signup_Page?cid={!c.id}" id="theLink">{!c.Name}
+                          </apex:outputLink> 
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Location</apex:facet>
+                    {!c.Event_Location__c}
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Short description</apex:facet>
+                    {!c.description}
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Date and time</apex:facet>
+                      <c:VFFormattedLocalTimeComponent date_time_value="{!c.Event_Date_Time__c}" date_time_format="EEE MMM d', ' yyyy ' at ' h:mm a" />
+
+                  </apex:column>
+                  <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Places remaining</apex:facet>
+                     <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}" >
+                     </apex:outputText>
+                    
+                  </apex:column>
+
+                </apex:dataTable>
+                <!--<apex:pageBlock id="hiddenBlock" rendered="false"></apex:pageBlock> -->
+            </apex:form>
+        <!--apex:page detail subject="{!$CurrentPage.parameters.oid}" relatedList="false" title="false"/-->    
+        </apex:page>

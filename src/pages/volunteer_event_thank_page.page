@@ -1,0 +1,13 @@
+<apex:page standardController="Campaign" extensions="Volunteer_Event_Controller" showHeader="false" cache="false" standardStylesheets="true">
+<apex:stylesheet value="{!$Resource.wg_styles}"/>
+  <h3 style="font-size:22px; color:#0c6dc4; line-height:28px;">Thanks, {!pcontact.firstname}!</h3>
+  <p style="font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:20px;">You've signed up for our {!camp.name}. <br/><br/>
+  
+  Event location: {!camp.Event_Location__c}<br/>
+  Event time: <apex:outputText value=" "></apex:outputText><c:VFFormattedLocalTimeComponent date_time_value="{!camp.Event_Date_Time__c}" date_time_format="EEE MMM d', ' yyyy ' at ' h:mm a" /><br/>
+  Event description: {!camp.Description_Long__c}<br/><br/>
+  
+  You'll also be receiving a confirmation email from us shortly.</p>
+  
+  <p class="section_header" style="font-family:Arial,Helvetica,sans-serif; font-size:15px; line-height:20px;">To return to our website, close this window by clicking on the X in the upper right corner.</p>
+</apex:page>

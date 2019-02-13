@@ -1,0 +1,93 @@
+<apex:page controller="registerForCampaign" showheader="false" sidebar="false" docType="html-5.0" action="{!setSignUp}">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <apex:form >
+        <div class="bPageBlock mobile" color="blue">  
+            <div class="container ma w100">
+                    <div class="title df">                         
+                        <div class="df bcw"> <apex:image value="{!$Resource[lo]}" styleClass="ma" /> </div> 
+                        <div class="text">                         
+                            <div class="name"> <div class="ma"> {!title} </div> </div>
+                        </div>                        
+                    </div>
+                    
+                    <div class="blue2 highlight">
+                        <div class="tal fs266">
+                            <p> Thank You! </p>                           
+                            <p> You've signed up for our {!c.Name}. </p>
+                            <p> You'll also be receiving a confirmation email from us shortly. </p>
+                        </div>
+               		 </div>
+                
+                	<div class="p11 output">                        
+                        <apex:outputPanel layout="block" styleClass="table">
+                            
+                            <table>  
+<!--                                <tr> 
+                                    <td> date  </td> 
+                                    <td>
+                                        <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                             <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                        </apex:outputText>
+                                    </td> 
+                                </tr>
+                                
+                                <tr> 
+                                    <td> start time</td> 
+                                    <td> 
+                                        <apex:outputText value="{0, date, hh:mm a}">
+                                             <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                        </apex:outputText>
+                                    </td> 
+                                </tr>
+                                
+                                <tr> 
+                                    <td> end time </td> 
+                                    <td>
+                                        <apex:outputText value="{0, date, hh:mm a}">
+                                             <apex:param value="{!c.Event_End_Time__c + tzoffset}" /> 
+                                        </apex:outputText>
+                                    </td> 
+                                </tr>
+                                
+                                <tr> 
+                                    <td> location </td> 
+                                    <td> 
+                                        <apex:outputField value="{!c.Event_Location__c}" rendered="{step == '1'}" />
+                                    </td> 
+                                </tr>
+-->
+                                
+                                 <apex:outputPanel layout="none" rendered="{!c.Host__c != null}">
+                                    <tr> 
+                                        <td> event contact </td> 
+                                        <td> 
+                                            <apex:outputField value="{!c.Host__c}" rendered="{step == '1'}" />
+                                        </td> 
+                                    </tr>
+                                </apex:outputPanel>
+                                
+                                <tr> 
+                                    <td> description </td> 
+                                    <td> 
+                                        <apex:outputField value="{!c.Description_Long__c}" rendered="{!step == '1'}" />
+                                    </td> 
+                                </tr>
+                                
+                                <tr> 
+                                    <td> spaces remaining </td> 
+                                    <td> 
+                                        <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}" rendered="{!step == '1'}" />
+                                    </td> 
+                                </tr>
+                            </table>
+                        </apex:outputPanel>
+                    </div>
+                </div>
+        </div>
+    </apex:form>        
+</apex:page>

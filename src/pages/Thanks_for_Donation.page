@@ -1,0 +1,49 @@
+<apex:page renderAs="{!renderAs}" showHeader="false" standardController="Opportunity" extensions="Thanks_Template_Controller" applyHTMLtag="false" standardStylesheets="false" >
+    
+<apex:form >  
+
+    <apex:image id="theImage" value="https://c.na3.content.force.com/servlet/servlet.ImageServer?id=01550000002qQzM&oid=00D50000000NoFE&lastMod=1496846533000" width="700" height="200"/> 
+
+    
+<br/>
+<apex:outputText value="{0,date,MMMM d, yyyy}"> <br/>
+       <apex:param value="{!TODAY()}" />
+</apex:outputText> <br/>
+<br/>
+
+{!Opportunity.Contact__r.Name}<br/>
+{!Opportunity.Account.BillingStreet} <br/>
+{!Opportunity.Account.BillingCity}, {!Opportunity.Account.BillingState} {!Opportunity.Account.BillingPostalCode}<br/>
+<br/>
+
+Dear {!Opportunity.Account.Dear__c}: <br/>
+<br/>
+Thank you for your generous gift of <apex:outputText value=" "/><apex:outputfield value="{!Opportunity.Amount}"  /> on <apex:outputText value=" "/><apex:outputText value="{0, date, MMMM d','  yyyy}"><apex:param value="{!if(ISBLANK(Opportunity.Check_Date__c),Opportunity.CloseDate,Opportunity.Check_Date__c)}"/> </apex:outputText> to the WaterGrass River Alliance for our {!Opportunity.Campaign.Name} campaign.<br/>
+<br/>  
+
+Thanks to the support of donors like you, we are able to continue our proud fourteen year history of protecting the health of the WaterGrass River.
+
+This July we unveiled our revised WaterGrass Water Agenda.  This comprehensive guide for protecting the WaterGrass has been providing strategic direction for river advocates all across the state since 2007.  The updated version focuses on goal-oriented solutions to achieving healthy waters in the state.<br/>
+<br/>
+
+
+Additionally, we continue to provide leadership in networking and supporting an alliance of more than sixty local community groups working across the state to protect their local waterways.  This alliance of concerned citizens, which recently came together for our 13th annual conference, Water Rally, is the backbone of our river movement and we are proud to play such an important role.<br/>
+<br/>
+
+
+You care and we are grateful that you have chosen to act on that concern by giving to the WaterGrass River Alliance.  Together we can protect healthy rivers and healthy people!<br/>
+<br/>
+
+
+Water is Life,<br/>
+<br/>
+<br/>
+<br/>
+John Doe,
+Executive Director
+
+<div style="position: fixed; bottom: 0px; text-align: center; color: rgb(0,105,153); font-size: 10pt; font-family: sans-serif "> Your footer text here.</div>
+<!-- Replace text with your footer text. Adjust font and colors as appropriate.  This rgb color code will display in light blue -->
+
+</apex:form>
+</apex:page>

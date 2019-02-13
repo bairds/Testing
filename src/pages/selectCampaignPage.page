@@ -1,0 +1,73 @@
+<apex:page controller="registerForCampaign" showheader="false" sidebar="false" docType="html-5.0" action="{!setMasterCampaign}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+    <apex:includeScript value="{!$Resource.JoseJS}" />
+    <apex:stylesheet value="{!$Resource.JoseCSS}" />
+    
+    <apex:form >
+        <div class="bPageBlock mobile" color="blue">  
+            <div class="container ma miw100">
+                    <div class="title df">                         
+                        <div class="df bcw"> <apex:image value="{!$Resource.OrgLogo}" styleClass="ma" /> </div> 
+                        <div class="text">                         
+                            <div class="name"> <div class="ma"> {!mc.Name} </div> </div>
+                        </div>                        
+                    </div>
+                                        
+                    <div class="p11" id="content" color="green">                               
+                        <div class="table">
+                            <div class="title"> 
+                                <apex:outputText value="{!mc.SecondLineOnWebPage__c}" rendered="{!step == '1'}" />
+                            </div>
+                            
+                            <table class="miw100">                                    
+                                <tr class="col-header">
+                                    <td> Name </td>
+                                    <!--<td> Location </td>-->
+                                    <td> Description</td>
+                                    <!--<td> Date </td>
+                                    <td> Starts </td>
+                                    <td> Ends </td>-->
+                                    <td class="wsn"> Remaining Spaces</td>
+                                </tr>
+                                
+                                <apex:repeat value="{!cs}" var="c">
+                                    <tr class="row">
+                                        <td> <a href="{!$Site.Prefix}/apex/registerForCampaignPage?cid={!c.id}{!query}">{!c.Name}</a> </td> 
+                                        <!--<td> <apex:outputField value="{!c.Event_Location__c}" /> </td> -->
+                                        <td> <apex:outputField value="{!c.Description}" /> </td> 
+                                       
+                                        <!--<td class="wsn"> 
+                                             <apex:outputPanel rendered="{!c.Event_Date_Time__c != null}">
+                                            <apex:outputText value="{0, date, MM/dd/yyyy}">
+                                                <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                            </apex:outputText>
+                                                 </apex:outputPanel>
+                                             
+                                             <apex:outputPanel rendered="{!c.Event_Date_Time__c == null}">
+                                                 <apex:outputText value="To be determined"/>
+                                             </apex:outputPanel>
+                                        </td> 
+                                        
+                                         <td class="wsn"> 
+                                            <apex:outputText value="{0, date, hh:mm a}">
+                                                <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
+                                            </apex:outputText>
+                                        </td> 
+                                        
+                                         <td class="wsn"> 
+                                            <apex:outputText value="{0, date, hh:mm a}">
+                                                <apex:param value="{!c.Event_End_Time__c + tzoffset}" /> 
+                                            </apex:outputText>
+                                        </td> -->
+                                        <td> <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}" /> </td>
+                                    </tr>
+                                </apex:repeat>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </apex:form>    
+</apex:page>

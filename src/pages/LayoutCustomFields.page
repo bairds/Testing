@@ -1,0 +1,24 @@
+<!--
+ - Created by Baird on 9/21/2018.
+ This is an attempt to create a custom field section that would work on all objects.
+ But it turns out that it doesn't; it requires it's own "Submit" button, which means
+ there would be one Save and one Submit button on the same page, and users would have to hit
+ them in the right order or they'd lose data.
+ The only viable approach to incorporating this is to create a custom edit page which overrides the Salesforce default.
+ But then we'd constantly have to be updating that.
+ -->
+
+<apex:page id="LayoutCustomFields" standardController="Account" extensions="layoutCustomFieldsSection">
+    <apex:form >
+        <apex:pageBlock id="CustomFieldsBlock">
+            <apex:pageBlockButtons location="bottom">
+            <apex:CommandButton action="{!Submit}" value="Save" rerender="CustomFieldsBlock"/>
+            </apex:pageBlockButtons>
+            <apex:pageBlockSection >
+        <apex:repeat value="{!$ObjectType.Account.FieldSets.AccountLayoutCustomFields}" var="f">
+        <apex:inputField value="{!Account[f]}" />
+        </apex:repeat>
+        </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

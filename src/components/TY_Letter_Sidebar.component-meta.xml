@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApexComponent xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>43.0</apiVersion>
+    <description>Used for sidebars in Visualforce Thank You letters for Contributions.  Useful for including board lists to the left side of the letters.</description>
+    <label>TY Letter Sidebar</label>
+    <packageVersions>
+        <majorNumber>1</majorNumber>
+        <minorNumber>0</minorNumber>
+        <namespace>CnP_PaaS_Bridge</namespace>
+    </packageVersions>
+</ApexComponent>

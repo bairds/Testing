@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>Custom Metadata Type created from old WG_settings Custom setting.</description>
+    <fields>
+        <fullName>AccountAfterInsertTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>When true, AccountCustom controller calculates HUCs. Otherwise, not. Turn off for data loads.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>When true, AccountCustom controller calculates HUCs. Otherwise, not. Turn off for data loads.</inlineHelpText>
+        <label>AccountAfterInsertTrigger</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ContactBeforeAfterInsertTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Turn off before data loads.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Turn off before data loads.</inlineHelpText>
+        <label>ContactBeforeAfterInsertTrigger</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>DontUseLeads__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <label>DontUseLeads</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>FamilyAccountThreshhold__c</fullName>
+        <defaultValue>70</defaultValue>
+        <description>Above what level should an membership be considered a family membership andinclude all the active members in the account?  Defaults to 70.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Above what level should an membership be considered a family membership andinclude all the active members in the account?  Defaults to 70.</inlineHelpText>
+        <label>FamilyAccountThreshhold</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>FinalDonationCampaignStatus__c</fullName>
+        <description>After a donation is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Donated.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>After a donation is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Donated.</inlineHelpText>
+        <label>FinalDonationCampaignStatus</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Donated</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Responded Yes</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Contributed</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>FinalVolunteerCampaignStatus__c</fullName>
+        <description>After a volunteer hours contribution is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Completed.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>After a volunteer hours contribution is recorded, the corresponding campaign member is updated. What should their status be set to? Default: Completed.</inlineHelpText>
+        <label>FinalVolunteerCampaignStatus</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Completed</fullName>
+                    <default>true</default>
+                </value>
+                <value>
+                    <fullName>Contributed</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Took Action</fullName>
+                    <default>false</default>
+                </value>
+                <value>
+                    <fullName>Responded Yes</fullName>
+                    <default>false</default>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>HourlyVolunteerRate__c</fullName>
+        <description>From independent Sector. Change this each year.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>From independent Sector. Change this each year.</inlineHelpText>
+        <label>HourlyVolunteerRate</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>LeadSource_QuestionCnP__c</fullName>
+        <defaultValue>&apos;If this is your first donation or payment to our organization, please tell us how you first heard about us.&apos;</defaultValue>
+        <description>The question used in CnP Custom Questions to find out the registrant&apos;s leadsource</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>The question used in CnP Custom Questions to find out the registrant&apos;s leadsource</inlineHelpText>
+        <label>LeadSource_QuestionCnP</label>
+        <length>252</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ManageContribsTrigger__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Turns off the ManageContribsTrigger to facilitate data loads.  Default is on.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Turns off the ManageContribsTrigger to facilitate data loads.  Default is on.</inlineHelpText>
+        <label>ManageContribsTrigger</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Membership_Grace_Period__c</fullName>
+        <defaultValue>90</defaultValue>
+        <description>How many days before or ever the expiration date should a new membership payment be considered a renewal. Default 90.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>How many days before or ever the expiration date should a new membership payment be considered a renewal. Default 90.</inlineHelpText>
+        <label>Membership Grace Period</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Online_signup_newsletter__c</fullName>
+        <defaultValue>&apos;enewsletter&apos;</defaultValue>
+        <description>Name of the newsletter (campaign or mailing list) for which people sign up from the website.  Default: &quot;enewsletter&quot;</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Name of the newsletter (campaign or mailing list) for which people sign up from the website.  Default: &quot;enewsletter&quot;</inlineHelpText>
+        <label>Online_signup_newsletter</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>WGSettings</label>
+    <pluralLabel>WGSettings</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

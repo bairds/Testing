@@ -1,0 +1,22 @@
+<apex:page standardController="Contact" extensions="ContributionHistoryController" showHeader="false">    
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Number of Contributions Last 2 Yrs"/>
+                   <apex:outputText value="{!contribCount}"/>
+               </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Total Value of Contributions Last 2 Yrs"/>
+                <apex:OutputText value="${!totalContribAmount}"/>
+               </apex:pageBlockSectionItem>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Last Contribution Date"/>
+                <apex:OutputText value="{!lastContribDate}"/>
+               </apex:pageBlockSectionItem>   
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Maximum Contribution Last 2 Yrs"/>
+                <apex:OutputText value="${!maxAmount}"/>
+               </apex:pageBlockSectionItem>                                                 
+           </apex:pageBlockSection>
+    </apex:pageBlock>
+</apex:page>
