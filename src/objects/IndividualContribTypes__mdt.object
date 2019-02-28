@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <description>The Contribution recordTypes that are to be considered individual donations.  Some organizations include payments for events; some don&apos;t.  You can include or exclude any recordType.</description>
+    <fields>
+        <fullName>Contrib_Record_Type__c</fullName>
+        <description>A recordType which is considered an individual contribution (as opposed to, for example, a grant).</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>A recordType which is considered an individual contribution (as opposed to, for example, a grant).</inlineHelpText>
+        <label>Contrib Record Type</label>
+        <length>25</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>IndividualContribTypes</label>
+    <pluralLabel>IndividualContribTypes</pluralLabel>
+    <visibility>Public</visibility>
+</CustomObject>

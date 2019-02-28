@@ -15,12 +15,12 @@ private class PLPBairdTEST {
         CampaignMember cm = ctv.fetchTestCM();
         cm.Status='Responded Yes';
         update cm;
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
         PageReference pageRef = Page.PLPBairdPage;
         Test.setCurrentPage(pageRef);
-        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
         
         PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
-        system.assertEquals(1,PLPC.AttendeesRSVPed.size());
+        system.assertEquals(1,PLPC.UnprocessedCMs.size());
         // These two fire when the AutoComplete chooses a person
         PLPC.attendee.PersonId = co.Id;
         PLPC.newContactForm = false;
@@ -31,8 +31,8 @@ private class PLPBairdTEST {
         PLPC.attendee.Hours = 4;
 
         PLPC.processSelected();
-        system.assertEquals(1,PLPC.AttendeesAttended.size());
-        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.AttendeesAttended);
+        system.assertEquals(1,PLPC.UnprocessedAttendees.size());
+        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.UnprocessedAttendees);
 
         // PLPC.setCM(PLPC.AttendeesAttended[0]);
         PLPC.submitData();

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>They agreed to major donation, but the check hasn&apos;t arrived.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>MD Where&apos;s the Check?</name>
+    <style>none</style>
+    <subject>Time to find out where their check is.</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

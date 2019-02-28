@@ -2,8 +2,8 @@
 // Nov 10 2016 Baird makes sure this inserts addressee and dear.
 public class PLPBaird
 {
-    public List<Attendee> AttendeesRSVPed {get; set;}
-    public List<Attendee> AttendeesAttended {get; set;}
+    public List<Attendee> UnprocessedCMs {get; set;}
+    public List<Attendee> UnprocessedAttendees {get; set;}
     public List<CampaignMember> UpdateCMs;
     public Campaign Camp {get; set;}
     public List<CampaignMember> Campmmbrs {get; set;}
@@ -22,35 +22,31 @@ public class PLPBaird
 
     public Attendee attendee { get; set; }
     public Attendee all { get; set; }
+    public Contact NewContact {get; set;}
 
-    public AccountController account {
-        get; set;
-    }
+//    public AccountController account {
+//        get; set;
+//    }
 
     public PLPBaird(ApexPages.StandardController Campaign) {
         review = false;
         //FamilyRTID = [select id from RecordType where Name = 'Family'][0].id;
-
-        cid = System.currentPageReference().getParameters().get('cid');
-        if (cid==null) DisplayNoCAmpaignWarning();
-
-        Camp = [select Id, campaign.Name, Event_Date_Time__c from Campaign where Id = :cid];
-
-
+        Camp = (Campaign)Campaign.getRecord();
         attendee = new Attendee(camp);
         all = new Attendee(camp);
         // account = new AccountController();
-        SetRSVP();
+        selectUnprocessedCMs();
         newContactForm = false;
     }
 
-    public void SetRSVP() {
-        AttendeesRSVPed = new List<Attendee>();
-        for(CampaignMember cm: [select Id, ContactId, Contact.FirstName, Contact.LastName, Contact.Email, Contact.AccountId, LeadId, Lead.FirstName,
+    public void selectUnprocessedCMs() {
+        UnprocessedCMs = new List<Attendee>();
+        List<CampaignMember> ListCMs = [select Id, ContactId, Contact.FirstName, Contact.LastName, Contact.Email, Contact.AccountId, LeadId, Lead.FirstName,
                 Lead.LastName, Lead.IsConverted, Hours__c, Status, Role__c from CampaignMember
-        where Campaign.Id = :Camp.Id and Processed__c <> true order by Contact.FirstName, Lead.FirstName limit 1000]) {
+        where Campaign.Id = :Camp.Id and Processed__c <> true order by Contact.FirstName, Lead.FirstName limit 1000];
+        for(CampaignMember cm : ListCMs) {
             // As each campaignMember is processed we create a new Attendee object and add it to the AttendeesRSVPed
-            AttendeesRSVPed.add(new Attendee(cm));
+            UnprocessedCMs.add(new Attendee(cm));
             // We also capture its status value so that we can check later to see whether the user has changed the status
         }
 
@@ -78,7 +74,7 @@ public class PLPBaird
     }
     public void setAllStatus()
     {
-        for(Attendee a : AttendeesRSVPed) {
+        for(Attendee a : UnprocessedCMs) {
             if(String.isNotBlank(all.CM.Status))
                 a.CM.Status = all.CM.Status;
 
@@ -92,7 +88,7 @@ public class PLPBaird
 
     public void setAllHours()
     {
-        for(Attendee a : AttendeesRSVPed) {
+        for(Attendee a : UnprocessedCMs) {
             a.Hours = all.Hours;
 
             if(a.Hours == 0)
@@ -106,11 +102,11 @@ public class PLPBaird
 
     public void addCMToList(CampaignMember cm) {
         formatsRSVPedList();
-        AttendeesRSVPed.add(new Attendee(cm));
+        UnprocessedCMs.add(new Attendee(cm));
     }
 
     public void formatsRSVPedList(){
-        for(Attendee a: AttendeesRSVPed) {
+        for(Attendee a: UnprocessedCMs) {
             if(a.Hours == 0)
                 a.Hours = null;
         }
@@ -121,10 +117,10 @@ public class PLPBaird
         newContactForm = false;
 
         UpdateCMs = new List<CampaignMember>();
-        AttendeesAttended = new List<Attendee>();
+        UnprocessedAttendees = new List<Attendee>();
         TotalHours = 0;
 
-        for(Attendee a: AttendeesRSVPed) {
+        for(Attendee a: UnprocessedCMs) {
             System.debug('Going through AttendeesRSVPed to add to AttendeesAttended');
 
             if(addToAttendedList(a)){
@@ -136,7 +132,7 @@ public class PLPBaird
         if(all.Hours == 0)
             all.Hours = null;
 
-        if(AttendeesAttended.size() == 0)
+        if(UnprocessedAttendees.size() == 0)
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'No members were processed'));
 
         if(!ApexPages.hasMessages())
@@ -151,7 +147,7 @@ public class PLPBaird
         // If user has changed hours, comments, rating, or status
 
         if(a.Hours != null  || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != PLPBaird.DefaultRating || a.OriginalStatus != a.CM.Status) {
-            AttendeesAttended.add(a);
+            UnprocessedAttendees.add(a);
             return true;
         }
 
@@ -170,7 +166,7 @@ public class PLPBaird
 //REturn to Edit List
     public PageReference returnToEditList(){
         review=false;
-        AttendeesAttended.clear();
+        UnprocessedAttendees.clear();
         return null;
     }
 
@@ -184,8 +180,8 @@ public class PLPBaird
             update Camp;
         }
 
-        system.debug('AttendeesAttended create the Opps; they include ' + AttendeesAttended);
-        For (Attendee a : AttendeesAttended) {
+        system.debug('AttendeesAttended create the Opps; they include ' + UnprocessedAttendees);
+        For (Attendee a : UnprocessedAttendees) {
             setCM(a);
 
             UpdateCMs.add(a.CM);
@@ -281,48 +277,37 @@ public class PLPBaird
                 return null;
     }
 
+    public void preAddToList() {
+        newContactForm = false;
+    }
+
 //Wrapper Class
     public class Attendee {
-
-        public String PersonId {
-            get; set;
-        }
-
-        PLPBaird Controller;
+        public String PersonId {get; set;}
         public CampaignMember CM {get; set;}
         public Decimal Hours {get; set;}
         public String Comments {get; set;}
         public String OriginalStatus {get; set;}
-
         public CampaignMember selected {get; set;}
-
-        public Person Person {
-            get; set;
-        }
-
+        public Person Person {get; set; }
         public Opportunity Contribution {get; set;}
 
 
         public Attendee(Campaign camp) {
             selected = new CampaignMember();
-            CampaignMember CM = new CampaignMember(campaignId=camp.Id);
+            CampaignMember CM = new CampaignMember(campaignId = camp.Id);
             OriginalStatus = CM.Status;
             Contribution = new Opportunity();
-            // Contribution.Supervisor_Satisfaction__c = PLPBaird.DefaultRating;
-            // Contribution.Leadership_Level__c = PLPBaird.DefaultLeadership;
-            // Contribution.CloseDate = Controller.Camp.Event_Date_Time__c == null ? System.today() : Controller.Camp.Event_Date_Time__c.date();
         }
 
-
         public Attendee(PLPBaird con) {
-            Controller = con;
             selected = new CampaignMember();
             CM = new CampaignMember();
             OriginalStatus = CM.Status;
             Contribution = new Opportunity();
             Contribution.Supervisor_Satisfaction__c = PLPBaird.DefaultRating;
             Contribution.Leadership_Level__c = PLPBaird.DefaultLeadership;
-            Contribution.CloseDate = Controller.Camp.Event_Date_Time__c == null ? System.today() : Controller.Camp.Event_Date_Time__c.date();
+            Contribution.CloseDate = System.today();
         }
 
         public Attendee(CampaignMember campmmbr) {
@@ -332,17 +317,12 @@ public class PLPBaird
             Contribution.Supervisor_Satisfaction__c = PLPBaird.DefaultRating;
             Contribution.Leadership_Level__c = PLPBaird.DefaultLeadership;
         }
-/*
-        public void preAddToList() {
-            newContactForm = false;
-        }
-*/
+
         public void addToList() {
             if(String.isNotBlank(PersonId)) {
                 Person = new Person(PersonId, null);
                 system.debug('Before error, PerseonId is ' + PersonId);
-                String querystring = 'SELECT Id, Processed__c FROM CampaignMember WHERE ' + Person.Type + 'Id = \'' + PersonId + '\' AND ' +
-                        'CampaignId = \'' + Campaign.Id + '\'';
+                String querystring = 'SELECT Id, Processed__c FROM CampaignMember WHERE ' + Person.Type + 'Id = \'' + PersonId + '\' AND ' + 'CampaignId = \'' + Camp.Id + '\'';
                 system.debug('Before error, querystring is ' + querystring);
                 List<CampaignMember> check = Database.query(querystring);
 
@@ -354,7 +334,7 @@ public class PLPBaird
                     else
                             CM.ContactId = PersonId;
 
-                    CM.CampaignId = Controller.Camp.Id;
+                    CM.CampaignId = Camp.Id;
                     CM.Status = 'Attended';
 
                     insert CM;
@@ -362,7 +342,7 @@ public class PLPBaird
                     CM = [SELECT Id, Contact.FirstName, Contact.LastName, Contact.AccountId, ContactId, Lead.FirstName, Lead.LastName, Status, Lead.IsConverted, LeadId, Role__c
                     FROM CampaignMember WHERE Id = :CM.Id];
 
-                    Controller.addCMToList(CM);
+                    addCMToList(CM);
                 }
                 else
                 {
@@ -374,7 +354,7 @@ public class PLPBaird
                             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Campaign Member is already in this list.'));
 
 
-                    Controller.formatsRSVPedList();
+                    formatsRSVPedList();
                 }
             }
         }
@@ -386,31 +366,31 @@ public class PLPBaird
         public void deleteCM() {
             delete selected;
 
-            Controller.SetRSVP();
+            selectUnprocessedCMs();
         }
     }
 
-    public class AccountController  {
-        PLPBaird Controller;
-
-        public String Id {
-            get; set;
-        }
-
-        public Boolean newContactForm {
-            get; set;
-        }
-
-        public Contact newContact {
-            get; set;
-        }
-
-        public AccountController(PLPBaird con) {
-            Controller = con;
-        }
+//    public class AccountController  {
+//        PLPBaird Controller;
+//
+//        public String Id {
+//            get; set;
+//        }
+////
+////        public Boolean newContactForm {
+////            get; set;
+////        }
+//
+//        public Contact newContact {
+//            get; set;
+//        }
+//
+//        public AccountController(PLPBaird con) {
+//            Controller = con;
+//        }
 
         public void addNewContact() {
-            newContact = new Contact();
+            Contact newContact = new Contact();
             newContactForm = true;
 
             Id = null;
@@ -456,10 +436,10 @@ public class PLPBaird
         public void cancelContact() {
             newContactForm = false;
         }
-    }
+//    }
 
     public PageReference DisplayNoCAmpaignWarning() {
-        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.WARNING,'Error: Not sure which Campaign to use.  Please send a copy of this message to support@watergrass.org.');
+        ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.WARNING,'Error: Not sure which Campaign to use.  Did you start from a Campaign Detail Page?');
         ApexPages.addMessage(myMsg);
         return null;
     }

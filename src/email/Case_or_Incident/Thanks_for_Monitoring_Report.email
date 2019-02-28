@@ -1,0 +1,66 @@
+<table height="550" width="650" cellpadding="5" border="0" cellspacing="0" >
+<tr height="100" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<table height="100%" width="100%" cellpadding="5" border="0" cellspacing="0" >
+<tr height="100" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="650" tEditID="c1r1" locked="0" aEditID="c1r1" >
+<![CDATA[<P>Dear {!Contact.FirstName}</P>
+<P>&nbsp;</P>
+<P>Thank you so much for getting up and going out to monitor the {!Case.River__c} on {!Case.When_Discovered__c}.&nbsp; Our protection of this beautiful resource depends upon our knowledge of its health.&nbsp; </P>
+<P>&nbsp;</P>
+<P>Just to make sure we've got it right, here's what you told us.&nbsp; If we don't hear from you with corrections within two days, we'll assume it's okay.</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>]]></td>
+</tr>
+<tr height="15" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<![CDATA[]]></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr height="450" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<table height="100%" width="100%" cellpadding="5" border="0" cellspacing="5" >
+<tr height="225" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c1r2" locked="0" aEditID="c1r2" >
+<![CDATA[<P>Person monitoring: {!Contact.Name}</P>
+<P>Date and time:&nbsp;{!Case.When_Discovered__c}</P>
+<P>River Basin: {!Case.Basin__c}</P>
+<P>River: {!Case.River__c}</P>
+<P>Monitoring site: {!Case.Monitoring_Site__c}</P>
+<P>&nbsp;</P>
+<P>Observations or comments: {!Case.Description}</P>]]></td>
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c2r2" locked="0" aEditID="c2r2" >
+<![CDATA[<P>Air and weather</P>
+<P>Air temp: {!Case.Air_Temp_C__c}</P>
+<P>Sky conditions: {!Case.Sky__c}</P>
+<P>Weather: {!Case.Weather__c}</P>
+<P>Rain Event? {!Case.Rain__c}&nbsp;</P>
+<P>&nbsp;</P>]]></td>
+</tr>
+<tr height="225" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c1r3" locked="0" aEditID="c1r3" >
+<![CDATA[<P>Flow &amp; Visual Observations:</P>
+<P>Flow: {!Case.Flow__c}</P>
+<P>Water Color: {!Case.Water_Color__c}</P>
+<P>Turbidity: {!Case.Turbidity__c}</P>
+<P>Algae Species: {!Case.Algae_Species__c}</P>
+<P>Algae Color: {!Case.Algae_Color__c}</P>
+<P>Aquatic Vegetation: {!Case.Aquatic_Veg__c}</P>
+<P>Bank conditions: {!Case.Bank__c}</P>
+<P>Substrate: {!Case.Substrate__c}</P>
+<P>&nbsp;</P>]]></td>
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c2r3" locked="0" aEditID="c2r3" >
+<![CDATA[<P>Water Chemistry:</P>
+<P>Water temperature: {!Case.Water_Temp_C__c} Celsius</P>
+<P>pH: {!Case.pH__c}</P>
+<P>Dissolved Oxygen: {!Case.DO_mg_L__c}</P>
+<P>Salinity: {!Case.Chloride__c}</P>
+<P>Nitrogen: {!Case.Nitrogen__c}</P>
+<P>Phosphate: {!Case.Phosphate__c}</P>]]></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>

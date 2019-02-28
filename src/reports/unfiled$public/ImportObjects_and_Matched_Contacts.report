@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>FK_NAME</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Address__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Match_Address__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Person_PhoneWork__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Match_PhoneWork__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Person_PhoneMobile__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Match_PhoneMobile__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Person_EmailWork__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Match_EmailWork__c</field>
+    </columns>
+    <description>To compare address fields</description>
+    <format>Tabular</format>
+    <name>ImportObjects and Matched Contacts</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$ImportObject__c@ImportObject__c.ContactCalculated__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>ImportObject__c.Contribution_MmbrEndDate__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

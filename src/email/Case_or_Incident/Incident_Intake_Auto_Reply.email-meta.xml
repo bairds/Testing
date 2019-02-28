@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Auto reply after someone reports an incident.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>WaterGrass_Letterhead</letterhead>
+    <name>Incident Intake Auto Reply</name>
+    <style>newsletter</style>
+    <subject>Thanks for your report of {!Case.CreatedDate}</subject>
+    <textOnly>Dear {!Contact.FirstName},
+ 
+Thank you for reporting the {!Case.Name} to us here at the WaterGrass Riverkeeper.  We&apos;ll be in touch over the coming days, as appropriate.
+ 
+We&apos;d like to confirm the information you gave us, as below.  Please let us know right away if we got anything wrong.
+ 
+Date and time reported: {!Case.CreatedDate}
+Case number: {!Case.CaseNumber}
+Report received by: {!Case.OwnerFullName}
+Others informed so far: {!Case.Others_notified__c}
+ 
+Location: {!Case.Location__c}
+Description: {!Case.Description}
+How problem was discovered: {!Case.How_discovered__c}
+ABOUT YOU:
+Do you want to remain anonymous? {!Case.Requests_anonymity__c}
+Your name: {!Case.Contact}
+Your address: {!Case.Contact}
+Your workphone: {!Case.Contact}
+Your homephone: {!Case.Contact}
+Email: {!Contact.Email}
+ABOUT THE INCIDENT:
+Type of Incident: {!Case.Type}
+Material involved, if any: {!Case.Material_and_Quantity__c}
+ 
+ </textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

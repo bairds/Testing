@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Web</fullName>
+        <default>false</default>
+        <label>Web</label>
+    </customValue>
+    <customValue>
+        <fullName>Social Media</fullName>
+        <default>false</default>
+        <label>Social Media</label>
+    </customValue>
+    <customValue>
+        <fullName>Community Event</fullName>
+        <default>false</default>
+        <label>Community Event</label>
+    </customValue>
+    <customValue>
+        <fullName>Letter or Postcard from HRWC</fullName>
+        <default>false</default>
+        <label>Letter or Postcard from HRWC</label>
+    </customValue>
+    <customValue>
+        <fullName>Referral/Word of Mouth</fullName>
+        <default>false</default>
+        <label>Referral/Word of Mouth</label>
+    </customValue>
+    <customValue>
+        <fullName>Newspaper, radio or TV</fullName>
+        <default>false</default>
+        <label>Newspaper, radio or TV</label>
+    </customValue>
+    <customValue>
+        <fullName>Advertisement</fullName>
+        <default>false</default>
+        <label>Advertisement</label>
+    </customValue>
+    <customValue>
+        <fullName>HRWC newsletter, flyer, or brochure</fullName>
+        <default>false</default>
+        <label>HRWC newsletter, flyer, or brochure</label>
+    </customValue>
+    <description>From Pam Labadie, HRWC</description>
+    <masterLabel>LeadSource</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

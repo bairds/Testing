@@ -22,7 +22,7 @@
               <div class="fwb m5">  Not in the list?  </div>     
                 
                        
-                <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact" valueField="Id" targetField="{!attendee.Id}"
+                <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact" valueField="Id" targetField="{!attendee.PersonId}"
                                   syncManualEntry="false" style="width:200px" filterClause="IsConverted=false" preSubmit="true" placeholder="Search WaterGrass"/>
                   
                      <apex:actionFunction immediate="true" action="{!attendee.preAddToList}" name="preSubmit" oncomplete="addToList()" /> 
@@ -94,9 +94,9 @@
              <apex:actionRegion >
                  
                  
-                 <apex:outputPanel layout="block" rendered="{!AttendeesRSVPed.size == 0}">No records to display </apex:outputPanel>
+                 <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size == 0}">No records to display </apex:outputPanel>
            
-                 <apex:outputPanel layout="block" rendered="{!AttendeesRSVPed.size > 0}" styleClass="section df">
+                 <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size > 0}" styleClass="section df">
                      <div class="section">
                          <label class="labelCol">
                              Date of the event:
@@ -132,7 +132,7 @@
                  </apex:outputPanel>
 
         
-                 <apex:pageBlockTable value="{!AttendeesRSVPed}" var="ar" id="People_Who_RSVPed" rendered="{!AttendeesRSVPed.size > 0}">
+                 <apex:pageBlockTable value="{!UnprocessedCMs}" var="ar" id="People_Who_RSVPed" rendered="{!UnprocessedCMs.size > 0}">
             
              <apex:column >
             <apex:commandLink value="X" action="{!attendee.deleteCM}" reRender="attendees" onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
@@ -185,7 +185,7 @@
         </apex:pageBlockTable>
              
             
-            <apex:outputPanel layout="block" styleClass="section tac" rendered="{!AttendeesRSVPed.size > 0}">
+            <apex:outputPanel layout="block" styleClass="section tac" rendered="{!UnprocessedCMs.size > 0}">
             	<apex:commandButton value="Review List" action="{!processSelected}" reRender="participant_list_processing"/>
 			
             </apex:outputPanel> 
@@ -203,7 +203,7 @@
     
     <apex:pageBlock title="Review Your List" rendered="{!review}">
         <apex:form >
-        <apex:pageBlockTable value="{!AttendeesAttended}" var="aa" id="AttendeesAttended">
+        <apex:pageBlockTable value="{!UnprocessedAttendees}" var="aa" id="AttendeesAttended">
        
         <apex:column width="50px">
             <apex:facet name="header">First Name</apex:facet>

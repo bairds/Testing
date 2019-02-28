@@ -1,0 +1,70 @@
+<table height="550" width="650" cellpadding="5" border="0" cellspacing="0" >
+<tr height="100" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<table height="100%" width="100%" cellpadding="5" border="0" cellspacing="0" >
+<tr height="100" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="650" tEditID="c1r1" locked="0" aEditID="c1r1" >
+<![CDATA[<P>Dear {!Contact.FirstName},</P>
+<P>&nbsp;</P>
+<P>Thank you for reporting the {!Case.Name} to us here at the WaterGrass Riverkeeper.&nbsp; We'll be in touch over the coming days, as appropriate.</P>
+<P>&nbsp;</P>
+<P>We'd like to confirm the information you gave us, as below.&nbsp; Please let us know right away&nbsp;if we got anything wrong.</P>
+<P>&nbsp;</P>
+<P><STRONG>Date and time reported:</STRONG> {!Case.CreatedDate}</P>
+<P><STRONG>Case number:</STRONG> {!Case.CaseNumber}</P>
+<P><STRONG>Report received by:</STRONG> {!Case.OwnerFullName}</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P><STRONG>Location:</STRONG> {!Case.Location__c}</P>
+<P><STRONG>Description:</STRONG> {!Case.Description}</P>
+<P><STRONG>How problem was discovered:</STRONG> {!Case.How_discovered__c}</P>]]></td>
+</tr>
+<tr height="15" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<![CDATA[]]></td>
+</tr>
+</table>
+</td>
+</tr>
+<tr height="450" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" >
+<table height="100%" width="100%" cellpadding="5" border="0" cellspacing="5" >
+<tr height="225" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c1r2" locked="0" aEditID="c1r2" >
+<![CDATA[<P><STRONG>ABOUT YOU:</STRONG></P>
+<P><STRONG>Do you want to remain anonymous?</STRONG> {!Case.Requests_anonymity__c}</P>
+<P>Your name: {!Case.Contact}</P>
+<P>Your address: {!Case.Contact}</P>
+<P>Your workphone: {!Case.Contact}</P>
+<P>Your homephone: {!Case.Contact}</P>
+<P>Email: {!Contact.Email}</P>]]></td>
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c2r2" locked="0" aEditID="c2r2" >
+<![CDATA[<P><STRONG>ABOUT THE INCIDENT:</STRONG></P>
+<P><STRONG>Type of Incident:</STRONG> {!Case.Type}</P>
+<P><STRONG>Material involved, if any, and how much of it:</STRONG> {!Case.Material_and_Quantity__c}</P>
+<P><STRONG>The area affected by the incident:</STRONG> {!Case.Area_affected__c}</P>
+<P><STRONG>Resources at risk:</STRONG> {!Case.Resources_at_Risk__c}</P>
+<P><STRONG>The weather at the time:</STRONG> {!Case.Weather__c}</P>
+<P><STRONG>Marine conditions:</STRONG> {!Case.Marine_conditions__c}</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>
+<P>&nbsp;</P>]]></td>
+</tr>
+<tr height="225" valign="top" >
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c1r3" locked="0" aEditID="c1r3" >
+<![CDATA[<P><STRONG>BUILDING A CASE:</STRONG> </P>
+<P><STRONG>Other witnesses or evidence:</STRONG> {!Case.Witnesses_or_Evidence__c}</P>
+<P><STRONG>Type of evidence:</STRONG> {!Case.Type_of_Evidence__c}</P>
+<P><STRONG>Others informed so far</STRONG>: {!Case.Others_notified__c}</P>
+<P>&nbsp;</P>]]></td>
+<td style=" color:#000000; font-size:12pt; background-color:#FFFFFF; font-family:arial; bLabel:main; bEditID:r3st1;" width="50%" tEditID="c2r3" locked="0" aEditID="c2r3" >
+<![CDATA[<P><STRONG>THANKS!</STRONG></P>
+<P>&nbsp;</P>
+<P>A member of the WaterGrass Riverkeeper will be in touch with you shortly.</P>
+<P>&nbsp;</P>
+<P>In the meantime, if you need to get in touch, please contact {!Case.OwnerFullName} at {!Case.OwnerPhone}.</P>]]></td>
+</tr>
+</table>
+</td>
+</tr>
+</table>

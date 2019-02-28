@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Thanks for volunteering email</name>
+    <style>none</style>
+    <subject>Thanks for your time at the {!01I700000001Tpk.00N70000001lV5h}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

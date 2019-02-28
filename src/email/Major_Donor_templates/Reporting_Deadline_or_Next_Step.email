@@ -1,0 +1,14 @@
+Hi {!Opportunity.OwnerFirstName}
+
+It's two days before the deadline you sent for reporting or taking the next step on the {!Opportunity.Account} donation named {!Opportunity.Name}.
+
+In your notes about this, you wrote:
+{!Opportunity.Description}
+
+As you follow-up now, be sure to log into WaterGrass, find the Participation named {!Opportunity.Name}, and
+1) update your notes
+2) change the participation stage (if it has changed, say, from "Sent Letter" to "Phoned Reminder")
+3) reset the Reporting Deadline or Next Step field to a new date, if there's another deadline or next step coming up.  (If not, just leave it blank.)
+
+Thanks.
+WaterGrass.

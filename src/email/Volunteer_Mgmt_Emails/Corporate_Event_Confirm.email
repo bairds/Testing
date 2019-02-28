@@ -1,0 +1,23 @@
+<messaging:emailTemplate subject="Here's your confirmation for the volunteer event." recipientType="Contact" relatedToType="CampaignMember">
+<messaging:htmlEmailBody >
+<apex:image id="Logo" value="https://c.na43.content.force.com/servlet/servlet.ImageServer?id=0150G000007zS63&oid=00DA0000000Hs9s&lastMod=1490997631000" 
+width="666"/><br/><br/>
+Dear {!if(relatedTo.Type == 'Contact',relatedTo.Contact.firstname,relatedTo.Lead.firstname)},<br/><br/>
+
+You have registered with your colleagues at {!relatedTo.Group__c} for the {!relatedTo.Campaign.Name} on <apex:outputText value=" "/><apex:outputfield value="{!relatedTo.Campaign.Event_Date_Time__c}" />. <br/><br/>
+
+If you have any questions or concerns please contact <a href="mailto:bbuitrago@nyharbor.org">Blyss Buitrago</a>.<br/><br/>
+
+Looking forward to seeing you,<br/><br/><br/>
+Blyss<br/><br/>
+
+
+Your Name: {!relatedTo.contact.name}<br/>
+
+Where: {!relatedTo.campaign.Event_Location__c}.<br/>
+
+Date and Time: <apex:outputfield value="{!relatedTo.Campaign.Event_Date_Time__c}" />.<br/>
+
+Description: {!relatedTo.campaign.Description_Long__c}.<br/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

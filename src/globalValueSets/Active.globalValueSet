@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Obsolete contact info</fullName>
+        <default>false</default>
+        <label>Obsolete contact info</label>
+    </customValue>
+    <customValue>
+        <fullName>Active</fullName>
+        <default>true</default>
+        <label>Active</label>
+    </customValue>
+    <customValue>
+        <fullName>Deceased</fullName>
+        <default>false</default>
+        <label>Deceased</label>
+    </customValue>
+    <customValue>
+        <fullName>No Longer Active</fullName>
+        <default>false</default>
+        <label>No Longer Active</label>
+    </customValue>
+    <customValue>
+        <fullName>Yes</fullName>
+        <default>false</default>
+        <label>Yes</label>
+    </customValue>
+    <masterLabel>Active</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

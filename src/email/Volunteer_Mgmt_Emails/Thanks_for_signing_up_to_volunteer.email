@@ -1,0 +1,30 @@
+<messaging:emailTemplate subject="Thanks for signing up to volunteer" recipientType="Contact" relatedToType="CampaignMember">
+<messaging:htmlEmailBody >
+
+<!-- INSERT A LINK TO YOUR LOGO OR IMAGE BELOW ON LINE 5.  YOU'LL NEED TO RE-SET HEIGHT AND WIDTH APPROPRIATE FOR YOUR IMAGE. -->
+<apex:image id="YourLogo" value="http://watergrass.org/wp-content/themes/presswork/admin/images/wg_logo.jpg" width="500" height="86"/> <br/>
+<br/>
+
+<!-- YOUR TEXT GOES BELOW.  KEEP THE "DEAR" LINE INTACT FOR IT TO WORK WITH EITHER LEAD OR CONTACT SIGNUPS -->
+Dear {!IF(ISNULL(relatedTo.Contact.FirstName),relatedTo.Lead.FirstName,relatedTo.Contact.FirstName)}, <br/>
+<br/>
+Thanks for volunteering for YOUR EVENT NAME.<br/>
+<br/>
+You've signed up to help with {!relatedTo.Campaign.Name}.<br/>
+<br/>
+Location: &nbsp;{!relatedTo.Campaign.Event_Location__c} <br/>
+Time: &nbsp; <apex:outputField value=" {!relatedTo.Campaign.Event_Date_Time__c}"/> <br/>
+Description: &nbsp;{!relatedTo.Campaign.Description_Long__c} <br/>
+<br/>
+<!-- MISCELLANEOUS ADDITIONAL INSTRUCTIONS CAN BE ADDED BELOW OR REMOVED.  LEAVE THEM IN THIS TEMPLATE-->
+<p>Please report to your volunteer station at least 15 minutes prior to the time your shift begins. In exchange for your assistance, we are pleased to offer you a free beer or soda of your choice. </p>
+
+<p>We will contact you using the email/phone number you provide if there are any changes to the volunteer schedule. Please know that extreme weather is always a consideration, so dress appropriately. </p>
+
+<p>Please contact YOUR NAME at (202)429-2310 or me@myorg.org with any questions. </p>
+
+<p>Thanks again for your help! </p>
+
+
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

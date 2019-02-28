@@ -1,0 +1,11 @@
+Dear {!Contact.Dear__c}:
+
+Your membership in the WaterGrass River Alliance is about to expire on {!Account.Account_Membership_Expires__c}.
+
+Please renew now.  Click on the link below to go to our online renewal page:
+
+______
+
+Many thanks for your ongoing support,
+
+The WaterGrass River Alliance Team

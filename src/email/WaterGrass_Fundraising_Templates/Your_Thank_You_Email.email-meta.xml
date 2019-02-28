@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>A generic thank you letter that you can customize and clone.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <letterhead>Your_Letterhead</letterhead>
+    <name>Your Thank You Email</name>
+    <style>freeForm</style>
+    <subject>Thank you for your donation.</subject>
+    <textOnly>{!Account.Addressee__c}
+{!Account.BillingAddress}
+{!Account.BillingCity}, {!Account.BillingState}  {!Account.BillingStateCode}
+
+{!Today}
+
+Dear {!Account.Dear__c},
+
+Thank you for your donation to help the _____ River watershed. Your support is greatly appreciated! We hereby acknowledge receipt of your {!Opportunity.Amount}, check #{!Opportunity.00NE0000000u6p2}, dated {!Opportunity.CloseDate}.
+
+Our organization a 501(c)(3) tax exempt organization, and our Federal Identification Number is _________. We recognize that your donation was in cash, not in-kind, and that you did not receive any product or material benefit in return.
+
+We thank you for partnering with us as we pursue our mission to preserve and enhance the natural resources of the watershed.  I hope we will get the chance to meet you at one of our events.
+
+Warm regards,
+
+_______________</textOnly>
+    <type>html</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

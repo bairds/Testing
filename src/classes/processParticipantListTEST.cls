@@ -25,7 +25,7 @@ Test.setCurrentPage(pageRef);
 ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
 
 processParticipantList PPL = new processParticipantList(new ApexPages.StandardController(cm));
-system.assertEquals(1,PPL.AttendeesRSVPed.size());
+system.assertEquals(1,PPL.UnprocessedCMs.size());
 // These two fire when the AutoComplete chooses a person
 PPL.attendee.Id = co.Id;
 PPL.attendee.preAddToList();
@@ -36,12 +36,12 @@ PPL.attendee.addToList();
 //Give this attendee hours
 PPL.attendee.Hours = 4.00;
     PPL.setCM(PPL.attendee);
-    system.debug('After inserting 4 hours for attendee, AttendeesRSVPed is now ' + PPL.AttendeesRSVPed);
+    system.debug('After inserting 4 hours for attendee, AttendeesRSVPed is now ' + PPL.UnprocessedCMs);
 
 PPL.processSelected();
     System.assertEquals(true, PPL.addToAttendedList(PPL.attendee));
-system.assertEquals(1,PPL.AttendeesAttended.size());
-system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PPL.AttendeesAttended);
+system.assertEquals(1,PPL.UnprocessedAttendees.size());
+system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PPL.UnprocessedAttendees);
 
 // PPL.setCM(PPL.AttendeesAttended[0]);
 PPL.submitData();
@@ -217,8 +217,8 @@ PPL.processSelected();
 PPL.setCM(PPL.attendee);
     system.debug('After setCM attendee is ' + PPL.attendee);
 System.assertEquals(true, PPL.addToAttendedList(PPL.attendee));
-    system.debug('After inserting 4 hours for attendee, AttendeesRSVPed is now ' + PPL.AttendeesRSVPed);
-    system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PPL.AttendeesAttended);
+    system.debug('After inserting 4 hours for attendee, AttendeesRSVPed is now ' + PPL.UnprocessedCMs);
+    system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PPL.UnprocessedAttendees);
 
 update PPL.attendee.CM;
 

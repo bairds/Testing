@@ -5,8 +5,8 @@
 // Nov 10 2016 Baird makes sure this inserts addressee and dear.
 public class processParticipantList
 {
-    public List<Attendee> AttendeesRSVPed {get; set;}
-    public List<Attendee> AttendeesAttended {get; set;}
+    public List<Attendee> UnprocessedCMs {get; set;}
+    public List<Attendee> UnprocessedAttendees {get; set;}
     public List<CampaignMember> UpdateCMs;
     public Campaign Camp {get; set;}
     public List<CampaignMember> Campmmbrs {get; set;}
@@ -43,16 +43,16 @@ public class processParticipantList
         attendee = new Attendee(this);
         all = new Attendee(this);
         account = new AccountController(this);
-        SetRSVP();
+        selectUnprocessedCMs();
     }
 
-    public void SetRSVP() {
-        AttendeesRSVPed = new List<Attendee>();
+    public void selectUnprocessedCMs() {
+        UnprocessedCMs = new List<Attendee>();
         for(CampaignMember cm: [select Id, ContactId, Contact.FirstName, Contact.LastName, Contact.Email, Contact.AccountId, LeadId, Lead.FirstName,
                 Lead.LastName, Lead.IsConverted, Hours__c, Status, Role__c from CampaignMember
         where Campaign.Id = :Camp.Id and Processed__c <> true order by Contact.FirstName, Lead.FirstName limit 1000]) {
             // As each campaignMember is processed we create a new Attendee object and add it to the AttendeesRSVPed
-            AttendeesRSVPed.add(new Attendee(cm));
+            UnprocessedCMs.add(new Attendee(cm));
             // We also capture its status value so that we can check later to see whether the user has changed the status
         }
 
@@ -80,7 +80,7 @@ public class processParticipantList
     }
     public void setAllStatus()
     {
-        for(Attendee a : AttendeesRSVPed) {
+        for(Attendee a : UnprocessedCMs) {
             if(String.isNotBlank(all.CM.Status))
                 a.CM.Status = all.CM.Status;
 
@@ -94,7 +94,7 @@ public class processParticipantList
 
     public void setAllHours()
     {
-        for(Attendee a : AttendeesRSVPed) {
+        for(Attendee a : UnprocessedCMs) {
             a.Hours = all.Hours;
 
             if(a.Hours == 0)
@@ -108,11 +108,11 @@ public class processParticipantList
 
     public void addCMToList(CampaignMember cm) {
         formatsRSVPedList();
-        AttendeesRSVPed.add(new Attendee(cm));
+        UnprocessedCMs.add(new Attendee(cm));
     }
 
     public void formatsRSVPedList(){
-        for(Attendee a: AttendeesRSVPed) {
+        for(Attendee a: UnprocessedCMs) {
             if(a.Hours == 0)
                 a.Hours = null;
         }
@@ -123,10 +123,10 @@ public class processParticipantList
         account.newContactForm = false;
 
         UpdateCMs = new List<CampaignMember>();
-        AttendeesAttended = new List<Attendee>();
+        UnprocessedAttendees = new List<Attendee>();
         TotalHours = 0;
 
-        for(Attendee a: AttendeesRSVPed) {
+        for(Attendee a: UnprocessedCMs) {
             System.debug('Going through AttendeesRSVPed to add to AttendeesAttended');
 
             if(addToAttendedList(a)){
@@ -138,7 +138,7 @@ public class processParticipantList
         if(all.Hours == 0)
             all.Hours = null;
 
-        if(AttendeesAttended.size() == 0)
+        if(UnprocessedAttendees.size() == 0)
             ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'No members were processed'));
 
         if(!ApexPages.hasMessages())
@@ -153,7 +153,7 @@ public class processParticipantList
         // If user has changed hours, comments, rating, or status
 
         if(a.Hours != null  || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != processParticipantList.DefaultRating || a.OriginalStatus != a.CM.Status) {
-            AttendeesAttended.add(a);
+            UnprocessedAttendees.add(a);
             return true;
         }
 
@@ -172,7 +172,7 @@ public class processParticipantList
 //REturn to Edit List
     public PageReference returnToEditList(){
         review=false;
-        AttendeesAttended.clear();
+        UnprocessedAttendees.clear();
         return null;
     }
 
@@ -186,8 +186,8 @@ public class processParticipantList
             update Camp;
         }
 
-        system.debug('AttendeesAttended create the Opps; they include ' + AttendeesAttended);
-        For (Attendee a : AttendeesAttended) {
+        system.debug('AttendeesAttended create the Opps; they include ' + UnprocessedAttendees);
+        For (Attendee a : UnprocessedAttendees) {
             setCM(a);
 
             UpdateCMs.add(a.CM);
@@ -375,7 +375,7 @@ public class processParticipantList
         public void deleteCM() {
             delete selected;
 
-            Controller.SetRSVP();
+            Controller.selectUnprocessedCMs();
         }
     }
 

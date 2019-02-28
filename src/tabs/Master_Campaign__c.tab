@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomTab xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customObject>true</customObject>
+    <description>These are the parent campaigns that hold the FR or Vol Activities. A parent campaign might be a river cleanup with various related activities, or a fundraising drive with various events and appeal letters.</description>
+    <mobileReady>false</mobileReady>
+    <motif>Custom60: Umbrella</motif>
+</CustomTab>

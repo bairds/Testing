@@ -1,0 +1,22 @@
+Dear {!Opportunity.OwnerFullName},
+
+We've just received payment from  {!Opportunity.Contact__c} of {!Opportunity.Account}.  They gave  {!Opportunity.Amount}.  Congrats on following through with the major donation process.  It's annoiying to get these computer-generated reminder emails, we know, but when it gets down to it, organizing is 90% reminder calls anyway.
+
+It's time to send them a thank you letter.
+
+Using Internet Explorer, go into WaterGrass, and find the donation.  It's named {!Opportunity.Name} and you can find it either under the Contact -{!Opportunity.Contact__c} - or the Account - {!Opportunity.Account}.
+
+Scroll down to Activity History and click on Mail Merge.
+
+You'll find that it has chosen right Participation Record.
+
+Choose the contact to whom you want the letter sent.
+
+Choose the appropriate template - the Sponsorship Thank You, or Major Donation thank you.
+
+The letter will open in Microsoft Word, and you can edit it, print it, and send it off.
+
+Don't forget to change the status of the donation to: Thank You Sent.
+
+Good work!
+WaterGrass

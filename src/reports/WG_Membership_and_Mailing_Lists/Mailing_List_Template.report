@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Account.Company__c</field>
+    </columns>
+    <columns>
+        <field>Account.Addressee__c</field>
+    </columns>
+    <columns>
+        <field>Account.Dear__c</field>
+    </columns>
+    <columns>
+        <field>ACC_ADDRESS1_STREET</field>
+    </columns>
+    <columns>
+        <field>ACC_ADDRESS1_CITY</field>
+    </columns>
+    <columns>
+        <field>ACC_ADDRESS1_STATE</field>
+    </columns>
+    <columns>
+        <field>ACC_ADDRESS1_ZIP</field>
+    </columns>
+    <columns>
+        <field>EMAIL</field>
+    </columns>
+    <description>Starting point for custom mailing list reports.  Be sure to copy this template to a new report using &quot;Save As&quot;.</description>
+    <filter>
+        <criteriaItems>
+            <column>PRIMARY</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>1</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Account.Do_Not__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value>no mail</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>ACC_ADDRESS1_STREET</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Mailing List Template</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountContactRole</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

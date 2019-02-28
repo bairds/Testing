@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <description>Sends reminder to Contrib Owner 2 days before Next Step Deadline</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Next Step Reminder</name>
+    <style>none</style>
+    <subject>WaterGrass Next Step Reminder for {!Opportunity.RecordType}</subject>
+    <type>text</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>
