@@ -74,47 +74,47 @@ public Contact fetchTestContact() {
 public Lead fetchTestLead() {
     return TestLead;}
 
-//
-//    public WG_Settings__c createWGCustomSettings() {
-//        WG_Settings__c newsletter=new WG_Settings__c(
-//        name = 'newsletter',
-//        FinalDonationCampaignStatus__c='Donated',
-//        FinalVolunteerCampaignStatus__c='Completed',
-//        ManageContribsTrigger__c=true);
-//        insert newsletter;
-//        return newsletter;
-//    }
-//
-//
-//    public list<CampaignStati__c> createCampaignStati() {
-//        list<CampaignStati__c> ListCSs = new list<CampaignStati__c>();
-//        // List of CampaignStatus values that are HasResponded=true
-//        list<string> Stati = new list<string>();
-//            Stati.add('Attended');
-//            Stati.add('Contributed');
-//            Stati.add('Donated');
-//            Stati.add('No Show');
-//            Stati.add('Responded No');
-//            Stati.add('RSVPed and Attended');
-//            Stati.add('Signed e-petition');
-//            Stati.add('Took action');
-//        for (string s : stati) {
-//        CampaignStati__c cs=new CampaignStati__c(
-//        name = s,
-//        HasResponded__c = true);
-//            ListCSs.add(cs);
-//        }
-//        Stati.clear();
-//        // List of CampaignStatus values that are HasResponded=false
-//		Stati.add('Communication sent');
-//        for (string s : stati) {
-//        CampaignStati__c cs=new CampaignStati__c(
-//        name = s,
-//        HasResponded__c = false);
-//            ListCSs.add(cs);
-//        }
-//        insert ListCSs;
-//        system.debug('Just inserted campaign Stati ' + ListCSs);
-//        return ListCSs;
-//    }
+
+    public WG_Settings__c createWGCustomSettings() {
+        WG_Settings__c newsletter=new WG_Settings__c(
+        name = 'newsletter',
+        FinalDonationCampaignStatus__c='Donated',
+        FinalVolunteerCampaignStatus__c='Completed',
+        ManageContribsTrigger__c=true);
+        insert newsletter;
+        return newsletter;
+    }
+
+
+    public list<CampaignStati__c> createCampaignStati() {
+        list<CampaignStati__c> ListCSs = new list<CampaignStati__c>();
+        // List of CampaignStatus values that are HasResponded=true
+        list<string> Stati = new list<string>();
+            Stati.add('Attended');
+            Stati.add('Contributed');
+            Stati.add('Donated');
+            Stati.add('No Show');
+            Stati.add('Responded No');
+            Stati.add('RSVPed and Attended');
+            Stati.add('Signed e-petition');
+            Stati.add('Took action');
+        for (string s : stati) {
+        CampaignStati__c cs=new CampaignStati__c(
+        name = s,
+        HasResponded__c = true);
+            ListCSs.add(cs);
+        }
+        Stati.clear();
+        // List of CampaignStatus values that are HasResponded=false
+		Stati.add('Communication sent');
+        for (string s : stati) {
+        CampaignStati__c cs=new CampaignStati__c(
+        name = s,
+        HasResponded__c = false);
+            ListCSs.add(cs);
+        }
+        insert ListCSs;
+        system.debug('Just inserted campaign Stati ' + ListCSs);
+        return ListCSs;
+    }
 }

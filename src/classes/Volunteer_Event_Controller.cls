@@ -66,7 +66,7 @@ public class Volunteer_Event_Controller {
                         from Campaign
                         where
                         (Event_Date_Time__c >= Today and Master_Campaign__c = :masterCampID and (RecordType.Name = 'Public Event'
-                        or RecordType.Name = 'Volunteer Event'))
+                        or RecordType.Name = 'Volunteer Event') and IsActive=true)
                         ORDER BY Event_Date_Time__c ASC
                 ];
             } else // select all public events or volunteer events
@@ -77,7 +77,7 @@ public class Volunteer_Event_Controller {
                         from Campaign
                         where
                         (Event_Date_Time__c >= Today and (RecordType.Name = 'Public Event'
-                        or RecordType.Name = 'Volunteer Event'))
+                        or RecordType.Name = 'Volunteer Event') and IsActive=true)
                         ORDER BY Event_Date_Time__c ASC
                 ];
             }
