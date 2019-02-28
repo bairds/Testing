@@ -38,15 +38,13 @@ public List<Campaign> getCampaign() {
         string masterCampID = ApexPages.currentPage().getParameters().get('mid');
         mCampaign= [select campaign.name, id, Description, Event_Date_Time__c,  
         recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, type from Campaign where 
-        (Event_Date_Time__c >= Today and Master_Campaign__c = :masterCampID and (recordtype.name = 'Public Event' 
-        or recordtype.name = 'Volunteer Event')) ORDER BY type ASC];
+        (Event_Date_Time__c >= Today and Master_Campaign__c = :masterCampID and recordtype.name = 'Public Event' AND isActive=true) ORDER BY type ASC];
         }
     else // select all public events or volunteer events
         {
             mCampaign= [select campaign.name, id, Description, Event_Date_Time__c,  
         recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, type from Campaign where 
-        (Event_Date_Time__c >= Today and (recordtype.name = 'Public Event' 
-        or recordtype.name = 'Volunteer Activity')) ORDER BY type ASC];
+        (Event_Date_Time__c >= Today and recordtype.name = 'Public Event' AND isActive=true) ORDER BY type ASC];
         }
     }
    

@@ -32,6 +32,7 @@ public static testMethod void Public_Event_Test() {
     Testcampaign.event_date_time__c = datetime.newInstance(2050, 12, 1, 12, 30, 2);
     Testcampaign.description = 'description';
     Testcampaign.event_cost__c = 20.00;
+    Testcampaign.isActive = true;
     Testcampaign.Waiver_Required__c = true;
     Testcampaign.RecordtypeID = [select id from recordtype where name = 'Public Event'].id;
     insert Testcampaign;        
@@ -92,7 +93,7 @@ insert testcontact;
 Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', 
     postalCode = '11111', email = 'testlead@dontbotherme.org');
 insert TestLead;
-Campaign Testcamp = new Campaign (name='TestCampaign', Waiver_Required__c = true, Isactive=TRUE, recordtype = [select id from recordtype where name ='Public Event']);
+Campaign Testcamp = new Campaign (name='TestCampaign', Waiver_Required__c = true, isActive=true, recordtype = [select id from recordtype where name ='Public Event']);
 insert testcamp;
 CampaignMember pcampmmbr = new CampaignMember();
 
@@ -370,6 +371,7 @@ Campaign Testcampaign2 = new Campaign(name = 'Testcampaign2',
     event_date_time__c = datetime.newInstance(2050, 12, 1, 12, 30, 2),
     description = 'description',
     event_cost__c = 20.00,
+        isActive = true,
     Waiver_Required__c = true,
     RecordtypeID = [select id from recordtype where name = 'Public Event'].id,
     Master_Campaign__c = mastercamp.id);
@@ -377,9 +379,9 @@ Campaign Testcampaign2 = new Campaign(name = 'Testcampaign2',
 
     String masterCampIDstring = mastercamp.Id;
 PageReference pageRef2 = new PageReference('/apex/Public_Event_Signup_page?mid=TestMasterCampaign');
-//Test.setCurrentPageReference(PageRef);ApexPages.currentPage().getParameters().put('mid', 'TestMasterCampaign');
+Test.setCurrentPageReference(PageRef);ApexPages.currentPage().getParameters().put('mid', masterCampIDstring);
 Public_Event_Controller PEC8 = new Public_Event_Controller(sc);
-// System.assertequals([select id, master_campaign__c from campaign where name ='TestCampaign2' limit 1].id, PEC8.mastercampID);
+System.assertequals([select id, master_campaign__c from campaign where name ='TestCampaign2' limit 1].master_campaign__c, mastercampIDstring);
 System.assertEquals(1,PEC8.getCampaign().size());
 
 } // end controller

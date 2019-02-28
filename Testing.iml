@@ -775,6 +775,22 @@
                             <option name="name" value="VolunteerEventRegisterBootstrapTEST" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="generateCampaignURLs" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="generateCampaignURLsTEST" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="generateMCampaignURLs" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="generateMasterCampURLsTEST" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
                         </list>
                       </option>
                       <option name="name" value="ApexClass" />
@@ -1198,10 +1214,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="PLPBaird" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="Test_Thanks" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -1219,6 +1231,10 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Test" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MCampaignURLsSection" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
@@ -1479,6 +1495,9 @@
                         </list>
                       </option>
                       <option name="name" value="Workflow" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="LightningComponentBundle" />
                     </MetadataType>
                   </set>
                 </option>

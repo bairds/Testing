@@ -43,7 +43,7 @@
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> DATE</div>
                     <div class="col-md-1 hidden-xs hidden-sm alignleft"> START</div>
                     <div class="col-md-1 hidden-sm hidden-xs alignleft"> END</div>
-                    <div class="col-md-1 hidden-xs alignleft"> SPACES</div>
+                    <div class="col-md-1 hidden-sm hidden-xs alignleft"> SPACES</div>
                 </div>
 
                 <apex:repeat value="{!cs}" var="c">
@@ -54,7 +54,7 @@
                                     <apex:outputText value=" "/>
                                 </div>
                                 <div class="col-md-12 col-xs-8 alignleft">
-                                    <a href="{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?cid={!c.id}{!query}">{!c.Name}</a>
+                                    <a href="{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?cid={!c.id}{!query}"><b>{!c.Name}</b></a>
                                 </div>
                             </div>
                         </div>
@@ -108,12 +108,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-1">
+                        <div class="col-md-1 col-xs-12 alignleft">
                                 <div class="row">
-                                    <div class="hidden-sm hidden-md hidden-lg col-xs-4 alignleft">
+                                    <div class="hidden-md hidden-lg col-xs-4">
                                         SPACES:
                                     </div>
-                                    <div class="col-md-12 col-xs-8 alignleft">
+                                    <div class="col-md-12 col-xs-8">
                                     <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}"/>
                                     </div>
                                 </div>

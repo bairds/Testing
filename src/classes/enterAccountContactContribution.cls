@@ -240,7 +240,7 @@ public class enterAccountContactContribution
 
     public PageReference redirect()
     {
-        String url = '/apex/EACCBairdPage?step=' + step;
+        String url = '/apex/enterAccountContactContributionPage?step=' + step;
 
         if(String.isNotEmpty(a))
             url += '&a=' + a;
