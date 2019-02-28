@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <available>true</available>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Thanks for signing up for emails</name>
+    <style>none</style>
+    <subject>Thanks for signing up for information about the WaterGrass River Alliance!</subject>
+    <textOnly>Dear {!Lead.FirstName},
+
+Thank you for your interest in our organization. We will send you email updates approximately monthly, and also inform you of opportunities to volunteer to help clean up and protect the WaterGrass River.
+
+If you should ever want us to change the way we communicate with you, just send us an email at outreach@watergrassriver.org, or call us a 311-311-3111 and we&apos;ll adjust your profile.
+
+If you&apos;re interested in our upcoming events, please visit our events listing at:
+
+http://leadgreen.org/wordpress/?page_id=124.
+
+Sincerely,
+Baird Straughan</textOnly>
+    <type>custom</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

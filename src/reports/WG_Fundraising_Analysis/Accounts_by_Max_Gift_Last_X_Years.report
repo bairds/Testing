@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FIRST_NAME</field>
+    </columns>
+    <columns>
+        <field>LAST_NAME</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.ADDRESS1_STREET</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.ADDRESS1_CITY</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.ADDRESS1_STATE</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.ADDRESS1_ZIP</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.PHONE1</field>
+    </columns>
+    <description>Report to search for major donors based on max gift over the last X years.  You must set the date range AND edit the field Max Gift Last X Years to match the date range of interest.</description>
+    <format>Tabular</format>
+    <name>Accounts by Max Gift Last X Years</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>ContactList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

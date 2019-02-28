@@ -1,0 +1,927 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ConvertLead</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CreateOpportunity</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>false</enableFeeds>
+    <fieldSets>
+        <fullName>volunteerEventRegister</fullName>
+        <description>volunteerEventRegisterPage</description>
+        <displayedFields>
+            <field>Leadership_Level__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>volunteerEventRegister</label>
+    </fieldSets>
+    <fields>
+        <fullName>AcceptDeclineWaiver__c</fullName>
+        <externalId>false</externalId>
+        <label>AcceptDeclineWaiver</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>I accept.</fullName>
+                    <default>false</default>
+                    <label>I accept.</label>
+                </value>
+                <value>
+                    <fullName>I decline.</fullName>
+                    <default>false</default>
+                    <label>I decline.</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Add_To_TY_Message__c</fullName>
+        <description>Text that will be inserted as the first paragraph in the TY message.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Text that will be inserted as the first paragraph in the TY message.</inlineHelpText>
+        <label>Add To TY Message</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Addressee__c</fullName>
+        <description>For mail merge lists that contain Leads and Contacts.  Pulled from the Contact&apos;s Account info or from the Lead&apos;s info depending on the member type.</description>
+        <externalId>false</externalId>
+        <formula>IF(  ISBLANK(Contact.LastName) ,  Lead.Addressee__c ,  Contact.Account.Addressee__c )</formula>
+        <label>Addressee</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Agreed_to_Waiver__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Agreed_to_Waiver</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>AutosendTY__c</fullName>
+        <description>Whether or not to send the thank you message automatically. If the value is already set to &quot;sent,&quot; the message won&apos;t go out.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether or not to send the thank you message automatically. If the value is already set to &quot;sent,&quot; the message won&apos;t go out.</inlineHelpText>
+        <label>AutosendTY</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>none</fullName>
+                    <default>true</default>
+                    <label>none</label>
+                </value>
+                <value>
+                    <fullName>send</fullName>
+                    <default>false</default>
+                    <label>send</label>
+                </value>
+                <value>
+                    <fullName>sent</fullName>
+                    <default>false</default>
+                    <label>sent</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Autosend_TY_Msg__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Should WaterGrass automatically send  thank you message to this volunteer, including the custom paragraph if there is one, when you synchronize the database?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Should WaterGrass automatically send  thank you message to this volunteer, including the custom paragraph if there is one, when you synchronize the database?</inlineHelpText>
+        <label>Autosend_TY_Msg</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Availability__c</fullName>
+        <externalId>false</externalId>
+        <label>Availability</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Boat__c</fullName>
+        <externalId>false</externalId>
+        <label>Boat</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CampRTAndType__c</fullName>
+        <description>Concatenate CM.Campaign.RecordType.Name and CM.Campaign.Type for use in workflows</description>
+        <externalId>false</externalId>
+        <formula>Campaign.RecordType.DeveloperName + &apos; &apos; +  TEXT(Campaign.Type)</formula>
+        <inlineHelpText>Concatenate CM.Campaign.RecordType.Name and CM.Campaign.Type for use in workflows</inlineHelpText>
+        <label>CampRTAndType</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CampaignId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_Member_Source__c</fullName>
+        <externalId>false</externalId>
+        <label>Campaign_Member_Source</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Web signup</fullName>
+                    <default>false</default>
+                    <label>Web signup</label>
+                </value>
+                <value>
+                    <fullName>From attendance list</fullName>
+                    <default>false</default>
+                    <label>From attendance list</label>
+                </value>
+                <value>
+                    <fullName>Manual entry</fullName>
+                    <default>false</default>
+                    <label>Manual entry</label>
+                </value>
+                <value>
+                    <fullName>Select by database query</fullName>
+                    <default>false</default>
+                    <label>Select by database query</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Car_pooling__c</fullName>
+        <externalId>false</externalId>
+        <label>Car pooling</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>I will need a ride with the team.</fullName>
+                    <default>false</default>
+                    <label>I will need a ride with the team.</label>
+                </value>
+                <value>
+                    <fullName>My car is full.</fullName>
+                    <default>false</default>
+                    <label>My car is full.</label>
+                </value>
+                <value>
+                    <fullName>I have room for people in my vehicle.</fullName>
+                    <default>false</default>
+                    <label>I have room for people in my vehicle.</label>
+                </value>
+                <value>
+                    <fullName>Other (Please describe in comment box below.)</fullName>
+                    <default>false</default>
+                    <label>Other (Please describe in comment box below.)</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>City</fullName>
+    </fields>
+    <fields>
+        <fullName>City__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Contact.Account.BillingCity = null, Lead.City, Contact.Account.BillingCity)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>City</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Comments__c</fullName>
+        <externalId>false</externalId>
+        <label>Comments</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>CompanyOrAccount</fullName>
+    </fields>
+    <fields>
+        <fullName>Constant1__c</fullName>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Constant1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ContactId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Country</fullName>
+    </fields>
+    <fields>
+        <fullName>Dear__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( ISBLANK(Contact.FirstName) , Lead.Dear__c , Contact.Account.Dear__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Dear</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+    </fields>
+    <fields>
+        <fullName>Dietary_Restrictions__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Please describe any dietary restrictions you have.</inlineHelpText>
+        <label>Dietary Restrictions</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>DoNotCall</fullName>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+    </fields>
+    <fields>
+        <fullName>Email__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Contact.Email = null, Lead.Email, Contact.Email)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Email</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Emergency_Contact_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Emergency Contact Name</label>
+        <length>122</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Emergency_Contact_Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Emergency Contact Phone</label>
+        <required>false</required>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Fax</fullName>
+    </fields>
+    <fields>
+        <fullName>FirstName</fullName>
+    </fields>
+    <fields>
+        <fullName>FirstRespondedDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Follow_Up_Task__c</fullName>
+        <description>Task assigned by default to the event owner; can be reassigned to other people in the organization.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Task assigned by default to the event owner; can be reassigned to other people in the organization.</inlineHelpText>
+        <label>Follow Up Task</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Group__c</fullName>
+        <externalId>false</externalId>
+        <label>Group</label>
+        <length>80</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfEmail</fullName>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfFax</fullName>
+    </fields>
+    <fields>
+        <fullName>HasResponded</fullName>
+    </fields>
+    <fields>
+        <fullName>HoursValue__c</fullName>
+        <externalId>false</externalId>
+        <label>HoursValue</label>
+        <precision>7</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Hours__c</fullName>
+        <externalId>false</externalId>
+        <label>Hours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>How_Heard_About_Event__c</fullName>
+        <externalId>false</externalId>
+        <label>How_Heard_About_Event</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>From the email newsletter</fullName>
+                    <default>false</default>
+                    <label>From the email newsletter</label>
+                </value>
+                <value>
+                    <fullName>From the printer newsletter</fullName>
+                    <default>false</default>
+                    <label>From the printer newsletter</label>
+                </value>
+                <value>
+                    <fullName>From the website</fullName>
+                    <default>false</default>
+                    <label>From the website</label>
+                </value>
+                <value>
+                    <fullName>From a staff member</fullName>
+                    <default>false</default>
+                    <label>From a staff member</label>
+                </value>
+                <value>
+                    <fullName>From a friend or acquaintance</fullName>
+                    <default>false</default>
+                    <label>From a friend or acquaintance</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Interests__c</fullName>
+        <description>What brought the participant to the event?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>What brought the participant to the event?</inlineHelpText>
+        <label>Interests</label>
+        <length>252</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Invite_to_Next_Level__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Invite this participant to the follow up cultivation event.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Invite this participant to the follow up cultivation event.</inlineHelpText>
+        <label>Invite_to_Next_Level</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>LastName</fullName>
+    </fields>
+    <fields>
+        <fullName>LeadId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>LeadSource</fullName>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Leadership_Level__c</fullName>
+        <externalId>false</externalId>
+        <label>Leadership Level</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>1 - Volunteer</fullName>
+                    <default>false</default>
+                    <label>1 - Volunteer</label>
+                </value>
+                <value>
+                    <fullName>2 - Leader</fullName>
+                    <default>false</default>
+                    <label>2 - Leader</label>
+                </value>
+                <value>
+                    <fullName>3 - Leader of leaders (Organized the event or similar)</fullName>
+                    <default>false</default>
+                    <label>3 - Leader of leaders (Organized the event or similar)</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Mail_Merge_Street_Address__c</fullName>
+        <description>Uses the Account Billing Street field if member is a Contact or the Lead Street if a Lead.</description>
+        <externalId>false</externalId>
+        <formula>IF( ISBLANK(Contact.LastName) ,  Lead.Street  ,  Contact.Account.BillingStreet  )</formula>
+        <label>Mail Merge Street Address</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MobilePhone</fullName>
+    </fields>
+    <fields>
+        <fullName>Nr_Adults__c</fullName>
+        <externalId>false</externalId>
+        <label>Nr_Adults</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Nr_in_Group__c</fullName>
+        <externalId>false</externalId>
+        <label>Nr_in_Group</label>
+        <precision>3</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+    </fields>
+    <fields>
+        <fullName>Photo_Title__c</fullName>
+        <description>Caption for the photo of the participant</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Caption for the photo of the participant</inlineHelpText>
+        <label>Photo Title</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Photo_URL__c</fullName>
+        <description>Photo of this participant, stored on the web.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Photo of this participant, stored on the web.</inlineHelpText>
+        <label>Photo_URL</label>
+        <required>false</required>
+        <type>Url</type>
+    </fields>
+    <fields>
+        <fullName>PostalCode</fullName>
+    </fields>
+    <fields>
+        <fullName>PostalCode__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Contact.Account.BillingPostalCode = null, Lead.PostalCode, Contact.Account.BillingPostalCode)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>PostalCode</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Pref_Location__c</fullName>
+        <description>Do you have a particular location you&apos;d prefer?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Do you have a particular location you&apos;d prefer?</inlineHelpText>
+        <label>Pref_Location</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Processed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether this campaign member has had a donation of volunteer hours assigned for its participation, using the PostEventHours Controller.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If this is &quot;true,&quot; the Assign Hours Post Event won&apos;t touch this record.</inlineHelpText>
+        <label>Processed</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Quality_of_Supervisor_Support__c</fullName>
+        <description>Did your supervisor give you good directions and support in order to do your volunteer task?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Did your supervisor give you good directions and support in order to do your volunteer task?</inlineHelpText>
+        <label>Quality of Supervisor Support</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>1 - Not at all</fullName>
+                    <default>false</default>
+                    <label>1 - Not at all</label>
+                </value>
+                <value>
+                    <fullName>2 - Not completely</fullName>
+                    <default>false</default>
+                    <label>2 - Not completely</label>
+                </value>
+                <value>
+                    <fullName>3 - It was adequate.</fullName>
+                    <default>false</default>
+                    <label>3 - It was adequate.</label>
+                </value>
+                <value>
+                    <fullName>4 - Yes</fullName>
+                    <default>false</default>
+                    <label>4 - Yes</label>
+                </value>
+                <value>
+                    <fullName>5 - Enthusiastic yes!</fullName>
+                    <default>false</default>
+                    <label>5 - Enthusiastic yes!</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Questions_or_Comments__c</fullName>
+        <description>Questions, comments, expectations, needs, explanations</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Questions, comments, expectations, needs, explanations</inlineHelpText>
+        <label>Questions or Comments</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Role__c</fullName>
+        <externalId>false</externalId>
+        <label>Role</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Volunteer</fullName>
+                    <default>true</default>
+                    <label>Volunteer</label>
+                </value>
+                <value>
+                    <fullName>Site captain</fullName>
+                    <default>false</default>
+                    <label>Site captain</label>
+                </value>
+                <value>
+                    <fullName>Group leader</fullName>
+                    <default>false</default>
+                    <label>Group leader</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Salutation</fullName>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Send_Member_Info__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Send Member Info</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Shirt_Size__c</fullName>
+        <externalId>false</externalId>
+        <label>Shirt Size</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>XXL</fullName>
+                    <default>false</default>
+                    <label>XXL</label>
+                </value>
+                <value>
+                    <fullName>XL</fullName>
+                    <default>false</default>
+                    <label>XL</label>
+                </value>
+                <value>
+                    <fullName>L</fullName>
+                    <default>false</default>
+                    <label>L</label>
+                </value>
+                <value>
+                    <fullName>M</fullName>
+                    <default>false</default>
+                    <label>M</label>
+                </value>
+                <value>
+                    <fullName>S</fullName>
+                    <default>false</default>
+                    <label>S</label>
+                </value>
+                <value>
+                    <fullName>XS</fullName>
+                    <default>false</default>
+                    <label>XS</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>SignupQuestionAnswer2__c</fullName>
+        <externalId>false</externalId>
+        <label>Signup Question Answer 2</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>SignupQuestionAnswer__c</fullName>
+        <externalId>false</externalId>
+        <label>Signup Question Answer</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Special_Location_Preference__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the campaign member requires or prefers a special location-related quality, like unbrambly or even ground.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the campaign member requires or prefers a special location-related quality, like unbrambly or even ground.</inlineHelpText>
+        <label>Special_Location_Preference</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Special_Needs__c</fullName>
+        <externalId>false</externalId>
+        <label>Special_Needs</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>State</fullName>
+    </fields>
+    <fields>
+        <fullName>State__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Contact.Account.BillingState = null, Lead.State, Contact.Account.BillingState)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>State</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Street</fullName>
+    </fields>
+    <fields>
+        <fullName>Street__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( Contact.Account.BillingStreet = null, Lead.Street, Contact.Account.BillingStreet)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Street</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Supervisor_Satisfaction__c</fullName>
+        <description>Same as similar field in Opportunity.  This field was created for the case that a supervisor wanted to rate a volunteer without giving them hours.  0 poor to 4 outstanding.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>0 poor to 4 outstanding.</inlineHelpText>
+        <label>Supervisor_Satisfaction</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>0</fullName>
+                    <default>false</default>
+                    <label>0</label>
+                </value>
+                <value>
+                    <fullName>1</fullName>
+                    <default>false</default>
+                    <label>1</label>
+                </value>
+                <value>
+                    <fullName>2</fullName>
+                    <default>false</default>
+                    <label>2</label>
+                </value>
+                <value>
+                    <fullName>3</fullName>
+                    <default>false</default>
+                    <label>3</label>
+                </value>
+                <value>
+                    <fullName>4</fullName>
+                    <default>false</default>
+                    <label>4</label>
+                </value>
+                <value>
+                    <fullName>5</fullName>
+                    <default>false</default>
+                    <label>5</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Teammates__c</fullName>
+        <description>Full names of people on your team and their ages.  All adults should register separately.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Full names of people on your team and their ages.  All adults should register separately.</inlineHelpText>
+        <label>Teammates</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>TempAndroidId__c</fullName>
+        <description>Used by WG SignIn app</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Used by WG SignIn app</inlineHelpText>
+        <label>TempAndroidId</label>
+        <length>252</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Title</fullName>
+    </fields>
+    <fields>
+        <fullName>To_Delete__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>To_Delete</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Narrative_Feedback__c</fullName>
+        <description>Feedback from the volunteer about the event.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Feedback from the volunteer about the event.</inlineHelpText>
+        <label>Volunteer_Narrative_Feedback</label>
+        <length>32768</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Waders__c</fullName>
+        <externalId>false</externalId>
+        <label>Waders</label>
+        <required>false</required>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>4.5 mens / 6 womens</fullName>
+                    <default>false</default>
+                    <label>4.5 mens / 6 womens</label>
+                </value>
+                <value>
+                    <fullName>5.5 mens / 7 womens</fullName>
+                    <default>false</default>
+                    <label>5.5 mens / 7 womens</label>
+                </value>
+                <value>
+                    <fullName>6 mens / 7.5 womens</fullName>
+                    <default>false</default>
+                    <label>6 mens / 7.5 womens</label>
+                </value>
+                <value>
+                    <fullName>7 mens / 8.5 womens</fullName>
+                    <default>false</default>
+                    <label>7 mens / 8.5 womens</label>
+                </value>
+                <value>
+                    <fullName>8 mens / 9.5 womens</fullName>
+                    <default>false</default>
+                    <label>8 mens / 9.5 womens</label>
+                </value>
+                <value>
+                    <fullName>9 mens / 10.5 womens</fullName>
+                    <default>false</default>
+                    <label>9 mens / 10.5 womens</label>
+                </value>
+                <value>
+                    <fullName>10 mens / 11.5 womens</fullName>
+                    <default>false</default>
+                    <label>10 mens / 11.5 womens</label>
+                </value>
+                <value>
+                    <fullName>11 mens / 12.5 womens</fullName>
+                    <default>false</default>
+                    <label>11 mens / 12.5 womens</label>
+                </value>
+                <value>
+                    <fullName>12 mens</fullName>
+                    <default>false</default>
+                    <label>12 mens</label>
+                </value>
+                <value>
+                    <fullName>13 mens</fullName>
+                    <default>false</default>
+                    <label>13 mens</label>
+                </value>
+                <value>
+                    <fullName>I will use my own waders.</fullName>
+                    <default>false</default>
+                    <label>I will use my own waders.</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Which_Waiver_Agreed__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Which Waiver Agreed</label>
+        <referenceTo>Text_Document__c</referenceTo>
+        <relationshipLabel>Campaign Members</relationshipLabel>
+        <relationshipName>Campaign_Members</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <sharingModel>ControlledByCampaign</sharingModel>
+</CustomObject>

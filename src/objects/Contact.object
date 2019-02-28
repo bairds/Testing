@@ -1,0 +1,1556 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddToCampaign</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CallHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EmailHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EnableCustomerPortal</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EnablePartnerPortalUser</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EnableSelfService</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ListClean</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Merge</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>NewContact</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>RequestUpdate</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SmsHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ViewCustomerPortal</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ViewPartnerPortalUser</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ViewSelfService</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <compactLayouts>
+        <fullName>QuickStartLayout</fullName>
+        <fields>Name</fields>
+        <fields>Title</fields>
+        <fields>AccountId</fields>
+        <fields>Phone</fields>
+        <fields>Email</fields>
+        <fields>MobilePhone</fields>
+        <fields>OwnerId</fields>
+        <label>Quick Start Layout</label>
+    </compactLayouts>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <fieldSets>
+        <fullName>EmailCampaignSignUp</fullName>
+        <description>EmailCampaignSignUp</description>
+        <displayedFields>
+            <field>Birthdate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>EmailCampaignSignUp</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>SignInList</fullName>
+        <description>SignInPage</description>
+        <displayedFields>
+            <field>Birthdate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Volunteer_Interests__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>SignInList</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>eACContactFields</fullName>
+        <description>in enterAccountContacts, the additional custom fields you want displayed.</description>
+        <label>eACContactFields</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>registerEmailList</fullName>
+        <description>registerEmailList</description>
+        <displayedFields>
+            <field>Birthdate</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Volunteer_Interests__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>registerEmailList</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>volunteerEventRegister</fullName>
+        <description>volunteerEventRegisterPage</description>
+        <label>volunteerEventRegister</label>
+    </fieldSets>
+    <fields>
+        <fullName>AccountId</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>&quot;Active&quot;</defaultValue>
+        <description>Is this person active?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Is this person active?</inlineHelpText>
+        <label>Active</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetName>Active</valueSetName>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Addressee__c</fullName>
+        <externalId>false</externalId>
+        <label>Addressee</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Age__c</fullName>
+        <externalId>false</externalId>
+        <formula>FLOOR((TODAY() - Birthdate)/365)</formula>
+        <label>Age</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AssistantName</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>AssistantPhone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Attn__c</fullName>
+        <description>Attention or c/o line for mailing labels.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Attention or c/o line for mailing labels.</inlineHelpText>
+        <label>Attn</label>
+        <length>50</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Birthdate</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>CleanStatus</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Communication_Preference__c</fullName>
+        <description>Should be exactly like the Communication Preference field in the Lead object.  Information from that object is transferred here with the Lead is converted to a Contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Should be exactly like the Communication Preference field in the Lead object.  Information from that object is transferred here with the Lead is converted to a Contact.</inlineHelpText>
+        <label>Communication Preference</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>By email</fullName>
+                    <default>false</default>
+                    <label>By email</label>
+                </value>
+                <value>
+                    <fullName>By mail</fullName>
+                    <default>false</default>
+                    <label>By mail</label>
+                </value>
+                <value>
+                    <fullName>By phone</fullName>
+                    <default>false</default>
+                    <label>By phone</label>
+                </value>
+                <value>
+                    <fullName>By Facebook</fullName>
+                    <default>false</default>
+                    <label>By Facebook</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Constant1__c</fullName>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Constant1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contact_Full_Name__c</fullName>
+        <externalId>false</externalId>
+        <formula>hyperlink (&quot;/&quot; &amp;Id, LastName &amp; &quot;, &quot; &amp; FirstName)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Contact Full Name</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Contact_Membership_Expires__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Memberships can be assigned to either accounts or contacts.  If it&apos;s assigned to a contact, this is the date it expires.</inlineHelpText>
+        <label>Contact Membership Expires</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Dear__c</fullName>
+        <description>For letters and messages, how you&apos;d like your saluation to read.  For example, for John Roberts you may want: Dear JR:</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For letters and messages, the words you&apos;d like after the saluation &quot;Dear &quot;.  For example, for John Roberts you may want: Dear JR.  In this case, you&apos;d enter &quot;JR&quot; in the field.  If left blank, it populates with the first name.</inlineHelpText>
+        <label>Dear</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Deceased__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Deceased?</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Department</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>DoNotCall</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Do_Not__c</fullName>
+        <description>Permissions for communicating with contact.  This field must be exactly the same as the Do_Not field in the Lead object, because information from the Lead is transferred here with Leads are converted to Contacts.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>WaterGrass assumes that contacts will accept ALL forms of communication, unless noted otherwise here.  You can set permissions for CONTACTS on this page, for ACCOUNTS on the accounts page.</inlineHelpText>
+        <label>Do Not</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>no email</fullName>
+                    <default>false</default>
+                    <label>no email</label>
+                </value>
+                <value>
+                    <fullName>no email solicitations</fullName>
+                    <default>false</default>
+                    <label>no email solicitations</label>
+                </value>
+                <value>
+                    <fullName>no mail</fullName>
+                    <default>false</default>
+                    <label>no mail</label>
+                </value>
+                <value>
+                    <fullName>no mail solicitations</fullName>
+                    <default>false</default>
+                    <label>no mail solicitations</label>
+                </value>
+                <value>
+                    <fullName>no phone calls</fullName>
+                    <default>false</default>
+                    <label>no phone calls</label>
+                </value>
+                <value>
+                    <fullName>no phone solicitations</fullName>
+                    <default>false</default>
+                    <label>no phone solicitations</label>
+                </value>
+                <value>
+                    <fullName>only one solicitation a year</fullName>
+                    <default>false</default>
+                    <label>only one solicitation a year</label>
+                </value>
+                <value>
+                    <fullName>don&apos;t share my name with other groups</fullName>
+                    <default>false</default>
+                    <label>don&apos;t share my name with other groups</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>5</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Fax</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>First_Contrib_Cat__c</fullName>
+        <description>The type of campaign that brought in the contact&apos;s first contribution. This field is calculated automatically.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The type of campaign that brought in the contact&apos;s first contribution. This field is calculated automatically.</inlineHelpText>
+        <label>First_Contrib_Cat</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>First_Contrib_Source__c</fullName>
+        <description>From ManageContribs</description>
+        <externalId>false</externalId>
+        <inlineHelpText>From ManageContribs</inlineHelpText>
+        <label>First_Contrib_Source</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>First_Donate_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>First_Donate_Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfEmail</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfFax</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>HomePhone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>ImportObjectSource__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Import Object Source</label>
+        <referenceTo>ImportObject__c</referenceTo>
+        <relationshipLabel>Contacts</relationshipLabel>
+        <relationshipName>Contacts</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Jigsaw</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Jurisdiction__c</fullName>
+        <description>Jurisdiction you reside in.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Jurisdiction you reside in.</inlineHelpText>
+        <label>Jurisdiction</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Town of Morse</fullName>
+                    <default>false</default>
+                    <label>Town of Morse</label>
+                </value>
+                <value>
+                    <fullName>Town of Anderson</fullName>
+                    <default>false</default>
+                    <label>Town of Anderson</label>
+                </value>
+                <value>
+                    <fullName>Mellen</fullName>
+                    <default>false</default>
+                    <label>Mellen</label>
+                </value>
+                <value>
+                    <fullName>Hurley</fullName>
+                    <default>false</default>
+                    <label>Hurley</label>
+                </value>
+                <value>
+                    <fullName>City of Ashland</fullName>
+                    <default>false</default>
+                    <label>City of Ashland</label>
+                </value>
+                <value>
+                    <fullName>Odanah</fullName>
+                    <default>false</default>
+                    <label>Odanah</label>
+                </value>
+                <value>
+                    <fullName>Iron County (not in Town of Anderson or Hurley)</fullName>
+                    <default>false</default>
+                    <label>Iron County (not in Town of Anderson or Hurley)</label>
+                </value>
+                <value>
+                    <fullName>Ashland County (not in Town of Morse, Mellen or Odanah)</fullName>
+                    <default>false</default>
+                    <label>Ashland County (not in Town of Morse, Mellen or Odanah)</label>
+                </value>
+                <value>
+                    <fullName>Other (for those outside the above mentioned areas)</fullName>
+                    <default>false</default>
+                    <label>Other (for those outside the above mentioned areas)</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Languages__c</fullName>
+        <externalId>false</externalId>
+        <label>Languages</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Largest_Contrib_Amt__c</fullName>
+        <description>This field is calculated by the &quot;Recalculate Gifts&quot; button</description>
+        <externalId>false</externalId>
+        <label>Largest_Contrib_Amt</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Largest_Contrib_Date__c</fullName>
+        <description>This field calculated by the &quot;Recalculate Gifts&quot; button.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field calculated by the &quot;Recalculate Gifts&quot; button.</inlineHelpText>
+        <label>Largest_Contrib_Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>LastCURequestDate</fullName>
+    </fields>
+    <fields>
+        <fullName>LastCUUpdateDate</fullName>
+    </fields>
+    <fields>
+        <fullName>Last_Contrib_Amt__c</fullName>
+        <description>This field is updated by the &quot;Recalculate Giving&quot; button</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is updated by the &quot;Recalculate Giving&quot; button</inlineHelpText>
+        <label>Last Contrib Amt</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Last_Contrib_Date__c</fullName>
+        <description>This field is calculated by the &quot;Recalculate Gifts&quot; button.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is calculated by the &quot;Recalculate Gifts&quot; button.</inlineHelpText>
+        <label>Last Contrib Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Last_Donate_Amt__c</fullName>
+        <description>Amount of the last donation classified as an individual donation.  (See the Custom Settings for Individual Contribution Types.)</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Amount of the last donation classified as an individual donation.  (See the Custom Settings for Individual Contribution Types.)</inlineHelpText>
+        <label>Last_Donate_Amt</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Last_Donate_Date__c</fullName>
+        <description>Calculated by ManageContribs</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Calculated by ManageContribs</inlineHelpText>
+        <label>Last_Donate_Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Last_Year_Donations__c</fullName>
+        <description>Individual donations from the last calendar year.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Individual donations from the last calendar year.</inlineHelpText>
+        <label>Last_Year_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Last_Year_Giving__c</fullName>
+        <description>This field calculated by the &quot;Recalculate Giving&quot; button.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field calculated by the &quot;Recalculate Giving&quot; button.</inlineHelpText>
+        <label>Last Year Giving</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Last_Year_VolHours__c</fullName>
+        <description>Calculated automatically</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Calculated automatically</inlineHelpText>
+        <label>Last_Year_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>LeadSource</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Legacy_Contact_ID__c</fullName>
+        <description>Include here any legacy ID number from the old database.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Include here any legacy ID number from the old database.  A hard-learned lesson: If you ever want to correct errors in data import, it&apos;s very helpful to have this.</inlineHelpText>
+        <label>Legacy Contact ID</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Level__c</fullName>
+        <externalId>false</externalId>
+        <label>Level</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Secondary</fullName>
+                    <default>false</default>
+                    <label>Secondary</label>
+                </value>
+                <value>
+                    <fullName>Tertiary</fullName>
+                    <default>false</default>
+                    <label>Tertiary</label>
+                </value>
+                <value>
+                    <fullName>Primary</fullName>
+                    <default>false</default>
+                    <label>Primary</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>LifetimeVolhours__c</fullName>
+        <externalId>false</externalId>
+        <label>LifetimeVolhours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lifetime_Giving__c</fullName>
+        <description>This field is updated by a batch controller once a day.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field is updated by a batch controller once a day.</inlineHelpText>
+        <label>Lifetime Giving</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lookup_Key__c</fullName>
+        <description>Key for Import Object Lookup Process</description>
+        <externalId>false</externalId>
+        <formula>IF ( 
+AND ( 
+NOT(ISBLANK(FirstName)), 
+NOT(ISBLANK(LastName)), 
+NOT(ISBLANK(MailingPostalCode)) 
+), 
+LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(MailingPostalCode), 
+&quot;&quot; 
+)</formula>
+        <inlineHelpText>Key for Import Object Lookup Process</inlineHelpText>
+        <label>Lookup Key</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MailingAddress</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Mailing_Lists__c</fullName>
+        <description>What information would you like to us to send you?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>What information would you like to us to send you?</inlineHelpText>
+        <label>Mailing Lists</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Deep Mine updates</fullName>
+                    <default>false</default>
+                    <label>Deep Mine updates</label>
+                </value>
+                <value>
+                    <fullName>Allegheny Energy Center updates</fullName>
+                    <default>false</default>
+                    <label>Allegheny Energy Center updates</label>
+                </value>
+                <value>
+                    <fullName>Trail news</fullName>
+                    <default>false</default>
+                    <label>Trail news</label>
+                </value>
+                <value>
+                    <fullName>Youghiogheny River issues</fullName>
+                    <default>false</default>
+                    <label>Youghiogheny River issues</label>
+                </value>
+                <value>
+                    <fullName>Shale Gas issues</fullName>
+                    <default>false</default>
+                    <label>Shale Gas issues</label>
+                </value>
+                <value>
+                    <fullName>Volunteer opportunities</fullName>
+                    <default>false</default>
+                    <label>Volunteer opportunities</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Major_Donor_Now__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Check this box if you want this contact to get major donor communications (and not regular appeals).  This box is automatically updated when the major donor report is run.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Check this box if you want this contact to get major donor communications (and not regular appeals).  This box is automatically updated when the major donor report is run.</inlineHelpText>
+        <label>Major Donor Now</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Map__c</fullName>
+        <externalId>false</externalId>
+        <formula>hyperlink (&quot;/servlet/servlet.Integration?lid=00b70000000mr5G&amp;eid=&quot; &amp;Id, IMAGE( &quot;servlet/servlet.FileDownload?file=01570000000MKgu&quot;, &quot;image from Documents tab&quot;))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Map</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Marital_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Marital Status</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Married</fullName>
+                    <default>false</default>
+                    <label>Married</label>
+                </value>
+                <value>
+                    <fullName>Single</fullName>
+                    <default>false</default>
+                    <label>Single</label>
+                </value>
+                <value>
+                    <fullName>Divorced</fullName>
+                    <default>false</default>
+                    <label>Divorced</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Middle_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Middle Name</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>MobilePhone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Name</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Newsletter_for_Contact_Cutoff_Date__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>When should the newsletter subscription expire?</inlineHelpText>
+        <label>Newsletter for Contact Cutoff Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Newsletter_for_Contact__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>Check if you want the contact to receive a newsletter.  (The newsletter can also go to the account, or both.)</inlineHelpText>
+        <label>Newsletter for Contact</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>None</fullName>
+                    <default>true</default>
+                    <label>None</label>
+                </value>
+                <value>
+                    <fullName>Print</fullName>
+                    <default>false</default>
+                    <label>Print</label>
+                </value>
+                <value>
+                    <fullName>Email</fullName>
+                    <default>false</default>
+                    <label>Email</label>
+                </value>
+                <value>
+                    <fullName>Both</fullName>
+                    <default>false</default>
+                    <label>Both</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Original_LeadSource__c</fullName>
+        <description>The first time LeadSource is populated, store it here. Afterwards, don&apos;t overwrite it. Only Admins can edit the field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The first time LeadSource is populated, store it here. Afterwards, don&apos;t overwrite it. Only Admins can edit the field.</inlineHelpText>
+        <label>Original_LeadSource</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Original</label>
+        <referenceTo>Contact</referenceTo>
+        <relationshipLabel>Duplicates</relationshipLabel>
+        <relationshipName>Duplicates</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>OtherAddress</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>OtherPhone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Other_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Other_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Other_emails__c</fullName>
+        <description>Store other emails here.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Store other emails here, like this:  Home: johnd@home.org.  Work: Johnd@abc.com.  When you need to use them, type them into the &quot;Email to use&quot; field.  (It&apos;s clunky but it always works.)</inlineHelpText>
+        <label>Other emails</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Over_18__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Over_18</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>OwnerId</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Personal_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Personal_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Preferred_Email__c</fullName>
+        <description>Which email should be used for most communications involving this Contact?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Which email should be used for most communications involving this Contact?</inlineHelpText>
+        <label>Preferred_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Personal</fullName>
+                    <default>false</default>
+                    <label>Personal</label>
+                </value>
+                <value>
+                    <fullName>Work</fullName>
+                    <default>false</default>
+                    <label>Work</label>
+                </value>
+                <value>
+                    <fullName>Alternate</fullName>
+                    <default>false</default>
+                    <label>Alternate</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Protected__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Protects the contact&apos;s address from being overwritten by updates to the account.  Otherwise, the EnterAccountContactContribution module automatically pushes account address updates to contacts.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Protects the contact&apos;s address from being overwritten by updates to the account.  Otherwise, the EnterAccountContactContribution module automatically pushes account address updates to contacts.</inlineHelpText>
+        <label>Protected</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>ReportsToId</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Spouse_Name__c</fullName>
+        <externalId>false</externalId>
+        <label>Spouse Name</label>
+        <length>80</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Suffix__c</fullName>
+        <externalId>false</externalId>
+        <label>Suffix</label>
+        <length>30</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Title</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Today_Text_Contacts__c</fullName>
+        <externalId>false</externalId>
+        <formula>CASE(MONTH(TODAY()), 
+1, &quot;January&quot;, 
+2, &quot;February&quot;, 
+3, &quot;March&quot;, 
+4, &quot;April&quot;, 
+5, &quot;May&quot;, 
+6, &quot;June&quot;, 
+7, &quot;July&quot;, 
+8, &quot;August&quot;, 
+9, &quot;September&quot;, 
+10, &quot;October&quot;, 
+11, &quot;November&quot;, 
+12, &quot;December&quot;, 
+&quot;None&quot;) + &quot; &quot; + 
+TEXT(DAY(TODAY())) 
++ &quot;, &quot; + TEXT(YEAR(TODAY()))</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Today Text Contacts</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Vol_Event_Count__c</fullName>
+        <description>How many volunteer events has this person participated in?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How many volunteer events has this person participated in?</inlineHelpText>
+        <label>Vol_Event_Count</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Interests__c</fullName>
+        <description>Tree Planting
+Nursery Maintenance
+Street Tree
+Rainbarrel
+Stream Team
+Project Clean Stream
+Fundraising
+Office Work
+Public Relations
+Education and Outreach</description>
+        <externalId>false</externalId>
+        <label>Volunteer Interests</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Education and Outreach</fullName>
+                    <default>false</default>
+                    <label>Education and Outreach</label>
+                </value>
+                <value>
+                    <fullName>Fundraising</fullName>
+                    <default>false</default>
+                    <label>Fundraising</label>
+                </value>
+                <value>
+                    <fullName>Invasive Species Removal</fullName>
+                    <default>false</default>
+                    <label>Invasive Species Removal</label>
+                </value>
+                <value>
+                    <fullName>Mining Issue</fullName>
+                    <default>false</default>
+                    <label>Mining Issue</label>
+                </value>
+                <value>
+                    <fullName>Nursery Maintenance</fullName>
+                    <default>false</default>
+                    <label>Nursery Maintenance</label>
+                </value>
+                <value>
+                    <fullName>Office Administration</fullName>
+                    <default>false</default>
+                    <label>Office Administration</label>
+                </value>
+                <value>
+                    <fullName>Public Relations</fullName>
+                    <default>false</default>
+                    <label>Public Relations</label>
+                </value>
+                <value>
+                    <fullName>Rainbarrel</fullName>
+                    <default>false</default>
+                    <label>Rainbarrel</label>
+                </value>
+                <value>
+                    <fullName>Stream Cleanup</fullName>
+                    <default>false</default>
+                    <label>Stream Cleanup</label>
+                </value>
+                <value>
+                    <fullName>Street Tree</fullName>
+                    <default>false</default>
+                    <label>Street Tree</label>
+                </value>
+                <value>
+                    <fullName>Trail Maintenance</fullName>
+                    <default>false</default>
+                    <label>Trail Maintenance</label>
+                </value>
+                <value>
+                    <fullName>Tree Planting</fullName>
+                    <default>false</default>
+                    <label>Tree Planting</label>
+                </value>
+                <value>
+                    <fullName>Water Quality Monitoring</fullName>
+                    <default>false</default>
+                    <label>Water Quality Monitoring</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Skills__c</fullName>
+        <externalId>false</externalId>
+        <label>Volunteer_Skills</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Fundraising</fullName>
+                    <default>false</default>
+                    <label>Fundraising</label>
+                </value>
+                <value>
+                    <fullName>Education and outreach</fullName>
+                    <default>false</default>
+                    <label>Education and outreach</label>
+                </value>
+                <value>
+                    <fullName>Data analysis</fullName>
+                    <default>false</default>
+                    <label>Data analysis</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Work_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Work_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X3_Years_Ago_Donations__c</fullName>
+        <externalId>false</externalId>
+        <label>3_Years_Ago_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X3_Years_Ago_VolHours__c</fullName>
+        <externalId>false</externalId>
+        <label>3_Years_Ago_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X4_Years_Ago_Donations__c</fullName>
+        <externalId>false</externalId>
+        <label>4_Years_Ago_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X4_Years_Ago_VolHours__c</fullName>
+        <externalId>false</externalId>
+        <label>4_Years_Ago_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X5_Years_Ago_Donations__c</fullName>
+        <externalId>false</externalId>
+        <label>5_Years_Ago_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>X5_Years_Ago_VolHours__c</fullName>
+        <externalId>false</externalId>
+        <label>5_Years_Ago_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>YearToDate_VolHours__c</fullName>
+        <description>Calculated by ManageContribs.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Calculated by ManageContribs.</inlineHelpText>
+        <label>YearToDate_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Year_Before_Last_Donations__c</fullName>
+        <externalId>false</externalId>
+        <label>Year_Before_Last_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Year_Before_Last_Giving__c</fullName>
+        <description>This field calculated by the &quot;Recalculate Giving&quot; button.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field calculated by the &quot;Recalculate Giving&quot; button.</inlineHelpText>
+        <label>Year Before Last Giving</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>Year_Before_Last_VolHours__c</fullName>
+        <externalId>false</externalId>
+        <label>Year_Before_Last_VolHours</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>YeartoDate_Donations__c</fullName>
+        <description>Only contributions which match the individual giving types.  Calculated automatically by ManageContribs.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Only contributions which match the individual giving types.  Calculated automatically by ManageContribs.</inlineHelpText>
+        <label>YeartoDate_Donations</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>YeartoDate_Giving__c</fullName>
+        <description>This field calculated by the &quot;Recalculate Giving&quot; button.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This field calculated by the &quot;Recalculate Giving&quot; button.</inlineHelpText>
+        <label>YeartoDate_Giving</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <listViews>
+        <fullName>AllContacts</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All Contacts</label>
+    </listViews>
+    <listViews>
+        <fullName>BirthdaysThisMonth</fullName>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CONTACT.BIRTHDATE</field>
+            <operation>equals</operation>
+            <value>THIS_MONTH</value>
+        </filters>
+        <label>Birthdays This Month</label>
+    </listViews>
+    <listViews>
+        <fullName>MyContacts</fullName>
+        <filterScope>Mine</filterScope>
+        <label>My Contacts</label>
+    </listViews>
+    <listViews>
+        <fullName>NewLastWeek</fullName>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CONTACT.CREATED_DATE</field>
+            <operation>equals</operation>
+            <value>LAST_WEEK</value>
+        </filters>
+        <label>New Last Week</label>
+    </listViews>
+    <listViews>
+        <fullName>NewThisWeek</fullName>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CONTACT.CREATED_DATE</field>
+            <operation>equals</operation>
+            <value>THIS_WEEK</value>
+        </filters>
+        <label>New This Week</label>
+    </listViews>
+    <listViews>
+        <fullName>X2011_June_Renewals_1st_mailing</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>CONTACT.TITLE</columns>
+        <columns>CONTACT.PHONE1</columns>
+        <columns>CONTACT.EMAIL</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <filterScope>Everything</filterScope>
+        <label>2011 June Renewals 1st mailing</label>
+    </listViews>
+    <searchLayouts>
+        <customTabListAdditionalFields>FULL_NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>ACCOUNT.NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>CONTACT.PHONE1</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>FULL_NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ACCOUNT.NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>ACCOUNT.SITE</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>FULL_NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ACCOUNT.NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ACCOUNT.SITE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE1</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE3</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE4</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE5</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE6</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>FULL_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ACCOUNT.NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>ACCOUNT.SITE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CONTACT.PHONE1</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CONTACT.EMAIL</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Test_Error</fullName>
+        <active>true</active>
+        <errorConditionFormula>LastName = &quot;TEST52A&quot;</errorConditionFormula>
+        <errorDisplayField>LastName</errorDisplayField>
+        <errorMessage>Test C Fail</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Contacts_in_this_Organization</fullName>
+        <availability>online</availability>
+        <description>generates report of all contacts within the organization</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <height>600</height>
+        <linkType>url</linkType>
+        <masterLabel>All Contacts in this Organization</masterLabel>
+        <openType>sidebar</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>/00O70000001TiLT?pv0={!Account.Id}&amp;isdtp=mo</url>
+    </webLinks>
+    <webLinks>
+        <fullName>GoogleMaps</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Google Maps</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>http://maps.google.com/maps?f=q&amp;hl=en&amp;q={!Contact.MailingStreet}+{!Contact.MailingCity}+{!Contact.MailingState}&amp;om=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>GoogleSearch</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Google Search</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>http://www.google.com/search?q={!Contact.FirstName} {!Contact.LastName}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>SendGmail</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Send Gmail</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>https://mail.google.com/mail?view=cm&amp;tf=0&amp;to={!Contact.Email}&lt;{!Contact.LastName}, {!Contact.FirstName}&gt;&amp;tf=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>View_Connections</fullName>
+        <availability>online</availability>
+        <description>used to view connections between contacts and orgainzations</description>
+        <displayType>button</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>View Connections</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>/00O70000001TiLW?pv0={!Contact.Id}&amp;pv1={!Contact.FirstName} {!Contact.LastName}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>YahooMaps</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>true</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>true</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Yahoo! Maps</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>true</showsLocation>
+        <showsStatus>true</showsStatus>
+        <url>http://maps.yahoo.com/py/maps.py?cn={!Contact.MailingCountry}&amp;csz={!Contact.MailingCity}+{!Contact.MailingState}+{!Contact.MailingPostalCode}+&amp;addr={!Contact.MailingStreet}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>YahooWeather</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>Yahoo! Weather</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>http://weather.yahoo.com/search/weather2?p={!Contact.MailingPostalCode}</url>
+    </webLinks>
+    <webLinks>
+        <fullName>map</fullName>
+        <availability>online</availability>
+        <displayType>link</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>url</linkType>
+        <masterLabel>google map</masterLabel>
+        <openType>newWindow</openType>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+        <url>http://maps.google.com/?q={!Contact.MailingStreet}+{!Contact.MailingCity}+{!Contact.MailingState}+{!Contact.MailingPostalCode}+{!Contact.MailingCountry}</url>
+    </webLinks>
+</CustomObject>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FK_NAME</field>
+    </columns>
+    <columns>
+        <field>FK_CNTC_FIRST_NAME</field>
+    </columns>
+    <columns>
+        <field>FK_$Contact.Contact_Full_Name__c</field>
+    </columns>
+    <columns>
+        <field>Affiliation__c.Account__c</field>
+    </columns>
+    <columns>
+        <field>Affiliation__c.Affiliation_Role__c</field>
+    </columns>
+    <columns>
+        <field>Affiliation__c.Current__c</field>
+    </columns>
+    <columns>
+        <field>Affiliation__c.Start_Date__c</field>
+    </columns>
+    <columns>
+        <field>Affiliation__c.End_date__c</field>
+    </columns>
+    <description>All contacts with affiliation account = Board of Directors</description>
+    <filter>
+        <criteriaItems>
+            <column>Affiliation__c.Account__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Test Account</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>All Board of Directors Ever</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$Affiliation__c@Affiliation__c.Contact__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Affiliation__c.End_date__c</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

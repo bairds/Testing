@@ -1,0 +1,11 @@
+In WaterGrass you set a deadline of {!Opportunity.Next_Step_Deadline__c} for your next step on the {!Opportunity.RecordType} from {!Opportunity.Contact__c} of the {!Opportunity.Account} account.
+
+In your notes you wrote: "{!Opportunity.Description}"
+
+The contact's phone number is {!Contact.Phone} and the email is {!Contact.Email}
+
+Please note the results in WaterGrass.
+
+Thanks for staying on track with this, along with everything else you do.
+
+WaterGrass

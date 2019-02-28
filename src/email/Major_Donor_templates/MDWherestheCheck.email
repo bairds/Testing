@@ -1,0 +1,10 @@
+Dear {!Opportunity.OwnerFullName},
+
+Two weeks ago you talked to {!Opportunity.Contact__c} of {!Opportunity.Account}, asking them to donate {!Opportunity.Amount}.  They agreed.  Congrats.
+
+But we still haven't seen their check.  It's a good time to follow up and see when we can expect it, or if we need to pass by their offices to pick it up.  
+
+Call them at their office at {!Account.Phone}.  Their home number is {!Contact.HomePhone}.  Their other phone number is {!Contact.OtherPhone}.
+
+Thanks and good luck!
+WaterGrass

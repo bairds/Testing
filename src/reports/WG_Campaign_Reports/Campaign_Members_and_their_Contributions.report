@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Campaign$Name</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers$Name</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers$Status</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers.Contributions__r$Name</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers.Contributions__r$Amount</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers.Contributions__r$CloseDate</field>
+    </columns>
+    <columns>
+        <field>Campaign.ContactCampaignMembers.Contributions__r$Check_Date__c</field>
+    </columns>
+    <description>Pulls member and member status information and contributions by those members if they exist.  If a donor is not a member, they will not show in this report.</description>
+    <format>Tabular</format>
+    <name>Campaign Members and their Contributions</name>
+    <params>
+        <name>scopeid</name>
+        <value>filterPanel_000000000000000</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Campaigns_with_members_and_donations__c</reportType>
+    <scope>one</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Campaign$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

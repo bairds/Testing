@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Account$Name</field>
+    </columns>
+    <columns>
+        <field>Account$BillingAddress</field>
+    </columns>
+    <columns>
+        <field>Account$BillingCity</field>
+    </columns>
+    <columns>
+        <field>Account$BillingState</field>
+    </columns>
+    <columns>
+        <field>Account$BillingPostalCode</field>
+    </columns>
+    <columns>
+        <field>Account$Account_Membership_Expires__c</field>
+    </columns>
+    <columns>
+        <field>Account$Dear__c</field>
+    </columns>
+    <columns>
+        <field>Account$Addressee__c</field>
+    </columns>
+    <description>Set to expiring today and filtering out inactive, deceased, bad addresses and major donors.</description>
+    <filter>
+        <criteriaItems>
+            <column>Account$Active__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value>Obsolete contact info</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Account$BillingStreet</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Account$Major_Donor_Now__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>notEqual</operator>
+            <value>1</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Memberships Expired</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Accounts_with_or_without_Contacts__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Account$Account_Membership_Expires__c</dateColumn>
+        <interval>INTERVAL_PREVY</interval>
+    </timeFrameFilter>
+</Report>

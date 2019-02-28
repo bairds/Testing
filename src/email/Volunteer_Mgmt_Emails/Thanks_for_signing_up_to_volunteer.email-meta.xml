@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EmailTemplate xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>34.0</apiVersion>
+    <available>true</available>
+    <description>Starting point for email replies to volunteer signups.  This works for both Leads and Contacts, so can be used with just one workflow.  Fields and text may need modifying.</description>
+    <encodingKey>ISO-8859-1</encodingKey>
+    <name>Thanks for signing up to volunteer</name>
+    <packageVersions>
+        <majorNumber>1</majorNumber>
+        <minorNumber>0</minorNumber>
+        <namespace>CnP_PaaS_Bridge</namespace>
+    </packageVersions>
+    <style>none</style>
+    <subject>Thanks for signing up to volunteer</subject>
+    <type>visualforce</type>
+    <uiType>Aloha</uiType>
+</EmailTemplate>

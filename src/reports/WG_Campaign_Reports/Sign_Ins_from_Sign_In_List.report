@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>FIRST_NAME</field>
+    </columns>
+    <columns>
+        <field>LAST_NAME</field>
+    </columns>
+    <columns>
+        <field>PHONE1</field>
+    </columns>
+    <columns>
+        <field>ACCOUNT.ADDRESS1_ZIP</field>
+    </columns>
+    <columns>
+        <field>CampaignMember.SignupQuestionAnswer__c</field>
+    </columns>
+    <columns>
+        <field>CampaignMember.SignupQuestionAnswer2__c</field>
+    </columns>
+    <columns>
+        <field>EMAIL</field>
+    </columns>
+    <description>Campaign members (any campaign, sign in or not) with the custom question fields.</description>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>CAMPAIGN_NAME</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Sign Ins from Sign In List</name>
+    <params>
+        <name>scopeid</name>
+        <value>70150000000eeMu</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CampaignContact</reportType>
+    <scope>one</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+</Report>

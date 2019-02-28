@@ -1,0 +1,8 @@
+Dear {!Opportunity.OwnerFullName},
+
+One week ago you talked to {!Opportunity.Contact__c} of {!Opportunity.Account}, asking them to donate {!Opportunity.Amount}.  Now it's time to call and ask their decision.
+
+Call them at their office at {!Account.Phone}.  Their home number is {!Contact.HomePhone}.  Their other phone number is {!Contact.OtherPhone}.
+
+Thanks and good luck!
+WaterGrass

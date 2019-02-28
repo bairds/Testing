@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Status__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Processed_Date__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Person_FirstName__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Person_LastName__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Match_Status__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Missing_Second_Contact__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Missing_Contribution__c</field>
+    </columns>
+    <columns>
+        <field>ImportObject__c.Missing_Campaign__c</field>
+    </columns>
+    <format>Tabular</format>
+    <name>Import Status Report</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CustomEntity$ImportObject__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
+    <sortColumn>CUST_NAME</sortColumn>
+    <sortOrder>Asc</sortOrder>
+    <timeFrameFilter>
+        <dateColumn>ImportObject__c.Processed_Date__c</dateColumn>
+        <interval>INTERVAL_TODAY</interval>
+    </timeFrameFilter>
+</Report>

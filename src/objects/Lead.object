@@ -1,0 +1,2308 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddToCampaign</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CallHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ChangeStatus</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Convert</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EmailHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>FindDup</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ListClean</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SmsHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <businessProcesses>
+        <fullName>OnlineDonation</fullName>
+        <isActive>true</isActive>
+        <values>
+            <fullName>Closed - Converted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Closed - Not Converted</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Open - Not Contacted</fullName>
+            <default>true</default>
+        </values>
+        <values>
+            <fullName>Working - Contacted</fullName>
+            <default>false</default>
+        </values>
+    </businessProcesses>
+    <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
+    <enableFeeds>true</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <fields>
+        <fullName>Address</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Addressee__c</fullName>
+        <description>Editable.  Initially set to Lead.firstname + &apos; &apos; + Lead.Lastname</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Editable.  Initially set to Lead.firstname + &apos; &apos; + Lead.Lastname</inlineHelpText>
+        <label>Addressee</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Alternate_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Alternate_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>AnnualRevenue</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Availability__c</fullName>
+        <externalId>false</externalId>
+        <label>Availability</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Weekdays</fullName>
+                    <default>false</default>
+                    <label>Weekdays</label>
+                </value>
+                <value>
+                    <fullName>Weekends</fullName>
+                    <default>false</default>
+                    <label>Weekends</label>
+                </value>
+                <value>
+                    <fullName>Evenings</fullName>
+                    <default>false</default>
+                    <label>Evenings</label>
+                </value>
+                <value>
+                    <fullName>Anytime</fullName>
+                    <default>false</default>
+                    <label>Anytime</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>CampaignId</fullName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>CleanStatus</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Communication_Preference__c</fullName>
+        <description>How do you prefer we contact you?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How do you prefer we contact you ?</inlineHelpText>
+        <label>Communication Preference</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>By email</fullName>
+                    <default>false</default>
+                    <label>By email</label>
+                </value>
+                <value>
+                    <fullName>By mail</fullName>
+                    <default>false</default>
+                    <label>By mail</label>
+                </value>
+                <value>
+                    <fullName>By phone</fullName>
+                    <default>false</default>
+                    <label>By phone</label>
+                </value>
+                <value>
+                    <fullName>By Facebook</fullName>
+                    <default>false</default>
+                    <label>By Facebook</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Company</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>CompanyDunsNumber</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Constant1__c</fullName>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Constant1</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>County__c</fullName>
+        <externalId>false</externalId>
+        <label>County</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Antrim</fullName>
+                    <default>false</default>
+                    <label>Antrim</label>
+                </value>
+                <value>
+                    <fullName>Benzie</fullName>
+                    <default>false</default>
+                    <label>Benzie</label>
+                </value>
+                <value>
+                    <fullName>Charlevoix</fullName>
+                    <default>false</default>
+                    <label>Charlevoix</label>
+                </value>
+                <value>
+                    <fullName>Grand Traverse</fullName>
+                    <default>false</default>
+                    <label>Grand Traverse</label>
+                </value>
+                <value>
+                    <fullName>Kalkaska</fullName>
+                    <default>false</default>
+                    <label>Kalkaska</label>
+                </value>
+                <value>
+                    <fullName>Manistee</fullName>
+                    <default>false</default>
+                    <label>Manistee</label>
+                </value>
+                <value>
+                    <fullName>Other</fullName>
+                    <default>false</default>
+                    <label>Other</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>CurrentGenerators__c</fullName>
+        <externalId>false</externalId>
+        <label>Current Generator(s)</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>DandbCompanyId</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Dear__c</fullName>
+        <description>Editable.  Initially set to Lead.Firstname.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Editable.  Initially set to Lead.Firstname.</inlineHelpText>
+        <label>Dear</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Description</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>DoNotCall</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Do_Not__c</fullName>
+        <externalId>false</externalId>
+        <label>Do Not</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Don&apos;t call me for contributions</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t call me for contributions</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t mail me solicitation letters</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t mail me solicitation letters</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t email me solicitation messages</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t email me solicitation messages</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t phone me at all</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t phone me at all</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t mail me at all</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t mail me at all</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t email me at all</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t email me at all</label>
+                </value>
+                <value>
+                    <fullName>Only send me one solicitation a year.</fullName>
+                    <default>false</default>
+                    <label>Only send me one solicitation a year.</label>
+                </value>
+                <value>
+                    <fullName>Don&apos;t share my name with other groups</fullName>
+                    <default>false</default>
+                    <label>Don&apos;t share my name with other groups</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Email</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Fax</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfEmail</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>HasOptedOutOfFax</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Home_Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Home Phone</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>How_Heard__c</fullName>
+        <description>How did you hear about us?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>How did you hear about us?</inlineHelpText>
+        <label>How Heard</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>ImportObjectSource__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Import Object Source</label>
+        <referenceTo>ImportObject__c</referenceTo>
+        <relationshipLabel>Leads</relationshipLabel>
+        <relationshipName>Leads</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Industry</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Jigsaw</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Jurisdiction__c</fullName>
+        <description>Jurisdiction you reside in.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Jurisdiction you reside in.</inlineHelpText>
+        <label>Jurisdiction</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Town of Morse</fullName>
+                    <default>false</default>
+                    <label>Town of Morse</label>
+                </value>
+                <value>
+                    <fullName>Town of Anderson</fullName>
+                    <default>false</default>
+                    <label>Town of Anderson</label>
+                </value>
+                <value>
+                    <fullName>Mellen</fullName>
+                    <default>false</default>
+                    <label>Mellen</label>
+                </value>
+                <value>
+                    <fullName>Hurley</fullName>
+                    <default>false</default>
+                    <label>Hurley</label>
+                </value>
+                <value>
+                    <fullName>City of Ashland</fullName>
+                    <default>false</default>
+                    <label>City of Ashland</label>
+                </value>
+                <value>
+                    <fullName>Odanah</fullName>
+                    <default>false</default>
+                    <label>Odanah</label>
+                </value>
+                <value>
+                    <fullName>Iron County (not in Town of Anderson or Hurley)</fullName>
+                    <default>false</default>
+                    <label>Iron County (not in Town of Anderson or Hurley)</label>
+                </value>
+                <value>
+                    <fullName>Ashland County (not in Town of Morse, Mellen or Odanah)</fullName>
+                    <default>false</default>
+                    <label>Ashland County (not in Town of Morse, Mellen or Odanah)</label>
+                </value>
+                <value>
+                    <fullName>Other (for those outside the above mentioned areas)</fullName>
+                    <default>false</default>
+                    <label>Other (for those outside the above mentioned areas)</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>LastTransferDate</fullName>
+    </fields>
+    <fields>
+        <fullName>LeadSource</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Legacy_Contact_ID__c</fullName>
+        <description>To import from legacy systems</description>
+        <externalId>false</externalId>
+        <inlineHelpText>To import from legacy systems</inlineHelpText>
+        <label>Legacy Id</label>
+        <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lookup_Key__c</fullName>
+        <description>Key for Import Object Lookup Process</description>
+        <externalId>false</externalId>
+        <formula>IF (
+AND (
+NOT(ISBLANK(FirstName)),
+NOT(ISBLANK(LastName)),
+NOT(ISBLANK(PostalCode))
+),
+LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
+&quot;&quot;
+)</formula>
+        <inlineHelpText>Key for Import Object Lookup Process</inlineHelpText>
+        <label>Lookup Key</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Mailing_Lists__c</fullName>
+        <description>What information would you like us to send you?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>What information would you like us to send you?</inlineHelpText>
+        <label>Mailing Lists</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Deep Mine updates</fullName>
+                    <default>false</default>
+                    <label>Deep Mine updates</label>
+                </value>
+                <value>
+                    <fullName>Allegheny Energy Center updates</fullName>
+                    <default>false</default>
+                    <label>Allegheny Energy Center updates</label>
+                </value>
+                <value>
+                    <fullName>Trail news</fullName>
+                    <default>false</default>
+                    <label>Trail news</label>
+                </value>
+                <value>
+                    <fullName>Youghiogheny River issues</fullName>
+                    <default>false</default>
+                    <label>Youghiogheny River issues</label>
+                </value>
+                <value>
+                    <fullName>Shale Gas issues</fullName>
+                    <default>false</default>
+                    <label>Shale Gas issues</label>
+                </value>
+                <value>
+                    <fullName>Volunteer opportunities</fullName>
+                    <default>false</default>
+                    <label>Volunteer opportunities</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>MobilePhone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Mobile_Phone__c</fullName>
+        <externalId>false</externalId>
+        <label>Mobile Phone</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Name</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>NumberOfEmployees</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Original_LeadSource__c</fullName>
+        <description>The first time LeadSource is populated, store it here.  Afterwards, don&apos;t overwrite it.  Only Admins can edit the field.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The first time LeadSource is populated, store it here.  Afterwards, don&apos;t overwrite it.  Only Admins can edit the field.</inlineHelpText>
+        <label>Original_LeadSource</label>
+        <length>100</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Original__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>Original</label>
+        <referenceTo>Lead</referenceTo>
+        <relationshipLabel>Duplicates</relationshipLabel>
+        <relationshipName>Duplicates</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Other_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Other_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Other_emails__c</fullName>
+        <description>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</inlineHelpText>
+        <label>Other emails</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Over_18__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Over_18</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>OwnerId</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Personal_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Personal_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Phone</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Preferred_Email__c</fullName>
+        <description>Which email should be used for most communications involving this Lead?</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Which email should be used for most communications involving this Lead?</inlineHelpText>
+        <label>Preferred_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <restricted>true</restricted>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Personal</fullName>
+                    <default>false</default>
+                    <label>Personal</label>
+                </value>
+                <value>
+                    <fullName>Work</fullName>
+                    <default>false</default>
+                    <label>Work</label>
+                </value>
+                <value>
+                    <fullName>Alternate</fullName>
+                    <default>false</default>
+                    <label>Alternate</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Primary__c</fullName>
+        <externalId>false</externalId>
+        <label>Primary</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>No</fullName>
+                    <default>false</default>
+                    <label>No</label>
+                </value>
+                <value>
+                    <fullName>Yes</fullName>
+                    <default>false</default>
+                    <label>Yes</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>ProductInterest__c</fullName>
+        <externalId>false</externalId>
+        <label>Product Interest</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>GC1000 series</fullName>
+                    <default>false</default>
+                    <label>GC1000 series</label>
+                </value>
+                <value>
+                    <fullName>GC5000 series</fullName>
+                    <default>false</default>
+                    <label>GC5000 series</label>
+                </value>
+                <value>
+                    <fullName>GC3000 series</fullName>
+                    <default>false</default>
+                    <label>GC3000 series</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+    </fields>
+    <fields>
+        <fullName>Rating</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>SICCode__c</fullName>
+        <externalId>false</externalId>
+        <label>SIC Code</label>
+        <length>15</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Special_Request__c</fullName>
+        <description>Special requests for more information</description>
+        <externalId>false</externalId>
+        <label>Special Request</label>
+        <length>1000</length>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Status</fullName>
+        <trackFeedHistory>true</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Title</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Contact__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Please let me know about volunteer activities that match my interests.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Please let me know about volunteer activities that match my interests.</inlineHelpText>
+        <label>Volunteer Contact</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Interests__c</fullName>
+        <externalId>false</externalId>
+        <label>Volunteer Interests</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Education and Outreach</fullName>
+                    <default>false</default>
+                    <label>Education and Outreach</label>
+                </value>
+                <value>
+                    <fullName>Fundraising</fullName>
+                    <default>false</default>
+                    <label>Fundraising</label>
+                </value>
+                <value>
+                    <fullName>Nursery Maintenance</fullName>
+                    <default>false</default>
+                    <label>Nursery Maintenance</label>
+                </value>
+                <value>
+                    <fullName>Office Work</fullName>
+                    <default>false</default>
+                    <label>Office Work</label>
+                </value>
+                <value>
+                    <fullName>Project Clean Stream</fullName>
+                    <default>false</default>
+                    <label>Project Clean Stream</label>
+                </value>
+                <value>
+                    <fullName>Public Relations</fullName>
+                    <default>false</default>
+                    <label>Public Relations</label>
+                </value>
+                <value>
+                    <fullName>Rainbarrel</fullName>
+                    <default>false</default>
+                    <label>Rainbarrel</label>
+                </value>
+                <value>
+                    <fullName>Stream Team</fullName>
+                    <default>false</default>
+                    <label>Stream Team</label>
+                </value>
+                <value>
+                    <fullName>Street Tree</fullName>
+                    <default>false</default>
+                    <label>Street Tree</label>
+                </value>
+                <value>
+                    <fullName>Tree Planting</fullName>
+                    <default>false</default>
+                    <label>Tree Planting</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Volunteer_Skills__c</fullName>
+        <externalId>false</externalId>
+        <label>Volunteer_Skills</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Fundraising</fullName>
+                    <default>false</default>
+                    <label>Fundraising</label>
+                </value>
+                <value>
+                    <fullName>Education and outreach</fullName>
+                    <default>false</default>
+                    <label>Education and outreach</label>
+                </value>
+                <value>
+                    <fullName>Data analysis</fullName>
+                    <default>false</default>
+                    <label>Data analysis</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>4</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Website</fullName>
+        <trackFeedHistory>false</trackFeedHistory>
+    </fields>
+    <fields>
+        <fullName>Work_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Work_Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <listViews>
+        <fullName>AllOpenLeads</fullName>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>LEAD.STATUS</field>
+            <operation>notContain</operation>
+            <value>closed</value>
+        </filters>
+        <label>All Open Leads</label>
+    </listViews>
+    <listViews>
+        <fullName>MyUnreadLeads</fullName>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>LEAD.UNREAD</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>My Unread Leads</label>
+    </listViews>
+    <listViews>
+        <fullName>TodaysLeads</fullName>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>LEAD.CREATED_DATE</field>
+            <operation>equals</operation>
+            <value>TODAY</value>
+        </filters>
+        <label>Today&apos;s Leads</label>
+    </listViews>
+    <listViews>
+        <fullName>ViewCustom1</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>LEAD.COMPANY</columns>
+        <columns>LEAD.STATE</columns>
+        <columns>LEAD.EMAIL</columns>
+        <columns>LEAD.STATUS</columns>
+        <columns>LEAD.CREATED_DATE</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>LEAD.UNREAD</columns>
+        <filterScope>Everything</filterScope>
+        <label>View - Custom 1</label>
+    </listViews>
+    <listViews>
+        <fullName>ViewCustom2</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>LEAD.COMPANY</columns>
+        <columns>LEAD.STATE</columns>
+        <columns>LEAD.EMAIL</columns>
+        <columns>LEAD.STATUS</columns>
+        <columns>LEAD.CREATED_DATE</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>LEAD.UNREAD</columns>
+        <columns>LEAD.LEAD_SOURCE</columns>
+        <filterScope>Everything</filterScope>
+        <label>View - Custom 2</label>
+    </listViews>
+    <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypes>
+        <fullName>OnlineDonation</fullName>
+        <active>true</active>
+        <businessProcess>OnlineDonation</businessProcess>
+        <label>Online Donation</label>
+        <picklistValues>
+            <picklist>Availability__c</picklist>
+            <values>
+                <fullName>Anytime</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Evenings</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekdays</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekends</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Communication_Preference__c</picklist>
+            <values>
+                <fullName>By Facebook</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By mail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>County__c</picklist>
+            <values>
+                <fullName>Antrim</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Benzie</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Charlevoix</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grand Traverse</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kalkaska</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manistee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Do_Not__c</picklist>
+            <values>
+                <fullName>Don%27t call me for contributions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me solicitation messages</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me solicitation letters</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t phone me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t share my name with other groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Only send me one solicitation a year%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Industry</picklist>
+            <values>
+                <fullName>Agriculture</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Apparel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Banking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biotechnology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chemicals</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Communications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Construction</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Consulting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Education</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electronics</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Energy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Engineering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entertainment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Environmental</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Food %26 Beverage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Government</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Healthcare</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hospitality</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insurance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Machinery</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Media</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Recreation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Retail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Technology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Telecommunications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Transportation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Utilities</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Jurisdiction__c</picklist>
+            <values>
+                <fullName>Ashland County %28not in Town of Morse%2C Mellen or Odanah%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>City of Ashland</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hurley</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Iron County %28not in Town of Anderson or Hurley%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mellen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Odanah</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28for those outside the above mentioned areas%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Anderson</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Morse</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>LeadSource</picklist>
+            <values>
+                <fullName>ClicknPledge Pymnt</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>CnP Controller</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phone Inquiry</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Purchased List</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>River Cleanup</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed Online Petition</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Mailing_Lists__c</picklist>
+            <values>
+                <fullName>Allegheny Energy Center updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deep Mine updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trail news</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Name</picklist>
+            <values>
+                <fullName>Dr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mrs%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ms%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prof%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Preferred_Email__c</picklist>
+            <values>
+                <fullName>Alternate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Personal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Work</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>ProductInterest__c</picklist>
+            <values>
+                <fullName>GC1000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC3000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC5000 series</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Rating</picklist>
+            <values>
+                <fullName>Cold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Warm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Volunteer_Interests__c</picklist>
+            <values>
+                <fullName>Education and Outreach</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fundraising</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nursery Maintenance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Work</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Clean Stream</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Public Relations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rainbarrel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stream Team</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Street Tree</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Online_Signup</fullName>
+        <active>true</active>
+        <businessProcess>OnlineDonation</businessProcess>
+        <label>Online Signup</label>
+        <picklistValues>
+            <picklist>Availability__c</picklist>
+            <values>
+                <fullName>Anytime</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Evenings</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekdays</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekends</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Communication_Preference__c</picklist>
+            <values>
+                <fullName>By Facebook</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By mail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>County__c</picklist>
+            <values>
+                <fullName>Antrim</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Benzie</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Charlevoix</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grand Traverse</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kalkaska</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manistee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Do_Not__c</picklist>
+            <values>
+                <fullName>Don%27t call me for contributions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me solicitation messages</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me solicitation letters</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t phone me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t share my name with other groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Only send me one solicitation a year%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Industry</picklist>
+            <values>
+                <fullName>Agriculture</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Apparel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Banking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biotechnology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chemicals</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Communications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Construction</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Consulting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Education</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electronics</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Energy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Engineering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entertainment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Environmental</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Food %26 Beverage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Government</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Healthcare</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hospitality</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insurance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Machinery</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Media</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Not For Profit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Recreation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Retail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Technology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Telecommunications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Transportation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Utilities</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Jurisdiction__c</picklist>
+            <values>
+                <fullName>Ashland County %28not in Town of Morse%2C Mellen or Odanah%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>City of Ashland</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hurley</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Iron County %28not in Town of Anderson or Hurley%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mellen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Odanah</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28for those outside the above mentioned areas%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Anderson</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Morse</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>LeadSource</picklist>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phone Inquiry</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Purchased List</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>River Cleanup</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed Online Petition</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Mailing_Lists__c</picklist>
+            <values>
+                <fullName>Allegheny Energy Center updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deep Mine updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trail news</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Name</picklist>
+            <values>
+                <fullName>Dr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mrs%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ms%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prof%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Preferred_Email__c</picklist>
+            <values>
+                <fullName>Alternate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Personal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Work</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>ProductInterest__c</picklist>
+            <values>
+                <fullName>GC1000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC3000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC5000 series</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Rating</picklist>
+            <values>
+                <fullName>Cold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Warm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Volunteer_Interests__c</picklist>
+            <values>
+                <fullName>Education and Outreach</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fundraising</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nursery Maintenance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Work</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Clean Stream</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Public Relations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rainbarrel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stream Team</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Street Tree</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Standard_Lead</fullName>
+        <active>true</active>
+        <businessProcess>OnlineDonation</businessProcess>
+        <label>Standard Lead</label>
+        <picklistValues>
+            <picklist>Availability__c</picklist>
+            <values>
+                <fullName>Anytime</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Evenings</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekdays</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekends</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Communication_Preference__c</picklist>
+            <values>
+                <fullName>By Facebook</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By mail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>By phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>County__c</picklist>
+            <values>
+                <fullName>Antrim</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Benzie</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Charlevoix</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Grand Traverse</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kalkaska</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manistee</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Do_Not__c</picklist>
+            <values>
+                <fullName>Don%27t call me for contributions</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t email me solicitation messages</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t mail me solicitation letters</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t phone me at all</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Don%27t share my name with other groups</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Only send me one solicitation a year%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Industry</picklist>
+            <values>
+                <fullName>Agriculture</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Apparel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Banking</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Biotechnology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Chemicals</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Communications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Construction</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Consulting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Education</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electronics</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Energy</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Engineering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Entertainment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Environmental</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Finance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Food %26 Beverage</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Government</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Healthcare</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hospitality</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insurance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Machinery</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Manufacturing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Media</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Recreation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Retail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Shipping</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Technology</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Telecommunications</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Transportation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Utilities</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Jurisdiction__c</picklist>
+            <values>
+                <fullName>Ashland County %28not in Town of Morse%2C Mellen or Odanah%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>City of Ashland</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hurley</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Iron County %28not in Town of Anderson or Hurley%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mellen</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Odanah</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other %28for those outside the above mentioned areas%29</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Anderson</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Town of Morse</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>LeadSource</picklist>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phone Inquiry</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Purchased List</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>River Cleanup</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Signed Online Petition</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Mailing_Lists__c</picklist>
+            <values>
+                <fullName>Allegheny Energy Center updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Deep Mine updates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trail news</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Name</picklist>
+            <values>
+                <fullName>Dr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mrs%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ms%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prof%2E</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Preferred_Email__c</picklist>
+            <values>
+                <fullName>Alternate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Personal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Work</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Primary__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>ProductInterest__c</picklist>
+            <values>
+                <fullName>GC1000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC3000 series</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GC5000 series</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Rating</picklist>
+            <values>
+                <fullName>Cold</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hot</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Warm</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Volunteer_Interests__c</picklist>
+            <values>
+                <fullName>Education and Outreach</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fundraising</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Nursery Maintenance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Work</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Project Clean Stream</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Public Relations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rainbarrel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stream Team</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Street Tree</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <searchLayouts>
+        <customTabListAdditionalFields>FULL_NAME</customTabListAdditionalFields>
+        <customTabListAdditionalFields>LEAD.COMPANY</customTabListAdditionalFields>
+        <customTabListAdditionalFields>LEAD.PHONE</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>FULL_NAME</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>LEAD.COMPANY</lookupDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>FULL_NAME</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>LEAD.COMPANY</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>LEAD.PHONE</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>LEAD.MOBILE_PHONE</lookupPhoneDialogsAdditionalFields>
+        <searchResultsAdditionalFields>FULL_NAME</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.TITLE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.COMPANY</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.PHONE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.MOBILE_PHONE</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.EMAIL</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>LEAD.STATUS</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWriteTransfer</sharingModel>
+    <validationRules>
+        <fullName>Do_not_overwrite_first_LeadSource</fullName>
+        <active>true</active>
+        <description>If LeadSource already populated, don&apos;t overwrite it.</description>
+        <errorConditionFormula>NOT(ISBLANK(PRIORVALUE(LeadSource))) &amp;&amp; ISCHANGED(LeadSource)</errorConditionFormula>
+        <errorMessage>LeadSource already populated</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Test_Errors</fullName>
+        <active>true</active>
+        <errorConditionFormula>LastName = &apos;TEST52&apos;</errorConditionFormula>
+        <errorDisplayField>LastName</errorDisplayField>
+        <errorMessage>Failed on LastName</errorMessage>
+    </validationRules>
+</CustomObject>

@@ -1,0 +1,20 @@
+Good try with {!Opportunity.Account}
+
+It's time to thank {!Opportunity.Contact__c} for taking the time to consider us.  Here's a template for an email below.
+
+Remember to find out why they decided not to donate this time, and when they'd be willing to consider donating again in the future.
+
+WaterGrass
+
+=====================
+
+Dear {!Opportunity.Contact__c},
+
+We're sorry to learn that {!Opportunity.Account} won't be able to support the Network of Oregon Watersheds this time around.  Nevertheless, we appreciate the contribution that you make to our community, and hope that we can find ways to partner to protect this state that we love, and the waters that nourish it.
+
+If you should have any questions, or ideas about ways you think we could work with you, please don't hesitate to call me.
+
+Sincerely,
+
+{!Opportunity.OwnerFullName}
+{!Opportunity.OwnerPhone}

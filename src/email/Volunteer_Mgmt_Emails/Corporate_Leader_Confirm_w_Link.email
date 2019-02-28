@@ -1,0 +1,35 @@
+<messaging:emailTemplate subject="Here's your confirmation and link for your colleagues." recipientType="Contact" relatedToType="CampaignMember">
+<messaging:htmlEmailBody >
+<apex:image id="Logo" value="https://c.na43.content.force.com/servlet/servlet.ImageServer?id=0150G000007zS63&oid=00DA0000000Hs9s&lastMod=1490997631000" 
+width="666"/><br/><br/>
+Dear {!if(relatedTo.Type == 'Contact',relatedTo.Contact.firstname,relatedTo.Lead.firstname)},<br/><br/>
+
+You have reserved space for <apex:outputText value="{0, number, ###,##0}">
+    <apex:param value="{!relatedTo.Nr_in_Group__c}"/>
+</apex:outputText> individuals from {!relatedTo.Group__c} for the {!relatedTo.Campaign.Name} on <apex:outputText value=" "/><apex:outputfield value="{!relatedTo.Campaign.Event_Date_Time__c}" />. <br/><br/>
+
+<strong>Each participant must register and sign the waiver individually.</strong><br/><br/>
+
+Share <apex:outputText value=" "/><apex:outputLink value="http://wgtesting-developer-edition.na3.force.com//VolunteerEventRegisterPage?cid={!relatedTo.Campaign.Id}">this link</apex:outputLink> with your colleagues or other individuals who will sign up for the {!relatedTo.Group__c} team.<br/><br/>
+
+IMPORTANT:
+Please be aware this is just a reservation, and that a standard donation of $5,000 must be completed at least 3 weeks prior to your volunteer day.
+If your donation is not received by 3 weeks prior, you will forfeit your reservation for another group.<br/><br/>
+
+Once your donation has been completed, you will receive your itinerary for the day.<br/><br/>
+
+If you have any questions or concerns please contact <a href="mailto:bbuitrago@nyharbor.org">Blyss Buitrago</a>.<br/><br/>
+
+Looking forward to seeing you,<br/><br/><br/>
+Blyss<br/><br/>
+
+
+Your Name: {!relatedTo.contact.name}<br/>
+
+Where: {!relatedTo.campaign.Event_Location__c}.<br/>
+
+Date and Time: <apex:outputfield value="{!relatedTo.Campaign.Event_Date_Time__c}" />.<br/>
+
+Description: {!relatedTo.campaign.Description_Long__c}.<br/>
+</messaging:htmlEmailBody>
+</messaging:emailTemplate>

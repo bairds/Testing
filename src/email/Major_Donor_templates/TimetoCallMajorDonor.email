@@ -1,0 +1,7 @@
+Dear {!Opportunity.OwnerFullName},
+
+Two weeks ago we sent out our letter to {!Opportunity.Contact__c} of {!Opportunity.Account}, asking them to donate {!Opportunity.Amount}.  Now it's time to call and ask them to meet with us (or to give their answer over the phone - but that's not likely to net as big a donation.)
+
+Call them at their office at {!Account.Phone}.  Their home number is {!Contact.HomePhone}.  Their other phone number is {!Contact.OtherPhone}.
+
+Thanks and good luck!

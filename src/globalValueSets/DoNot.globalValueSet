@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>no email</fullName>
+        <default>false</default>
+        <label>no email</label>
+    </customValue>
+    <customValue>
+        <fullName>no email solicitations</fullName>
+        <default>false</default>
+        <label>no email solicitations</label>
+    </customValue>
+    <customValue>
+        <fullName>no mail</fullName>
+        <default>false</default>
+        <label>no mail</label>
+    </customValue>
+    <customValue>
+        <fullName>no mail solicitations</fullName>
+        <default>false</default>
+        <label>no mail solicitations</label>
+    </customValue>
+    <customValue>
+        <fullName>no phone calls</fullName>
+        <default>false</default>
+        <label>no phone calls</label>
+    </customValue>
+    <customValue>
+        <fullName>no phone solicitations</fullName>
+        <default>false</default>
+        <label>no phone solicitations</label>
+    </customValue>
+    <customValue>
+        <fullName>only one solicitation a year</fullName>
+        <default>false</default>
+        <label>only one solicitation a year</label>
+    </customValue>
+    <customValue>
+        <fullName>don&apos;t share my name</fullName>
+        <default>false</default>
+        <label>don&apos;t share my name</label>
+    </customValue>
+    <description>Restrictions on contacting this person.</description>
+    <masterLabel>DoNot</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

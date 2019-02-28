@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>Weekly</fullName>
+        <default>false</default>
+        <label>Weekly</label>
+    </customValue>
+    <customValue>
+        <fullName>Every 2 Weeks</fullName>
+        <default>false</default>
+        <label>Every 2 Weeks</label>
+    </customValue>
+    <customValue>
+        <fullName>Monthly</fullName>
+        <default>false</default>
+        <label>Monthly</label>
+    </customValue>
+    <customValue>
+        <fullName>Every 2 Months</fullName>
+        <default>false</default>
+        <label>Every 2 Months</label>
+    </customValue>
+    <customValue>
+        <fullName>Quarterly</fullName>
+        <default>false</default>
+        <label>Quarterly</label>
+    </customValue>
+    <customValue>
+        <fullName>Every 6 Months</fullName>
+        <default>false</default>
+        <label>Every 6 Months</label>
+    </customValue>
+    <customValue>
+        <fullName>Annually</fullName>
+        <default>false</default>
+        <label>Annually</label>
+    </customValue>
+    <masterLabel>Periodicity</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>

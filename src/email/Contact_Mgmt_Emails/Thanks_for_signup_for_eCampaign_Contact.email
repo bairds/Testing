@@ -1,0 +1,16 @@
+<messaging:emailTemplate subject="Thanks for Signing Up for {!if(relatedTo.Campaign!=null, relatedTo.Campaign.Name, 'our Email List')}" recipientType="Contact" relatedToType="CampaignMember">
+<messaging:HTMLEmailBody >
+<apex:image id="Logo" value="https://c.na6.content.force.com/servlet/servlet.ImageServer?id=01580000001k86L&oid=00D80000000KCu0&lastMod=1403811634000" 
+height="100" width="400"/>
+<br/>
+Dear {!relatedTo.Contact.Firstname},<br/>
+<br/>
+Thank you for your interest in our {!if(relatedTo.Campaign!=null, relatedTo.Campaign.Name, 'work')}. <br/>
+<br/>
+{!if(relatedTo.Campaign!=null, relatedTo.Campaign.Description_Long__c, 'Check your email inbox for the latest information from us.')} <br/>
+<br/>
+Sincerely,<br/>
+<br/>
+Your friends at {!$Organization.Name}
+</messaging:HTMLEmailBody>
+</messaging:emailTemplate>

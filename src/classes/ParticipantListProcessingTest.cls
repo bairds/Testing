@@ -20,7 +20,7 @@ private class ParticipantListProcessingTest {
         ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
         
         processParticipantList PLPC = new processParticipantList(new ApexPages.StandardController(cm));
-        system.assertEquals(1,PLPC.AttendeesRSVPed.size());
+        system.assertEquals(1,PLPC.UnprocessedCMs.size());
         // These two fire when the AutoComplete chooses a person
         PLPC.attendee.Id = co.Id;
         PLPC.attendee.preAddToList(); 
@@ -31,8 +31,8 @@ private class ParticipantListProcessingTest {
         PLPC.attendee.Hours = 4;
 
         PLPC.processSelected();
-        system.assertEquals(1,PLPC.AttendeesAttended.size());
-        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.AttendeesAttended);
+        system.assertEquals(1,PLPC.UnprocessedAttendees.size());
+        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.UnprocessedAttendees);
 
         // PLPC.setCM(PLPC.AttendeesAttended[0]);
         PLPC.submitData();

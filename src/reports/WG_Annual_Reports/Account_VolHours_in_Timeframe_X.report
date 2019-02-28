@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Account.Addressee__c</field>
+    </columns>
+    <columns>
+        <field>Account.VolHours_in_Timeframe_X__c</field>
+    </columns>
+    <description>Just one line per account: name, addressee, whatever fields you want to add, and the total number of hours for the timeframe.  Perfect for an annual report.  Requires you to set the timeframe for the rollup field, too.  (See instructions.)</description>
+    <filter>
+        <criteriaItems>
+            <column>Account.VolHours_in_Timeframe_X__c</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>greaterThan</operator>
+            <value>0</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>Account_VolHours in Timeframe X</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>AccountList</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATE</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

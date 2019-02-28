@@ -1,0 +1,25 @@
+<messaging:emailTemplate subject="Thanks for signing up for {!relatedTo.campaign.name}" recipientType="Contact" relatedToType="CampaignMember">
+<messaging:plainTextEmailBody >
+Dear {!relatedTo.contact.firstname},
+
+Thank you for registering for the event {!relatedTo.campaign.name}.
+
+Your Name: {!relatedTo.contact.name}
+
+Where: {!relatedTo.campaign.Event_Location__c}.
+
+Date and Time: {!relatedTo.campaign.Event_Date_Time__c}.
+
+Description: {!relatedTo.campaign.Description_Long__c}.
+
+If you need to cancel or change your registration for any reason, please contact us at .....................
+ 
+Sincerely,
+Cahaba River Society
+
+
+
+(***Public_Event_Confirm_Contact VFEmail, Confirm Public Event Contact workflow***)
+
+</messaging:plainTextEmailBody>
+</messaging:emailTemplate>

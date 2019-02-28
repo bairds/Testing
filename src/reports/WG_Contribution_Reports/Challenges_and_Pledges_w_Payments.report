@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <aggregates>
+        <calculatedFormula>Opportunity.Amount:SUM  +  Opportunity.Amount:SUM</calculatedFormula>
+        <datatype>number</datatype>
+        <developerName>FORMULA1</developerName>
+        <isActive>false</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Challenge Total</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <aggregates>
+        <calculatedFormula>Opportunity.Amount:SUM + Opportunity.Pledge_Amount__c:MAX</calculatedFormula>
+        <datatype>number</datatype>
+        <developerName>FORMULA2</developerName>
+        <isActive>true</isActive>
+        <isCrossBlock>false</isCrossBlock>
+        <masterLabel>Pledge Total</masterLabel>
+        <scale>2</scale>
+    </aggregates>
+    <columns>
+        <field>Opportunity$Pledge_Amount__c</field>
+    </columns>
+    <columns>
+        <field>Opportunity$CloseDate</field>
+    </columns>
+    <columns>
+        <aggregateTypes>Sum</aggregateTypes>
+        <field>Opportunity.Contributions__r$Amount</field>
+    </columns>
+    <columns>
+        <field>Opportunity.Contributions__r$CloseDate</field>
+    </columns>
+    <description>Shows Challenges and Pledges with their contributions.  Adjust by date range as needed or by specific Challenge or Pledge.</description>
+    <filter>
+        <criteriaItems>
+            <column>Opportunity$RecordType</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>equals</operator>
+            <value>Opportunity.Challenge,Opportunity.Pledge</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Opportunity$Name</column>
+            <isUnlocked>false</isUnlocked>
+            <operator>contains</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Opportunity.Contributions__r$Name</field>
+        <sortByName>FORMULA2</sortByName>
+        <sortOrder>Desc</sortOrder>
+        <sortType>CustomSummaryFormula</sortType>
+    </groupingsDown>
+    <name>Challenges and Pledges w Payments</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Pledges_and_Challenges_with_Payments__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <showGrandTotal>false</showGrandTotal>
+    <showSubTotals>false</showSubTotals>
+    <timeFrameFilter>
+        <dateColumn>Opportunity$CloseDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

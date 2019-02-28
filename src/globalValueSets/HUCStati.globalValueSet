@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GlobalValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <customValue>
+        <fullName>1 Needs processing</fullName>
+        <default>false</default>
+        <label>1 Needs processing</label>
+    </customValue>
+    <customValue>
+        <fullName>6 Call to USGS errors</fullName>
+        <default>false</default>
+        <label>6 Call to USGS errors</label>
+    </customValue>
+    <customValue>
+        <fullName>2 Call to USGS timed out</fullName>
+        <default>false</default>
+        <label>2 Call to USGS timed out</label>
+    </customValue>
+    <customValue>
+        <fullName>4 No USGS HUC found for geocode</fullName>
+        <default>false</default>
+        <label>4 No USGS HUC found for geocode</label>
+    </customValue>
+    <customValue>
+        <fullName>5 No geocode in WaterGrass for this address</fullName>
+        <default>false</default>
+        <label>5 No geocode in WaterGrass for this address</label>
+    </customValue>
+    <customValue>
+        <fullName>Current</fullName>
+        <default>false</default>
+        <label>Current</label>
+    </customValue>
+    <customValue>
+        <fullName>3 Undeserializable response from USGS</fullName>
+        <default>false</default>
+        <label>3 Undeserializable response from USGS</label>
+    </customValue>
+    <customValue>
+        <fullName>7 Incorrect URL</fullName>
+        <default>false</default>
+        <label>7 Incorrect URL</label>
+    </customValue>
+    <customValue>
+        <fullName>Undeserializable response from USGS</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Undeserializable response from USGS</label>
+    </customValue>
+    <customValue>
+        <fullName>Incorrect URL</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Incorrect URL</label>
+    </customValue>
+    <customValue>
+        <fullName>No geocode in WaterGrass for this address</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>No geocode in WaterGrass for this address</label>
+    </customValue>
+    <customValue>
+        <fullName>No USGS HUC found for geocode</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>No USGS HUC found for geocode</label>
+    </customValue>
+    <customValue>
+        <fullName>Do not change</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Do not change</label>
+    </customValue>
+    <customValue>
+        <fullName>Internal Error</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Internal Error</label>
+    </customValue>
+    <customValue>
+        <fullName>No geocode for address</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>No geocode for address</label>
+    </customValue>
+    <customValue>
+        <fullName>USGS HUC doesn&apos;t exist</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>USGS HUC doesn&apos;t exist</label>
+    </customValue>
+    <customValue>
+        <fullName>Call to USGS timed out</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Call to USGS timed out</label>
+    </customValue>
+    <customValue>
+        <fullName>Needs processing</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Needs processing</label>
+    </customValue>
+    <customValue>
+        <fullName>Call to USGS errors</fullName>
+        <default>false</default>
+        <isActive>false</isActive>
+        <label>Call to USGS errors</label>
+    </customValue>
+    <description>Numbers indicate the order for processing non-current HUCs.</description>
+    <masterLabel>HUC Stati</masterLabel>
+    <sorted>false</sorted>
+</GlobalValueSet>
