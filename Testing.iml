@@ -791,6 +791,26 @@
                             <option name="name" value="generateMasterCampURLsTEST" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="wgHelpTab" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="wgHelpTabTest" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="AutoCompleteV2Full" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="showPicklistCustomization" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="showPicklistCustomizationTEST" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
                         </list>
                       </option>
                       <option name="name" value="ApexClass" />
@@ -860,6 +880,10 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="TY_Letter_Signature_Block_ExecDir" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="AutoCompleteV2Full" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
@@ -1194,10 +1218,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="LayoutCustomFields" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="listCampaignMembersBairdPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -1235,6 +1255,18 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="MCampaignURLsSection" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="MoveHUCToAccountPage" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="AutoCompleteV2Test" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="showPickListCustomizationPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
@@ -1413,6 +1445,14 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="TY_CSS_for_Sidebar" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="WaterGrassCSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="WaterGrassCSS.resource-meta.xml" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>

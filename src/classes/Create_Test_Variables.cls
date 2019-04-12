@@ -23,7 +23,7 @@ public Create_Test_Variables() {
     insert testaccount;
     TestContact = new Contact (lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
     insert testcontact; 
-    TestLead = new Lead (firstname = 'Lead', lastname = 'TestLead', email='testlead@dontbotherme.org', company='TestCompany');
+    TestLead = new Lead (firstname = 'Lead', lastname = 'TestLead', email='testlead@dontbotherme.org', company='TestCompany', PostalCode='22222');
     insert TestLead;
     }
 
@@ -117,4 +117,5 @@ public Lead fetchTestLead() {
         system.debug('Just inserted campaign Stati ' + ListCSs);
         return ListCSs;
     }
+
 }

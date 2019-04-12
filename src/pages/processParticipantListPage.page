@@ -29,7 +29,6 @@
                         <apex:actionFunction immediate="true" action="{!attendee.preAddToList}" name="preSubmit" oncomplete="addToList()" />
                         <apex:actionFunction action="{!attendee.addToList}" name="addToList" rerender="participant_list"  />
 
-
                         <!-- <apex:inputHidden value="{!attendee.Id}" id="attendeeId" />-->
 
                     </div>

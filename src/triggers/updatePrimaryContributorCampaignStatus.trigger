@@ -7,6 +7,6 @@ trigger updatePrimaryContributorCampaignStatus on Opportunity (after insert, aft
     */
 
     if(trigger.isInsert || trigger.isUpdate) {
-        // updatePrimaryContributorCampaignStatus.UpdateCMStatus(trigger.new);
+        updatePrimaryContributorCampaignStatus.UpdateCMStatus(trigger.new);
     }
 }

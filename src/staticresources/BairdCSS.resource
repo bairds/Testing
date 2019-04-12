@@ -103,9 +103,9 @@ div[color] div[color="green"] div.buttons {
 }
 
 .infolabel {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .repeatrow{

@@ -3,6 +3,7 @@
 // category.
 // July 2016 Bulkified with second method
 // Sept 2018 Remove single trigger; just use bulkified.
+// Jan 2019 Upgraded custom settings to custom metadata.
 public class updatePrimaryContributorCampaignStatus {
     
     

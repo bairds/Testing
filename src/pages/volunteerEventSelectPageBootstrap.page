@@ -4,8 +4,7 @@
 
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
     <apex:includeScript value="{!$Resource.JoseJS}"/>
-    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
-    <apex:stylesheet value="{!$Resource.BairdCSS}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -53,7 +52,7 @@
                                 <div class="hidden-md hidden-lg hidden-xl col-xs-4 cw">
                                     <apex:outputText value=" "/>
                                 </div>
-                                <div class="col-md-12 col-xs-8 alignleft">
+                                <div class="col-md-12 col-xs-8 alignleft cb">
                                     <a href="{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?cid={!c.id}{!query}"><b>{!c.Name}</b></a>
                                 </div>
                             </div>

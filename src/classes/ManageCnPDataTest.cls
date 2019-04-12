@@ -2088,7 +2088,6 @@ test.stoptest();
         system.AssertEquals(TestAcct.ID, Payments[0].AccountId); 
         system.AssertEquals(TestCtct.ID, Payments[0].Contact__c); 
         system.AssertEquals(TestCamp.ID,Payments[0].CampaignId);
-        system.Assert(Payments[0].name.contains('Testcampaign'));
             
         Contact resultContact = [select leadsource from Contact where id =: Payments[0].Contact__c];
          system.assertEquals('Web',resultContact.leadsource);
@@ -2253,7 +2252,6 @@ test.stoptest();
         system.debug(Payments);
         system.AssertEquals(1,Payments.size()); 
         system.AssertEquals(TestCamp.ID,Payments[0].CampaignId);
-        system.Assert(Payments[0].name.contains('Testcampaign'));
     } // end test      
 
     // single transaction test with recurring, existing contact, campaign specified, installments=999
@@ -2415,7 +2413,6 @@ test.stoptest();
         system.AssertEquals(5,Payments[1].amount);
         //system.AssertEquals(TestAcct.ID, Payments[0].AccountId);
         //system.AssertEquals(TestCtct.ID, Payments[0].Contact__c);
-        system.AssertEquals('Testcampaign', Payments[0].Campaign.Name);
         system.AssertEquals(TestCamp.ID,Payments[0].CampaignId);
         system.AssertEquals('Recurring Payment begun on ' + System.today().format(),Payments[0].Name);
     }    
@@ -2703,7 +2700,6 @@ XMLstring += '</CnPTransactionData>';
         system.AssertEquals(1,Payments.size());
         system.AssertEquals(1.00,Payments[0].amount);
         system.AssertEquals(TestCamp.ID,Payments[0].CampaignId);
-        system.Assert(Payments[0].name.contains('Testcampaign'));
     } // end test  
 
 // single transaction test with existing contact, campaign specified in orderItem

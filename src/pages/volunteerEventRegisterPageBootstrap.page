@@ -4,8 +4,7 @@
 
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
     <apex:includeScript value="{!$Resource.JoseJS}"/>
-    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
-    <apex:stylesheet value="{!$Resource.BairdCSS}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -64,6 +63,12 @@
                                 {!title}
                             </div>
                         </apex:outputPanel>
+                        <apex:outputPanel rendered="{!step=='4'}">
+                            <div class="WGPageTitle col-sm-8 align-middle" color="TitleColor"><br/>
+                                Thank you for signing up for our {!c.name}.
+                            </div>
+                        </apex:outputPanel>
+
                     </div>
                 </apex:outputPanel>
 
@@ -75,8 +80,6 @@
 
                 <apex:outputPanel rendered="{!step=='4'}">
                     <div class="WGPageTitle col-xs-12 align-middle" color="TitleColor"><br/>
-                        Thank you for signing up for our {!c.name}.
-                        <br/><br/>
                         You'll receive a confirmation email shortly.
                         <br/>
                         <br/>

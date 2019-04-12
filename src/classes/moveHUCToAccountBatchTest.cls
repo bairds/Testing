@@ -14,19 +14,20 @@ private class moveHUCToAccountBatchTest {
         List<Account> ListAcct = new List<Account>();
         Account a = new Account();
         a.Name = 'test huc address 1';         
-        a.BillingStreet = '1100 N. Main, Suite 210';
-        a.BillingCity = 'Ann Arbor';
-        a.BillingState = 'MI';
-        a.BillingPostalCode = '48104';  
-        a.BillingLatitude = 42.29382;
-        a.BillingLongitude = -83.746775; 
-            a.Billing_HUC__c = h.Id;
+//        a.BillingStreet = '1100 N. Main, Suite 210';
+//        a.BillingCity = 'Ann Arbor';
+//        a.BillingState = 'MI';
+//        a.BillingPostalCode = '48104';
+//        a.BillingLatitude = 42.29382;
+//        a.BillingLongitude = -83.746775;
+//            a.Billing_HUC__c = h.Id;
         a.ShippingStreet = '1100 N. Main, Suite 210';
         a.ShippingCity = 'Ann Arbor';
         a.ShippingState = 'MI';
         a.ShippingPostalCode = '48104';  
         a.ShippingLatitude = 42.29382;
-        a.ShippingLongitude = -83.746775;   
+        a.ShippingLongitude = -83.746775;
+            a.Shipping_HUC__c = h.Id;
         ListAcct.add(a);
         
         Account b = new Account();
@@ -80,7 +81,7 @@ private class moveHUCToAccountBatchTest {
         system.assertEquals('Current',a.HUC_Status__c,'moveHUCToAccountBatch failed to bring over Billing_Status__c into HUC_Code__c.'); 
         system.assertEquals('Text in error field for test purposes',a.HUC_Errors__c,'moveHUCToAccountBatch failed to bring over HUC_Errors__c into HUC_Code__c.'); 
         system.assertEquals('Potomac',a.HUC_Watershed__c,'moveHUCToAccountBatch failed to bring over Watershed into HUC_Watershed__c.');  
-        system.assertEquals('Lower Rock Creek',a.HUC_Watershed__c,'moveHUCToAccountBatch failed to bring over Watershed into HUC_SubWatershed__c.');  
+        system.assertEquals('Lower Rock Creek',a.HUC_Subwatershed__c,'moveHUCToAccountBatch failed to bring over Watershed into HUC_SubWatershed__c.');
     }       
     }
 
@@ -108,8 +109,7 @@ private class moveHUCToAccountBatchTest {
         system.assertEquals('Current',a.HUC_Status__c,'moveHUCToAccountBatch failed to bring over Billing_Status__c into HUC_Code__c.'); 
         system.assertEquals(null,a.HUC_Errors__c,'moveHUCToAccountBatch failed to bring over null value for HUC_Errors__c into HUC_Code__c.'); 
         system.assertEquals(null,a.HUC_Watershed__c,'moveHUCToAccountBatch failed to bring over null value for Watershed into HUC_Watershed__c.');  
-        system.assertEquals('Lower Rock Creek',a.HUC_Watershed__c,'moveHUCToAccountBatch failed to bring over Watershed into HUC_SubWatershed__c.');  
+        system.assertEquals('Lower Rock Creek',a.HUC_Subwatershed__c,'moveHUCToAccountBatch failed to bring over Watershed into HUC_SubWatershed__c.');
     }       
-    }    
-    
+    }
 }

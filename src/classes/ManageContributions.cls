@@ -114,6 +114,7 @@ public class ManageContributions{
         if (PledgeIds == null) PledgeIds = new Set<Id>();
         // Get the list of fields considered individual contributions from the custom setting
         DonationRTIDs = new Set<Id>();
+        membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
         List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
         for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);

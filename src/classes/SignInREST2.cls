@@ -47,6 +47,7 @@ global with sharing class SignInREST2 {
                             CampaignMember.Lead.Street, CampaignMember.Lead.City, CampaignMember.Lead.State, CampaignMember.Lead.Country,
                             CampaignMember.Lead.PostalCode FROM Campaign.CampaignMembers)
                     FROM Campaign WHERE IsActive = true AND Id = :campaignId];
+                    system.debug('UserId is ' + SelectedCampaign.OwnerId);
                     User Organizer = [Select Phone, Email, FirstName, LastName from User where Id =: SelectedCampaign.OwnerId];
                     List<CampaignMemberWrapper> CMWs = new List<CampaignMemberWrapper>();
                     for (CampaignMember cm : SelectedCampaign.CampaignMembers)
@@ -158,6 +159,7 @@ global with sharing class SignInREST2 {
                     cm.Interests__c = member.Interests;
                     cm.Add_To_TY_Message__c = member.AddToTyMessage;
                     if (member.VolunteerHours != null) cm.Hours__c = member.VolunteerHours;
+                    system.debug('Setting.HourlyVolunteerRate__c is' + Setting.HourlyVolunteerRate__c);
                     if (member.VolunteerHours != null && Setting.HourlyVolunteerRate__c != null) cm.HoursValue__c = cm.Hours__c*Setting.HourlyVolunteerRate__c;
                     cm.TempAndroidId__c = member.tempId;
                     if (member.InviteNextLevel == true) cm.Invite_to_Next_Level__c = member.InviteNextLevel;

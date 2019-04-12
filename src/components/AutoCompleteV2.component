@@ -66,6 +66,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
 	<apex:attribute name="placeholder" type="String" default="Search"
 					description="Text to display as a placeholder in the search input box." />
+    <apex:attribute name="onChange"
+                    description="JS method to be invoked when the value changes"
+                    type="String" />
     <!--Required js files-->
     <apex:outputPanel rendered="{!importJquery}">
         <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
@@ -130,9 +133,15 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                        
                        if('{!cacheField}' !='') {
                            $elem.select2("data", {id: "{!targetFieldVar}", text: "{!cacheField}"})  
-                       }  
-                      
-                    },
+                       }
+
+
+                if({!NOT(ISNULL(onChange))}){
+                    $elem.on("select2-selecting",{!IF(ISNULL(onChange), 'function(e){}',onChange)});
+                }
+
+
+            },
                     
             triggerSearch :function(val){
                 if(prevVal{!randomJsIden} != val){

@@ -1405,6 +1405,32 @@ Education and Outreach</description>
         <errorDisplayField>LastName</errorDisplayField>
         <errorMessage>Test C Fail</errorMessage>
     </validationRules>
+    <validationRules>
+    <fullName>Choose_One_of_the_Emails_to_be_Preferred</fullName>
+    <active>false</active>
+    <description>If there is no Preferred Email chosen, and two (or more) email addresses are filled in, force the selection of one to be preferred.</description>
+    <errorConditionFormula>and(
+        or(
+        and( not(isblank(Personal_Email__c)) , not(isblank(Work_Email__c)) ) ,
+        and( not(isblank(Personal_Email__c)),not(isblank(Other_Email__c)) ) ,
+        and( not(isblank(Work_Email__c)) , not(isblank(Other_Email__c)) )
+        ) ,
+        text( Preferred_Email__c ) = null )</errorConditionFormula>
+    <errorDisplayField>Preferred_Email__c</errorDisplayField>
+    <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
+</validationRules>
+    <validationRules>
+        <fullName>Preferred_Email_Choice_Must_Exist</fullName>
+        <active>true</active>
+        <description>Show error if Preferred Email selection is not populated.</description>
+        <errorConditionFormula>or(
+            and( ispickval(Preferred_Email__c , &quot;Personal&quot;) , Personal_Email__c = null ),
+            and( ispickval(Preferred_Email__c , &quot;Work&quot;) , Work_Email__c = null ) ,
+            and( ispickval(Preferred_Email__c , &quot;Alternate&quot;) , Other_Email__c = null )
+            )</errorConditionFormula>
+        <errorDisplayField>Preferred_Email__c</errorDisplayField>
+        <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>Contacts_in_this_Organization</fullName>
         <availability>online</availability>

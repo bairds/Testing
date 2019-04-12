@@ -4,7 +4,6 @@ public class Public_Event_Signin_Controller {
 public Public_Event_Signin_Controller(ApexPages.StandardController stdController) {
     createNewLead = false;
 	 interestselection = new List<String>{};
-	
 }
 
 //DECLARE VARIABLES 

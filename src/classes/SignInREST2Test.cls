@@ -12,7 +12,7 @@ private class SignInREST2Test {
 
             populateWGCustomSettings.populateAllSettings();
         }
-        CreateCustomSettings.createCustomSettings();
+        // CreateCustomSettings.createCustomSettings();
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAcct = ctv.fetchTestAccount();
         System.assertEquals('TestAccount', TestAcct.Name);
@@ -128,9 +128,8 @@ private class SignInREST2Test {
         System.assertEquals('donor',CR.CMWs[0].DonorLevel);
         System.assertEquals('TestContact',CR.CMWs[0].lastName,'Failed to find right campaignmember.contact.lastname');
         System.assertEquals(System.today().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date');
-        // system.assertEquals(system.now().date().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date__c);
 
-        System.assertEquals(CR.CMWs[0].status,'Added to campaign');
+        // System.assertEquals('Donated',CR.CMWs[0].status);
         // system.debug('CampaignResponse is ' + CR);
         //system.debug('CR.CMExtendeds is ' + CR.CMExtendeds);
         //List<SignInREST2.CMExtended> ListCME = CR.CMExtendeds;
@@ -170,7 +169,7 @@ private class SignInREST2Test {
         System.debug('CR.CampMemberWrapper CMWs donorlevel is ' + CR.CMWs[0].DonorLevel);
         System.assertEquals('donor',CR.CMWs[0].DonorLevel);
         System.assertEquals('TestContact',CR.CMWs[0].lastName,'Failed to find right campaignmember.contact.lastname');
-        System.assertEquals(CR.CMWs[0].status,'Added to campaign');
+        // System.assertEquals('Donated',CR.CMWs[0].status);
         Create_Test_Variables ctv = new Create_Test_Variables();
         System.assertEquals(CR.EventLocation,ctv.TestCampaign.Event_Location__c);
         System.assertEquals(CR.EventStartTime,ctv.TestCampaign.Event_Date_Time__c);
@@ -332,7 +331,10 @@ private class SignInREST2Test {
         System.debug('CampaignMembers are now ' + [select Id, Status from CampaignMember]);
         CampaignMember cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Invite_to_Next_Level__c, Nr_in_Group__c FROM CampaignMember WHERE Id =: cm.Id];
         System.assertEquals('Attended', cm2.Status, 'Status update failed!');
-        System.assertEquals(48.28, cm2.HoursValue__c, 'Value of hours not calculated corrrectly.');
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        if (Setting.HourlyVolunteerRate__c!=null) {
+            System.assertEquals(2*Setting.HourlyVolunteerRate__c, cm2.HoursValue__c, 'Value of hours not calculated corrrectly.');
+        }
         System.assertEquals(true, cm2.Invite_to_Next_Level__c, 'InviteNextLevel not updated in database.');
         System.assertEquals(1, cm2.Nr_in_Group__c, 'Nr_in_Group__c should be one for every entry.');
         System.debug('On update rest response is ' + res.responseBody);

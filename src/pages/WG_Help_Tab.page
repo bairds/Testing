@@ -1,4 +1,4 @@
-<apex:page >
+<apex:page controller="wgHelpTab">
 <apex:stylesheet value="{!$Resource.wg_styles}"/>
 
 <p align="right"><apex:image url="{!$Resource.WGHelpLogo}" width="400" height="123"/></p>
@@ -23,7 +23,24 @@ We won't always be available, but if we are we'll try to help out quickly.</li><
 
 <p><li>If you're on a Salesforce page (looking at a contact, for instance) and you need help on the functions available on that 
 specific page, you will find a help link specific to the page in the upper left".</li></p>
-
 </b>
+<apex:form>
+<apex:pageBlock title="WaterGrass Settings">
+    <apex:pageBlockSection columns="4">
+        <apex:pageBlockSectionItem>
+            OrganizationId (18 character):
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem>
+            {!OrgId18}
+        </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem>
+        Base URL for Signup Site (You may need to change it to "http<i><b>s</b></i>://orgname.<i><b>secure</b></i>.force.com".) :
+    </apex:pageBlockSectionItem>
+    <apex:pageBlockSectionItem>
+            {!BaseURL}
+    </apex:pageBlockSectionItem>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:form>
 </body>
 </apex:page>
