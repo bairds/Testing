@@ -7,7 +7,8 @@ global with sharing class Email_Signup_Controller {
     WGSettings__mdt Setting;
     public static string mailing_list;
     public Campaign camp {get; set;}
-    public string DisplayName {get; set;}
+    public string OrgName {get; set;}
+    public Boolean Thankspage {get; set;}
     
     
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
@@ -22,6 +23,7 @@ global with sharing class Email_Signup_Controller {
         }
         Setting= WGHelpers.getWGSettings();
         mailing_list = Setting.online_signup_newsletter__c;
+        ThanksPage = false;
     }
     
     // public Email_Signup_Controller(){}
@@ -60,6 +62,7 @@ global with sharing class Email_Signup_Controller {
                 /*if (templead.email == null) */ templead.email = pcontact.email;
                 tempLead.LeadSource = 'Online Email Signup';
                 tempLead.email=pcontact.email;
+                if (OrgName!=null) tempLead.Company=OrgName;
                 if (string.isBlank(tempLead.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                     tempLead.Mailing_Lists__c = getMailingList();
                 // If not blank, send to second method
@@ -73,7 +76,7 @@ global with sharing class Email_Signup_Controller {
                 Leadid = stype == 'Lead'?  tempLead.id : null,
                 ContactId = stype == 'Contact'?  tempContact.id : null,
                 CampaignId = camp.id,
-                Questions_or_Comments__c = pcontact.Description,
+                Questions_or_Comments__c = 'Signed up for ' + OrgName + ' with comments ' + pcontact.Description,
                 Status = 'Responded Yes');
             CMList.add(cm);
         }
@@ -87,9 +90,17 @@ global with sharing class Email_Signup_Controller {
         }
         // Right here insert Lead or contact into method call
         // sendAcknowledgementEmail(stype);
+        string APString = string.ValueOf(apexPages.currentPage());
+        system.debug('APString is ' + APstring);
         PageReference Thanks_Page = Page.Email_Signup_Thank_Page;
-        Thanks_Page.setRedirect(false);
-        return Thanks_Page;
+        if (APString.CONTAINS('EmailSignupPageBootstrap')){
+            ThanksPage = true;
+            return null;
+        } else {
+            Thanks_Page = Page.Email_Signup_Thank_Page;
+            Thanks_Page.setRedirect(false);
+            return Thanks_Page;
+        }
         //return null;
     }
     
@@ -176,41 +187,6 @@ global with sharing class Email_Signup_Controller {
         }
         return ret;
     }
-/*    
-    public void sendAcknowledgementEmail(string stype) {
-        List<EmailTemplate> ETs;
-        // Will only fire if there's a corresponding email template.
-        // If no campaign, finds the EAlert template.  Otherwise, finds the ECampaign template
-        if (stype == 'Contact') {
-            ETs = Camp == null ?
-                [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_Signing_Up_for_EAlerts'] :
-            [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signup_for_eCampaign_Contact'] ;
-                }
-        else {
-            ETs = Camp == null ?
-                [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signing_up_for_emails'] :
-            [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signup_for_eCampaign_Lead'] ;
-                }
-        if(ETs.size() > 0) {
-            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-            
-            mail.setSenderDisplayName(DisplayName);
-            // mail.setWhatID JOSE THIS NEEDS TO CONNECT TO THE RELATEDTO IN THE EMAIL.
-            // WHATID CAN ONLY BE LEAD, OPPORTUNITY, CONTACT, CAMPAIGN, ETC.
-            // SO WE COULD USE CAMPAIGN.
-            mail.setTargetObjectId(sid); // Specify who the email should be sent to.
-            mail.setTemplateId(ETs[0].id);
-            
-            Try{
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[] {mail});
-            }
-            Catch(EmailException e) {
-                system.debug('EmailException is ' + e);
-                //LogError.LogEmailError(e);
-            }
-        }
-    } 
-*/
 // JAGMOHAN, THIS IS THE METHOD THAT THE REST API SHOULD FEED THE CONTACT PARAMETERS INTO.
 // IT TAKES CONTACT.FIRSTNAME, LASTNAME, EMAIL, MAILINGSTREET, MAILINGCITY, MAILINGSTATE, MAILINGPOSTALCODE, PHONE
 // FIRST AND LASTNAME, EMAIL, AND MAILINGPOSTALCODE ARE ALL REQUIRED BECAUSE THEY ARE USED IN THE identifyorcreatePerson method.

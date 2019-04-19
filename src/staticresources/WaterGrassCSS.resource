@@ -67,6 +67,10 @@
 
 .h100 { height: 100%; }
 
+.jcr {
+    display: flex;
+    justify-content: right; }
+
 .m11 { margin: 11px; }
 
 .ma { margin: auto; }

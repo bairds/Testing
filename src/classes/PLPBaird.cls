@@ -1,5 +1,7 @@
 // Jan 31 Jose revises so users can add campaign members without refreshing whole page and erasing data they've already input.
 // Nov 10 2016 Baird makes sure this inserts addressee and dear.
+// Apr 2019 Baird rewrites to avoid using overly engineered code.
+
 public class PLPBaird
 {
     public List<Attendee> UnprocessedAttendees {get; set;}
@@ -130,31 +132,35 @@ public class PLPBaird
 
 
     public void processSelected() {
-        newContactForm = false;
-        UpdateCMs = new List<CampaignMember>();
-        TotalHours = 0;
+        if (Camp.Event_Date_Time__c == null) {
+            ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'Please enter the date and time of the event below.'));
+        } else {
+            newContactForm = false;
+            UpdateCMs = new List<CampaignMember>();
+            TotalHours = 0;
 
-        for (Attendee a : UnprocessedAttendees) {
-            System.debug('Going through UnprocessedCMs to add to UpdateAttendees');
-            // MAKE SURE HOURS ARE NULL RATHER THAN 0
-            if (a.Hours == 0)
-                a.Hours = null;
+            for (Attendee a : UnprocessedAttendees) {
+                System.debug('Going through UnprocessedCMs to add to UpdateAttendees');
+                // MAKE SURE HOURS ARE NULL RATHER THAN 0
+                if (a.Hours == 0)
+                    a.Hours = null;
 
-            // If user has changed hours, comments, rating, or status
+                // If user has changed hours, comments, rating, or status
 
-            if (a.Hours != null || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != PLPBaird.DefaultRating || a.OriginalStatus != a.CM.Status) {
-                /*system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != DefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != DefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
+                if (a.Hours != null || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != PLPBaird.DefaultRating || a.OriginalStatus != a.CM.Status) {
+                    /*system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != DefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != DefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
                 SYSTEM.debug('a.Hours are ' + a.Hours + 'and a.Supervisor_Satisfaction is '+ a.Contribution.Supervisor_Satisfaction__c + ' and Default RAting is ' + DefaultRating);*/
-                UpdateAttendees.add(a);
-                if (a.Hours != null)
-                    TotalHours += a.Hours;
+                    UpdateAttendees.add(a);
+                    if (a.Hours != null)
+                        TotalHours += a.Hours;
 
-                if (UpdateAttendees.size() == 0)
-                    ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'No members were processed'));
+                    if (UpdateAttendees.size() == 0)
+                        ApexPages.addMessage(new ApexPages.Message(ApexPages.Severity.ERROR, 'No members were processed'));
 
-                if (!ApexPages.hasMessages())
-                    system.debug('Error messages are ' + ApexPages.getMessages());
+                    if (!ApexPages.hasMessages())
+                        system.debug('Error messages are ' + ApexPages.getMessages());
                     review = true;
+                }
             }
         }
     }
@@ -208,11 +214,14 @@ public class PLPBaird
                     Status = 'Attended'
             );
             insert newcm;
-            system.debug('After inserting new campaignMember, does it have a name? ' + newcm.Name);
+            CampaignMember ShowCM = [select Id, Name, ContactId, Contact.FirstName, Contact.LastName, Contact.Email, Contact.AccountId, LeadId, Lead.FirstName,
+            Lead.LastName, Lead.IsConverted, Hours__c, Status, Role__c, Processed__c
+            from CampaignMember where id =: newcm.Id];
+            system.debug('After inserting new campaignMember, does it have a name? ' + showcm.Name);
             // newcm.lastname = newcm.contact.lastname == null ? newcm.lead.lastname : newcm.contact.lastname;
-            ListCMs.add(newcm);
+            ListCMs.add(showcm);
 
-            UnprocessedAttendees.add(new Attendee(newcm));
+            UnprocessedAttendees.add(new Attendee(showcm));
             system.debug('After AddToList(), UnprocessedAttendees number ' + UnprocessedAttendees.size());
             integer j = UnprocessedAttWrapped.size();
             UnprocessedAttWrapped = new List<AttendeeWrapper>();
@@ -253,40 +262,35 @@ public class PLPBaird
 
 //Submit Data
     public PageReference submitData(){
-        List<Opportunity> InsertOpps = new List<Opportunity>();
+            List<Opportunity> InsertOpps = new List<Opportunity>();
 
-        if(Camp.Event_Date_Time__c == null) {
-            Camp.Event_Date_Time__c = attendee.Contribution.CloseDate;
-            update Camp;
-        }
+            // TRANSFER ATTENDEE INFO INTO THE PROPER CAMPAIGNMEMBER FIELDS
+            system.debug('UpdateAttendees create the Opps; they include ' + UpdateAttendees);
+            For (Attendee a : UpdateAttendees) {
+                // SAVE ATTENDEE INFO INTO CAMPAIGN MEMBER
+                a.CM.Hours__c = a.Hours;
+                a.CM.Supervisor_Satisfaction__c = a.Contribution.Supervisor_Satisfaction__c;
+                a.CM.Comments__c = a.Comments;
+                a.CM.Leadership_Level__c = a.Contribution.Leadership_Level__c;
+                a.CM.Processed__c = true;
+                UpdateCMs.add(a.CM);
+                Opportunity opp = createContribution(a);
 
-        // TRANSFER ATTENDEE INFO INTO THE PROPER CAMPAIGNMEMBER FIELDS
-        system.debug('UpdateAttendees create the Opps; they include ' + UpdateAttendees);
-        For (Attendee a : UpdateAttendees) {
-            // SAVE ATTENDEE INFO INTO CAMPAIGN MEMBER
-            a.CM.Hours__c = a.Hours;
-            a.CM.Supervisor_Satisfaction__c = a.Contribution.Supervisor_Satisfaction__c;
-            a.CM.Comments__c = a.Comments;
-            a.CM.Leadership_Level__c = a.Contribution.Leadership_Level__c;
-            a.CM.Processed__c = true;
-            UpdateCMs.add(a.CM);
-            Opportunity opp = createContribution(a);
+                if (opp != null)
+                    InsertOpps.add(opp);
+            }
 
-            if (opp != null)
-                InsertOpps.add(opp);
-        }
+            SYSTEM.DEBUG('After updating CMs from Attendee data, the UpdateCMs list is ' + UpdateCMs);
+            if (UpdateCMs.size() > 0) update UpdateCMs; // We set all the CMs in the AttendeeRSVPed list to 'processed' so we won't pull them in the next batch.
+            system.debug('InsertOpps is ' + InsertOpps);
+            system.debug('UpdateCMs is ' + UpdateCMs);
+            if (InsertOpps.size() > 75)
+                Id batchId = Database.executeBatch(new OpportunityBatch(InsertOpps), 75); else if (InsertOpps.size() > 0) insert InsertOpps;
 
-        SYSTEM.DEBUG('After updating CMs from Attendee data, the UpdateCMs list is ' + UpdateCMs);
-        if (UpdateCMs.size() > 0) update UpdateCMs; // We set all the CMs in the AttendeeRSVPed list to 'processed' so we won't pull them in the next batch.
-        system.debug('InsertOpps is ' + InsertOpps);
-        system.debug('UpdateCMs is ' + UpdateCMs);
-        if (InsertOpps.size() > 75)
-            Id batchId = Database.executeBatch(new OpportunityBatch(InsertOpps), 75);
-        else if (InsertOpps.size() > 0) insert InsertOpps;
+            PageReference nextPage = new PageReference('/' + Camp.Id);
+            nextPage.setRedirect(true);
+            return nextPage;
 
-        PageReference nextPage = new PageReference('/'+Camp.Id);
-        nextPage.setRedirect(true);
-        return nextPage;
     }
 
 
