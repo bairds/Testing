@@ -1,25 +1,23 @@
 // Jan 7 2017 Included two tests for the insertEmailListContact()for the RESTEmail controller can use this too.
 // Feb 2019 Switch from WG_Settings to WGSettings__mdt
-  
+
 @isTest
 private class Email_Signup_Test {
-    private static string baseUrl = 'http://www.google.com/recaptcha/api/verify'; 
+    private static string baseUrl = 'http://www.google.com/recaptcha/api/verify';
 
-    
+
     // Test for new signup = existing contact       
 public static testMethod void Email_Signup_Test1() {
-    
+
         Account Testaccount = new Account (name='TestAccount');
         insert Testaccount;
         Contact TestContact = new Contact (firstname='Test', lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
         insert Testcontact;
         Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', email = 'testlead@dontbotherme.org');
-        insert TestLead; 
+        insert TestLead;
 
 ApexPages.StandardController sc = new ApexPages.StandardController(testcontact);
 Email_Signup_Controller ECR1 = new Email_Signup_Controller(sc);
-    // pageRef = Page.Email_Signup_For_Campaign;
-    // Test.setCurrentPage(pageRef);
     boolean testemail;
     if (Limits.getLimitEmailInvocations() > Limits.getEmailInvocations()) testemail = true;
     Integer emailbefore = Limits.getEmailInvocations();
@@ -32,7 +30,8 @@ Email_Signup_Controller ECR1 = new Email_Signup_Controller(sc);
     }
 
 // Test for new signup = existing lead      
-public static testMethod void Email_Signup_Test2() {
+@istest
+public static void Email_Signup_Test2() {
     
         Account Testaccount = new Account (name='TestAccount');
         insert Testaccount;
@@ -44,8 +43,6 @@ public static testMethod void Email_Signup_Test2() {
         
 ApexPages.StandardController sc = new ApexPages.StandardController(testcontact);
 Email_Signup_Controller ECR2 = new Email_Signup_Controller(sc);
-    //PageReference pageRef = Page.Email_Signup_For_Campaign;
-    //Test.setCurrentPage(pageRef);
     ECR2.pcontact.lastname = 'Lead';
     ECR2.pcontact.firstname = 'Test';
     ECR2.pcontact.email = 'testlead@dontbotherme.org';
@@ -69,8 +66,6 @@ public static testMethod void Email_Signup_Test3() {
         
 ApexPages.StandardController sc = new ApexPages.StandardController(testcontact);
 Email_Signup_Controller ECR3 = new Email_Signup_Controller(sc);
-    //PageReference pageRef = Page.Email_Signup_For_Campaign;
-    //Test.setCurrentPage(pageRef);
     ECR3.pcontact.lastname = 'Newlead';
     ECR3.pcontact.firstname = 'Test';
     ECR3.pcontact.email = 'nottestlead@dontbotherme.org';
@@ -182,14 +177,14 @@ Email_Signup_Controller ECR8 = new Email_Signup_Controller(sc);
            
     }
 // Test for new signup = existing lead with different email who is already on list; 
-// Does email switch to new email?
+// Does email switch to new email?  And is Description added to Lead.Description?
 public static testMethod void Email_Signup_Test9() {
      
         Account Testaccount = new Account (name='TestAccount');
         insert Testaccount;
         Contact TestContact = new Contact (firstname='Test', lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
         insert Testcontact;
-        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', 
+        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', Description = 'Original Description',
             email = 'testlead@dontbotherme.org', PostalCode = '22222',  mailing_lists__c = 'e-newsletter');
         insert TestLead;
 
@@ -202,10 +197,14 @@ Email_Signup_Controller ECR9 = new Email_Signup_Controller(sc);
     ECR9.pcontact.firstname = 'Test';
     ECR9.pcontact.MailingPostalCode = '22222';
     ECR9.pcontact.email = 'testlead2@dontbotherme.org';
+    ECR9.pcontact.description = 'New Description';
     ECR9.submit();
-    system.assertEquals('testlead2@dontbotherme.org', [select id, email from Lead where
-        lastname = 'Lead'][0].email);              
-    }
+    List<Lead> resultsLead = [select id, description, email from Lead where
+            lastname = 'Lead'];
+    system.assertEquals('testlead2@dontbotherme.org', resultsLead[0].email);
+    system.assertEquals('Original Description; New Description', resultsLead[0].description);
+
+}
    
   
 public static testMethod void Email_Signup_w_Campaign() {     
@@ -277,6 +276,35 @@ Email_Signup_Controller ECR10 = new Email_Signup_Controller(sc);
         system.assertEquals('testcontact@dontbotherme.org', [select id, email from Contact where
                                                           lastname = 'TestContact'][0].email);              
     } // end test
-    
-    
+    // Test for new signup = existing contact
+    public static testMethod void SetUpTrial(){
+
+        Account Testaccount = new Account (name='TestAccount');
+        insert Testaccount;
+        Contact TestContact = new Contact (firstname='Test', lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
+        insert Testcontact;
+        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', email = 'testlead@dontbotherme.org');
+        insert TestLead;
+
+        ApexPages.StandardController sc = new ApexPages.StandardController(testcontact);
+        Email_Signup_Controller ECR1 = new Email_Signup_Controller(sc);
+        boolean testemail;
+        if (Limits.getLimitEmailInvocations() > Limits.getEmailInvocations()) testemail = true;
+        Integer emailbefore = Limits.getEmailInvocations();
+        ECR1.pcontact.lastname = 'TestContact';
+        ECR1.pcontact.firstname = 'Test';
+        ECR1.pcontact.email = 'testcontact@dontbotherme.org';
+        ECR1.SetUpTrial = true;
+        ECR1.OrgName = 'TestOrgName';
+        ECR1.submit();
+        system.assertEquals(true, [select id, mailing_lists__c from Contact where
+                lastname = 'TestContact'][0].mailing_lists__c.contains('enewsletter'));
+        List<Task> ConfirmTask = [SELECT Subject, WhatId, WhoId, OwnerId, Status, Type, ReminderDateTime from Task];
+        system.assertEquals(1,ConfirmTask.size());
+        system.assertEquals(TestContact.Id,ConfirmTask[0].WhoId);
+        system.assertEquals(system.now().addHours(24),ConfirmTask[0].ReminderDateTime);
+        system.assertEquals('Create trial database for TestOrgName',ConfirmTask[0].Subject,'OrgName existed but did not get inserted into Subject.');
+    }
+
+
 }

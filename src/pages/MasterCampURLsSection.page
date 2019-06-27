@@ -36,9 +36,9 @@
         }
 
     </script>
-    <apex:form>
+    <apex:form >
         <apex:pageBlock title="URLs for signup pages">
-            <apex:pageMessages/>
+            <apex:pageMessages />
             <table columns="2">
                 <tr>
                     <td>
@@ -53,8 +53,7 @@
                         <table columns="2">
                             <tr>
                                 <td>
-                                    <apex:outputText
-                                            value="Choose the template for selecting a campaign in this master campaign."/>
+                                    <apex:outputText value="Choose the template for selecting a campaign in this master campaign."/>
                                 </td>
                                 <td>
                                     <apex:selectList value="{!Mcamp.Select_Template__c}" size="3"
@@ -97,4 +96,3 @@
         </apex:pageBlock>
     </apex:form>
 </apex:page>
-

@@ -51,9 +51,9 @@
             }
         }
     </script>
-    <apex:form>
+    <apex:form >
         <apex:pageBlock title="URLs for signup pages">
-            <apex:pageMessages/>
+            <apex:pageMessages />
             <table columns="2">
                 <tr>
                     <td>
@@ -68,8 +68,7 @@
                         <table columns="2">
                             <tr>
                                 <td>
-                                    <apex:outputText
-                                            value="Choose the template for selecting a campaign.  If you choose this, you don't need a registration template."/>
+                                    <apex:outputText value="Choose the template for selecting a campaign.  If you choose this, you don't need a registration template."/>
                                 </td>
                                 <td>
                                     <apex:selectList value="{!camp.Select_Template__c}" size="3"
@@ -94,8 +93,7 @@
                         <table columns="2">
                             <tr>
                                 <td>
-                                    <apex:outputText
-                                            value="Or choose the registration template for this specific campaign."/>
+                                    <apex:outputText value="Or choose the registration template for this specific campaign."/>
                                 </td>
                                 <td>
                                     <apex:selectList value="{!camp.Register_Template__c}" size="3"

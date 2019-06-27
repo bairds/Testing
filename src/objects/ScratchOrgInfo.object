@@ -107,6 +107,10 @@
         <trackHistory>true</trackHistory>
     </fields>
     <fields>
+        <fullName>Release</fullName>
+        <trackHistory>true</trackHistory>
+    </fields>
+    <fields>
         <fullName>ScratchOrg</fullName>
         <trackHistory>true</trackHistory>
     </fields>

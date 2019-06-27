@@ -97,10 +97,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>First_Donation_Date__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Last_Donate_Amount__c</field>
             </layoutItems>
             <layoutItems>

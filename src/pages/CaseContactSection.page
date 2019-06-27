@@ -1,0 +1,14 @@
+<!--
+ - Created by Baird on 5/7/2019, for Case Tracking for Arundel Rivers
+ -->
+
+<apex:page id="CaseContactSection" standardController="Case" extensions="CaseContactSection">
+    <apex:form >
+        <apex:pageBlock Title="People Involved">
+            <apex:pageBlockTable value="{!CCRList}" var="cc" >
+                <apex:column value="{!cc.Contact.Name}"/>
+                <apex:column value="{!cc.Role}"/>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

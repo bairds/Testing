@@ -76,7 +76,7 @@ private class GlobalTests
 
         
         /* ------------------------------------------------------------------------------------------------------------------------------------
-        	Processing the lead with eACC_backup changes the lead to account/contact with one contribution where stage = 'Thank You Mailed'.
+        	Processing the lead with enterAccountContactContribution changes the lead to account/contact with one contribution where stage = 'Thank You Mailed'.
 			If the error is caused because opp.stage value is "Thank you mailed' instead of 'Thank You Mailed' alert us.  
 			Wouldn't it make more sense to just check to see that the stage is set properly or do a value replacement if it isn't? (Carl)
         ------------------------------------------------------------------------------------------------------------------------------------*/
@@ -87,7 +87,7 @@ private class GlobalTests
          
         System.assertEquals(false, l.IsConverted, 'Lead is not converted');
         
-        eACC_backup eacc = new eACC_backup();
+        enterAccountContactContribution eacc = new enterAccountContactContribution();
         eacc.step = '2';
         eacc.setEnterContrib();
         eacc.enterContribution();

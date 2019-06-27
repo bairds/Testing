@@ -20,6 +20,7 @@
 // Aug 2018 Revised contact.first_contrib_cat and source, which weren't working before.
 // Aug 2018 Revisions for 2018 Upgrade.  Lifetime_Donations__c now calculated, not rollup.  First_member_date corrected.
 // Sept 2018 If Campaign.Account_Line_Item is populated, populate Contrib.Account_Line_Item
+// May 2019 Add "yearly" to the periodicity values for recurring payments, in recurring payment section
 
 public class ManageContributions{
     public static Set<Id> AccountIds;
@@ -32,9 +33,11 @@ public class ManageContributions{
     // NOTE: REDUCE FOLLOWING 2 SOQL QUERIES TO ONE LIST QUERY.
     public static void beforeDelete(Opportunity []  Contribs) {
         AccountIds = new Set<Id>();
+        ContactIds = new Set<Id>();
         PledgeIds = new Set<Id>();
         for (Opportunity o : Contribs) {
             AccountIds.add(o.AccountId);
+            ContactIds.add(o.Contact__c);
             System.debug('List to delete includes opportunities in ' + AccountIds.size() + ' separate accounts.');
             if (o.Matches_Which_Challenge_or_Pledge__c!=null) PledgeIds.add(o.Matches_Which_Challenge_or_Pledge__c);
         }
@@ -57,6 +60,7 @@ public class ManageContributions{
         for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
         AvoidRecursiveContributionTrigger.setWorking();
         ManageContributions.recalcAccountMethod(AccountIds);
+        ManageContributions.recalcContactMethod(ContactIds);
         AvoidRecursiveContributionTrigger.setClosed();
         if (PledgeIds.size()>0) updatePledges(PledgeIds);
     }
@@ -147,6 +151,7 @@ public class ManageContributions{
             Date nextMembershipDate;
             Date nextDonationDate;
             a.Lifetime_Donations__c = 0;
+            a.Lifetime_Donation_Count__c = 0;
             a.Largest_Contrib__c = 0;
             a.Largest_Contrib_Date__c = null;
             a.Last_Contrib_Amount__c = 0;
@@ -155,6 +160,7 @@ public class ManageContributions{
             a.Last_Membership_Amount__c = 0;
             a.Last_Donate_Date__c = null;
             a.First_Donate_Date__c = null;
+            a.First_Donate_Amount__c = 0;
             a.Last_Membership_Date__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
             Decimal pytddonations = 0; //Last Year Giving and Count
@@ -191,8 +197,10 @@ public class ManageContributions{
                             a.Last_Donate_Date__c = a.Opportunities[i].CloseDate;
                             foundDonation = true;
                         }
+                        a.First_Donate_Amount__c = a.Opportunities[i].Amount;
                         a.First_Donate_Date__c = a.Opportunities[i].CloseDate;
                         a.Lifetime_Donations__c += a.Opportunities[i].Amount;
+                        a.Lifetime_Donation_Count__c += 1;
                         // Is this the most recent donation?
                         if (nextDonationDate==null) {
                             //This is the most recent donation set Lapse to null
@@ -361,12 +369,14 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             Date nextMembershipDate;
             Date nextDonationDate;
             c.Lifetime_Giving__c = 0;
+            c.Lifetime_Donation_Count__c = 0;
             c.Largest_Contrib_Amt__c = 0;
             c.Largest_Contrib_Date__c = null;
             c.Last_Contrib_Amt__c = 0;
             c.Last_Contrib_Date__c = null;
             c.Last_Donate_Amt__c = 0;
             c.Last_Donate_Date__c = null;
+            c.First_Donate_Amount__c = 0;
             c.First_Donate_Date__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
             Decimal pytddonations = 0; //Last Year Giving and Count
@@ -395,7 +405,9 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                 //iterate through the opportunities from the most recent to the oldest
                 for(Integer i=0; i<OppsForThisCtct.size(); i++) {
 
-                    if (OppsForThisCtct[i].Amount > 0) c.Lifetime_Giving__c += OppsForThisCtct[i].Amount;
+                    if (OppsForThisCtct[i].Amount > 0) {
+                        c.Lifetime_Giving__c += OppsForThisCtct[i].Amount;
+                    }
                     c.First_Contrib_Source__c = OppsForThisCtct[i].Campaign.Name;
                     c.First_Contrib_Cat__c = OppsForThisCtct[i].RecordType.Name;
 
@@ -405,6 +417,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                     // Set Lapse Till Next Donation
                     // Only process individual donation records now
                     if (DonationRTIDs.contains(OppsForThisCtct[i].RecordTypeId )) {
+                        c.Lifetime_Donation_Count__c += 1;
 /*                        // Is this the most recent donation?
                         if (NextDonationDate==null) {
                             //This is the most recent donation set Lapse to null
@@ -462,6 +475,8 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                     if (DonationRTIDs.contains(OppsForThisCtct[i].RecordTypeId)){
                         // update first_donation_date each time, since we loop through in decreasing order
                         c.First_Donate_Date__c = OppsForThisCtct[i].CloseDate;
+                        c.First_Donate_Amount__c = OppsForThisCtct[i].Amount;
+
                         // update last_donate_date only once
                         if (foundCtctDonation == false) {
                             c.Last_Donate_Amt__c = OppsForThisCtct[i].Amount;
@@ -469,13 +484,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                             foundCtctDonation = true;
                         } // end update last_donate_amt__c
                     }
-                    // Baird not sure why three lines below are necessary.  I handled this above.
-                    /*               if (i==OppsForThisCtct.size()-1) {
-                                       c.first_contrib_source__c = OppsForThisCtct[i].Campaign.Name;
-                                       c.first_contrib_cat__c = OppsForThisCtct[i].RecordType.Name;
-                                   }
-                   */
-                    //Largest contribution
+                   //Largest contribution
                     if(c.Largest_Contrib_Amt__c < OppsForThisCtct[i].Amount) {
                         c.Largest_Contrib_Amt__c = OppsForThisCtct[i].Amount;
                         c.Largest_Contrib_Date__c = OppsForThisCtct[i].CloseDate;
@@ -571,7 +580,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             NextPaymentDate = LastPaymentDate.addMonths(3);
         } else if (periodicity=='Every 6 Months') {
             NextPaymentDate = LastPaymentDate.addMonths(6);
-        } else if (periodicity=='Annually') {
+        } else if (periodicity=='Annually' || periodicity=='Yearly') {
             NextPaymentDate = LastPaymentDate.addYears(1);}
         else if (periodicity=='Irregularly') {
             NextPaymentDate = null;

@@ -30,6 +30,15 @@
     <columns>
         <field>Account.Account_Membership_Expires__c</field>
     </columns>
+    <columns>
+        <field>Account.Last_Member_Amt__c</field>
+    </columns>
+    <columns>
+        <field>Account.Last_Membership_Amount__c</field>
+    </columns>
+    <columns>
+        <field>Account.Last_Membership_Date__c</field>
+    </columns>
     <description>Use to pull accounts and primary contacts for renewals</description>
     <filter>
         <criteriaItems>

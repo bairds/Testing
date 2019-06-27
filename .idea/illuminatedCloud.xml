@@ -5,6 +5,7 @@
       <list>
         <IlluminatedCloudConnection>
           <option name="connectionName" value="Testing" />
+          <option name="connectionType" value="MDAPI" />
           <option name="defaultModuleName" value="Testing" />
           <option name="offlineSymbolTablePath" value="$PROJECT_DIR$/IlluminatedCloud/Testing/OfflineSymbolTable.zip" />
         </IlluminatedCloudConnection>

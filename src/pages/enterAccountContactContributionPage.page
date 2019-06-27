@@ -510,7 +510,7 @@
                                                             <tr> <td> dear ___ </td> <td> <apex:inputfield value="{!co.Dear__c}" html-placeholder="leave blank for autofill" /> </td> </tr>
                                                             <tr> <td> title </td> <td> <apex:inputfield value="{!co.Title}" /> </td> </tr>
                                                             <tr> <td> home phone </td> <td> <apex:inputfield value="{!co.HomePhone}" /> </td> </tr>
-                                                            <tr> <td> cell phone </td> <td> <apex:inputfield value="{!co.MobilePhone}" /> </td> </tr>
+                                                            <tr> <td> mobile phone </td> <td> <apex:inputfield value="{!co.MobilePhone}" /> </td> </tr>
                                                             <tr> <td> email </td> <td> <apex:inputfield value="{!co.Email}" /> </td> </tr>
 
                                                             <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}" var="fc">
@@ -526,7 +526,7 @@
                                                             <tr> <td> dear ___ </td> <td> <apex:inputfield value="{!co2.Dear__c}" html-placeholder="leave blank for autofill" /> </td> </tr>
                                                             <tr> <td> title </td> <td> <apex:inputfield value="{!co2.Title}" /> </td> </tr>
                                                             <tr> <td> home phone </td> <td> <apex:inputfield value="{!co2.HomePhone}" /> </td> </tr>
-                                                            <tr> <td> cell phone </td> <td> <apex:inputfield value="{!co2.MobilePhone}" /> </td> </tr>
+                                                            <tr> <td> mobile phone </td> <td> <apex:inputfield value="{!co2.MobilePhone}" /> </td> </tr>
                                                             <tr> <td> email </td> <td> <apex:inputfield value="{!co2.Email}" /> </td> </tr>
 
                                                             <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}" var="fc">

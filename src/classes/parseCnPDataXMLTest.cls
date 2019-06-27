@@ -146,7 +146,60 @@ static testMethod void standardDonation() {
 		System.assertEquals('1', results.get('installmentnumber'));
 		System.assertEquals('2013-08-10 16:08:00', results.get('nextinstallmentdate'));
 	}
-	
+
+//Test for recurring donation with Annually instead of Yearly - does the value of periodicity get changed to Yearly?
+	static testMethod void RecurringDonationWithAnnually() {
+
+		Create_Test_Variables ctv = new Create_Test_Variables();
+		Account TestAcct = ctv.fetchTestAccount();
+		Contact TestCtct = ctv.fetchTestContact();
+		Campaign TestCamp = ctv.fetchTestCampaign();
+
+		// Create test string, this time with recurring information
+		String testxml = '<?xml version="1.0" encoding="UTF-8"?><CnPTransactionData><Version>40</Version><Patron><BillingInformation><BillingFirstName>Tester</BillingFirstName><BillingMI></BillingMI><BillingLastName>TestContact</BillingLastName><BillingEmail>testcontact@dontbotherme.org</BillingEmail><BillingPhone>333</BillingPhone></BillingInformation><BillingAddress><BillingAddress1>lkj;</BillingAddress1><BillingAddress2></BillingAddress2><BillingAddress3></BillingAddress3><BillingCity>;lkj</BillingCity><BillingStateProvince>Alabama</BillingStateProvince><BillingPostalCode>33333</BillingPostalCode><BillingCountryName>United States of America</BillingCountryName></BillingAddress></Patron><TransactionDetail><OrderNumber>1207131327206181111</OrderNumber><Tracker>TestTracker</Tracker>';
+		testxml += '<Campaign>TestCampaign</Campaign><WindowName>Wild and Scenic Film Fest</WindowName><WindowId>55337</WindowId><TotalCharge>14.00</TotalCharge><ChargAmount>0.70</ChargAmount><TransactionDate>2012-07-13 13:27:00</TransactionDate><TransactionTimeZone>2012-07-13 13:27:00</TransactionTimeZone><TransactionResult>Authorized</TransactionResult><UrlReferrer>http://leadgreen.org/wordpress/</UrlReferrer><PaymentMethod><PaymentType>Credit Card</PaymentType><CreditCard>';
+		testxml += '<NameOnCard>Test16 Tester</NameOnCard><CardNumber>41111111</CardNumber><CardName>VISA</CardName>';
+		testxml += '<ExpirationDate>1208</ExpirationDate></CreditCard></PaymentMethod></TransactionDetail>';
+		testxml += '<Recurring><TransactionResult>Authorized</TransactionResult><RecurringID>47212</RecurringID>';
+		testxml += '<MasterTransactionNumber>1307101607584781111</MasterTransactionNumber><Installments>2</Installments>';
+		testxml += '<RecurringMethod>Subscription</RecurringMethod><Periodicity>Yearly</Periodicity>';
+		testxml += '<InstallmentNumber>1</InstallmentNumber><NextInstallmentDate>2013-08-10 16:08:00</NextInstallmentDate>';
+		testxml += '<InstallmentAmount>14.00</InstallmentAmount><TotalAmount>14.00</TotalAmount><TotalCommitted>28.00</TotalCommitted>';
+		testxml += '<TotalMade>14.00</TotalMade><TotalDue>14.00</TotalDue></Recurring>';
+		testxml += '<OrderItemList>';
+		testxml += '<OrderItem>';
+		testxml += '<ItemID>1</ItemID>';
+		testxml += '<ItemName>Event Attendee-Baird straughan</ItemName>';
+		testxml += '<Quantity>1</Quantity>';
+		testxml += '<UnitPriceCharge>14</UnitPriceCharge>';
+		testxml += '<UnitPriceDue>14</UnitPriceDue>';
+		testxml += '<UnitDeductibleCharge>0</UnitDeductibleCharge>';
+		testxml += '<UnitDeductibleDue>0</UnitDeductibleDue>';
+		testxml += '<TaxAmountCharge>0</TaxAmountCharge>';
+		testxml += '<TaxAmountDue>0</TaxAmountDue>';
+		testxml += '<DiscountCharge>0</DiscountCharge>';
+		testxml += '<DiscountDue>0</DiscountDue>';
+		testxml += '<SKU>Membership</SKU>';
+		testxml += '<CampaignName></CampaignName>';
+		testxml += '</OrderItem>';
+		testxml += '</OrderItemList></CnPTransactionData>';
+
+		Map<String, String> parseResults = parseCnPDataXML.parseXML(testxml);
+		System.assertEquals('2013-08-10 16:08:00',parseresults.get('nextinstallmentdate'));
+
+
+		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
+				CnP_PaaS_Bridge__DataXML__c = testxml,
+				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		insert testdata2;
+
+
+		system.debug('Testdata record now contains: '+ testdata2);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.assertEquals('Annually', results.get('periodicity'));
+	}
+
 //Test for multi-item donation		
 	static testMethod void EventandDonation() {
 		// Create test string, this time with recurring information

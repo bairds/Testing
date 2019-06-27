@@ -1,14 +1,17 @@
 // Added ability to append campaign id so that people can sign up for a campaign.
 // When they sign up for a campaign, the name of the campaign is inserted into contact.mailing_lists__c.
 // Jan 7 2017 Included the insertEmailListContact so that the Prescott Creeks RESTEmail controller can use this too.
+// 23 May 2019 Added code to append new Dsscription to exisitng description field for Lead and Contact
 global with sharing class Email_Signup_Controller {
     
     public Contact pcontact;
     WGSettings__mdt Setting;
-    public static string mailing_list;
+    public string mailing_list;
     public Campaign camp {get; set;}
     public string OrgName {get; set;}
     public Boolean Thankspage {get; set;}
+    public Boolean CampaignExists {get; set;}
+    public Boolean SetUpTrial {get; set;}
     
     
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
@@ -21,8 +24,9 @@ global with sharing class Email_Signup_Controller {
                     recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c, type from Campaign where 
                     id = :CampID];
         }
-        Setting= WGHelpers.getWGSettings();
-        mailing_list = Setting.online_signup_newsletter__c;
+        if (Camp!=null) CampaignExists = true;
+        mailing_list = WGHelpers.getWGSettings().Online_signup_newsletter__c;
+        system.debug('In constructor, mailing_list is ' + mailing_list);
         ThanksPage = false;
     }
     
@@ -48,6 +52,7 @@ global with sharing class Email_Signup_Controller {
                            MailingPostalCode, email, Mailing_Lists__c from contact where id = :sID];
             // Update email
             tempContact.email = pcontact.email;
+            tempContact.Description += '; ' + pcontact.Description;
             // If Mailing_Lists__c is blank, send it to the first method.
             if (string.isBlank(tempContact.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                 tempContact.Mailing_Lists__c = getMailingList();
@@ -58,10 +63,11 @@ global with sharing class Email_Signup_Controller {
         }
         else {
             if (stype=='Lead') {
-                tempLead = [select id, firstname, lastname, PostalCode, email, Mailing_Lists__c from lead where id = :sID];
+                tempLead = [select id, firstname, lastname, Description, PostalCode, email, Mailing_Lists__c from lead where id = :sID];
                 /*if (templead.email == null) */ templead.email = pcontact.email;
                 tempLead.LeadSource = 'Online Email Signup';
                 tempLead.email=pcontact.email;
+                tempLead.Description += '; ' + pcontact.Description;
                 if (OrgName!=null) tempLead.Company=OrgName;
                 if (string.isBlank(tempLead.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                     tempLead.Mailing_Lists__c = getMailingList();
@@ -88,12 +94,28 @@ global with sharing class Email_Signup_Controller {
                 }
             }
         }
+        if (SetUpTrial==true){
+            String Taskname = String.IsEmpty(Orgname) ? 'unidentified organization' : Orgname;
+            Task tsk = new Task(
+                    Subject = 'Create trial database for ' + Taskname,
+                    // WhatId = [select Id from Opportunity Limit 1].Id,
+                    ownerId = UserInfo.getUserId(),
+                    WhoId = sresults[0],
+                    Status = 'New',
+                    Type = 'Call',
+                    Description = pcontact.description,
+                    ActivityDate = system.today().addDays(2),
+                    IsReminderSet=true,
+                    ReminderDateTime=system.now().addHours(24)
+            );
+            insert tsk;
+        }
         // Right here insert Lead or contact into method call
         // sendAcknowledgementEmail(stype);
         string APString = string.ValueOf(apexPages.currentPage());
         system.debug('APString is ' + APstring);
         PageReference Thanks_Page = Page.Email_Signup_Thank_Page;
-        if (APString.CONTAINS('EmailSignupPageBootstrap')){
+        if (APString.TOUPPERCASE().CONTAINS('EMAILSIGNUPPAGEBOOTSTRAP')){
             ThanksPage = true;
             return null;
         } else {
@@ -101,15 +123,17 @@ global with sharing class Email_Signup_Controller {
             Thanks_Page.setRedirect(false);
             return Thanks_Page;
         }
-        //return null;
     }
     
-    //No mailing list exists
+    //Add Campaign.Name to MailingLists values
     public string getMailingList() {
-        if(Camp!=null && Camp.Add_New_Mailing_List__c == true) {return Camp.Name;
-                       } else {
-                           return mailing_List;
-                       }
+        if (Camp != null && Camp.Add_New_Mailing_List__c == true) {
+            return Camp.Name;
+        } else {
+            if (mailing_list != null)
+                return mailing_list;
+        }
+        return null;
     }
     
     //Mailing List already exists
@@ -121,7 +145,6 @@ global with sharing class Email_Signup_Controller {
                 return ML;
             }
         } else {
-            system.debug('ML.containsNone(mailing_list) evaluates to ' + ML.containsNone(mailing_list) + ' and mailing_list is ' + mailing_list);
             if (!ML.contains(mailing_list)) {
                            return ML + '; ' + mailing_list;
             } else {
@@ -193,6 +216,7 @@ global with sharing class Email_Signup_Controller {
 
  
 public string insertEmailListContact(contact pcontact) {
+    system.debug('in insertEmailListContact mailing_list is ' + mailing_list);
     String[] sresults = identifyorcreatePerson.IdentifyOrCreatePerson(pContact);
     sID = sresults[0];
     stype = sresults[1];
@@ -218,7 +242,7 @@ public string insertEmailListContact(contact pcontact) {
                                    tempLead.Mailing_Lists__c = mailing_list;
                                         }
                                         else {
-                                        tempLead.Mailing_Lists__c += '; ' + mailing_list;      
+                                        tempLead.Mailing_Lists__c += '; ' + mailing_list;
                                         }            
                         update tempLead;
             }

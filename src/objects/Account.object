@@ -445,19 +445,21 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Donate_Amount__c</fullName>
+        <description>First contribution that is one of the individual donation record types, as currently set.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>First contribution that is one of the individual donation record types, as currently set.</inlineHelpText>
+        <label>First Donate Amount</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>First_Donate_Date__c</fullName>
         <externalId>false</externalId>
         <label>First_Donate_Date</label>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Date</type>
-    </fields>
-    <fields>
-        <fullName>First_Donation_Date__c</fullName>
-        <description>Date of first donation (checks for contributions that are of RecordTypes included in the INdividual Donation custom setting)</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Date of first donation (checks for contributions that are of RecordTypes included in the INdividual Donation custom setting)</inlineHelpText>
-        <label>First_Donation_Date</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Date</type>
@@ -692,9 +694,9 @@
         <fullName>Last_Membership_Amount__c</fullName>
         <externalId>false</externalId>
         <label>Last Membership Amount</label>
-        <precision>6</precision>
+        <precision>8</precision>
         <required>false</required>
-        <scale>0</scale>
+        <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Currency</type>
     </fields>
@@ -728,6 +730,19 @@
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lifetime_Donation_Count__c</fullName>
+        <description>Number of individual donations (according to the recordTypes that are included in the individual donations setting).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of individual donations (according to the recordTypes that are included in the individual donations setting).</inlineHelpText>
+        <label>Lifetime Donation Count</label>
+        <precision>9</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
         <unique>false</unique>
     </fields>
     <fields>

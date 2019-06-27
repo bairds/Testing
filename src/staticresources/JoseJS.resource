@@ -3,7 +3,7 @@ var loading = false;
 function showLoading(id)
 {
 	var element = document.getElementById('loading_request_' + id);
-    element.style.display = 'flex';
+    // element.style.display = 'flex';
     loading = true;
     
     return element;

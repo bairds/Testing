@@ -25,9 +25,16 @@
                     <div class="col-md-4 WGPageTitle" color="TitleColor">
                         <apex:image value="{!$Resource.OrgLogo}" styleclass="logo-image" height="100px"/>
                     </div>
-                    <div class="WGPageTitle col-md-8 align-middle" color="TitleColor">
-                        Volunteer Events
-                    </div>
+                    <apex:outputPanel rendered="{!mid==null}">
+                        <div class="WGPageTitle col-md-8 align-middle" color="TitleColor">
+                            Upcoming Events
+                        </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!mid!=null}">
+                        <div class="WGPageTitle col-md-8 align-middle" color="TitleColor">
+                            {!title}
+                        </div>
+                    </apex:outputPanel>
                 </div>
 
                 <div class="row match-my-cols bcb">
@@ -35,7 +42,7 @@
                         Please Select an Event.<b/>
                     </div>
                 </div>
-                <div class="row bcg2 fs16">
+                <div class="row bcg2 fs15">
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> NAME</div>
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> LOCATION</div>
                     <div class="col-md-3 hidden-sm hidden-xs alignleft"> DESCRIPTION</div>
@@ -108,15 +115,24 @@
                             </div>
                         </div>
                         <div class="col-md-1 col-xs-12 alignleft">
-                                <div class="row">
-                                    <div class="hidden-md hidden-lg col-xs-4">
-                                        SPACES:
-                                    </div>
-                                    <div class="col-md-12 col-xs-8">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4">
+                                    SPACES:
+                                </div>
+                                <div class="col-md-12 col-xs-8">
                                     <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}"/>
-                                    </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-md-1 col-xs-12 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-sm hidden-lg hidden-xl col-xs-4">
+                                    <apex:outputText value="    "/>
+                                </div>
+                                <div class="hidden-xl hidden-lg hidden-md col-xs-8 hr justify-content-right">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </apex:repeat>
                 <div class="text">

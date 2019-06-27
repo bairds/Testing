@@ -26,7 +26,7 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 @isTest
-private class AutocompleteV2_Con_Test{
+private class AutoCompleteV2_Con_Test {
     static testMethod void test_AutocompleteV2_Con(){
         //create some test account
         List<Account> accountList = new List<Account>();

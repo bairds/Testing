@@ -771,14 +771,29 @@ static testMethod void LapseTest() {
         system.AssertEquals(30,CheckMembership.Donate_Lapse__c);
         system.AssertEquals(30,CheckMembership.Member_Lapse__c);
         system.AssertEquals('New Membership',CheckMembership.Membership_Type__c);
+		// Test new summary fields
+		Contact ConfirmCtct = [select First_Donate_Amount__c, Lifetime_Donation_Count__c, account.First_Donate_Amount__c, account.Lifetime_Donation_Count__c
+		from Contact where lastname = 'Testcontact' LIMIT 1];
+		SYSTEM.AssertEquals(TestMembership2.amount,ConfirmCtct.First_Donate_Amount__c);
+		SYSTEM.AssertEquals(TestMembership2.amount,ConfirmCtct.account.First_Donate_Amount__c);
+		System.AssertEquals(3,ConfirmCtct.Lifetime_Donation_Count__c);
+		System.AssertEquals(3,ConfirmCtct.account.Lifetime_Donation_Count__c);
         //Delete Second Membership
         // for this test, reset the AvoidRecursieContributionTrigger
         AvoidRecursiveContributionTrigger.setClosed();
         Delete TestMembership1;
+		system.assertEquals(2,[select id from Opportunity].size());
         CheckMembership = [select id, Donate_Lapse__c from Opportunity where id = :TestMembership2.id];
         system.AssertEquals(60,CheckMembership.Donate_Lapse__c);
         Opportunity CheckMembership0 = [select id, Donate_Lapse__c, Membership_Type__c from Opportunity where id = :TestMembership0.id limit 1];
         system.AssertEquals('Renewal', CheckMembership0.Membership_Type__c);
+		//
+		// Test new summary fields
+		Contact ConfirmCtct2 = [select First_Donate_Amount__c, Lifetime_Donation_Count__c, account.First_Donate_Amount__c, account.Lifetime_Donation_Count__c
+		from Contact where lastname = 'Testcontact' LIMIT 1];
+		System.AssertEquals(2,ConfirmCtct2.Lifetime_Donation_Count__c);
+		System.AssertEquals(2,ConfirmCtct2.account.Lifetime_Donation_Count__c);
+
 		
 	} // end of runAs
 	} // end of testmethod  

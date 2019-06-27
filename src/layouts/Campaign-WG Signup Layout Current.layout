@@ -243,6 +243,7 @@
         <fields>Role__c</fields>
         <fields>EMAIL</fields>
         <fields>Agreed_to_Waiver__c</fields>
+        <fields>Processed__c</fields>
         <relatedList>RelatedCampaignMemberList</relatedList>
         <sortField>LAST_NAME</sortField>
         <sortOrder>Asc</sortOrder>

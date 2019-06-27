@@ -2,11 +2,11 @@
  * Created by Baird on 3/14/2019.
  */
 
-public with sharing class wgHelpTab {
+public with sharing class WGHelpTab {
     public string OrgID18 {get; set;}
     public string BaseURL {get; set;}
 
-    public wgHelpTab(){
+    public WGHelpTab(){
         OrgID18 = [select id from Organization].Id;
 
         Try {

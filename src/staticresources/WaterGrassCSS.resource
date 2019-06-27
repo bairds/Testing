@@ -6,6 +6,7 @@
     --secondary-color: #DEF6DE;
     --primary-bgcolor: #406B8C;
     --secondary-bgcolor: #2C6636;
+    --primary-font-family: "Times New Roman", Times,serif;
 }
 
 .bcb { background-color: #DBE8F6; }
@@ -66,6 +67,15 @@
 .fwb { font-weight: bold; }
 
 .h100 { height: 100%; }
+
+.hr {
+    display: block;
+    overflow: hidden;
+    border-style: inset;
+    border-width: 1px;
+    margin-right: 0;
+    align: right;
+}
 
 .jcr {
     display: flex;
@@ -132,6 +142,10 @@ table { border-collapse: collapse }
     text-align: left;
 }
 
+body{
+    font-family: var(--primary-font-family);
+}
+
 body div.bPageBlock {
     margin: initial;
     border: initial;
@@ -173,6 +187,7 @@ body div.bPageBlock {
 .container {
     max-width: 1200px;
     margins: auto;
+    font-family: var(--primary-font-family);
 }
 
 div[color] div[color="green"] div.title,

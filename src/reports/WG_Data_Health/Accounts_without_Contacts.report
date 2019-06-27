@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Report xmlns="http://soap.sforce.com/2006/04/metadata">
     <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
         <field>RECORDTYPE</field>
     </columns>
     <columns>
@@ -12,12 +15,7 @@
         <relatedTable>Contact</relatedTable>
         <relatedTableJoinColumn>Account</relatedTableJoinColumn>
     </crossFilters>
-    <format>Summary</format>
-    <groupingsDown>
-        <dateGranularity>Day</dateGranularity>
-        <field>ACCOUNT.NAME</field>
-        <sortOrder>Asc</sortOrder>
-    </groupingsDown>
+    <format>Tabular</format>
     <name>Accounts without Contacts</name>
     <params>
         <name>co</name>
@@ -25,9 +23,11 @@
     </params>
     <reportType>AccountList</reportType>
     <scope>organization</scope>
-    <showDetails>false</showDetails>
+    <showDetails>true</showDetails>
     <showGrandTotal>true</showGrandTotal>
     <showSubTotals>true</showSubTotals>
+    <sortColumn>ACCOUNT.NAME</sortColumn>
+    <sortOrder>Asc</sortOrder>
     <timeFrameFilter>
         <dateColumn>CREATED_DATE</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>

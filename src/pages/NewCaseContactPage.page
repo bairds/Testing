@@ -1,0 +1,49 @@
+<!--
+ - Created by Baird on 5/8/2019.
+ -->
+
+<apex:page id="NewCaseContactPage" standardController="Case" extensions="NewCaseContact">
+<apex:form >
+    <apex:pageMessages />
+    <apex:pageBlock >
+        <h2> New Contact </h2>
+        <div class="section">
+            <apex:pageBlockSection columns="2" id="NewContactSection">
+
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="Existing Account?" />
+                    <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account"
+                                      valueField="Id" targetField="{!newContact.AccountId}"
+                                      syncManualEntry="false" style="width:200px">
+                    </c:AutoCompleteV2>
+
+                </apex:pageBlockSectionItem>
+                <apex:pageBlockSectionItem />
+
+                <apex:inputField value="{!newContact.FirstName}" required="true"/>
+                <apex:inputField value="{!newContact.LastName}" required="true"/>
+                <apex:inputField value="{!newContact.Email}" />
+                <apex:inputField value="{!newContact.Phone}" />
+                <apex:inputField value="{!newContact.MailingStreet}" />
+                <apex:inputField value="{!newContact.MailingCity}" />
+                <apex:inputField value="{!newContact.MailingState}" />
+                <apex:inputField value="{!newContact.MailingPostalCode}" />
+                <apex:inputField value="{!newCaseContactRole.Role}" required="true"/>
+                <apex:inputField value="{!newContact.Description}" required="false"/>
+            </apex:pageBlockSection>
+        </div>
+
+        <apex:outputPanel layout="block" styleClass="section tac">
+
+            <apex:commandButton action="{!savePerson}" value="Save" rerender="newContactSection">
+                <!--<apex:param value="{!newCtct}" assignTo="{!newContact}"/>
+                <apex:param value="{!newCtct.AccountId}" assignTo="{!Acct.Id}"/>-->
+            </apex:commandButton>
+
+            <!--<apex:actionRegion >-->
+            <apex:commandButton action="{!cancelContact}" value="Cancel" immediate="true" rerender="new_contact" />
+            <!--</apex:actionRegion>-->
+        </apex:outputPanel>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

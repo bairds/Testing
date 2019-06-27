@@ -28,6 +28,12 @@ private with sharing class DataImportRecords_TESTS {
 
 	Scenario 8 - bulk, submit 100 records
 
+	Scenario 8 - New Contact with New Contact 2 no two records
+
+	Scenario 9 - New Contacts with same Contact 2 across multiple records.    Does it create duplicate contact2?
+	Scenario 9A - Two existing records, both with the same contact1 and contact2.
+	Scenario 9B - Existing Contact 1 with Existing Contact 2 across multiple records
+	Scenario 9D - Existing Lead with Contact 2 - should convert and attach Contact 2 to Household
 
     New lead with
 */
@@ -809,9 +815,238 @@ private with sharing class DataImportRecords_TESTS {
         //test.StopTest();
 
         List<Account> ConfirmAccts = [SELECT Id, Name, Account_Membership_Expires__c, Last_Membership_Date__c from Account];
-        system.assertEquals(100,ConfirmAccts.size(),'Should have found 100 accounts created');
+        //100 + plus default one
+        system.assertEquals(101,ConfirmAccts.size(),'Should have found 100 accounts created');
 
     }
+
+
+    @isTest
+    private static void Scenario9() {
+        //New Contact with Contact 2 across multiple records
+    List<ImportObject__c> testImportList = new List<ImportObject__c>();
+
+    ImportObject__c tempImport = new ImportObject__c();
+    tempImport.Person_FirstName__c = 'TestFN1_X';
+    tempImport.Person_LastName__c =  'TestFL1_X';
+    tempImport.Person2_FirstName__c = 'TestFN2_X';
+    tempImport.Person2_LastName__c = 'TestFL2_X';
+    tempImport.Campaign_IsActive__c = true;
+    tempImport.Campaign_Name__c = 'Test Camp Scenario 9A';
+    tempImport.Person_LegacyID__c = NULL;
+    tempImport.Person_EmailPersonal__c = 'nomatchtest@example.com';
+        testImportList.add(tempImport);
+
+        ImportObject__c tempImport2 = new ImportObject__c();
+        tempImport2.Person_FirstName__c = 'TestFN1_X';
+        tempImport2.Person_LastName__c =  'TestFL1_X';
+        tempImport2.Person2_FirstName__c = 'TestFN2_X';
+        tempImport2.Person2_LastName__c = 'TestFL2_X';
+        tempImport2.Campaign_IsActive__c = true;
+        tempImport2.Campaign_Name__c = 'Test Camp Scenario 9B';
+        tempImport2.Person_LegacyID__c = NULL;
+        tempImport2.Person_EmailPersonal__c = 'nomatchtest@example.com';
+        testImportList.add(tempImport2);
+
+    insert testImportList;
+
+        DataImportRecords dtest1 = new DataImportRecords ();
+        for (DataImportRecords.ImportWrapper iotemp : dtest1.iowrappers) {
+        iotemp.bSelected = true;
+        }
+
+        dtest1.submitListToProcess();
+
+        EnhancedIOProcess EIOPConfirm = dtest1.matchprocess.EIMatches[5][0];
+        system.assertequals(NULL, EIOPConfirm.bCreate);
+        EnhancedIOProcess.enhancedIOResult ioResultConfirm = EIOPConfirm.eioResults[0];
+
+        dtest1.process();
+
+        Contact [] conConfirm = [Select Id, LastName, AccountId from Contact WHERE LastName Like 'TestFL%'Order By LastName ASC];
+        system.assertequals(2, conConfirm .size());
+        system.assertequals('TestFL1_X', conConfirm[0].LastName);
+        system.assertequals('TestFL2_X', conConfirm[1].LastName);
+        system.assertEquals(conConfirm[0].AccountId, conConfirm[1].AccountId);
+
+
+        Campaign campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9A'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+        campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9B'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+        }
+
+    @isTest
+    private static void Scenario9A() {
+        //Existing Contact 1 with Contact 2 across multiple records
+        List<ImportObject__c> testImportList = new List<ImportObject__c>();
+
+        ImportObject__c tempImport = new ImportObject__c();
+        tempImport.Person_FirstName__c = 'TestFN1_X';
+        tempImport.Person_LastName__c =  'TestContact';
+        tempImport.Person2_FirstName__c = 'TestFN2_X';
+        tempImport.Person2_LastName__c = 'TestFL2_X';
+        tempImport.Campaign_IsActive__c = true;
+        tempImport.Campaign_Name__c = 'Test Camp Scenario 9A';
+        tempImport.Person_LegacyID__c = NULL;
+        tempImport.Person_EmailPersonal__c = 'testcontact@dontbotherme.org';
+        testImportList.add(tempImport);
+
+        ImportObject__c tempImport2 = new ImportObject__c();
+        tempImport2.Person_FirstName__c = 'TestFN1_X';
+        tempImport2.Person_LastName__c =  'TestContact';
+        tempImport2.Person2_FirstName__c = 'TestFN2_X';
+        tempImport2.Person2_LastName__c = 'TestFL2_X';
+        tempImport2.Campaign_IsActive__c = true;
+        tempImport2.Campaign_Name__c = 'Test Camp Scenario 9B';
+        tempImport2.Person_LegacyID__c = NULL;
+        tempImport2.Person_EmailPersonal__c = 'testcontact@dontbotherme.org';
+        testImportList.add(tempImport2);
+
+        insert testImportList;
+
+        DataImportRecords dtest1 = new DataImportRecords ();
+        for (DataImportRecords.ImportWrapper iotemp : dtest1.iowrappers) {
+            iotemp.bSelected = true;
+        }
+
+        dtest1.submitListToProcess();
+        dtest1.process();
+
+        Contact [] conConfirm = [Select Id, LastName, AccountId from Contact Order By LastName ASC];
+        //Should be two default tests + new one from this test
+        system.assertequals(3, conConfirm .size());
+        system.assertequals('TestContact', conConfirm[0].LastName);
+        system.assertequals('TestFL2_X', conConfirm[2].LastName);
+        system.assertEquals(conConfirm[0].AccountId, conConfirm[2].AccountId);
+
+
+        Campaign campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9A'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+        campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9B'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+    }
+
+    @isTest
+    private static void Scenario9B() {
+        //Existing Contact 1 with Existing Contact 2 across multiple records
+        List<ImportObject__c> testImportList = new List<ImportObject__c>();
+
+        ImportObject__c tempImport = new ImportObject__c();
+        tempImport.Person_FirstName__c = 'TestFN1_X';
+        tempImport.Person_LastName__c =  'TestContact';
+        tempImport.Person2_FirstName__c = 'mytest';
+        tempImport.Person2_LastName__c = 'TestContact2';
+        tempImport.Campaign_IsActive__c = true;
+        tempImport.Campaign_Name__c = 'Test Camp Scenario 9A';
+        tempImport.Person_LegacyID__c = NULL;
+        tempImport.Person_EmailPersonal__c = 'testcontact@dontbotherme.org';
+        testImportList.add(tempImport);
+
+        ImportObject__c tempImport2 = new ImportObject__c();
+        tempImport2.Person_FirstName__c = 'TestFN1_X';
+        tempImport2.Person_LastName__c =  'TestContact';
+        tempImport2.Person2_FirstName__c = 'mytest';
+        tempImport2.Person2_LastName__c = 'TestContact2';
+        tempImport2.Campaign_IsActive__c = true;
+        tempImport2.Campaign_Name__c = 'Test Camp Scenario 9B';
+        tempImport2.Person_LegacyID__c = NULL;
+        tempImport2.Person_EmailPersonal__c = 'testcontact@dontbotherme.org';
+        testImportList.add(tempImport2);
+
+        insert testImportList;
+
+        DataImportRecords dtest1 = new DataImportRecords ();
+        for (DataImportRecords.ImportWrapper iotemp : dtest1.iowrappers) {
+            iotemp.bSelected = true;
+        }
+
+        dtest1.submitListToProcess();
+        dtest1.process();
+
+        Contact [] conConfirm = [Select Id, LastName, AccountId from Contact Order By LastName ASC];
+        system.assertequals(2, conConfirm .size());
+        system.assertequals('TestContact', conConfirm[0].LastName);
+        system.assertequals('TestContact2', conConfirm[1].LastName);
+        system.assertEquals(conConfirm[0].AccountId, conConfirm[1].AccountId);
+
+
+        Campaign campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9A'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+        campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 9B'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+
+    }
+
+    @isTest
+    private static void Scenario9D() {
+        //Existing Lead with Contact 2 - should convert and attach Contact 2 to Household
+
+        List<ImportObject__c> testImport = new List<ImportObject__c>();
+
+        ImportObject__c tempImport = new ImportObject__c();
+        tempImport.Person_FirstName__c = 'TestFN1';
+        tempImport.Person_LastName__c =  'TestLN1';
+        tempImport.Person_LegacyID__c = NULL;
+        tempImport.Person_EmailPersonal__c = 'emailonly@example.com';
+
+        tempImport.Person2_FirstName__c = 'TestFN2_X';
+        tempImport.Person2_LastName__c =  'TestScenario4A';
+
+        tempImport.Address_StreetLine1__c = '2546 Main Street';
+        tempImport.Address_StreetLine2__c = 'Apt 2';
+        tempImport.Address_City__c = 'Arlington';
+        tempImport.Address_State__c = 'VA';
+        tempImport.Address_ZipCode__c = '22206';
+
+        tempImport.Campaign_IsActive__c = true;
+        tempImport.Campaign_Name__c = 'Test Camp Scenario 4A';
+
+        tempImport.Contribution_Amount__c = 100;
+        tempImport.Contribution_Type__c = 'Donation';
+        tempImport.Contribution_Stage__c = 'Closed/Won';
+        tempImport.Contribution_TransactionDate__c = system.today();
+
+        testImport.add(tempImport);
+        insert testImport;
+        //Created_Campaign_Member_Record__c
+        //Created_Second_Contact__c
+        //Processed__c
+
+        DataImportRecords dtest1 = new DataImportRecords ();
+        for (DataImportRecords.ImportWrapper iotemp : dtest1.iowrappers) {
+            iotemp.bSelected = true;
+        }
+
+        dtest1.submitListToProcess();
+        dtest1.process();
+
+        Contact cConfirm = [Select Id, LastName, FirstName, Personal_Email__c FROM Contact WHERE Email = 'emailonly@example.com'];
+        system.assertequals('TestLN1', cConfirm.LastName);
+        system.assertequals('emailonly@example.com', cConfirm.Personal_Email__c);
+
+        Contact [] cConfirm2 = [Select Id, LastName, FirstName, Personal_Email__c FROM Contact WHERE LastName = 'TestScenario4A'];
+        system.assertequals(1, cConfirm2.size());
+
+        Campaign campConfirm = [SELECT Id, Name, (Select Id, ContactId, LeadId from CampaignMembers) FROM Campaign WHERE Name = 'Test Camp Scenario 4A'];
+        system.assertequals(2, campConfirm.CampaignMembers.size());
+        system.assertequals(cConfirm.Id, campConfirm.CampaignMembers[0].ContactId);
+        system.assertequals(cConfirm2[0].Id, campConfirm.CampaignMembers[1].ContactId);
+
+        Opportunity oConfirm = [Select Id, CampaignId, Amount, (Select ContactId from OpportunityContactRoles) from Opportunity];
+        system.assertequals(campConfirm.Id, oConfirm.CampaignId);
+        system.assertequals(100.00, oConfirm.Amount);
+        system.assertequals(1, oConfirm.OpportunityContactRoles.size());
+        system.assertequals(cConfirm.Id, oConfirm.OpportunityContactRoles[0].ContactId);
+
+
+    }
+
 
     private static void createTestLeads() {
 
@@ -821,6 +1056,7 @@ private with sharing class DataImportRecords_TESTS {
                 LastName = 'TestLN1',
                 FirstName = 'TestFN1',
                 Email = 'emailonly@example.com',
+                Personal_Email__c = 'emailonly@example.com',
                 Legacy_Contact_ID__c = NULL,
                 PostalCode = '22206'
         ));
@@ -859,5 +1095,14 @@ private with sharing class DataImportRecords_TESTS {
         ));
 
         insert testleads;
+
+        Account Testaccount = new Account (name='TestAccount');
+        insert testaccount;
+        List<Contact> cons = new List<Contact>();
+        cons.add( new Contact (lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID));
+        cons.add( new Contact (firstname = 'mytest', lastname='TestContact2', email='testcontact2@dontbotherme.org', accountID = TestAccount.ID));
+
+        insert cons;
+
     }
 }

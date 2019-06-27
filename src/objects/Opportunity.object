@@ -309,6 +309,16 @@
         <label>Membership</label>
     </fieldSets>
     <fieldSets>
+        <fullName>ParticipantListFieldset</fullName>
+        <description>Used in the processParticipantListPage</description>
+        <displayedFields>
+            <field>Supervisor_Satisfaction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>ParticipantListFieldset</label>
+    </fieldSets>
+    <fieldSets>
         <fullName>Pledge</fullName>
         <description>Manage Contributions</description>
         <displayedFields>
@@ -1090,14 +1100,14 @@ TEXT(DAY( CloseDate ))
             <valueSetDefinition>
                 <sorted>false</sorted>
                 <value>
-                    <fullName>1 - Volunteer (not in charge of anyone else)</fullName>
+                    <fullName>2 - Leader</fullName>
                     <default>false</default>
-                    <label>1 - Volunteer (not in charge of anyone else)</label>
+                    <label>2 - Leader</label>
                 </value>
                 <value>
-                    <fullName>2 - Leader (In charge of others, or of getting others to do something)</fullName>
-                    <default>false</default>
-                    <label>2 - Leader (In charge of others, or of getting others to do something)</label>
+                    <fullName>1 - Volunteer</fullName>
+                    <default>true</default>
+                    <label>1 - Volunteer</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1119,9 +1129,11 @@ TEXT(DAY( CloseDate ))
         <externalId>false</externalId>
         <inlineHelpText>Where the volunteer will complete the task. Optional.</inlineHelpText>
         <label>Location of Task</label>
+        <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
-        <type>TextArea</type>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>MainCompetitors__c</fullName>
@@ -2015,11 +2027,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2069,6 +2081,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2290,11 +2337,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2375,6 +2422,10 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2600,11 +2651,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2654,6 +2705,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2871,11 +2957,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2925,6 +3011,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3161,11 +3282,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3215,6 +3336,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3452,11 +3608,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3506,6 +3662,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3743,11 +3934,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3797,6 +3988,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4030,11 +4256,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4115,6 +4341,10 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4352,11 +4582,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4406,6 +4636,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4642,11 +4907,11 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Leadership_Level__c</picklist>
             <values>
-                <fullName>1 - Volunteer %28not in charge of anyone else%29</fullName>
+                <fullName>1 - Volunteer</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>2 - Leader %28In charge of others%2C or of getting others to do something%29</fullName>
+                <fullName>2 - Leader</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4684,6 +4949,41 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

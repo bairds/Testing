@@ -328,6 +328,15 @@
         <type>Phone</type>
     </fields>
     <fields>
+        <fullName>Event_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>Campaign.Event_Date_Time__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Event Date</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Fax</fullName>
     </fields>
     <fields>
@@ -630,11 +639,6 @@
             <valueSetDefinition>
                 <sorted>false</sorted>
                 <value>
-                    <fullName>Volunteer</fullName>
-                    <default>true</default>
-                    <label>Volunteer</label>
-                </value>
-                <value>
                     <fullName>Site captain</fullName>
                     <default>false</default>
                     <label>Site captain</label>
@@ -643,6 +647,11 @@
                     <fullName>Group leader</fullName>
                     <default>false</default>
                     <label>Group leader</label>
+                </value>
+                <value>
+                    <fullName>Volunteer</fullName>
+                    <default>true</default>
+                    <label>Volunteer</label>
                 </value>
             </valueSetDefinition>
         </valueSet>

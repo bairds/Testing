@@ -26,16 +26,23 @@ public class PLPBaird
     static public String DefaultLeadership {get; set;}
 
     public Attendee attendee { get; set; }
-    // public Attendee all { get; set; }
     public Contact NewContact {get; set;}
     public Id PersonId {get; set;}
     public Decimal allHours {get;set;}
     public string allStatus {get;set;}
+    public string allRoles {get;set;}
+    public string Loc {get; set;} // string holder so I can insert multiple locations into Location_of_Task field
+
+    public List<FieldSetCustom> ofs { get; set; }
+    public Contact co2 { get; set; }
+    public List<Schema.FieldSetMember> pPLFieldSetMembers {get;set;}
 
     public PLPBaird(ApexPages.StandardController stdController) {
         LeadershipLevels = Opportunity.Leadership_Level__c.getDescribe().getPicklistValues();
         DefaultLeadership = getDefaultValue(Opportunity.Leadership_Level__c.getDescribe(), 0);
+        pPLFieldSetMembers = SObjectType.Opportunity.fieldSets.ParticipantListFieldset.getFields();
         CMToDelete = new CampaignMember();
+        co2 = new Contact();
         review = false;
         cid = System.currentPageReference().getParameters().get('cid');
         system.debug('At top of constructor, cid is ' + cid);
@@ -85,6 +92,20 @@ public class PLPBaird
             stati.add(new SelectOption(cms.Label, cms.Label));
         return stati;
     }
+
+    public List<SelectOption> getRoles() {
+        List<SelectOption> options = new List<SelectOption>();
+        // Baird revised Jose's query to pull the CampaignMemberStati from the campaign itself
+        Schema.DescribeFieldResult fieldResult =
+                CampaignMember.Role__c.getDescribe();
+        List<Schema.PicklistEntry> ple = fieldResult.getPicklistValues();
+
+        for( Schema.PicklistEntry f : ple)
+        {
+            options.add(new SelectOption(f.getLabel(), f.getValue()));
+        }
+        return options;
+    }
     
     static public String getDefaultValue(Schema.DescribeFieldResult field, Integer index) {
         List<Schema.PicklistEntry> sspl = field.getPicklistValues();
@@ -114,13 +135,15 @@ public class PLPBaird
         system.debug('Passed in allHours ' + allHours);
         for(Attendee a : UnprocessedAttendees) {
             a.Hours =  allHours;
-
-            if(a.Hours == 0)
-                a.Hours = null;
         }
+    }
 
-        if(allHours == 0)
-            allHours = null;
+    public void setAllRoles()
+    {
+        system.debug('Passed in allRoles ' + allRoles);
+        for(Attendee a : UnprocessedAttendees) {
+            a.CM.Role__c =  allRoles;
+        }
     }
 
     public void formatsRSVPedList(){
@@ -129,7 +152,6 @@ public class PLPBaird
                 a.Hours = null;
         }
     }
-
 
     public void processSelected() {
         if (Camp.Event_Date_Time__c == null) {
@@ -147,9 +169,9 @@ public class PLPBaird
 
                 // If user has changed hours, comments, rating, or status
 
-                if (a.Hours != null || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != PLPBaird.DefaultRating || a.OriginalStatus != a.CM.Status) {
-                    /*system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != DefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != DefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
-                SYSTEM.debug('a.Hours are ' + a.Hours + 'and a.Supervisor_Satisfaction is '+ a.Contribution.Supervisor_Satisfaction__c + ' and Default RAting is ' + DefaultRating);*/
+                if ((a.Hours > 0) || string.IsNotBlank(a.Comments) || a.Contribution.Supervisor_Satisfaction__c != PLPBaird.DefaultRating || a.OriginalStatus != a.CM.Status) {
+                    system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != DefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != DefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
+                SYSTEM.debug('a.Comments are ' + a.Comments + 'and a.Supervisor_Satisfaction is '+ a.Contribution.Supervisor_Satisfaction__c + ' and Default RAting is ' + DefaultRating);
                     UpdateAttendees.add(a);
                     if (a.Hours != null)
                         TotalHours += a.Hours;

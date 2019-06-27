@@ -65,25 +65,6 @@ global class AutoCompleteV2_Con {
         return targetFieldVar;
     }
 
-    //private Object getCacheFieldValue(Object targetFieldVar){
-    //    Object retVal = targetFieldVar;
-
-    //    String objectName = sObjVal;
-
-    //  if(objectName == 'Person')
-    //      objectName = 'Contact';
-
-    //  if(targetFieldVar!=null){
-    //      for(sObject sObj : Database.query('SELECT '+valueFieldVar+','+labelFieldVar+' FROM '+ objectName+' WHERE '+valueFieldVar+' =:targetFieldVar')){
-    //          retVal = sObj.get(labelFieldVar);
-    //          break;
-    //      }
-    //  }
-
-    // return retVal;
-    //  }
-
-
     /*
     *Random number generator to change the js function name if multiple components us
     ***/
@@ -132,7 +113,6 @@ global class AutoCompleteV2_Con {
                 result.add(new AutoCompleteData(sObj.get(valueFieldVar),label));
             }
         }
-
         return result;
     }
 

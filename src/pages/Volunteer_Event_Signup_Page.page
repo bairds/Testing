@@ -182,7 +182,7 @@ body{font-family:Arial,Helvetica,sans-serif; font-size:14px;}
 </apex:outputPanel>
     </apex:outputPanel>     
     </apex:outputPanel>    
-	</apex:actionRegion>
+    </apex:actionRegion>
     
 <apex:outputPanel id="NewContactInfo" rendered="{!createNewLead}">
 <apex:messages />

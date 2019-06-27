@@ -28,7 +28,7 @@
     </values>
     <values>
         <field>HourlyVolunteerRate__c</field>
-        <value xsi:nil="true"/>
+        <value xsi:type="xsd:double">24.14</value>
     </values>
     <values>
         <field>LeadSource_QuestionCnP__c</field>

@@ -413,6 +413,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Donate_Amount__c</fullName>
+        <description>Calculated - amount of the first donation with a recordType which is one of the current individual donation member types.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Calculated - amount of the first donation with a recordType which is one of the current individual donation member types.</inlineHelpText>
+        <label>First Donate Amount</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>First_Donate_Date__c</fullName>
         <externalId>false</externalId>
         <label>First_Donate_Date</label>
@@ -441,6 +453,11 @@
         <relationshipLabel>Contacts</relationshipLabel>
         <relationshipName>Contacts</relationshipName>
         <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>IndividualId</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Lookup</type>
     </fields>
@@ -678,6 +695,19 @@
         <precision>11</precision>
         <required>false</required>
         <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Lifetime_Donation_Count__c</fullName>
+        <description>Number of donations by this contact which are one of the current individual record Types.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of donations by this contact which are one of the current individual record Types.</inlineHelpText>
+        <label>Lifetime Donation Count</label>
+        <precision>9</precision>
+        <required>false</required>
+        <scale>0</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Number</type>
         <unique>false</unique>
@@ -1399,26 +1429,19 @@ Education and Outreach</description>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <validationRules>
-        <fullName>Test_Error</fullName>
-        <active>true</active>
-        <errorConditionFormula>LastName = &quot;TEST52A&quot;</errorConditionFormula>
-        <errorDisplayField>LastName</errorDisplayField>
-        <errorMessage>Test C Fail</errorMessage>
-    </validationRules>
-    <validationRules>
-    <fullName>Choose_One_of_the_Emails_to_be_Preferred</fullName>
-    <active>false</active>
-    <description>If there is no Preferred Email chosen, and two (or more) email addresses are filled in, force the selection of one to be preferred.</description>
-    <errorConditionFormula>and(
+        <fullName>Choose_One_of_the_Emails_to_be_Preferred</fullName>
+        <active>false</active>
+        <description>If there is no Preferred Email chosen, and two (or more) email addresses are filled in, force the selection of one to be preferred.</description>
+        <errorConditionFormula>and(
         or(
         and( not(isblank(Personal_Email__c)) , not(isblank(Work_Email__c)) ) ,
         and( not(isblank(Personal_Email__c)),not(isblank(Other_Email__c)) ) ,
         and( not(isblank(Work_Email__c)) , not(isblank(Other_Email__c)) )
         ) ,
         text( Preferred_Email__c ) = null )</errorConditionFormula>
-    <errorDisplayField>Preferred_Email__c</errorDisplayField>
-    <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
-</validationRules>
+        <errorDisplayField>Preferred_Email__c</errorDisplayField>
+        <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
+    </validationRules>
     <validationRules>
         <fullName>Preferred_Email_Choice_Must_Exist</fullName>
         <active>true</active>
@@ -1430,6 +1453,13 @@ Education and Outreach</description>
             )</errorConditionFormula>
         <errorDisplayField>Preferred_Email__c</errorDisplayField>
         <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Test_Error</fullName>
+        <active>true</active>
+        <errorConditionFormula>LastName = &quot;TEST52A&quot;</errorConditionFormula>
+        <errorDisplayField>LastName</errorDisplayField>
+        <errorMessage>Test C Fail</errorMessage>
     </validationRules>
     <webLinks>
         <fullName>Contacts_in_this_Organization</fullName>

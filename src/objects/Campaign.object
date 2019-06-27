@@ -238,6 +238,17 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>FollowOnEvent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>FollowOnEvent</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Campaigns</relationshipLabel>
+        <relationshipName>FollowOnEvent_for</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Goal__c</fullName>
         <description>Numeric campaign goal</description>
         <externalId>false</externalId>
@@ -626,7 +637,7 @@
         <label>My Active Campaigns</label>
     </listViews>
     <recordTypes>
-        <fullName>FundraisingActivity</fullName>
+        <fullName>Fundraising_Activity</fullName>
         <active>true</active>
         <description>Fundraising Campaign Activity (Can have sub-activities, like Renewal Letters.)</description>
         <label>Fundraising Activity</label>

@@ -15,6 +15,8 @@ public with sharing class MatchOrCreatePerson {
     // Helper class to create map of all contacts, make sure they aren't duplicates
     public List< List< EnhancedIOProcess> > EIMatches {get;set;}
     private static Map<String, Data_Import_Mapping__mdt> DataImportFieldMap;
+    //Create Map to hold Contacts at any Account that we us ein Match to look for Contact 2 by Name only
+    public Map<Id, Map<String, Contact>> accountContactLookupMap;
 
     public MatchOrCreatePerson() {
 
@@ -210,6 +212,7 @@ public with sharing class MatchOrCreatePerson {
                 //newSoRecordsMap.put(eio.matchIO.Id, newSO);
                 iotemp = new EnhancedIOProcess.enhancedIOResult();
                 iotemp.matchedsObject = newSO;
+                eio.matchedsObject = newSO;
                 iotemp.MatchReliability = 'Create New Record';
                 if (iList == NULL) iList = 5;
                 iotemp.iMatchScore = 1;
@@ -272,6 +275,8 @@ public with sharing class MatchOrCreatePerson {
                 if (soTemp.getSObjectType().getDescribe().getName() == 'Contact') {//Create an Account
                     if (newAccountsforContacts.containskey(sTemp) && newAccountsforContacts.get(sTemp).Id != NULL) { //Confirm Account created
                         soTemp.put('AccountId', newAccountsforContacts.get(sTemp).Id);
+                        //Add to account lookup map for later use
+                        accountContactLookupMap.put(newAccountsforContacts.get(sTemp).Id,new Map<String, Contact>());
                     }
                 }
             }
@@ -316,6 +321,7 @@ public with sharing class MatchOrCreatePerson {
                     Id ImportId = importContactids[i];
                     errors.add(importError (ImportId, sr.getErrors()));
                 }
+
             }
         insert errors;
         }
@@ -465,6 +471,8 @@ for (EnhancedIOProcess EIO : records) {
 private void setupLookupMap() {
 // Create map of Lead and Contact who match list of newRecords
 lookupMap = new map<string,List<sObject> >();
+accountContactLookupMap = new Map<Id, Map<String, Contact>>();
+
 String sLeadQuery = 'SELECT id, Name, Legacy_Contact_ID__c, email, firstname, lastname, phone, mobilephone,Home_Phone__c,' +
         ' Company,Street, City, State,PostalCode, Country,Salutation, Personal_Email__c,Other_Email__c, Lookup_Key__c, ' +
         ' Work_Email__c, Title, Volunteer_Interests__c, Mailing_Lists__c, Do_Not__c FROM Lead WHERE isConverted = FALSE ';
@@ -505,11 +513,13 @@ for (Lead MatchingLeads : database.query(sLeadNameQuery)) {
     String sContactNameQuery = sContactQuery +  ' WHERE Lookup_Key__c in :MatchingNames ';
 
 for (Contact MatchingContacts : database.query(sContactLegacyQuery) ) {
+    //Add to Account Lookup Map to check for Contact 2
+    accountContactLookupMap.put(MatchingContacts.AccountId, null );
     addtoSOList(MatchingContacts.Legacy_Contact_ID__c, MatchingContacts);
 }
 
 for (Contact MatchingContacts : database.query(sContactEmailQuery) ) {
-
+    accountContactLookupMap.put(MatchingContacts.AccountId, null);
     if (String.isNotBlank(MatchingContacts.email)) addtoSOList(MatchingContacts.email, MatchingContacts);
 
     if (String.isNotBlank(MatchingContacts.Personal_Email__c)) addtoSOList(MatchingContacts.Personal_Email__c, MatchingContacts);
@@ -521,9 +531,18 @@ for (Contact MatchingContacts : database.query(sContactEmailQuery) ) {
 }
 
 for (Contact MatchingContacts : database.query(sContactNameQuery)) {
+    accountContactLookupMap.put(MatchingContacts.AccountId, null);
     addtoSOList(MatchingContacts.Lookup_Key__c, MatchingContacts);
 }
 
+    //Now populate Acount Lookup Map
+    For (Account atemp: [Select Id, (Select Id, FirstName, LastName from Contacts) FROM Account WHERE ID in :accountContactLookupMap.keyset()]) {
+                Map<String, Contact> ctempmap = new Map<String, Contact>();
+                    for (Contact c: atemp.Contacts) {
+                        ctempmap.put(c.FirstName+':'+c.LastName, c);
+                    }
+        accountContactLookupMap.put(atemp.Id,ctempmap);
+    }
 }
 
     public void setupLists() {

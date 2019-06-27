@@ -230,6 +230,8 @@ if (grandchild.getname() == 'SKU') result.put('SKU' + i, grandchild.getText());
                 }
             }
         system.debug(result);
+            // If periodicity = Yearly, change it to Annually to avoid error on insert.
+            if (result.get('periodicity')=='Yearly') result.put('periodicity','Annually');
         return result;
         } catch (exception ex) {
                 WG_Error_Log__c EL = new WG_Error_Log__c(

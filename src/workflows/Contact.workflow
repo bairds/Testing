@@ -12,17 +12,6 @@
         <template>Contact_Mgmt_Emails/Email_Signup_Response_Contact</template>
     </alerts>
     <fieldUpdates>
-        <fullName>Update_Original_LeadSource</fullName>
-        <description>The first time leadsource is created, populate this field. Then don&apos;t overwrite it. Only Admins can edit it.</description>
-        <field>Original_LeadSource__c</field>
-        <formula>TEXT(LeadSource)</formula>
-        <name>Update Original_LeadSource</name>
-        <notifyAssignee>false</notifyAssignee>
-        <operation>Formula</operation>
-        <protected>false</protected>
-        <reevaluateOnChange>true</reevaluateOnChange>
-    </fieldUpdates>
-    <fieldUpdates>
         <fullName>Alternate_Email_to_Email</fullName>
         <field>Email</field>
         <formula>Other_Email__c</formula>
@@ -87,6 +76,26 @@
         <protected>false</protected>
     </fieldUpdates>
     <fieldUpdates>
+        <fullName>Update_Original_Contact_LeadSource</fullName>
+        <field>Original_LeadSource__c</field>
+        <formula>TEXT(LeadSource)</formula>
+        <name>Update_Original_Contact_LeadSource</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+    </fieldUpdates>
+    <fieldUpdates>
+        <fullName>Update_Original_LeadSource</fullName>
+        <description>The first time leadsource is created, populate this field. Then don&apos;t overwrite it. Only Admins can edit it.</description>
+        <field>Original_LeadSource__c</field>
+        <formula>TEXT(LeadSource)</formula>
+        <name>Update Original_LeadSource</name>
+        <notifyAssignee>false</notifyAssignee>
+        <operation>Formula</operation>
+        <protected>false</protected>
+        <reevaluateOnChange>true</reevaluateOnChange>
+    </fieldUpdates>
+    <fieldUpdates>
         <fullName>Work_Email_to_Email</fullName>
         <field>Email</field>
         <formula>Work_Email__c</formula>
@@ -95,49 +104,6 @@
         <operation>Formula</operation>
         <protected>false</protected>
     </fieldUpdates>
-    <rules>
-        <fullName>Email List Signup Contact</fullName>
-        <actions>
-            <name>Thanks_for_signing_up_e_newsletter_Ctct</name>
-            <type>Alert</type>
-        </actions>
-        <active>true</active>
-        <criteriaItems>
-            <field>Contact.Mailing_Lists__c</field>
-            <operation>includes</operation>
-            <value>e-newsletter</value>
-        </criteriaItems>
-        <description>If an existing contact signs up for the e-newsletter, send them an acknowledgement email.</description>
-        <triggerType>onCreateOrTriggeringUpdate</triggerType>
-    </rules>
-    <rules>
-        <fullName>Populate_Original_Contact_LeadSource</fullName>
-        <actions>
-            <name>Update_Original_LeadSource</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>true</active>
-        <criteriaItems>
-            <field>Contact.LeadSource</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Contact.Original_LeadSource__c</field>
-            <operation>equals</operation>
-        </criteriaItems>
-        <description>The first time leadsource is created, populate this field. Then don&apos;t overwrite it. Only Admins can edit it.</description>
-        <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>Set Primary Contact for Account</fullName>
-        <active>true</active>
-        <criteriaItems>
-            <field>Account.Addressee__c</field>
-            <operation>equals</operation>
-        </criteriaItems>
-        <description>The first time a contact is created for an account, populate the account.contact role with the contact.  Populate the Dear__ field with contact.firstname unless it is already filled.  Subsequently, do not make any changes.</description>
-        <triggerType>onCreateOnly</triggerType>
-    </rules>
     <rules>
         <fullName>Contact%2EAltEmail third</fullName>
         <actions>
@@ -304,6 +270,53 @@
         </criteriaItems>
         <description>When the only email provided is &quot;Work&quot;, set the preferred phone field to &quot;Work&quot;.</description>
         <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Email List Signup Contact</fullName>
+        <actions>
+            <name>Thanks_for_signing_up_e_newsletter_Ctct</name>
+            <type>Alert</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Contact.Mailing_Lists__c</field>
+            <operation>includes</operation>
+            <value>e-newsletter</value>
+        </criteriaItems>
+        <description>If an existing contact signs up for the e-newsletter, send them an acknowledgement email.</description>
+        <triggerType>onCreateOrTriggeringUpdate</triggerType>
+    </rules>
+    <rules>
+        <fullName>Populate_Original_Contact_LeadSource</fullName>
+        <actions>
+            <name>Update_Original_Contact_LeadSource</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Update_Original_LeadSource</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>true</active>
+        <criteriaItems>
+            <field>Contact.LeadSource</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Contact.Original_LeadSource__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <description>The first time leadsource is created, populate this field. Then don&apos;t overwrite it. Only Admins can edit it.</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Set Primary Contact for Account</fullName>
+        <active>true</active>
+        <criteriaItems>
+            <field>Account.Addressee__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <description>The first time a contact is created for an account, populate the account.contact role with the contact.  Populate the Dear__ field with contact.firstname unless it is already filled.  Subsequently, do not make any changes.</description>
+        <triggerType>onCreateOnly</triggerType>
     </rules>
     <tasks>
         <fullName>SendBirthdayCard</fullName>

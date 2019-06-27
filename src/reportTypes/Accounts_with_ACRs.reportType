@@ -317,11 +317,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>First_Donation_Date__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>First_Member_Date__c</field>
             <table>Account</table>
         </columns>

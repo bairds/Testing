@@ -195,6 +195,10 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
+                <field>First_Donate_Amount__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
                 <field>Largest_Contrib__c</field>
             </layoutItems>
             <layoutItems>
@@ -211,7 +215,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>First_Donate_Date__c</field>
+                <field>Lifetime_Donations__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -226,6 +230,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Last_Donate_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>First_Donate_Date__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -245,7 +253,7 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Lifetime_Donations__c</field>
+                <field>Lifetime_Donation_Count__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

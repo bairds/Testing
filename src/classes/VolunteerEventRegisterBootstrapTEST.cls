@@ -2,10 +2,10 @@
  * Created by Baird on 2/8/2019.
  */
 
-@IsTest
+@isTest
 private class VolunteerEventRegisterBootstrapTEST {
 
-    @IsTest
+    @istest
     public static void test() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         ctv.TestCampaign.Capacity__c = 3;
@@ -14,10 +14,11 @@ private class VolunteerEventRegisterBootstrapTEST {
         update ctv.TestCampaign;
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'TestMasterCamp');
-
+        // This time we are not specifying the master_campaign_id;
+        // The setMasterCAmpaign() method should run even without the master_campaign_Id;
         insert mc;
 
-        System.currentPageReference().getParameters().put('mid', mc.Id);
+        // System.currentPageReference().getParameters().put('mid', mc.Id);
         System.currentPageReference().getParameters().put('cid', ctv.TestCampaign.Id);
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
@@ -121,14 +122,17 @@ private class VolunteerEventRegisterBootstrapTEST {
     public static void signUpExistingContact() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
+        Campaign camp = ctv.fetchTestCampaign();
         system.debug('TestContact is ' + TestContact);
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
-
         insert mc;
 
+        camp.Master_Campaign__c = mc.Id;
+        update camp;
+
         System.currentPageReference().getParameters().put('mid', mc.Id);
-        System.currentPageReference().getParameters().put('cid', ctv.TestCampaign.Id);
+        System.currentPageReference().getParameters().put('cid', camp.Id);
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         // System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
 
@@ -162,7 +166,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
         system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
-
+        ve.ExitToCompletionURL();
     }
 
     @istest

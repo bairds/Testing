@@ -21,6 +21,7 @@ public with sharing class generateCampaignURLs {
         Campaign c = (Campaign)stdController.getRecord();
         CampId = c.Id;
         Camp = [SELECT name, Signup_Template__c, Select_Template__c, Register_Template__c from Campaign WHERE Id = :CampId];
+        System.debug('Generating the CampaignURLs the campaign Camp is ' + camp);
         VFPageMap = new Map<string,apexpage>();
         getSelectCampaignOptions();
         getRegisterOptions();
@@ -64,11 +65,12 @@ public with sharing class generateCampaignURLs {
     public List<SelectOption> getRegisterOptions() {
         List<SelectOption> RegisterOptions = new List<SelectOption>();
         RegisterOptions.add(new SelectOption('','-none-'));
-        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE Name like '%register%' AND (NOT Description LIKE 'Default Force.com User%') ORDER BY Description];
+        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE ((Name like '%register%') OR (Name like '%event_signup%')) AND (NOT Description LIKE 'Default Force.com User%') ORDER BY Description];
         For (apexPage p : VFPages) if (p.Description != null) {
             RegisterOptions.add(new selectOption(p.id,String.ValueOf(p.description).LEFT(50)));
             VFPageMap.put(p.Id,p);
         }
+        System.debug('Does RegisterOptions have legit values? ' + RegisterOptions);
         return RegisterOptions;
     }
 }

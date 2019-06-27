@@ -100,6 +100,10 @@
                 <behavior>Edit</behavior>
                 <field>Register_Template__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FollowOnEvent__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

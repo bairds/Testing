@@ -5,8 +5,8 @@ public without sharing class VolunteerEventRegisterBootstrap
     public Campaign c { get; set; }
     public CampaignCustom cc { get; set; }
     public CampaignMember cm { get; set; }
-    public datetime DateTimeStartAdjusted {get; set;}
-    public datetime DateTimeEndAdjusted {get; set;}
+    // public datetime DateTimeStartAdjusted {get; set;}
+    // public datetime DateTimeEndAdjusted {get; set;}
     public Contact co { get; set; }
     public ContactCustom coc { get; set; }
     public List<FieldSetCustom> cofs { get; set; }
@@ -29,7 +29,8 @@ public without sharing class VolunteerEventRegisterBootstrap
     public String errors { get; set; }
     public double tzoffset {get; set;}
     public timezone tz {get; set;}
-    public url initialurl {get; set;}
+    // public url initialurl {get; set;}
+    public string mid {get; set;}
 
     public VolunteerEventRegisterBootstrap()
     {
@@ -48,15 +49,19 @@ public without sharing class VolunteerEventRegisterBootstrap
     public void setMasterCampaign()
     {
         // cps = new List<CampaignPlus>();
-        String mid = System.currentPageReference().getParameters().get('mid');
+        mid = System.currentPageReference().getParameters().get('mid');
 
         String query = 'SELECT Id, Name, Description, Event_Date_Time__c, Event_End_Time__c, Event_Location__c, Recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, ' +
                 'Slots_Reserved__c, Type, Master_Campaign__r.Name, (select id, Role__c from CampaignMembers) FROM Campaign ' +
                 'WHERE Event_Date_Time__c >= TODAY AND (recordtype.name = \'Public Event\' OR recordtype.name = \'Volunteer Event\') AND IsActive = true';
         if (mid!=null) query += ' AND Master_Campaign__c = \'' + mid + '\'';
         query += ' ORDER BY Event_Date_Time__c, Name';
-
         cs = Database.query(query);
+        system.debug('After searching for Master campaign campaign is ' + cs);
+        if (cs[0].Master_Campaign__r.Name!=null)
+        title = cs[0].Master_Campaign__r.Name;
+
+                // .Master_Campaigns__r[0].Name;
 
         // Remove campaign from list if it's a Corporate volunteer event with a Group Leader
         system.debug('Before looping through Corporate Event CMs to remove Group Leader, cs is ' + cs);
@@ -419,8 +424,9 @@ public without sharing class VolunteerEventRegisterBootstrap
         string u = null;
         if(String.isNotBlank(this.c.CompletionURL__c)) {
             u = 'http://' + this.c.CompletionURL__c.replace('http://', '');
+        } else {
+            return null;
         }
-
         PageReference url = new PageReference(u);
         url.setRedirect(true);
         return url;

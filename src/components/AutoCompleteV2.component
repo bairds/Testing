@@ -85,7 +85,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                     v2.init($)
              });
         }
-        
+
         autocompleteV2{!randomJsIden}.prototype={
             init : function($){
           
@@ -107,7 +107,7 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                        $elem.on("select2-selecting", function(e) {                               
                            $('.hiddenField{!randomJsIden}').val(e.val);
                            
-                           if (e.val != null) {   
+                           if (e.val != null) {
                                 if({!preSubmit})
                                    preSubmit();
                                
