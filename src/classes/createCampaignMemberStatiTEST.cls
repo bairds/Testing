@@ -16,9 +16,9 @@ private class createCampaignMemberStatiTEST {
         system.assertEquals(CMSs.size()-2, SettingCMs.size(), 'Should have found all the CampaignStatiMDT values in the Campaign Member Stati, plus "Added to Campaign" and "Donated."');
         // Make sure all the campaign status values from the CampaignStatiMDT__mdt are here
         Map<string, CampaignMemberStatus> CMSMap = new Map<string, CampaignMemberStatus>();
-        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label, c);
+        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label.TOUPPERCASE(), c);
         For (CampaignStatiMDT__mdt c : SettingCMs)
-            system.assert(CMSMap.keyset().CONTAINS(c.label));
+            system.assert(CMSMap.CONTAINSKEY(c.label.TOUPPERCASE()));
     }
 
     @IsTest
@@ -36,7 +36,7 @@ private class createCampaignMemberStatiTEST {
                     IsDefault = false,
                     SortOrder = 10 + i,
                     CampaignId = c.Id
-                                );
+            );
             ListCMS.add(cms);
         }
         insert ListCMS;
@@ -100,10 +100,13 @@ private class createCampaignMemberStatiTEST {
         List<CampaignStatiMDT__mdt> SettingCMs = [select Label from CampaignStatiMDT__mdt];
 // Find all the settings for this campaign
         CMSs = [select cms.Id, cms.Label, cms.isDefault from CampaignMemberStatus cms where cms.CampaignId = :ListCamps[0].Id];
-        system.assertEquals(CMSs.size() - 2, SettingCMs.size(), 'Should have found all the CampaignStatiMDT values in the Campaign Member Stati, plus "Added to Campaign" and "Donated."');
+        system.assertEquals(CMSs.size(), SettingCMs.size()+2, 'Should have found all the CampaignStatiMDT values in the Campaign Member Stati, plus "Added to Campaign" and "Donated."');
         Map<string, CampaignMemberStatus> CMSMap = new Map<string, CampaignMemberStatus>();
-        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label, c);
-        For (CampaignStatiMDT__mdt c : SettingCMs)
-            system.assert(CMSMap.keyset().CONTAINS(c.label));
+        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label.TOUPPERCASE(), c);
+        system.debug('CMSMap is ' + CMSMap);
+        For (CampaignStatiMDT__mdt c : SettingCMs) {
+            system.debug('CMS is ' + c);
+            system.assert(CMSMap.CONTAINSKEY(c.Label.TOUPPERCASE()));
+        }
     }
 }

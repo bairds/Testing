@@ -16,9 +16,9 @@ private class UpdateCampaignMemberStatusTEST {
         system.assertEquals(CMSs.size() - 2, SettingCMs.size(), 'Should have found all the CampaignStatiMDT values in the Campaign Member Stati, plus "Added to Campaign" and "Donated."');
         // Make sure all the campaign status values from the CampaignStatiMDT__mdt are here
         Map<string, CampaignMemberStatus> CMSMap = new Map<string, CampaignMemberStatus>();
-        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label, c);
+        For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label.TOUPPERCASE(), c);
          For (CampaignStatiMDT__mdt c : SettingCMs)
-             system.assert(CMSMap.keyset().CONTAINS(c.label));
+             system.assert(CMSMap.CONTAINSKEY(c.label.TOUPPERCASE()));
     }
 /*
 
