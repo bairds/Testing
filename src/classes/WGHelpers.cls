@@ -67,9 +67,9 @@ public class WGHelpers {
         RETURN WGSettings;
     }
 
-    private static CampaignStatiMDT__mdt CampaignStatiMDT;
+    private static List<CampaignStatiMDT__mdt> CampaignStatiMDT;
 
-    public static CampaignStatiMDT__mdt getCampaignStatiMDT() {
+    public static List<CampaignStatiMDT__mdt> getCampaignStatiMDT() {
         if (CampaignStatiMDT == null) {
             string querystring = 'select ';
             List<String> types = new String[]{
@@ -83,8 +83,7 @@ public class WGHelpers {
                 For (string s : fieldsMap.keyset()) {
                     querystring += s + ', ';
                 }
-                querystring = querystring.LEFT(querystring.length() - 2) + ' from CampaignStatiMDT__mdt LIMIT 1';
-
+                querystring = querystring.LEFT(querystring.length() - 2) + ' from CampaignStatiMDT__mdt';
                 CampaignStatiMDT  = Database.query(querystring);
             }
         }

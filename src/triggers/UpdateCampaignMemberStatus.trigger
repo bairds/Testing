@@ -1,4 +1,5 @@
 trigger UpdateCampaignMemberStatus on Campaign (after insert) {
+    /*
     List<CampaignMemberStatus> newCampaignMemberStatus = new List<CampaignMemberStatus>();
     List<CampaignMemberStatus> oldCampaignMemberStatus = new List<CampaignMemberStatus>();
     List<String> campaignIds = new List<String>();
@@ -115,11 +116,11 @@ trigger UpdateCampaignMemberStatus on Campaign (after insert) {
             // Add campaign ids to list for removal of campaign member status values
             campaignIds.add(c.id); 
             system.debug('Now going through campaign ' + c.id);
-/*        List<CampaignMemberStatus> CMSList = cmsMap.get(c.Id);
-            for (CampaignMemberStatus cms : CMSList) {
-            system.debug('CampaignMemberStatus is ' + cms);
-        }
-*/
+//        List<CampaignMemberStatus> CMSList = cmsMap.get(c.Id);
+//            for (CampaignMemberStatus cms : CMSList) {
+//            system.debug('CampaignMemberStatus is ' + cms);
+//        }
+//
 
         Set<String> statusValues = new Set<String>();
         // Create a set of campaign member status values
@@ -196,5 +197,5 @@ trigger UpdateCampaignMemberStatus on Campaign (after insert) {
             delete oldCampaignMemberStatus;
         }
     } // end else TRIGGER SIZE > 1
-    
+*/
 } // END TRIGGER

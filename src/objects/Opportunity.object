@@ -312,7 +312,17 @@
         <fullName>ParticipantListFieldset</fullName>
         <description>Used in the processParticipantListPage</description>
         <displayedFields>
+            <field>Location_of_Task__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
             <field>Supervisor_Satisfaction__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>TotalOpportunityQuantity</field>
             <isFieldManaged>false</isFieldManaged>
             <isRequired>false</isRequired>
         </displayedFields>
@@ -1129,11 +1139,30 @@ TEXT(DAY( CloseDate ))
         <externalId>false</externalId>
         <inlineHelpText>Where the volunteer will complete the task. Optional.</inlineHelpText>
         <label>Location of Task</label>
-        <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>MultiselectPicklist</type>
+        <valueSet>
+            <valueSetDefinition>
+                <sorted>false</sorted>
+                <value>
+                    <fullName>Location 1</fullName>
+                    <default>false</default>
+                    <label>Location 1</label>
+                </value>
+                <value>
+                    <fullName>Location 2</fullName>
+                    <default>false</default>
+                    <label>Location 2</label>
+                </value>
+                <value>
+                    <fullName>Location 3</fullName>
+                    <default>false</default>
+                    <label>Location 3</label>
+                </value>
+            </valueSetDefinition>
+        </valueSet>
+        <visibleLines>3</visibleLines>
     </fields>
     <fields>
         <fullName>MainCompetitors__c</fullName>
@@ -2036,6 +2065,21 @@ TEXT(DAY(TODAY()))
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Matching_Status__c</picklist>
             <values>
                 <fullName>Not Posted</fullName>
@@ -2342,6 +2386,21 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2660,6 +2719,21 @@ TEXT(DAY(TODAY()))
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Matching_Status__c</picklist>
             <values>
                 <fullName>Not Posted</fullName>
@@ -2962,6 +3036,21 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3287,6 +3376,21 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -3617,6 +3721,21 @@ TEXT(DAY(TODAY()))
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Matching_Status__c</picklist>
             <values>
                 <fullName>Not Posted</fullName>
@@ -3943,6 +4062,21 @@ TEXT(DAY(TODAY()))
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Matching_Status__c</picklist>
             <values>
                 <fullName>Not Posted</fullName>
@@ -4261,6 +4395,21 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4591,6 +4740,21 @@ TEXT(DAY(TODAY()))
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Matching_Status__c</picklist>
             <values>
                 <fullName>Not Posted</fullName>
@@ -4912,6 +5076,21 @@ TEXT(DAY(TODAY()))
             </values>
             <values>
                 <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

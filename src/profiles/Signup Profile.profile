@@ -242,10 +242,6 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ManageCnPData2</apexClass>
-        <enabled>false</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>ManageCnPDataSingleTest</apexClass>
         <enabled>false</enabled>
     </classAccesses>

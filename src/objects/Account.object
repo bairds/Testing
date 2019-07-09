@@ -651,7 +651,7 @@
         <description>Amount of last donation, major donation, or challenge.</description>
         <externalId>false</externalId>
         <inlineHelpText>Last closedate on any contribution, including payments, events, and volunteer hours.</inlineHelpText>
-        <label>Last Donate Amount</label>
+        <label>Last_Donate_Amount</label>
         <precision>10</precision>
         <required>false</required>
         <scale>2</scale>
@@ -693,7 +693,7 @@
     <fields>
         <fullName>Last_Membership_Amount__c</fullName>
         <externalId>false</externalId>
-        <label>Last Membership Amount</label>
+        <label>Last_Membership_Amount</label>
         <precision>8</precision>
         <required>false</required>
         <scale>2</scale>

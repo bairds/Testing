@@ -17,9 +17,10 @@ private class UpdateCampaignMemberStatusTEST {
         // Make sure all the campaign status values from the CampaignStatiMDT__mdt are here
         Map<string, CampaignMemberStatus> CMSMap = new Map<string, CampaignMemberStatus>();
         For (CampaignMemberStatus c : CMSs) CMSMap.put(c.label, c);
-        For (CampaignStatiMDT__mdt c : SettingCMs)
-            system.assert(CMSMap.keyset().CONTAINS(c.label));
+         For (CampaignStatiMDT__mdt c : SettingCMs)
+             system.assert(CMSMap.keyset().CONTAINS(c.label));
     }
+/*
 
     @istest static void ManyNewCampaigns() {
         Create_Test_Variables ctv = new Create_Test_Variables();
@@ -42,4 +43,5 @@ private class UpdateCampaignMemberStatusTEST {
         For (CampaignStatiMDT__mdt c : SettingCMs)
             system.assert(CMSMap.keyset().CONTAINS(c.label));
     }
+ */
 }

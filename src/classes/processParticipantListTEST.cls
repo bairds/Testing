@@ -45,16 +45,8 @@ private class processParticipantListTEST {
         PLPC.submitData();
         List<Opportunity> ConfirmOpps = [select id, hours_actual__c, Location_of_Task__c, Supervisor_Satisfaction__c from Opportunity where campaignId = :Testcampaign.Id];
         system.assertEquals(4, ConfirmOpps[0].Hours_Actual__c, 'PLP failed to create opportunity with 4 hours for existing campaign member');
-        // Test whether fieldset values are saved only if the fields are included in the field set;
-        // Because cannot create fieldsets or add fields to them in apex
-        Map<string, Schema.FieldSetMember> MSFSM = new Map<string, Schema.FieldSetMember>();
-        List<Schema.FieldSetMember> pPLFieldSetMembers = SObjectType.Opportunity.fieldSets.ParticipantListFieldset.getFields();
-        system.debug('pPLFieldSetMembers ' + pPLFieldSetMembers);
-        for (Schema.FieldSetMember ppf : pPLFieldSetMembers) {
-            MSFSM.put(ppf.getFieldPath(), ppf);
-        }
-        if (MSFSM.containsKey('Supervisor_Satisfaction__c')) system.assertEquals('4', ConfirmOpps[0].Supervisor_Satisfaction__c, 'PLP failed to transfer Supervisor Satisfaction from Page to Opp');
-        if (MSFSM.containsKey('Location_of_Task__c')) system.assertEquals('Location 1', ConfirmOpps[0].Location_of_Task__c, 'PLP failed to transfer Location of Task from Page to Opp');
+        system.assertEquals('4', ConfirmOpps[0].Supervisor_Satisfaction__c, 'PLP failed to transfer Supervisor Satisfaction from Page to Opp');
+        system.assertEquals('Location 1', ConfirmOpps[0].Location_of_Task__c, 'PLP failed to transfer Location of Task from Page to Opp');
 
         PLPC.exitToWaterGrass();
     }

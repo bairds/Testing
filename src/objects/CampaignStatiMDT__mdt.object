@@ -10,6 +10,15 @@
         <type>Checkbox</type>
     </fields>
     <label>CampaignStatiMDT</label>
+    <listViews>
+        <fullName>All_CampaignStati</fullName>
+        <columns>MasterLabel</columns>
+        <columns>DeveloperName</columns>
+        <columns>NamespacePrefix</columns>
+        <columns>HasResponded__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All CampaignStati</label>
+    </listViews>
     <pluralLabel>CampaignStatiMDT</pluralLabel>
     <visibility>Public</visibility>
 </CustomObject>

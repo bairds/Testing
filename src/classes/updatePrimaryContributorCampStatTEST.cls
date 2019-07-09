@@ -38,7 +38,7 @@ private with sharing class updatePrimaryContributorCampStatTEST {
         // ctv.createWGCustomSettings();
         Campaign TestCamp = ctv.fetchTestCampaign();
         List<CampaignMemberStatus> LCMS = [select label from CampaignMemberStatus where campaignId =: TestCamp.Id];
-        // system.debug('List of available CAmpaignMemberSTati is ' + LCMS);
+        system.debug('List of available CAmpaignMemberSTati is ' + LCMS);
         List<Contact> Ctcts = createContacts();
         List<CampaignMember> CMs = createCMs(Ctcts);
         List<Opportunity> Contribs = createContribs(Ctcts);
@@ -47,7 +47,7 @@ private with sharing class updatePrimaryContributorCampStatTEST {
         system.assertEquals(9,ConfirmCMs.size(),'Should have created 100 opportunities and hence 100 campaignmembers');
         For (CampaignMember cm : ConfirmCMs){
             // system.debug('At end, campaignmember CM is ' + cm);
-            system.assertEquals('Completed',cm.status,'Should have set status to Completed for this volunteer task');
+            system.assertEquals('COMPLETED',cm.status.TOUPPERCASE(),'Should have set status to Completed for this volunteer task');
         }
         
         
