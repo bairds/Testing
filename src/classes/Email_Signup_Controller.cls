@@ -12,8 +12,7 @@ global with sharing class Email_Signup_Controller {
     public Boolean Thankspage {get; set;}
     public Boolean CampaignExists {get; set;}
     public Boolean SetUpTrial {get; set;}
-    
-    
+
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
         this.pcontact=(Contact)Controller.getRecord();
         // In the case that the page is signing up a person for a specific campaign
@@ -52,7 +51,7 @@ global with sharing class Email_Signup_Controller {
                            MailingPostalCode, email, Mailing_Lists__c from contact where id = :sID];
             // Update email
             tempContact.email = pcontact.email;
-            tempContact.Description += '; ' + pcontact.Description;
+            tempContact.Description = tempContact.Description==null ? pcontact.Description : tempContact.Description + '; ' + pcontact.Description;
             // If Mailing_Lists__c is blank, send it to the first method.
             if (string.isBlank(tempContact.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                 tempContact.Mailing_Lists__c = getMailingList();
@@ -67,7 +66,7 @@ global with sharing class Email_Signup_Controller {
                 /*if (templead.email == null) */ templead.email = pcontact.email;
                 tempLead.LeadSource = 'Online Email Signup';
                 tempLead.email=pcontact.email;
-                tempLead.Description += '; ' + pcontact.Description;
+                tempLead.Description = tempLead.Description==null ? pcontact.Description : tempLead.Description + '; ' + pcontact.Description;
                 if (OrgName!=null) tempLead.Company=OrgName;
                 if (string.isBlank(tempLead.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                     tempLead.Mailing_Lists__c = getMailingList();

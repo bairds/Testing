@@ -92,8 +92,8 @@ private class enterAccountContactContributionTest {
         eacc.o.CampaignId = ctv.TestCampaign.Id;
         eacc.oc.thankYouLetter = eacc.oc.thankYouLetters[1].getValue();
         
-        eacc.cm.Membership_Start_Date__c = Date.today();
-        eacc.cm.Membership_End_Date__c = Date.today().addYears(1);
+        eacc.CompMmbership.Membership_Start_Date__c = Date.today();
+        eacc.CompMmbership.Membership_End_Date__c = Date.today().addYears(1);
         
         eacc.submitContribution();
         
@@ -208,8 +208,8 @@ private class enterAccountContactContributionTest {
         eacc.o.CampaignId = ctv.TestCampaign.Id;
         eacc.oc.thankYouLetter = eacc.oc.thankYouLetters[1].getValue();
         
-        eacc.cm.Membership_Start_Date__c = Date.today();
-        eacc.cm.Membership_End_Date__c = Date.today().addYears(1);
+        eacc.CompMmbership.Membership_Start_Date__c = Date.today();
+        eacc.CompMmbership.Membership_End_Date__c = Date.today().addYears(1);
         
         eacc.submitContribution();
         

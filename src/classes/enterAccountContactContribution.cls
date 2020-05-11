@@ -53,7 +53,7 @@ public class enterAccountContactContribution
 	private List<Contact> cos;
     public List<ContactCustom> cocs { get; set; }
     public Opportunity o { get; set; }
-    public Opportunity cm { get; set; }
+    public Opportunity CompMmbership { get; set; }
     public OpportunityCustom oc { get; set; }
     public List<FieldSetCustom> ofs { get; set; }
 
@@ -231,7 +231,7 @@ public class enterAccountContactContribution
                 oc.setThankYouLetters();
                 oc.setThankYouLetterFormats(pc);
 
-                cm = new Opportunity();
+                CompMmbership = new Opportunity();
 
                 ofs = FieldSetCustom.getList(Opportunity.sObjectType.getDescribe(), oc.recordType.Name.replace(' ', '_'));
             }
@@ -370,12 +370,14 @@ public class enterAccountContactContribution
         acct.ShippingState = acct.BillingState;
 
         if(acct.Dear__c == null) {
-            if (co2 == null)
-                acct.Dear__c = co.Dear__c == null ? co.FirstName : co.Dear__c;
-            else {
+            if (ContactsInAccount != '0') {
+                if (co2 == null)
+                    acct.Dear__c = co.Dear__c == null ? co.FirstName : co.Dear__c;
+                else {
                 acct.Dear__c = co.Dear__c == null ? co.FirstName : co.Dear__c;
                 acct.Dear__c += ' and ';
                 acct.Dear__c += co2.Dear__c == null ? co2.FirstName : co2.Dear__c;
+                }
             }
         }
         //else
@@ -527,21 +529,21 @@ public class enterAccountContactContribution
 
         insert o;
 
-        if(cm.Membership_Start_Date__c != null && cm.Membership_End_Date__c != null) {
+        if(CompMmbership.Membership_Start_Date__c != null && CompMmbership.Membership_End_Date__c != null) {
             RecordType rt = [ SELECT Id FROM RecordType WHERE Name = 'Membership' ];
 
-            cm.RecordTypeId = rt.Id;
-            cm.Name = pc.Name + ' ' + Date.today().format() + ' comp mmbr';
-            cm.CampaignId = o.CampaignId;
-            cm.StageName = 'Completed';
-            cm.CloseDate = o.CloseDate;
-            cm.Contribution__c = o.Id;
-            cm.Contact__c = o.Contact__c;
-            cm.AccountId = o.AccountId;
+            CompMmbership.RecordTypeId = rt.Id;
+            CompMmbership.Name = pc.Name + ' ' + Date.today().format() + ' comp mmbr';
+            CompMmbership.CampaignId = o.CampaignId;
+            CompMmbership.StageName = 'Completed';
+            CompMmbership.CloseDate = o.CloseDate;
+            CompMmbership.Contribution__c = o.Id;
+            CompMmbership.Contact__c = o.Contact__c;
+            CompMmbership.AccountId = o.AccountId;
 
-            cm.Type = 'Complimentary Membership';
+            CompMmbership.Type = 'Complimentary Membership';
 
-            insert cm;
+            insert CompMmbership;
         }
 
         cId = o.CampaignId;

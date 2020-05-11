@@ -37,7 +37,7 @@ public static void Email_Signup_Test2() {
         insert Testaccount;
         Contact TestContact = new Contact (firstname='Test', lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
         insert Testcontact;
-        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', email = 'testlead@dontbotherme.org');
+        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', email = 'testlead@dontbotherme.org', Description = 'Original Description');
         insert TestLead;
 
         
@@ -46,10 +46,12 @@ Email_Signup_Controller ECR2 = new Email_Signup_Controller(sc);
     ECR2.pcontact.lastname = 'Lead';
     ECR2.pcontact.firstname = 'Test';
     ECR2.pcontact.email = 'testlead@dontbotherme.org';
+    ECR2.pcontact.Description = 'Added Description';
     ECR2.submit();
-    system.assertEquals(true, [select id, mailing_lists__c from Lead where
-        lastname = 'Lead'][0].mailing_lists__c.contains('enewsletter'));
-           
+    List<Lead> results = [select id, mailing_lists__c, Description from Lead where
+            lastname = 'Lead'];
+    system.assertEquals(true, results[0].mailing_lists__c.contains('enewsletter'));
+    system.assertEquals('Original Description; Added Description', results[0].Description);
     }
 
 
@@ -69,10 +71,12 @@ Email_Signup_Controller ECR3 = new Email_Signup_Controller(sc);
     ECR3.pcontact.lastname = 'Newlead';
     ECR3.pcontact.firstname = 'Test';
     ECR3.pcontact.email = 'nottestlead@dontbotherme.org';
+    ECR3.pcontact.Description = 'Added Description';
     ECR3.submit();
-    system.assertEquals(true, [select id, mailing_lists__c from Lead where
-        lastname = 'Newlead'][0].mailing_lists__c.contains('enewsletter'));        
-           
+    List<Lead> results = [select id, mailing_lists__c, Description from Lead where
+            lastname = 'NewLead'];
+    system.assertEquals(true, results[0].mailing_lists__c.contains('enewsletter'));
+    system.assertEquals('Added Description', results[0].Description);
     }   
     
 // Test for new signup = existing contact with existing mail_lists__c entries       
@@ -302,9 +306,7 @@ Email_Signup_Controller ECR10 = new Email_Signup_Controller(sc);
         List<Task> ConfirmTask = [SELECT Subject, WhatId, WhoId, OwnerId, Status, Type, ReminderDateTime from Task];
         system.assertEquals(1,ConfirmTask.size());
         system.assertEquals(TestContact.Id,ConfirmTask[0].WhoId);
-        system.assertEquals(system.now().addHours(24),ConfirmTask[0].ReminderDateTime);
+        system.assertEquals(system.now().addHours(24).date(),ConfirmTask[0].ReminderDateTime.date());
         system.assertEquals('Create trial database for TestOrgName',ConfirmTask[0].Subject,'OrgName existed but did not get inserted into Subject.');
     }
-
-
 }
