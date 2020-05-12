@@ -7,6 +7,7 @@
     --primary-bgcolor: #406B8C;
     --secondary-bgcolor: #2C6636;
     --primary-font-family: "Times New Roman", Times,serif;
+    --secondary-font-family: Arial,Helvetica,sans-serif;
 }
 
 .bcb { background-color: #DBE8F6; }
@@ -52,6 +53,8 @@
 
 .fdc { flex-direction: column; }
 
+.fontfamily2 { font-family: var(--secondary-font-family);}
+
 .fg1 { flex-grow: 1; }
 
 .fs0 { flex-shrink: 0; }
@@ -63,6 +66,7 @@
 .fs22 {	font-size: 22pt; }
 .fs266 { font-size: 2.66vw; }
 .fs366 { font-size: 3.66vw; }
+.fs83 { font-size: 83%;}
 
 .fwb { font-weight: bold; }
 
@@ -175,7 +179,7 @@ body div.bPageBlock {
 }
 
 .col-md-4 {
-    vertical-align; middle;
+    vertical-align: middle;
     border-style: none;
 }
 
