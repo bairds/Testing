@@ -51,12 +51,12 @@ public class ManageContributions{
         membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
         PledgeRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Pledge').getRecordTypeId();
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
 
         // List<Individual_Contrib_Types__c> DonationRTtypes = Individual_Contrib_Types__c.getAll().values();
         List<String> DonationRTstrings = new List<String>();
-        // for (Individual_Contrib_Types__c ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
+        // for (Individual_Contrib_Types__c ict : DonationRTtypes) DonationRTstrings.add(ict.);
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
         for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
         AvoidRecursiveContributionTrigger.setWorking();
         ManageContributions.recalcAccountMethod(AccountIds);
@@ -72,9 +72,9 @@ public class ManageContributions{
         membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
         PledgeRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Pledge').getRecordTypeId();
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
 
         for (String s : DonationRTstrings)  {
             system.debug('s is ' + s);
@@ -119,9 +119,9 @@ public class ManageContributions{
         // Get the list of fields considered individual contributions from the custom setting
         DonationRTIDs = new Set<Id>();
         membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
         for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
 
         List<Account> ContribsByAcct = [select Id, Name, Last_Contrib_Date__c, Last_Donate_Date__c,
@@ -162,6 +162,8 @@ public class ManageContributions{
             a.First_Donate_Date__c = null;
             a.First_Donate_Amount__c = 0;
             a.Last_Membership_Date__c = null;
+            a.First_Member_Date__c = null;
+            a.First_Member_Source__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
             Decimal pytddonations = 0; //Last Year Giving and Count
             Decimal ppytddonations = 0;
@@ -320,9 +322,9 @@ public class ManageContributions{
 
     public static void recalcContactMethod(Set<Id> ctctIDs) {
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
         for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
 
         List<Opportunity> Contribs = [select Id, Membership_End_Date__c, Hours_Actual__c,
@@ -527,12 +529,13 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
         List<Opportunity> updateOpps = new List<Opportunity>();
         Map<Id,Opportunity> PledgeMap = new Map<Id,Opportunity>([select Id, Periodicity__c, Number_of_Payments__c, Next_Payment_Date__c, Total_Paid__c,
                 Start_Date__c, CloseDate, Pledge_Amount__c from Opportunity where Id in :pledgeIdsToUpdate]);
-        AggregateResult[] TotalsByPledge = [SELECT Matches_Which_Challenge_or_Pledge__c pledge,
+        AggregateResult[] TotalsByPledge = [SELECT Matches_Which_Challenge_or_Pledge__c pledge, count(Amount) NrPayments,
                 Sum(Amount) sum, Max(CloseDate) LastPaymentDate FROM Opportunity where Matches_Which_Challenge_or_Pledge__c
                 in :pledgeIdsToUpdate
         GROUP BY Matches_Which_Challenge_or_Pledge__c];
 
         For (AggregateResult ar : TotalsByPledge) {
+            system.debug('For this pledge, I found ' + (Decimal)ar.get('NrPayments') + ' payments.');
             Opportunity opp = PledgeMap.get((id)ar.get('pledge'));
             opp.Total_Paid__c = (Decimal)ar.get('sum');
             System.debug('Total_Paid__c is ' + opp.Total_Paid__c + ' and Pledge Amount is ' + opp.Pledge_Amount__c);
@@ -542,8 +545,10 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             } else {
                 opp.StageName = 'Pledge Recorded';
                 Date LastPaymentDate = (Date)ar.get('LastPaymentDate');
+                system.debug('before updating the pledge, LastPaymentDate is ' + LastPaymentDate);
                 opp.Next_Payment_Date__c = CalcNextPaymentDate(opp.Periodicity__c, LastPaymentDate);
             }
+            system.debug('Periodicity is ' + opp.Periodicity__c + ' and Next_Payment_Date__c is ' + opp.Next_Payment_Date__c);
 
             PledgeMap.put((id)ar.get('pledge'),opp);
             AvoidRecursiveContributionTrigger.setWorking();
@@ -587,6 +592,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
         } else {
             NextPaymentDate = null;
         }
+        system.debug('At end of CalcNextPaymentDate, NextPaymentDate is ' + NextPaymentDate);
         return NextPaymentDate;
     }
 }
