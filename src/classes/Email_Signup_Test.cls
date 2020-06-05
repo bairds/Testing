@@ -132,6 +132,7 @@ Email_Signup_Controller ECR5 = new Email_Signup_Controller(sc);
     system.assertEquals(true, mailing_list_result.contains('testnewsletter'));        
            
     }
+
      public static  testmethod void Email_Signup_Test6() {
 
         string href = baseUrl ;
@@ -143,6 +144,7 @@ Email_Signup_Controller ECR5 = new Email_Signup_Controller(sc);
         string host = remoteHost;
         Email_Signup_Controller.validCaptcha(challenge , response);
 }
+
     public static  testmethod void Email_Signup_Test7() {
 
         string href = baseUrl ;
@@ -155,6 +157,7 @@ Email_Signup_Controller ECR5 = new Email_Signup_Controller(sc);
         string host = remoteHost;
         Email_Signup_Controller.validCaptcha(challenge , response);
 }
+
 // Test for new signup = existing lead with different email; does email switch to new email?
 public static testMethod void Email_Signup_Test8() {
      
@@ -209,8 +212,7 @@ Email_Signup_Controller ECR9 = new Email_Signup_Controller(sc);
     system.assertEquals('Original Description; New Description', resultsLead[0].description);
 
 }
-   
-  
+
 public static testMethod void Email_Signup_w_Campaign() {     
         Account Testaccount = new Account (name='TestAccount');
         insert Testaccount;
@@ -219,8 +221,9 @@ public static testMethod void Email_Signup_w_Campaign() {
         Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', 
             email = 'testlead@dontbotherme.org', PostalCode = '22222',  mailing_lists__c = 'e-newsletter');
         insert TestLead; 
-        Campaign TestCamp = new Campaign(name = 'Test Campaign', RequireAddress__c = true, isActive=true, RecordTypeId =
-                                         [select id from RecordType where name = 'Volunteer Event'][0].id);
+        Campaign TestCamp = new Campaign(name = 'Test Campaign', RequireAddress__c = true, isActive=true, Custom_Signup_Question__c =
+                'Do you have special dietary needs?', Custom_Signup_Question_2__c = 'How many children will you bring with you?',
+                RecordTypeId =[select id from RecordType where name = 'Volunteer Event'][0].id);
         insert TestCamp;
         system.debug('Inserted TestCamp, id is ' + TestCamp.Id);
 
@@ -236,6 +239,8 @@ Email_Signup_Controller ECR10 = new Email_Signup_Controller(sc);
     ECR10.pcontact.firstname = 'Test';
     ECR10.pcontact.MailingPostalCode = '22222';
     ECR10.pcontact.email = 'testlead2@dontbotherme.org';
+    ECR10.CustomQuestion1Answer ='Allergic to peanuts';
+    ECR10.CustomQuestion2Answer ='Three children under four';
     ECR10.submit();
     List<CampaignMember> TestCMs = [select id, lead.email from CampaignMember where campaignId = :TestCamp.Id];
     System.AssertEquals('testlead2@dontbotherme.org', TestCMs[0].lead.email);
@@ -251,8 +256,10 @@ Email_Signup_Controller ECR10 = new Email_Signup_Controller(sc);
     ECR11.pcontact.MailingPostalCode = '22222';
     ECR11.pcontact.email = 'testlead2@dontbotherme.org';
     ECR11.submit();
-    TestCMs = [select id, lead.email from CampaignMember where campaignId = :TestCamp.Id];
+    TestCMs = [select id, lead.email,SignupQuestionAnswer__c,SignupQuestionAnswer2__c from CampaignMember where campaignId = :TestCamp.Id];
     System.AssertEquals('testlead2@dontbotherme.org', TestCMs[0].lead.email);
+    system.AssertEquals('Allergic to peanuts',TestCMs[0].SignupQuestionAnswer__c);
+    system.AssertEquals('Three children under four',TestCMs[0].SignupQuestionAnswer2__c);
     ECR11.submit();
     TestLeads = [select id, mailing_lists__c from Lead where firstname = 'Test'];
     system.debug('Mailing_List__c is ' + TestLeads[0].mailing_lists__c);

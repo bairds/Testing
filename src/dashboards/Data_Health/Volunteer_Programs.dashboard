@@ -16,6 +16,7 @@
             <drillToDetailEnabled>false</drillToDetailEnabled>
             <enableHover>false</enableHover>
             <expandOthers>false</expandOthers>
+            <groupingSortProperties/>
             <legendPosition>Bottom</legendPosition>
             <report>WG_Volunteer_Mgmt/Volunteer_Hours_Over_Time</report>
             <showPercentage>false</showPercentage>

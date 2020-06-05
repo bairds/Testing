@@ -5,7 +5,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -13,7 +33,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -21,7 +61,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -29,7 +89,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -37,7 +117,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <allowInChatterGroups>false</allowInChatterGroups>
@@ -48,6 +148,7 @@
     <enableBulkApi>true</enableBulkApi>
     <enableFeeds>false</enableFeeds>
     <enableHistory>false</enableHistory>
+    <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
@@ -88,38 +189,47 @@
                 <value>
                     <fullName>Business</fullName>
                     <default>false</default>
+                    <label>Business</label>
                 </value>
                 <value>
                     <fullName>Education</fullName>
                     <default>false</default>
+                    <label>Education</label>
                 </value>
                 <value>
                     <fullName>Family</fullName>
                     <default>false</default>
+                    <label>Family</label>
                 </value>
                 <value>
                     <fullName>Foundation</fullName>
                     <default>false</default>
+                    <label>Foundation</label>
                 </value>
                 <value>
                     <fullName>Government</fullName>
                     <default>false</default>
+                    <label>Government</label>
                 </value>
                 <value>
                     <fullName>Internal</fullName>
                     <default>false</default>
+                    <label>Internal</label>
                 </value>
                 <value>
                     <fullName>Media</fullName>
                     <default>false</default>
+                    <label>Media</label>
                 </value>
                 <value>
                     <fullName>Nonprofit</fullName>
                     <default>false</default>
+                    <label>Nonprofit</label>
                 </value>
                 <value>
                     <fullName>Watershed Group</fullName>
                     <default>false</default>
+                    <label>Watershed Group</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -244,46 +354,57 @@ Address_Country__c</formula>
                 <value>
                     <fullName>Attended</fullName>
                     <default>true</default>
+                    <label>Attended</label>
                 </value>
                 <value>
                     <fullName>RSVPed and Attended</fullName>
                     <default>false</default>
+                    <label>RSVPed and Attended</label>
                 </value>
                 <value>
                     <fullName>Donated</fullName>
                     <default>false</default>
+                    <label>Donated</label>
                 </value>
                 <value>
                     <fullName>Communication sent</fullName>
                     <default>false</default>
+                    <label>Communication sent</label>
                 </value>
                 <value>
                     <fullName>Signed e-petition</fullName>
                     <default>false</default>
+                    <label>Signed e-petition</label>
                 </value>
                 <value>
                     <fullName>No Show</fullName>
                     <default>false</default>
+                    <label>No Show</label>
                 </value>
                 <value>
                     <fullName>Responded No</fullName>
                     <default>false</default>
+                    <label>Responded No</label>
                 </value>
                 <value>
                     <fullName>Responded Yes</fullName>
                     <default>false</default>
+                    <label>Responded Yes</label>
                 </value>
                 <value>
                     <fullName>Added to campaign</fullName>
                     <default>false</default>
+                    <label>Added to campaign</label>
                 </value>
                 <value>
                     <fullName>Contributed</fullName>
                     <default>false</default>
+                    <label>Contributed</label>
                 </value>
                 <value>
                     <fullName>Took action</fullName>
                     <default>false</default>
+                    <label>Took action</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -334,26 +455,32 @@ Address_Country__c</formula>
                 <value>
                     <fullName>Fundraising_Activity</fullName>
                     <default>false</default>
+                    <label>Fundraising Activity</label>
                 </value>
                 <value>
                     <fullName>Good_or_Service</fullName>
                     <default>false</default>
+                    <label>Good or Service</label>
                 </value>
                 <value>
                     <fullName>Outreach_Campaign</fullName>
                     <default>false</default>
+                    <label>Outreach Campaign</label>
                 </value>
                 <value>
                     <fullName>Public_Event</fullName>
                     <default>false</default>
+                    <label>Public Event</label>
                 </value>
                 <value>
                     <fullName>Signup</fullName>
                     <default>false</default>
+                    <label>Signup</label>
                 </value>
                 <value>
                     <fullName>Volunteer_Event</fullName>
                     <default>false</default>
+                    <label>Volunteer Event</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -470,42 +597,52 @@ Address_Country__c</formula>
                 <value>
                     <fullName>Challenge</fullName>
                     <default>false</default>
+                    <label>Challenge</label>
                 </value>
                 <value>
                     <fullName>Donation</fullName>
                     <default>false</default>
+                    <label>Donation</label>
                 </value>
                 <value>
                     <fullName>Event</fullName>
                     <default>false</default>
+                    <label>Event</label>
                 </value>
                 <value>
                     <fullName>Grant</fullName>
                     <default>false</default>
+                    <label>Grant</label>
                 </value>
                 <value>
                     <fullName>InKind</fullName>
                     <default>false</default>
+                    <label>InKind</label>
                 </value>
                 <value>
                     <fullName>Major Donation</fullName>
                     <default>false</default>
+                    <label>Major Donation</label>
                 </value>
                 <value>
                     <fullName>Membership</fullName>
                     <default>false</default>
+                    <label>Membership</label>
                 </value>
                 <value>
                     <fullName>Pledge</fullName>
                     <default>false</default>
+                    <label>Pledge</label>
                 </value>
                 <value>
                     <fullName>Service</fullName>
                     <default>false</default>
+                    <label>Service</label>
                 </value>
                 <value>
                     <fullName>Volunteer Task</fullName>
                     <default>false</default>
+                    <label>Volunteer Task</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -526,138 +663,172 @@ Address_Country__c</formula>
                 <value>
                     <fullName>Closed/Won</fullName>
                     <default>false</default>
+                    <label>Closed/Won</label>
                 </value>
                 <value>
                     <fullName>Closed Lost</fullName>
                     <default>false</default>
+                    <label>Closed Lost</label>
                 </value>
                 <value>
                     <fullName>Planned</fullName>
                     <default>false</default>
+                    <label>Planned</label>
                 </value>
                 <value>
                     <fullName>Orphan</fullName>
                     <default>false</default>
+                    <label>Orphan</label>
                 </value>
                 <value>
                     <fullName>Adopted</fullName>
                     <default>false</default>
+                    <label>Adopted</label>
                 </value>
                 <value>
                     <fullName>Completed</fullName>
                     <default>false</default>
+                    <label>Completed</label>
                 </value>
                 <value>
                     <fullName>Abandoned</fullName>
                     <default>false</default>
+                    <label>Abandoned</label>
                 </value>
                 <value>
                     <fullName>Promised</fullName>
                     <default>false</default>
+                    <label>Promised</label>
                 </value>
                 <value>
                     <fullName>Payment Received</fullName>
                     <default>false</default>
+                    <label>Payment Received</label>
                 </value>
                 <value>
                     <fullName>Thank you mailed</fullName>
                     <default>false</default>
+                    <label>Thank you mailed</label>
                 </value>
                 <value>
                     <fullName>Grant Prep</fullName>
                     <default>false</default>
+                    <label>Grant Prep</label>
                 </value>
                 <value>
                     <fullName>Grant Submitted</fullName>
                     <default>false</default>
+                    <label>Grant Submitted</label>
                 </value>
                 <value>
                     <fullName>Grant Under Review</fullName>
                     <default>false</default>
+                    <label>Grant Under Review</label>
                 </value>
                 <value>
                     <fullName>Grant Awarded</fullName>
                     <default>false</default>
+                    <label>Grant Awarded</label>
                 </value>
                 <value>
                     <fullName>Grant Denied</fullName>
                     <default>false</default>
+                    <label>Grant Denied</label>
                 </value>
                 <value>
                     <fullName>Prospect</fullName>
                     <default>false</default>
+                    <label>Prospect</label>
                 </value>
                 <value>
                     <fullName>Letter Sent</fullName>
                     <default>false</default>
+                    <label>Letter Sent</label>
                 </value>
                 <value>
                     <fullName>Meeting scheduled</fullName>
                     <default>false</default>
+                    <label>Meeting scheduled</label>
                 </value>
                 <value>
                     <fullName>Ask Under Review</fullName>
                     <default>false</default>
+                    <label>Ask Under Review</label>
                 </value>
                 <value>
                     <fullName>Ask Denied</fullName>
                     <default>false</default>
+                    <label>Ask Denied</label>
                 </value>
                 <value>
                     <fullName>Ask Accepted</fullName>
                     <default>false</default>
+                    <label>Ask Accepted</label>
                 </value>
                 <value>
                     <fullName>Donation Received</fullName>
                     <default>false</default>
+                    <label>Donation Received</label>
                 </value>
                 <value>
                     <fullName>Paid / Current</fullName>
                     <default>false</default>
+                    <label>Paid / Current</label>
                 </value>
                 <value>
                     <fullName>Unpaid</fullName>
                     <default>false</default>
+                    <label>Unpaid</label>
                 </value>
                 <value>
                     <fullName>Send Pledge Reminder</fullName>
                     <default>false</default>
+                    <label>Send Pledge Reminder</label>
                 </value>
                 <value>
                     <fullName>Pledge Recorded</fullName>
                     <default>false</default>
+                    <label>Pledge Recorded</label>
                 </value>
                 <value>
                     <fullName>Prospecting</fullName>
                     <default>false</default>
+                    <label>Prospecting</label>
                 </value>
                 <value>
                     <fullName>Qualification</fullName>
                     <default>false</default>
+                    <label>Qualification</label>
                 </value>
                 <value>
                     <fullName>Needs Analysis</fullName>
                     <default>false</default>
+                    <label>Needs Analysis</label>
                 </value>
                 <value>
                     <fullName>Value Proposition</fullName>
                     <default>false</default>
+                    <label>Value Proposition</label>
                 </value>
                 <value>
                     <fullName>Id. Decision Makers</fullName>
                     <default>false</default>
+                    <label>Id. Decision Makers</label>
                 </value>
                 <value>
                     <fullName>Perception Analysis</fullName>
                     <default>false</default>
+                    <label>Perception Analysis</label>
                 </value>
                 <value>
                     <fullName>Proposal/Price Quote</fullName>
                     <default>false</default>
+                    <label>Proposal/Price Quote</label>
                 </value>
                 <value>
                     <fullName>Negotiation/Review</fullName>
                     <default>false</default>
+                    <label>Negotiation/Review</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -841,26 +1012,32 @@ LeadCalculated__r.Phone)</formula>
                 <value>
                     <fullName>Matched to Contact</fullName>
                     <default>false</default>
+                    <label>Matched to Contact</label>
                 </value>
                 <value>
                     <fullName>Matched to Lead</fullName>
                     <default>false</default>
+                    <label>Matched to Lead</label>
                 </value>
                 <value>
                     <fullName>New Contact Created</fullName>
                     <default>false</default>
+                    <label>New Contact Created</label>
                 </value>
                 <value>
                     <fullName>New Lead Created</fullName>
                     <default>false</default>
+                    <label>New Lead Created</label>
                 </value>
                 <value>
                     <fullName>Error with New Record Creation</fullName>
                     <default>false</default>
+                    <label>Error with New Record Creation</label>
                 </value>
                 <value>
                     <fullName>Matched to Converted Lead</fullName>
                     <default>false</default>
+                    <label>Matched to Converted Lead</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1118,18 +1295,22 @@ Created_Second_Contact__c= FALSE
                 <value>
                     <fullName>To Process</fullName>
                     <default>true</default>
+                    <label>To Process</label>
                 </value>
                 <value>
                     <fullName>Processed</fullName>
                     <default>false</default>
+                    <label>Processed</label>
                 </value>
                 <value>
                     <fullName>Error with Processing</fullName>
                     <default>false</default>
+                    <label>Error with Processing</label>
                 </value>
                 <value>
                     <fullName>Holding</fullName>
                     <default>false</default>
+                    <label>Holding</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1157,8 +1338,7 @@ Created_Second_Contact__c= FALSE
         <columns>Person_EmailPersonal__c</columns>
         <columns>Campaign_Name__c</columns>
         <columns>Contribution_Amount__c</columns>
-        <columns>OWNER.ALIAS</columns>
-        <columns>Processed__c</columns>
+        <columns>Status__c</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>CREATED_DATE</field>
@@ -1193,4 +1373,5 @@ Created_Second_Contact__c= FALSE
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <startsWith>Vowel</startsWith>
+    <visibility>Public</visibility>
 </CustomObject>

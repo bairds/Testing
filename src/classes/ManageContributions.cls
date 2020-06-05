@@ -21,6 +21,7 @@
 // Aug 2018 Revisions for 2018 Upgrade.  Lifetime_Donations__c now calculated, not rollup.  First_member_date corrected.
 // Sept 2018 If Campaign.Account_Line_Item is populated, populate Contrib.Account_Line_Item
 // May 2019 Add "yearly" to the periodicity values for recurring payments, in recurring payment section
+// June 2020 Filter out "if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)" on lines 60,77,127,333
 
 public class ManageContributions{
     public static Set<Id> AccountIds;
@@ -55,9 +56,12 @@ public class ManageContributions{
 
         // List<Individual_Contrib_Types__c> DonationRTtypes = Individual_Contrib_Types__c.getAll().values();
         List<String> DonationRTstrings = new List<String>();
-        // for (Individual_Contrib_Types__c ict : DonationRTtypes) DonationRTstrings.add(ict.);
         for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (String s : DonationRTstrings) {
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s) != null) {
+                DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            }
+        }
         AvoidRecursiveContributionTrigger.setWorking();
         ManageContributions.recalcAccountMethod(AccountIds);
         ManageContributions.recalcContactMethod(ContactIds);
@@ -78,8 +82,10 @@ public class ManageContributions{
 
         for (String s : DonationRTstrings)  {
             system.debug('s is ' + s);
-            system.debug('Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId() is ' + Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
-            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s)!=null) {
+                system.debug('Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId() is ' + Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+                DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            }
         }
         System.debug('DonationRTIDs is ' + DonationRTIDs);
         ManageContributions.setContribOrder(Contribs);
@@ -95,7 +101,6 @@ public class ManageContributions{
     } //end after insert
 
     public static void setContribOrder(Opportunity [] Contribs) {
-
         // If there are multiple donations from one person, we have to know which is the most recent.
         // Because all triggers fire before roll-ups are recalculated, we can't rely on roll-ups.
         // (see http://www.salesforce.com/us/developer/docs/apexcode/Content/apex_triggers_order_of_execution.htm)
@@ -122,7 +127,9 @@ public class ManageContributions{
         List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
         for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (String s : DonationRTstrings)
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s)!=null)
+            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
 
         List<Account> ContribsByAcct = [select Id, Name, Last_Contrib_Date__c, Last_Donate_Date__c,
                 Account_Membership_Expires__c, (select Id, Membership_End_Date__c,
@@ -325,7 +332,11 @@ public class ManageContributions{
         List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
         for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (String s : DonationRTstrings) {
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)
+            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        }
+
 
         List<Opportunity> Contribs = [select Id, Membership_End_Date__c, Hours_Actual__c,
                 Amount, CloseDate, RecordTypeId, Contact__c, RecordType.Name, CampaignId, Campaign.Name, Periodicity__c,

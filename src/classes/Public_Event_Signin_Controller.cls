@@ -146,7 +146,8 @@ public PageReference signMeIn() {
 						} // end of else They're in the database but haven't signed up ...
 					//Convert any leads to contacts
 					if (results[1] == 'Lead') {
-						results = ConvertLeadToContact.ConvertLeadToContact(results[0]);
+						List<Id> convertedLead = ConvertLeadToContact.ConvertLeadToContact(results[0]);
+						results[0] = convertedLead[0];
 						results[1] = 'Contact';
 						} 
 					} // end of else If they're a lead ..

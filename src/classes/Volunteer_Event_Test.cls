@@ -42,7 +42,7 @@ public static testMethod void Volunteer_Event_Test() {
     Testcampaign.Description = 'description';
     Testcampaign.isActive = true;
     Testcampaign.Event_Cost__c = 20.00;
-    Testcampaign.Waiver_Required__c = true;
+    //Testcampaign.Waiver_Required__c = true;
     Testcampaign.Waiver__c = waivertext.Id;
     Testcampaign.RecordTypeId = [select Id from RecordType where Name = 'Volunteer Event'].Id;
     insert Testcampaign;        

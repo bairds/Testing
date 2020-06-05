@@ -5,11 +5,21 @@
  - RecordType must be Volunteer or Public Event
  - Page generate URLs for VolunteerEventSelect page for all campaigns, and
  - the VolunteerEventRegisterPage for the current campaign.  Users can click on the URLs to open a new window and see them.
+ - Updated to bootstrap on 6 Apr 2019
+ - Also updated WaterGrassCSS, and the two should be deployed together.
  -->
 
-<apex:page id="CampaignURLsSection" standardController="Campaign" extensions="generateCampaignURLs">
+<apex:page id="CampaignURLsSection" standardController="Campaign" extensions="generateCampaignURLs"
+           lightningStyleSheets="true" docType="html-5.0" cache="false">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
     <apex:includeScript value="https://apis.google.com/js/api.js"/>
+    <apex:includeScript value="{!$Resource.JoseJS}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
     <script>
         function ShowSelectURL(selectedvalue) {
             var mypagename = '{!VFPageMapJSON}';
@@ -28,9 +38,9 @@
             console.log('Site.Name is ' + sitio.Name);
             console.log('Site.MasterLabel is ' + sitio.MasterLabel);
             console.log('URL.getSalesforceBaseUrl is {!SalesforceBaseUrl}');
-            if (selectedvalue!='') {
+            if (selectedvalue != '') {
                 var selectedSelectPage = jsPageMap[selectedvalue];
-                document.getElementById('ShowSelectCampaignURL').innerHTML = 'Signup page URL listing all campaigns is <a target="_blank" href="' + BaseURL + PathPrefix + selectedSelectPage.Name + '">' + BaseURL + PathPrefix + selectedSelectPage.Name+ '</a>';
+                document.getElementById('ShowSelectCampaignURL').innerHTML = 'Signup page URL listing all campaigns is <a target="_blank" href="' + BaseURL + PathPrefix + selectedSelectPage.Name + '">' + BaseURL + PathPrefix + selectedSelectPage.Name + '</a>';
             }
         }
 
@@ -45,68 +55,54 @@
             } else {
                 PathPrefix = '\/';
             }
-            if (selectedvalue!='') {
+            if (selectedvalue != '') {
                 var selectedRegisterPage = jsPageMap[selectedvalue];
                 document.getElementById('ShowRegisterCampaignURL').innerHTML = 'Signup page URL for this particular campaign: <a target="_blank" href="' + BaseURL + PathPrefix + selectedRegisterPage.Name + '?cid={!CampId}">' + BaseURL + PathPrefix + selectedRegisterPage.Name + '?cid={!CampId}</a>';
             }
         }
     </script>
-    <apex:form >
-        <apex:pageBlock title="URLs for signup pages">
-            <apex:pageMessages />
-            <table columns="2">
-                <tr>
-                    <td>
-                        <table columns="1">
-                            <tr>
-                                <td>
-                                    <div id="ShowSelectCampaignURL"/>
-                                    <br/>
-                                </td>
-                            </tr>
-                        </table>
-                        <table columns="2">
-                            <tr>
-                                <td>
-                                    <apex:outputText value="Choose the template for selecting a campaign.  If you choose this, you don't need a registration template."/>
-                                </td>
-                                <td>
+    <apex:form>
+        <apex:PageBlock title="Links for online signup pages">
+            <div class="container centercontainer">
+                <apex:outputPanel id="URLsSection">
+                    <div class="row fontfamily2 fs83">
+                        <div class="col-xs-6">
+                            <div class="row" id="ShowSelectCampaignURL">
+                                <br/>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <b>Choose the template for <i>selecting</i> a campaign.</b>
+                                </div>
+                                <div class="col-sm-3">
                                     <apex:selectList value="{!camp.Select_Template__c}" size="3"
                                                      onClick="ShowSelectURL(this.value)"
                                                      id="PickSelectTemplate">
                                         <apex:selectOptions value="{!selectCampaignOptions}"/>
                                     </apex:selectList>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td>
-                        <table columns="1">
-                            <tr>
-                                <td>
-                                    <div id="ShowRegisterCampaignURL"/>
-                                    <br/>
-                                    {!camp.Select_Template__c}
-                                </td>
-                            </tr>
-                        </table>
-                        <table columns="2">
-                            <tr>
-                                <td>
-                                    <apex:outputText value="Or choose the registration template for this specific campaign."/>
-                                </td>
-                                <td>
-                                    <apex:selectList value="{!camp.Register_Template__c}" size="3"
-                                                     onClick="ShowRegisterURL(this.value)" id="PickRegisterTemplate">
-                                        <apex:selectOptions value="{!RegisterOptions}"/>
-                                    </apex:selectList>
-                                </td>
-                            </tr>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="row" id="ShowRegisterCampaignURL"/>
+                            <br/>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <b>Or the registration page for this specific campaign.</b>
+                            </div>
+                            <div class="col-sm-3">
+                                <apex:selectList value="{!camp.Register_Template__c}" size="3"
+                                                 onClick="ShowRegisterURL(this.value)"
+                                                 id="PickRegisterTemplate">
+                                    <apex:selectOptions value="{!RegisterOptions}"/>
+                                </apex:selectList>
+                            </div>
+                        </div>
+                    </div>
+                </apex:outputPanel>
 
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </apex:pageBlock>
+            </div>
+        </apex:PageBlock>
     </apex:form>
 </apex:page>

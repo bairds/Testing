@@ -6,7 +6,7 @@ trigger ManageCampaigns on Campaign (after insert) {
     if(Trigger.isAfter && (Trigger.isUpdate || Trigger.IsInsert)) {
         List<Id> CampIds = new List<Id>();
         For (Campaign c : Trigger.New)
-            if (c.isClone()==false) CampIds.add(c.Id);
+            CampIds.add(c.Id);
         createCampaignMemberStati.createCampaignMemberStati(CampIds);
     }
 }

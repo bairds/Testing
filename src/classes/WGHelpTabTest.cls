@@ -12,6 +12,6 @@ private class WGHelpTabTest {
 
         WGHelpTab WGHT = new WGHelpTab();
         system.assertEquals(18,WGHT.OrgID18.length(),'WGHelpTab controller should have brought back and OrgId of length 18.');
-        system.assertEquals('BaseURL',WGHT.BaseURL);
+        system.assertEquals('BaseURL',WGHT.BaseURL,'If BaseURL is null, you need to create a site named Signup.');
     }
 }

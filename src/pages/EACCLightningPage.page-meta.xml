@@ -3,10 +3,5 @@
     <apiVersion>43.0</apiVersion>
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
-    <label>listCampaignMembersBairdPage</label>
-    <packageVersions>
-        <majorNumber>1</majorNumber>
-        <minorNumber>0</minorNumber>
-        <namespace>CnP_PaaS_Bridge</namespace>
-    </packageVersions>
+    <label>EACCBairdPage</label>
 </ApexPage>

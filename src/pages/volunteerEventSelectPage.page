@@ -1,75 +1,133 @@
-<apex:page controller="VolunteerEventRegister" showheader="false" sidebar="false" docType="html-5.0" action="{!setMasterCampaign}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
-    
-    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
-    <apex:includeScript value="{!$Resource.JoseJS}" />
-    <apex:stylesheet value="{!$Resource.JoseCSS}" />
-    
+<apex:page controller="VolunteerEventRegisterBootstrap" showheader="false" sidebar="false" docType="html-5.0"
+           action="{!setMasterCampaign}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
+    <apex:includeScript value="{!$Resource.JoseJS}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <style>
+        .alignleft {
+            padding-left:0px;
+        }
+    </style>
+
     <apex:form >
-        <div class="bPageBlock mobile" color="blue">  
-            <div class="container ma miw100">
-                    <div class="title df">                         
-                        <div class="df bcw"> <apex:image value="{!$Resource.OrgLogo}" styleClass="ma" /> </div> 
-                        <div class="text">                         
-                            <div class="name"> <div class="ma"> Volunteer Events </div> </div>
-                        </div>                         
+        <div class="container centercontainer" id="container"> <!-- from bootstrap example-->
+
+            <div class="bPageBlock" color="blue">
+
+                <div class="row match-my-cols bcw2">
+                    <div class="col-md-4 WGPageTitle" color="TitleColor">
+                        <apex:image value="{!$Resource.OrgLogo}" styleclass="logo-image" height="100px"/>
                     </div>
-                    
-                    <!--<div class="blue2 highlight"> <span> {!c.Type} at , </span> <apex:outputField value="{!c.StartDate}" /> </div>-->
-                   <!--<div class="purple highlight"> <div class="ma fs366">  </div> </div> -->
-                                        
-                    <div class="p11" id="content" color="green">                               
-                        <div class="table">
-                            <div class="title"> 
-                                <apex:outputText value="Please select an Event" rendered="{!step == '1'}" />
-                            </div>
-                            
-                            <table class="miw100">                                    
-                                <tr class="col-header">
-                                    <td> Name </td>
-                                    <td> Location </td>
-                                    <td> Description</td>
-                                    <td> Date </td>
-                                    <td> Starts </td>
-                                    <td> Ends </td>
-                                    <td class="wsn"> Remaining </td>
-                                </tr>
-                                
-                                <apex:repeat value="{!cs}" var="c">
-                                    <tr class="row">
-                                        <td> <a href="{!$Site.Prefix}/apex/volunteerEventRegisterPage?cid={!c.id}{!query}">{!c.Name}</a> </td> 
-                                        <td> <apex:outputField value="{!c.Event_Location__c}" /> </td> 
-                                        <td> <apex:outputField value="{!c.Description}" /> </td> 
-                                       
-                                        <td class="wsn"> 
-                                            <apex:outputText value="{0, date, MM/dd/yyyy}">
-                                                <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
-                                            </apex:outputText>
-                                        </td> 
-                                        
-                                         <td class="wsn"> 
-                                            <apex:outputText value="{0, date, hh:mm a}">
-                                                <apex:param value="{!c.Event_Date_Time__c + tzoffset}" /> 
-                                            </apex:outputText>
-                                        </td> 
-                                        
-                                         <td class="wsn"> 
-                                            <apex:outputText value="{0, date, hh:mm a}">
-                                                <apex:param value="{!c.Event_End_Time__c + tzoffset}" /> 
-                                            </apex:outputText>
-                                        </td> 
-                                        <td> <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}" /> </td>
-                                    </tr>
-                                </apex:repeat>
-                            </table>
-                            <div class="text"> 
-                                            
-                            <apex:OutputPanel rendered="{!NoAvailableCampaigns}" style="text-align: center; font-weight: bold; font-size: 16pt; "> Sorry, currently all our volunteer events are full!  Please check again! </apex:outputPanel>
-                                            
-                        </div>  
-                        </div>
+                    <div class="WGPageTitle col-md-8 align-middle" color="TitleColor">
+                        Volunteer Events
                     </div>
                 </div>
+
+                <div class="row match-my-cols">
+                    <div class="col-xs-12 WGPageTitle2" color="SectionColor">
+                        Please Select an Event.<b/>
+                    </div>
+                </div>
+                <div class="row bcg2 fs15">
+                    <div class="col-md-2 hidden-xs hidden-sm alignleft"> NAME</div>
+                    <div class="col-md-2 hidden-xs hidden-sm alignleft"> LOCATION</div>
+                    <div class="col-md-3 hidden-sm hidden-xs alignleft"> DESCRIPTION</div>
+                    <div class="col-md-2 hidden-xs hidden-sm alignleft"> DATE</div>
+                    <div class="col-md-1 hidden-xs hidden-sm alignleft"> START</div>
+                    <div class="col-md-1 hidden-sm hidden-xs alignleft"> END</div>
+                    <div class="col-md-1 hidden-sm hidden-xs alignleft"> SPACES</div>
+                </div>
+
+                <apex:repeat value="{!cs}" var="c">
+                    <div class="row repeatrow bcg2">
+                        <div class="col-md-2 col-xs-12">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg hidden-xl col-xs-4 cw">
+                                    <apex:outputText value=" "/>
+                                </div>
+                                <div class="col-md-12 col-xs-8 alignleft">
+                                    <a href="{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?cid={!c.id}{!query}"><b>{!c.Name}</b></a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-12">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4 alignleft ">
+                                    LOCATION
+                                </div>
+                                <div class="col-md-12 col-xs-8 alignleft">
+                                    <apex:outputField value="{!c.Event_Location__c}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 col-xs-12">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4 alignleft">
+                                    DESCRIPTION
+                                </div>
+                                <div class="col-md-12 col-xs-8 alignleft">
+                                    <apex:outputField value="{!c.Description}"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2 col-xs-12 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4 ">
+                                    DATE
+                                </div>
+                                <div class="col-md-12 col-xs-8">
+                                    <c:VFFormattedLocalTimeComponent date_time_value="{!c.Event_Date_Time__c}" date_time_format="EEE MMM d', ' yyyy" /><br/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-12 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4 ">
+                                    FROM:
+                                </div>
+                                <div class="col-md-12 col-xs-8">
+                                    <c:VFFormattedLocalTimeComponent date_time_value="{!c.Event_Date_Time__c}" date_time_format=" h:mm a" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-12 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4">
+                                    TO:
+                                </div>
+                                <div class="col-md-12 col-xs-8">
+                                    <c:VFFormattedLocalTimeComponent date_time_value="{!c.Event_End_Time__c}" date_time_format=" h:mm a" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1 col-xs-12 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4">
+                                    SPACES:
+                                </div>
+                                <div class="col-md-12 col-xs-8">
+                                    <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </apex:repeat>
+                <div class="text">
+
+                    <apex:OutputPanel rendered="{!NoAvailableCampaigns}"
+                                      style="text-align: center; font-weight: bold; font-size: 16pt; "> Sorry,
+                        currently all our volunteer events are full! Please check again!
+                    </apex:outputPanel>
+
+                </div>
+            </div>
         </div>
-    </apex:form>    
+    </apex:form>
 </apex:page>

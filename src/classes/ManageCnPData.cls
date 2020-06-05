@@ -1,4 +1,5 @@
-// June 18 2015.  Accepts eChecks.  Inserts orderItem.CampaignName as campaign if it exists.  Avoids matching on email=null.  
+// METHOD UNDER DEVELOPMENT
+// June 18 2015.  Accepts eChecks.  Inserts orderItem.CampaignName as campaign if it exists.  Avoids matching on email=null.
 //      Escapes all apostrophes which exist in the CnP DataXML object.
 // 11 June 2015.  Added test for Virtual Terminal, when the email is blank.
 // Oct 27, 2014.  Recognizes "Dinner Attendee" and other attendees as well as "Event Attendee"
@@ -19,6 +20,8 @@
 // May 2019 Correct periodicity values for recurring memberships, add in 'Yearly' which is what CnP now uses
 // June 2019 Allow either "Yearly" or "Annually" - because picklist is now exact, switch "Annually" to "Yearly" to avoid error on insert.
 //  June 2019 Refactor to catch errors without preventing CnP from inserting record.  Errors end up in the WG_Error_Log
+// Sept 2019 Revise Campaign section to handle new campaign list and campaign node within the Order Item.  NOTE:
+//  I take only the first campaignId and name from that list ... why would a single OrderItem have multiple campaigns?
 
 public with sharing class ManageCnPData {
     public list<Opportunity> newOpps;
@@ -27,8 +30,8 @@ public with sharing class ManageCnPData {
     public ID WGCampaignId;
     public Boolean foundTransactionCamp = false;
     public String sCampaignName;
-    public Id sOptyCampaignId;
-    public string sOptyCampaignName;
+    public Id OptyCampaignId;
+    public string OptyCampaignName;
     public Map<String, Id> CampaignMap;
     public map<string, Id> OppRTMap = new map<string, Id>();
     public map <string, string> parseResults;
@@ -59,16 +62,20 @@ public with sharing class ManageCnPData {
                 insert EL;
                 system.debug('Error on saving newOpps ' + EL);
                 Messaging.SingleEmailMessage message = new Messaging.SingleEmailMessage();
-                message.toAddresses = new String[] { 'baird@watergrass.org', 'support@watergrass.org' };
+                message.toAddresses = new String[]{
+                        'baird@watergrass.org', 'support@watergrass.org'
+                };
                 message.subject = 'ManageCnPData Error';
                 Organization org = [select name, Id from Organization];
                 string msg = org.Name + ' (' + org.Id + ') had a CnP error.';
-                        msg += '  Message was ' + ex.getMessage();
-                        msg += '  Type was ' + ex.getTypeName();
-                        msg += ' Occurred at line ' + ex.getLineNumber();
-                        msg += ' because of ' + ex.getCause();
-                        message.plainTextBody = msg;
-                Messaging.SingleEmailMessage[] messages =   new List<Messaging.SingleEmailMessage> {message};
+                msg += '  Message was ' + ex.getMessage();
+                msg += '  Type was ' + ex.getTypeName();
+                msg += ' Occurred at line ' + ex.getLineNumber();
+                msg += ' because of ' + ex.getCause();
+                message.plainTextBody = msg;
+                Messaging.SingleEmailMessage[] messages = new List<Messaging.SingleEmailMessage>{
+                        message
+                };
                 Messaging.SendEmailResult[] results = Messaging.sendEmail(messages);
                 if (results[0].success) {
                     System.debug('The email was sent successfully.');
@@ -150,9 +157,10 @@ public with sharing class ManageCnPData {
             if (STRING.ISNOTEMPTY(parseResults.get('orderitems'))) for (Integer i = 0; i < Integer.valueOf(parseResults.get('orderitems')); i++) {
                 system.debug('parseResults SKUi is ' + parseResults.get('sku' + i));
                 // Assign correct campaign Name
-                system.debug('Before calling AssignCampaignId(), campaignname+i is ' + parseResults.get('campaignname' + i) + ' and WGCampaignId is ' + parseResults.get('WGCampaignId') + ' and CampaignName is ' + parseResults.get('CampaignName') + ' and campaign is ' + parseResults.get('campaign'));
-                SOptyCampaignId = AssignCampaignId(parseResults.get('campaignname' + i), parseResults.get('WGCampaignId'), parseResults.get('CampaignName'), parseResults.get('campaign'));
-
+                system.debug('Before calling AssignCampaignId(), OrderItemNodecampId is ' + parseResults.get('OrderItem'+i+'NodeCampId') +  ' and OrderItemNodeCampName is ' + parseResults.get('OrderItem'+i+'NodeCampName') + ' and OrderItemCampaignName is ' + parseResults.get('OrderItem'+i+'CampaignName')+ ' and TransactionNodeCampaignId is ' + parseResults.get('transactionnodecampaignid') + ' and TransactionNodeCampaignName is ' + parseResults.get('transactionnodecampaignname') + ' and TransactionCampaignName is ' + parseResults.get('transactioncampaignname'));
+                OptyCampaignId = AssignCampaignId(parseResults.get('OrderItem'+i+'NodeCampId'), parseResults.get('OrderItem'+i+'NodeCampName'),
+                        parseResults.get('OrderItem'+i+'CampaignName'), parseResults.get('transactionnodecampaignid'), parseResults.get('transactionnodecampaignname'), parseResults.get('transactioncampaignname'));
+                system.debug('After calling AssignCampaignId, campaign ID is ' + OptyCampaignId);
                 //Calculate amount, apportioning the processing fee across different items
                 Decimal Amt = (decimal.valueof(parseResults.get('unitpricedue' + i) != null ? parseResults.get('unitpricedue' + i) : '0')
                         - Decimal.valueOf(parseResults.get('taxamountdue' + i) != null ? parseResults.get('taxamountdue' + i) : '0') -
@@ -168,9 +176,7 @@ public with sharing class ManageCnPData {
                 // Does OppRTMap.contain(Recordtype.name)?  If yes, RecordTypeID = OppRTMap(get ...
                 // Otherwise use 'Donation'
                 System.debug('XXX at this point parseResults.get(itemname) is ' + parseResults.get('itemname' + i));
-                System.debug('SOpptyCampaignId is ' + sOptyCampaignId);
-                string EventName = parseResults.get('itemname' + i) + ' for ' + sOptyCampaignName + ' paid on ' + String.valueOf(System.today());
-                system.debug('sOptyCampaignId is ' + sOptyCampaignId + ' and EventName is ' + EventName);
+                string EventName = parseResults.get('itemname' + i) + ' for ' + OptyCampaignName + ' paid on ' + String.valueOf(System.today());
                 string target = '-';
                 string replacement = ',';
                 string TransDateString = parseResults.get('transactiondate').left(10).replaceAll(target, replacement);
@@ -182,7 +188,7 @@ public with sharing class ManageCnPData {
                         Attendee__c = (parseResults.get('itemname' + i).contains('Attendee')) ? parseResults.get('itemname' + i).substring(15, parseResults.get('itemname' + i).length()) : null,
                         CloseDate = TransDate,
                         stageName = 'Payment Received',
-                        CampaignID = SOptyCampaignId,
+                        CampaignID = OptyCampaignId,
                         C_P_Data__c = d.id,
                         Accountid = [select id, accountid from contact where id = :sid][0].accountid,
                         Contact__c = sID,
@@ -207,19 +213,19 @@ public with sharing class ManageCnPData {
                 system.debug('C_P_Custom_Payment_Name is ' + Opp.C_P_Custom_Payment_Name__c);
                 system.debug('Opp.name is ' + Opp.Name);
 
-                //Check for recurring membership payment
-                if (opp.RecordTypeId == OppRTMap.get('Membership')) {
-                    if (parseResults.get('periodicity') != null) {
-                        opp.Membership_Start_Date__c = TransDate;
-                        if (parseResults.get('periodicity') == 'Weekly') opp.Membership_End_Date__c = TransDate.adddays(7);
-                        if (parseResults.get('periodicity') == 'Every 2 Weeks') opp.Membership_End_Date__c = TransDate.adddays(14);
-                        if (parseResults.get('periodicity') == 'Monthly') opp.Membership_End_Date__c = TransDate.addmonths(1);
-                        if (parseResults.get('periodicity') == 'Every 2 Months') opp.Membership_End_Date__c = TransDate.addmonths(1);
-                        if (parseResults.get('periodicity') == 'Quarterly') opp.Membership_End_Date__c = TransDate.addmonths(3);
-                        if (parseResults.get('periodicity') == 'Every 6 Months') opp.Membership_End_Date__c = TransDate.addmonths(6);
-                        if (parseResults.get('periodicity') == 'Annually' || parseResults.get('periodicity') == 'Yearly') opp.Membership_End_Date__c = TransDate.addmonths(12);
-                    }
+                //Check for recurring payment
+                // if (opp.RecordTypeId == OppRTMap.get('Membership')) {
+                if (parseResults.get('periodicity') != null) {
+                    opp.Membership_Start_Date__c = TransDate;
+                    if (parseResults.get('periodicity') == 'Weekly') opp.Membership_End_Date__c = TransDate.adddays(7);
+                    if (parseResults.get('periodicity') == 'Every 2 Weeks') opp.Membership_End_Date__c = TransDate.adddays(14);
+                    if (parseResults.get('periodicity') == 'Monthly') opp.Membership_End_Date__c = TransDate.addmonths(1);
+                    if (parseResults.get('periodicity') == 'Every 2 Months') opp.Membership_End_Date__c = TransDate.addmonths(1);
+                    if (parseResults.get('periodicity') == 'Quarterly') opp.Membership_End_Date__c = TransDate.addmonths(3);
+                    if (parseResults.get('periodicity') == 'Every 6 Months') opp.Membership_End_Date__c = TransDate.addmonths(6);
+                    if (parseResults.get('periodicity') == 'Annually' || parseResults.get('periodicity') == 'Yearly') opp.Membership_End_Date__c = TransDate.addmonths(12);
                 }
+                // }
 
 
                 //Check for Pledge payment.  If this is a pledge payment, there may still be multiple order items.
@@ -275,6 +281,11 @@ public with sharing class ManageCnPData {
 
     public void SaveOppList(List<Opportunity> newOpps, List<string> DataXMLs) {
         List<Database.SaveResult> SRList = database.insert(newOpps, false);
+        For (Database.SaveResult dsr : SRList){
+            system.debug('SaveResult is ' + dsr.success);
+            system.debug('SaveError is ' + dsr.getErrors());
+        }
+
         /*        List<DateBase.SaveResult, List<Opportunity>, DataXMLs> errorlist = new List<DateBase.SaveResult, List<Opportunity>, DataXML>();
 For (Database.SaveREsult DSR : SRList) {
 if (DSR == false) errorlist.add(DSR,opportunity,DataXML);
@@ -337,50 +348,53 @@ LE.LogOppInsertError(errorList);
     // which we create if it doesn't exist.
     // Nov 15 2016 And also in ExternalCampaignId, which can be for whole donation or individual orderitems.
     // Dec 7 2016 Refactor.  Search first for OrderItemCampaign, then for TransactionCampaign, then for Generic CnP Campaign.
+    // Sept 2019 Refactor.  Campaign node has now moved.
     public Map<string, Id> createCampaignMap(Map<string, string> parseResults) {
         CampaignMap = new Map<string, id>();
+        // Is there a TransactionCampaign?
+        if (STRING.ISNOTEMPTY(parseResults.get('TransactionCampaignId')))
+            CampaignMap.put('TransactionCampaignId',parseResults.get('TransactionCampaignId'));
+        if (STRING.ISNOTEMPTY(parseResults.get('transactioncampaignname')))
+            CampaignMap.put(parseResults.get('transactioncampaignname'),null);
         // Search OrderItems for Campaign
         if (STRING.ISNOTEMPTY(parseResults.get('orderitems')))
             for (Integer i = 0; i < Integer.valueOf(parseResults.get('orderitems')); i++) {
-                system.debug('campaignname' + i + ' is ' + parseResults.get('campaignname' + i));
-                system.debug('parseResults.containskey(campaignname + i) evaluated to ' + parseResults.containskey('campaignname' + i));
-                system.debug('STRING.ISNOTEMPTY(parseResults.get(campaigname + i)) evaluated to ' + string.isnotempty(parseResults.get('campaigname' + i)));
-                system.debug('(parseResults.containskey(campaignname + i) && parseResults.get(campaignname + i) != NULL) evaluates to ' + (parseResults.containskey('campaignname' + i) && parseResults.get('campaignname' + i) != null));
+                system.debug('OrderItem' + i + 'NodeCampId is ' + parseResults.get('OrderItem' + i + 'NodeCampId.'));
+                system.debug('OrderItem' + i + 'NodeCampName is ' + parseResults.get('OrderItem' + i + 'NodeCampName'));
+                system.debug('OrderItem' + i + 'CampaignName is ' + parseResults.get('OrderItem' + i + 'CampaignName'));
 
-                if (parseResults.containskey('campaignname' + i) && parseResults.get('campaignname' + i) != null) {
-                    sCampaignName = parseResults.get('campaignname' + i);
-                    CampaignMap.put(sCampaignName, NULL);
-                    system.debug('Order item campaign is ' + parseResults.get('campaignname' + i));
+                if (parseResults.containskey('OrderItem' + i + 'NodeCampId') && parseResults.get('OrderItem' + i + 'NodeCampId') != null) {
+                    // Don't bother with other campaign names, even if they exist
+                    continue;
+                } else {
+                    if (parseResults.containskey('OrderItem' + i + 'NodeCampName') && parseResults.get('OrderItem' + i + 'NodeCampName') != null) {
+                        CampaignMap.put(parseResults.get('OrderItem' + i + 'NodeCampName'), null);
+                        continue;
+                    } else {
+                        if (parseResults.containskey('OrderItem' + i + 'CampaignName') && parseResults.get('OrderItem' + i + 'CampaignName') != null) {
+                        CampaignMap.put(parseResults.get('OrderItem' + i + 'CampaignName'),null);
+                        }
+                    }
                 }
                 // Also add Generic CnP Campaign
                 CampaignMap.put('Generic CnP Campaign', null);
-            } //End of search of Order Items
-        // Search Transaction for Campaign
-
-        if (  parseResults.containsKey('CampaignName') && parseResults.get('CampaignName')!=null) {
-            CampaignMap.put(parseResults.get('CampaignName'), null);
-        } else {
-            if (parseResults.containsKey('campaign') && parseResults.get('campaign') != null) {
-                CampaignMap.put(parseResults.get('campaign'), null);
-                system.debug('CampaignMap after campaign insert is ' + CampaignMap);
-            }
-        }
-        // Insert CampaignIds in map
+            } //End of search of Transaction and Order Items
+        // Find CampaignIds for campaign names
         // If multiple campaigns have the same name, this will choose the Id of the last of the campaigns.
-        system.debug('campaignMap.keyset is ' + CampaignMap.Keyset());
-        system.debug('in this test the campaigns available are ' + [select id, name from campaign LIMIT 10]);
+        system.debug('List of campaign names to find Ids for is ' + CampaignMap.Keyset());
         List<Campaign> cChecks = [select id, name from Campaign where name IN :CampaignMap.keyset()];
         for (Campaign cCheck : cChecks) {
             CampaignMap.put(cCheck.Name, cCheck.Id);
-            system.debug('CampaignMap is ' + CampaignMap);
-            // return CampaignMap;
         }
+        // Remove any keys without values
+        for (String s : CampaignMap.Keyset())
+            if (s == null) CampaignMap.remove(s);
 
-        system.debug('CampaignMap is ' + CampaignMap);
+        system.debug('After removing keys with null values, CampaignMap is ' + CampaignMap);
+
         // Make sure we at least have a TransactionCampaign or a Generic CnP Campaign
         // Only run the following code if CampaignName is blank and Campaign is blank
-        if ((!parseResults.containsKey('CampaignName') || STRING.ISBLANK(parseResults.get('CampaignName')))
-                && (!parseResults.containsKey('Campaign') || STRING.ISBLANK(parseResults.get('Campaign')))) {
+        if (CampaignMap.isEmpty()) {
             List<Campaign> GenericCnPCampaigns = [SELECT id, name from Campaign where name = 'Generic CnP Campaign'];
             if (GenericCnPCampaigns.size() > 0) {
                 Campaign TempCamp = GenericCnPCampaigns[0];
@@ -395,48 +409,61 @@ LE.LogOppInsertError(errorList);
                         recordType = [select id from recordtype where name = 'Fundraising Activity']);// OppRTMap.get('Fundraising Activity').getRecordTypeId()
                 insert GenericCnPCampaign;
                 CampaignMap.put('Generic CnP Campaign', GenericCnPCampaign.Id);
-                system.debug('Created new campaign Generic CnP Campaign with Id ' + GenericCnPCampaign.Id);
+                system.debug('CampaignMap was empty so I created new campaign Generic CnP Campaign with Id ' + GenericCnPCampaign.Id);
             }
         } // end search for TransactionCampaign
         return CampaignMap;
     }
 
-    public Id AssignCampaignId(String OrderCampaignName, String WGCampaignId, String CampaignName, String LegacyCampaignName) {
+    public Id AssignCampaignId(String OrderItemNodeCampId, String OrderItemNodeCampName, String OrderItemCampName, String TransactionNodeCampaignId, String TransactionNodeCampaignName, String TransactionCampaign) {
         //is there a campaign supplied in item list?
-        if (STRING.ISNOTBLANK(OrderCampaignName)) {
-            sOptyCampaignId = CampaignMap.get(OrderCampaignName);
-            sOptyCampaignName = OrderCampaignName;
-            system.debug('After checking for OrderCampaignId SOptyCampaignId is' + SOptyCampaignId + ' for CampaignId for new opportunity.');
+        system.debug('TransactionCampaign is ' + TransactionCampaign);
+        if (STRING.ISNOTBLANK(OrderItemNodeCampId)) {
+            OptyCampaignId = OrderItemNodeCampId;
+            system.debug('After checking CampaignName SOptyCampaignId is' + OptyCampaignId + ' for CampaignId for new opportunity.');
         } else {
-            system.debug('WGCampaignId is ' + WGCampaignId);
-            if (string.ISNOTEMPTY(WGCampaignId)) {
-                sOptyCampaignId = WGCampaignId;
-                system.debug('After checking WGCampaignId SOptyCampaignId is' + SOptyCampaignId + ' for CampaignId for new opportunity.');
+            if (STRING.ISNOTBLANK(OrderItemNodeCampName)) {
+                OptyCampaignId = CampaignMap.get(OrderItemNodeCampName);
+                OptyCampaignName = OrderItemNodeCampName;
+                system.debug('After checking for OrderCampaignId SOptyCampaignName is' + OptyCampaignId + ' for CampaignId for new opportunity.');
             } else {
-                if (CampaignName != NULL) {
-                    if (CampaignMap.containskey(CampaignName)) {
-                        sOptyCampaignId = CampaignMap.get(CampaignName);
-                        sOptyCampaignName = CampaignName;
-                        system.debug('After checking CampaignName SOptyCampaignId is' + SOptyCampaignId + ' for CampaignId for new opportunity.');
-                    }
+                if (STRING.ISNOTBLANK(OrderItemCampName)) {
+                    OptyCampaignId = CampaignMap.get(OrderItemCampName);
+                    OptyCampaignName = OrderItemCampName;
+                    system.debug('After checking for OrderCampaignId SOptyCampaignName is' + OptyCampaignId + ' for CampaignId for new opportunity.');
                 } else {
-                    if (!STRING.ISBLANK(LegacyCampaignName)) {
-                        if (CampaignMap.containskey(LegacyCampaignName)) {
-                            SOptyCampaignId = CampaignMap.get(LegacyCampaignName);
-                            SOptyCampaignName = LegacyCampaignName;
-                            system.debug('After checking LegacyCampaign SOptyCampaignId is' + SOptyCampaignId + ' for CampaignId for new opportunity.');
-                        }
+                    if (string.ISNOTEMPTY(TransactionNodeCampaignId)) {
+                        OptyCampaignId = TransactionNodeCampaignId;
+                        system.debug('After checking WGCampaignId SOptyCampaignId is' + OptyCampaignId + ' for CampaignId for new opportunity.');
                     } else {
-                        SOptyCampaignId = CampaignMap.get('Generic CnP Campaign');
-                        SOptyCampaignName = 'Generic CnP Campaign';
-                        system.debug('After checking generic cnp campaign SOptyCampaignId is' + SOptyCampaignId + ' for CampaignId for new opportunity.');
+                        if (TransactionNodeCampaignName != NULL) {
+                            if (CampaignMap.containskey(TransactionNodeCampaignName)) {
+                                OptyCampaignId = CampaignMap.get(TransactionNodeCampaignName);
+                                OptyCampaignName = TransactionNodeCampaignName;
+                                system.debug('After checking CampaignName SOptyCampaignId is' + OptyCampaignId + ' for CampaignId for new opportunity.');
+                            }
+                        } else {
+                            if (TransactionCampaign!=null) {
+                                if (CampaignMap.containskey(TransactionCampaign)) {
+                                    OptyCampaignId = CampaignMap.get(TransactionCampaign);
+                                    OptyCampaignName = TransactionCampaign;
+                                    system.debug('After checking LegacyCampaign SOptyCampaignId is' + OptyCampaignId + ' for CampaignId for new opportunity.');
+                                }
+                            } else {
+                                OptyCampaignId = CampaignMap.get('Generic CnP Campaign');
+                                OptyCampaignName = 'Generic CnP Campaign';
+                                system.debug('After checking generic cnp campaign SOptyCampaignId is' + OptyCampaignId + ' for CampaignId for new opportunity.');
+                            }
+                        }
                     }
+
                 }
             }
         }
-        system.debug('Chose ' + SOptyCampaignId + ' for CampaignId for new opportunity.');
-        return SOptyCampaignId;
+        system.debug('Chose ' + OptyCampaignId + ' for CampaignId for new opportunity.');
+        return OptyCampaignId;
     }
+
 
     public Id AssignOppRTId(string SKUstring) {
         Id RTID = OppRTMap.get('Donation');
@@ -457,8 +484,8 @@ LE.LogOppInsertError(errorList);
     }
 
     //Here we create the "Master" Pledge or Recurring Record against which all the payments roll up.  It has no amount in it.
-    public Opportunity createPledgeOrRecurring(map<string, string> parseResults, string CnPDataXMLID) {
-        system.debug('Before createPledgeOrRecurring sOptyCampaignId is ' + sOptyCampaignId);
+    public Opportunity createPledgeOrRecurring(map<string, string> parseResults, string CnPDataXMLID){
+        system.debug('Before createPledgeOrRecurring sOptyCampaignId is ' + OptyCampaignId);
         newPledgeOrRecurring = new Opportunity(
                 Pledge_Amount__c = parseResults.get('installments') == '999' ? 0.00 : decimal.valueOf(parseResults.get('totalcommitted')),
                 CnPMasterTransactionNumber__c = parseResults.get('mastertransactionnumber'),
@@ -467,7 +494,7 @@ LE.LogOppInsertError(errorList);
                 closedate = Transdate,
                 name = parseResults.get('installments') == '999' ? 'Recurring Payment begun on ' + date.today().format() : 'autofill',
                 stageName = 'Pledge Recorded',
-                CampaignID = SOptyCampaignId,
+                CampaignID = OptyCampaignId,
                 C_P_Data__c = CnPDataXMLID,
                 Accountid = [select id, accountid from contact where id = :sid][0].accountid,
                 Contact__c = sID,
@@ -492,6 +519,8 @@ LE.LogOppInsertError(errorList);
             }
         }
         // Insert newPledgeOrRecurring now in order to use its ID in the pledge payment, which is inserted next;
+        system.debug('NewPledge campaign is ' + newPledgeOrRecurring.campaignId);
+        system.debug('NewPledge campaign is ' + [SELECT Name from Campaign where id = :newPledgeOrRecurring.campaignId]);
         insert newPledgeOrRecurring;
         return newPledgeOrRecurring;
     }

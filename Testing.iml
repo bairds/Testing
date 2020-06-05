@@ -17,7 +17,7 @@
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="name" value="AccountBatch" />
+                            <option name="name" value="accessData" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -69,10 +69,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="AutoTypev2_fail.cls-meta.xml" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="avoidDMLDuringHUC" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -121,14 +117,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="ContributionHistoryController" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ContributionHistoryControllerTests" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="controller_formatted_datetime" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -158,10 +146,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="convertListStringToMultiPicklist" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Counter" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -209,14 +193,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="DataImport" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DataImportBaird" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="DataImportRecords" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -229,15 +205,19 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="DataImportTest" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DataImportTestBaird" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="eACC_backup" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="EACCLightning" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="EACCLightningTEST" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="EACCNavigationLtng" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -341,23 +321,11 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="generateMCampaignURLs" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="GlobalTests" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="HUCCallMasterForURL" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUCController" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUCCustom" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -382,10 +350,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="HUCTests" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUCURLMockImpl" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -553,7 +517,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="PLPBairdTEST" />
+                            <option name="name" value="PLPBairdTest" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -693,7 +657,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="SignInREST2TEST" />
+                            <option name="name" value="SignInREST2Test" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -817,7 +781,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="WGHelperTests" />
+                            <option name="name" value="WGHelpersTest" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -831,84 +795,9 @@
                         </list>
                       </option>
                       <option name="name" value="ApexClass" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="AutoCompleteV2" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AutoCompleteV2Full" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AutoCompleteV3" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Checkbox" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CreateAccountAndContacts" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DataImportMatches" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Loading" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="SiteFooter" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="SiteHeader" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="SiteLogin" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="SitePoweredBy" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TimeLine" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TY_Letter_Footer" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TY_Letter_Sidebar" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TY_Letter_Signature_Block" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TY_Letter_Signature_Block_ExecDir" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Typeahead" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="VFFormattedLocalTimeComponent" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="ApexComponent" />
                     </MetadataType>
                     <MetadataType>
@@ -939,6 +828,10 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="CampaignURLsSection-Backup" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="CaseContactSection" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -959,27 +852,11 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Contribution_History" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DataImportPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DataImportPageBaird" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="DataImportRecords" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="EACCBairdPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="eACCPage_backup" />
+                            <option name="name" value="EACCLightningPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1000,6 +877,10 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="EmailSignupPageBootstrap" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="EmailSignupPageBootstrapCorp" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1051,10 +932,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="listCampaignMembersBairdPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="listCampaignMembersPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -1079,15 +956,15 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
+                            <option name="name" value="NavigateToURLTest" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
                             <option name="name" value="NewAccountContactPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="NewCaseContactPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ParticipantListProcessing" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1115,7 +992,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="public_event_select_page" />
+                            <option name="name" value="Public_Event_Select_Page" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1131,11 +1008,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="public_event_signup_page" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="public_event_thank_page" />
+                            <option name="name" value="Public_Event_Signup_Page" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1148,10 +1021,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="recalcContactPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="recalcGivingPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1179,7 +1048,7 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="showPickListCustomizationPage" />
+                            <option name="name" value="showPicklistCustomizationPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1295,10 +1164,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="VolunteerEventRegisterBairdPage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="volunteerEventRegisterPage" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -1321,196 +1186,22 @@
                         </list>
                       </option>
                       <option name="name" value="ApexPage" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="AccountAfterInsertUpdate" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AddUpdateRemoveContactRole" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ContactBeforeAfterInsert" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ManageAccounts" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ManageCampaigns" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ManageCnPDataTrigger" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ManageContacts" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ManageContributions" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="UpdateCampaignMemberStatus" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="updatePrimaryContributorCampaignStatus" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="ApexTrigger" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="name" value="BairdCSS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="BairdCSS.resource-meta.xml" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="bootstrapcss" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="bootstrapresponsivecss" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="BOPLogo" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Checkmark" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="customboostrapcss" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="customCSS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="customJS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="enterAccountContact" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="EnterAccountContactJS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="envelope_CSS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HeaderForEmailSignup" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="JoseCSS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="JoseJS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="jQueryUI" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Loading" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="OrgLogo" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="OrgLogoLarge" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="select2" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Signature_Image" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="SiteSamples" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TemplateHeader" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Thanks_CSS_Header" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Thanks_CSS_NoHeader" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Thanks_Header_Standard" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TY_CSS_for_Sidebar" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Typeahead" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass_Logo_20K_For_Header" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrassCSS" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrassCSS.resource-meta.xml" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="wg_styles" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WGHelpLogo" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="wp_style" />
+                            <option name="name" value="WaterGrass" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
                       </option>
-                      <option name="name" value="StaticResource" />
+                      <option name="name" value="CustomApplication" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
@@ -1533,10 +1224,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="CampaignStatiMDT.Donated" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CampaignStatiMDT.No_Show" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1614,6 +1301,7 @@
                         </list>
                       </option>
                       <option name="name" value="CustomMetadata" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
@@ -1660,10 +1348,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Campaign" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Campaign_Stati__c" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1771,14 +1455,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="ForecastingCategoryMapping" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Goal" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="HUC__c" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -1828,10 +1504,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Master_Campaign__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Metric" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -1965,321 +1637,9 @@
                         </list>
                       </option>
                       <option name="name" value="CustomObject" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Account" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AccountContactRelation" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Affiliation__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Asset" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AssetRelationship" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="AssistantProgress" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Campaign" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Campaign_Stati__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CampaignMember" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CampaignStati__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CampaignStatiMDT__mdt" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Case" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ChatterActivity" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CollaborationGroup" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="CollaborationGroupMember" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ColorScheme__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Contact" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Contract" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DandBCompany" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Data_Import_Batch__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Data_Import_Mapping__mdt" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DuplicateRecordItem" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DuplicateRecordSet" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="EmailMessage" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Event" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ExchangeUserMapping" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="FeedItem" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Goal" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="GoalLink" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUC__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUCURL__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Idea" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="ImportObject__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Individual_Contrib_Types__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Lead" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Macro" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MacroAction" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="MacroInstruction" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Master_Campaign__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Metric" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Opportunity" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="OpportunityLineItem" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Order" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="OrderItem" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Organization" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="OrgDeleteRequest" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Product2" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="QuickText" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Site" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Solution" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="StreamingChannel" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Task" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Text_Document__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Topic" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="TopicAssignment" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="User" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="UserLicense" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="UserProvisioningRequest" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="VFE__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WG_Error_Log__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WG_settings__c" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WGSettings__mdt" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkCoaching" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkFeedback" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkFeedbackQuestion" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkFeedbackQuestionSet" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkFeedbackRequest" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkFeedbackTemplate" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WorkPerformanceCycle" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
-                      <option name="name" value="Workflow" />
-                    </MetadataType>
-                    <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="helloWorld" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
-                      <option name="name" value="LightningComponentBundle" />
-                    </MetadataType>
-                    <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
-                      <option name="name" value="CustomApplication" />
-                    </MetadataType>
-                    <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Signup" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="CustomSite" />
                     </MetadataType>
                     <MetadataType>
@@ -2312,15 +1672,11 @@
                         </list>
                       </option>
                       <option name="name" value="CustomTab" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Data_Health" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Data_Health/Volunteer_Programs" />
                             <option name="parentFolder" value="Data_Health" />
@@ -2334,122 +1690,87 @@
                         </list>
                       </option>
                       <option name="name" value="Dashboard" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Buttonsdonotdelete" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Buttonsdonotdelete/CopyAddressfromOrganizationpng.png" />
+                            <option name="name" value="Buttonsdonotdelete/CopyAddressfromOrganizationpng" />
                             <option name="parentFolder" value="Buttonsdonotdelete" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Icons" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Icons/Syringe.png" />
+                            <option name="name" value="Icons/Syringe" />
                             <option name="parentFolder" value="Icons" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Logos" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass18_Logo200X61.png" />
+                            <option name="name" value="Logos/WaterGrass18_Logo200X61" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Deployment_Instance.png" />
+                            <option name="name" value="Logos/WaterGrass_Deployment_Instance" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_logo.jpg" />
+                            <option name="name" value="Logos/WaterGrass_logo" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Logo_20_K_For_Header.jpg" />
+                            <option name="name" value="Logos/WaterGrass_Logo_20_K_For_Header" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Logo_20K_For_Header.jpg" />
+                            <option name="name" value="Logos/WaterGrass_Logo_20K_For_Header" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Logo_Base_for_New_Instances.jpg" />
+                            <option name="name" value="Logos/WaterGrass_Logo_Base_for_New_Instances" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Logo_Master.jpg" />
+                            <option name="name" value="Logos/WaterGrass_Logo_Master" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Logos/WaterGrass_Testing_Instance.png" />
+                            <option name="name" value="Logos/WaterGrass_Testing_Instance" />
                             <option name="parentFolder" value="Logos" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WaterGrass" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass/HeaderForEmailSignup.jpg" />
+                            <option name="name" value="WaterGrass/HeaderForEmailSignup" />
                             <option name="parentFolder" value="WaterGrass" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="WaterGrass/Letterhead_Header.jpg" />
+                            <option name="name" value="WaterGrass/Letterhead_Header" />
                             <option name="parentFolder" value="WaterGrass" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="WaterGrass/WaterGrass_River_Alliance_728_x_90_jpg.jpg" />
+                            <option name="name" value="WaterGrass/WaterGrass_River_Alliance_728_x_90_jpg" />
                             <option name="parentFolder" value="WaterGrass" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
                       </option>
                       <option name="name" value="Document" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Contact.Standard_Rule_for_Contacts_with_Duplicate_Leads" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Lead.Standard_Rule_for_Leads_with_Duplicate_Contacts" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="DuplicateRule" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Case_or_Incident" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="Case_or_Incident/Incident_Intake_Auto_Reply" />
                             <option name="parentFolder" value="Case_or_Incident" />
@@ -2458,11 +1779,6 @@
                           <MetadataEntry>
                             <option name="name" value="Case_or_Incident/Thanks_for_Monitoring_Report" />
                             <option name="parentFolder" value="Case_or_Incident" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Contact_Mgmt_Emails" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -2476,11 +1792,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Lead_Mgmt_Emails" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="Lead_Mgmt_Emails/Thanks_for_signing_up_for_emails" />
                             <option name="parentFolder" value="Lead_Mgmt_Emails" />
                             <option name="selected" value="true" />
@@ -2488,11 +1799,6 @@
                           <MetadataEntry>
                             <option name="name" value="Lead_Mgmt_Emails/Thanks_for_signup_for_eCampaign_Lead" />
                             <option name="parentFolder" value="Lead_Mgmt_Emails" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Major_Donor_templates" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -2526,91 +1832,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Public_Event_Templates" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Public_Event_Templates/Public_Event_Confirm_Contact" />
-                            <option name="parentFolder" value="Public_Event_Templates" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Public_Event_Templates/Public_Event_Confirm_Lead" />
-                            <option name="parentFolder" value="Public_Event_Templates" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/MarketingProductInquiryResponse" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SalesNewCustomerEmail" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportCaseAssignmentNotification" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportCaseCreatedPhoneInquiries" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportCaseCreatedWebInquiries" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportCaseResponse" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportEscalatedCaseNotification" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportEscalatedCaseReassignment" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SUPPORTSelfServiceNewCommentNotificationSAMPLE" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportSelfServiceNewLoginandPassword" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SUPPORTSelfServiceNewUserLoginInformationSAMPLE" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SupportSelfServiceResetPassword" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/SUPPORTSelfServiceResetPasswordSAMPLE" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="Volunteer_Mgmt_Emails" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="Volunteer_Mgmt_Emails/Corporate_Event_Confirm" />
                             <option name="parentFolder" value="Volunteer_Mgmt_Emails" />
                             <option name="selected" value="true" />
@@ -2621,18 +1842,8 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Volunteer_Mgmt_Emails/Thanks_for_signing_up_to_volunteer" />
-                            <option name="parentFolder" value="Volunteer_Mgmt_Emails" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="Volunteer_Mgmt_Emails/Thanksforvolunteeringemail" />
                             <option name="parentFolder" value="Volunteer_Mgmt_Emails" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WaterGrass_Fundraising_Templates" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -2653,78 +1864,15 @@
                         </list>
                       </option>
                       <option name="name" value="EmailTemplate" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Active" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DoNot" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="HUCStati" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="LeadSource" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Periodicity" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="GlobalValueSet" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass Deployment Instance" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass logo base for new instances" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WG logo Master" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WG Logo Small" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WG Testing Instance" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="HomePageComponent" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Dashboard Home Page Default" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="DE Default" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass Home" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="HomePageLayout" />
                     </MetadataType>
                     <MetadataType>
@@ -2737,6 +1885,7 @@
                         </list>
                       </option>
                       <option name="name" value="InstalledPackage" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
@@ -2847,14 +1996,6 @@
                           </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="CampaignStatiMDT__mdt-CampaignStatiMDT Layout" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Case-Case %28Marketing%29 Layout" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Case-Case %28Sales%29 Layout" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3160,50 +2301,31 @@
                         </list>
                       </option>
                       <option name="name" value="Layout" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="LeadConvertSettings" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="LeadConvertSettings" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="LeaderHeadForEmailSignupResponse" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="WaterGrass_Letterhead" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Your_Letterhead" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="Letterhead" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="name" value="Lightning_Permissions" />
+                            <option name="name" value="helloWorld" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="Salesforce_DX_Users" />
+                            <option name="name" value="mapLocations" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
                       </option>
+                      <option name="name" value="LightningComponentBundle" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
                       <option name="name" value="PermissionSet" />
                     </MetadataType>
                     <MetadataType>
@@ -3220,6 +2342,7 @@
                         </list>
                       </option>
                       <option name="name" value="Profile" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
@@ -3231,20 +2354,11 @@
                         </list>
                       </option>
                       <option name="name" value="RemoteSiteSetting" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
-                          <MetadataEntry>
-                            <option name="name" value="unfiled$public/ImportObjects_and_Matched_Contacts" />
-                            <option name="parentFolder" value="unfiled$public" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Annual_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
                           <MetadataEntry>
                             <option name="name" value="WG_Annual_Reports/Account_Donations_in_Timeframe_X" />
                             <option name="parentFolder" value="WG_Annual_Reports" />
@@ -3268,11 +2382,6 @@
                           <MetadataEntry>
                             <option name="name" value="WG_Annual_Reports/Gifts_Last_Year_by_Campaign" />
                             <option name="parentFolder" value="WG_Annual_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Campaign_Reports" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3318,11 +2427,6 @@
                           <MetadataEntry>
                             <option name="name" value="WG_Campaign_Reports/Sign_Up_List_Campaign_Members" />
                             <option name="parentFolder" value="WG_Campaign_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Contacts_and_Accounts" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3391,11 +2495,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Contribution_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="WG_Contribution_Reports/All_Contributions_by_Campaign" />
                             <option name="parentFolder" value="WG_Contribution_Reports" />
                             <option name="selected" value="true" />
@@ -3461,11 +2560,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Data_Health" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="WG_Data_Health/Account_Primary_Contacts_without_Email" />
                             <option name="parentFolder" value="WG_Data_Health" />
                             <option name="selected" value="true" />
@@ -3518,11 +2612,6 @@
                           <MetadataEntry>
                             <option name="name" value="WG_Data_Health/WG_Error_Log" />
                             <option name="parentFolder" value="WG_Data_Health" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Fundraising_Analysis" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3601,11 +2690,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Internal" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="WG_Internal/Accounts_Last_Modified_by_XXX" />
                             <option name="parentFolder" value="WG_Internal" />
                             <option name="selected" value="true" />
@@ -3636,11 +2720,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Major_Donor_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="WG_Major_Donor_Reports/Major_Donor_Campaign_Progress" />
                             <option name="parentFolder" value="WG_Major_Donor_Reports" />
                             <option name="selected" value="true" />
@@ -3653,11 +2732,6 @@
                           <MetadataEntry>
                             <option name="name" value="WG_Major_Donor_Reports/Major_Donors_by_Major_Donor_Now_Field" />
                             <option name="parentFolder" value="WG_Major_Donor_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Membership_and_Mailing_Lists" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3726,18 +2800,8 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Research_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="WG_Research_Reports/Anonymous_Contribs_for_WG_Analysis" />
                             <option name="parentFolder" value="WG_Research_Reports" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="folder" value="true" />
-                            <option name="name" value="WG_Volunteer_Mgmt" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
@@ -3778,40 +2842,9 @@
                         </list>
                       </option>
                       <option name="name" value="Report" />
+                      <option name="wildcard" value="false" />
                     </MetadataType>
                     <MetadataType>
-                      <option name="entries">
-                        <list>
-                          <MetadataEntry>
-                            <option name="name" value="Accounts_with_ACRs" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Accounts_with_Contributions" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Accounts_with_or_without_Contacts" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Campaigns_with_members_and_donations" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Contributions_w_wout_Contact_Roles" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Contributions_with_Historical_Trending" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
-                            <option name="name" value="Pledges_and_Challenges_with_Payments" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                        </list>
-                      </option>
                       <option name="name" value="ReportType" />
                     </MetadataType>
                     <MetadataType>
@@ -3882,10 +2915,6 @@
                             <option name="selected" value="true" />
                           </MetadataEntry>
                           <MetadataEntry>
-                            <option name="name" value="OrgPreference" />
-                            <option name="selected" value="true" />
-                          </MetadataEntry>
-                          <MetadataEntry>
                             <option name="name" value="PathAssistant" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
@@ -3908,17 +2937,145 @@
                         </list>
                       </option>
                       <option name="name" value="Settings" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="SiteDotCom" />
                     </MetadataType>
                     <MetadataType>
                       <option name="entries">
                         <list>
                           <MetadataEntry>
-                            <option name="name" value="Signup" />
+                            <option name="name" value="BairdCSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="bootstrapcss" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="bootstrapresponsivecss" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="BOPLogo" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Checkmark" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="customboostrapcss" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="customCSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="customJS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="enterAccountContact" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="EnterAccountContactJS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="envelope_CSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="HeaderForEmailSignup" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="JoseCSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="JoseJS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="jQueryUI" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Loading" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="OrgLogo" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="OrgLogoLarge" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="select2" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Signature_Image" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="SiteSamples" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="TemplateHeader" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Thanks_CSS_Header" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Thanks_CSS_NoHeader" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="Thanks_Header_Standard" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="TY_CSS_for_Sidebar" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="WaterGrass_Logo_20K_For_Header" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="WaterGrassCSS" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="wg_styles" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="WGHelpLogo" />
+                            <option name="selected" value="true" />
+                          </MetadataEntry>
+                          <MetadataEntry>
+                            <option name="name" value="wp_style" />
                             <option name="selected" value="true" />
                           </MetadataEntry>
                         </list>
                       </option>
-                      <option name="name" value="SiteDotCom" />
+                      <option name="name" value="StaticResource" />
+                      <option name="wildcard" value="false" />
+                    </MetadataType>
+                    <MetadataType>
+                      <option name="name" value="Workflow" />
                     </MetadataType>
                   </set>
                 </option>

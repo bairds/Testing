@@ -18,6 +18,5 @@ private class generateCampaignURLsTEST {
         GCURL.getSelectCampaignOptions();
 
         system.assertEquals('Testcampaign',camp.Name);
-
     }
 }

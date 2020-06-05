@@ -1,11 +1,6 @@
 @isTest
 private class ManageContributionsTest_Temp {
-
- @testSetup static void setup() {
-    CreateCustomSettings CCS = new CreateCustomSettings();
-     CCS.createCustomSettings();
-    }   
-    
+   
 
 //Insert the contributions in different order to make sure that doesn't effect result
 static testMethod void AddMembership() {
@@ -79,8 +74,8 @@ static testMethod void AddMembership() {
 
         //After inserting this payment for service, the last_contrib_amount should be 300 still, the last
         // donation is now 400 becasue membership is considered individual donation, last membership is 400
-        Account checkAcct = [select Last_Contrib_Amount__c, Last_Donate_Amt__c, 
-            Last_Member_Amt__c, Last_Membership_Date__c,
+        Account checkAcct = [select Last_Contrib_Amount__c, Last_Donate_Amount__c, 
+            Last_Membership_Amount__c, Last_Membership_Date__c,
             (select amount, ContribOrder__c from opportunities order by ContribOrder__c) 
             from Account where name = 'TestAccount'][0];
         System.assertEquals(1,checkAcct.opportunities[0].ContribOrder__c);
@@ -93,8 +88,8 @@ static testMethod void AddMembership() {
         System.assertEquals(5,checkAcct.opportunities[4].ContribOrder__c);
         System.assertEquals(300,checkAcct.opportunities[4].Amount);
         System.assertEquals(testContrib3.amount, checkAcct.Last_Contrib_Amount__c);
-        System.assertEquals(TestContrib4.amount, checkAcct.Last_Donate_Amt__c);
-        System.assertEquals(TestContrib4.amount, checkAcct.Last_Member_Amt__c);
+        System.assertEquals(TestContrib4.amount, checkAcct.Last_Donate_Amount__c);
+        System.assertEquals(TestContrib4.amount, checkAcct.Last_Membership_Amount__c);
         System.assertEquals(TestContrib4.closeDate, checkAcct.Last_Membership_Date__c);
         Contact CheckContact = [select id, LifetimeVolHours__c, Vol_Event_Count__c from Contact
                                where id =: testctct.Id];

@@ -75,13 +75,13 @@ public with sharing class createCampaignMemberStati {
             system.debug('Map of CampaignStati is ' + CSMap);
             for (string s : CSMap.keyset()) {
                 if (ThisCampCMSMap == null || ThisCampCMSMap.get(s.toUpperCase()) == null) {
+                    system.debug('Adding ' + s + 'to insertCMSs.');
                     CampaignStatiMDT__mdt CS = CSMap.get(s);
-// Add campaign member status for "Communication sent"
                     CampaignMemberStatus CMS = new CampaignMemberStatus();
                     CMS.CampaignId = CampId;
                     CMS.HasResponded = CS.HasResponded__c;
                     CMS.IsDefault = FALSE;
-                    CMS.Label = s;
+                    CMS.Label = CSMap.get(s).label;
                     CMS.SortOrder = i;
                     system.debug('Just added CampaignMemberStatus ' + cms.Label + ' at SortOrder ' + cms.SortOrder);
                     insertCMSs.add(CMS);
@@ -89,10 +89,19 @@ public with sharing class createCampaignMemberStati {
                 }
             }
             system.debug('Before inserting CMS values, insertCMSs are ' + insertCMSs.size() + ' members.');
-            for (CampaignMemberStatus cms : insertCMSs) system.debug('InsertCMS is ' + CMS);
+            for (CampaignMemberStatus cms : insertCMSs) system.debug('InsertCMSs is ' + InsertCMSs);
             ExistingCMSs = [SELECT Id, label, isDefault, CampaignId, SortOrder from CampaignMemberStatus WHERE CampaignId IN :CampIds ORDER BY CampaignId];
             system.debug('Before inserting CMS values, ExistingCMSs are ' + ExistingCMSs);
         }
-        insert insertCMSs;
+        List<Database.SaveResult> DBSRs = Database.insert(insertCMSs,false);
+        for (Database.SaveResult dsr : DBSRs){
+            if (dsr.isSuccess() == false){
+                List<Database.Error> des = dsr.getErrors();
+                for (Database.Error de : des){
+                    system.debug('Database.SaveResult error is ' + des);
+                    // Create a WGError entry for each error;
+                }
+            }
+        }
     }
 }

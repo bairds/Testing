@@ -8,11 +8,14 @@ private class SignInREST2Test {
         User thisUser = [ select Id, Phone, Email from User where Id = :UserInfo.getUserId() ];
         System.debug ('thisUser is ' + thisUser);
         thisUser.Phone = '333-3333';
+        /*
         System.runAs ( thisUser ) {
 
             populateWGCustomSettings.populateAllSettings();
         }
-        // CreateCustomSettings.createCustomSettings();
+        CreateCustomSettings.createCustomSettings();
+        */
+
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAcct = ctv.fetchTestAccount();
         System.assertEquals('TestAccount', TestAcct.Name);
@@ -22,7 +25,10 @@ private class SignInREST2Test {
         System.assertEquals('Testcampaign', TestCamp.Name);
         CampaignMember cm = new CampaignMember(
                 CampaignId=TestCamp.Id,
-                ContactId=TestCtct.Id);
+                ContactId=TestCtct.Id,
+                Emergency_Contact_Name__c='Emergency Contact Name',
+                Emergency_Contact_Phone__c='333 333 3333'
+        );
         insert cm;
         List<Opportunity> ListOpps = new List<Opportunity>();
         Schema.DescribeSObjectResult d = Schema.SObjectType.Opportunity;
@@ -127,6 +133,8 @@ private class SignInREST2Test {
         SignInREST2.CampaignResponse CR = (SignInREST2.CampaignResponse)JSON.deserialize(testResResult, SignInREST2.CampaignResponse.class);
         System.assertEquals('donor',CR.CMWs[0].DonorLevel);
         System.assertEquals('TestContact',CR.CMWs[0].lastName,'Failed to find right campaignmember.contact.lastname');
+        System.assertEquals('Emergency Contact Name',CR.CMWs[0].EmergencyContactName,'Failed to find right campaignmember.EmergencyContactName');
+        System.assertEquals('333 333 3333',CR.CMWs[0].EmergencyContactPhone,'Failed to find right campaignmember.EmergencyContactPhone');
         System.assertEquals(System.today().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date');
 
         // System.assertEquals('Donated',CR.CMWs[0].status);
@@ -174,7 +182,7 @@ private class SignInREST2Test {
         System.assertEquals(CR.EventLocation,ctv.TestCampaign.Event_Location__c);
         System.assertEquals(CR.EventStartTime,ctv.TestCampaign.Event_Date_Time__c);
         System.assertEquals(CR.EventEndTime,ctv.TestCampaign.Event_End_Time__c);
-        System.assertEquals(CR.OrganizerName,System.UserInfo.getName());
+        System.assertEquals(System.UserInfo.getName(),CR.OrganizerName);
     }
 
     static testMethod void testCreateCampaignMember() {
@@ -197,6 +205,8 @@ private class SignInREST2Test {
         cmw.city = 'some city';
         cmw.zip = '92128';
         cmw.status = 'Attended';
+        cmw.EmergencyContactPhone = '444 444 4444';
+        cmw.EmergencyContactName = 'Test Emergency Contact';
 
         List<SignInREST2.CampaignMemberWrapper> rl = new List<SignInREST2.CampaignMemberWrapper>();
         rl.add(cmw);
@@ -217,6 +227,8 @@ private class SignInREST2Test {
 
         SignInREST2.Response result = SignInREST2.upsertCampaignMembers();
         System.assertEquals(result.statusCode, 200, 'Contact creation failed!');
+        List<CampaignMember> ResultCMs = [SELECT Emergency_Contact_Phone__c, Emergency_Contact_Name__c from CampaignMember where CampaignId =: cgn.Id];
+        System.assertEquals('444 444 4444',ResultCMs[0].Emergency_Contact_Phone__c);
     }
 
     static testMethod void testCreateCampaignMemberFromContact() {

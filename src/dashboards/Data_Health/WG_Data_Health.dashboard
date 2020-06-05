@@ -12,6 +12,7 @@
             <componentType>Metric</componentType>
             <displayUnits>Auto</displayUnits>
             <footer>Accounts without Contacts won&apos;t be on your mailing lists.</footer>
+            <groupingSortProperties/>
             <header>Accounts without Contacts</header>
             <indicatorBreakpoint1>20.0</indicatorBreakpoint1>
             <indicatorBreakpoint2>40.0</indicatorBreakpoint2>
@@ -26,6 +27,7 @@
             <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
             <componentType>Metric</componentType>
             <displayUnits>Auto</displayUnits>
+            <groupingSortProperties/>
             <header>Accounts without Primary Contacts</header>
             <indicatorHighColor>#54C254</indicatorHighColor>
             <indicatorLowColor>#C25454</indicatorLowColor>
@@ -38,6 +40,7 @@
             <autoselectColumnsFromReport>true</autoselectColumnsFromReport>
             <componentType>Metric</componentType>
             <displayUnits>Auto</displayUnits>
+            <groupingSortProperties/>
             <header>Primary Contacts without Emails</header>
             <indicatorHighColor>#54C254</indicatorHighColor>
             <indicatorLowColor>#C25454</indicatorLowColor>

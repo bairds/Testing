@@ -6,12 +6,15 @@
 private class VolunteerEventRegisterBootstrapTEST {
 
     @istest
-    public static void test() {
+    public static void NewLeadSignsUp() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         ctv.TestCampaign.Capacity__c = 3;
         ctv.TestCampaign.Event_End_Time__c = Datetime.NewInstance(2018, 12, 25, 8, 0, 0);
         ctv.TestCampaign.Waiver_Required__c = true;
+        Text_Document__c TD = ctv.fetchWaiver();
+        ctv.TestCampaign.Waiver__c = TD.Id;
         update ctv.TestCampaign;
+        Id TestLeadId;
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'TestMasterCamp');
         // This time we are not specifying the master_campaign_id;
@@ -20,6 +23,7 @@ private class VolunteerEventRegisterBootstrapTEST {
 
         // System.currentPageReference().getParameters().put('mid', mc.Id);
         System.currentPageReference().getParameters().put('cid', ctv.TestCampaign.Id);
+        TestLeadId = ctv.TestLead.Id;
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
 
@@ -53,6 +57,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         ve.updateSignee();
         ve.DeclineWaiver = true;
         ve.toggleAccept();
+        ve.coc.newsletter = true;
         system.assertEquals(true, ve.DeclineWaiver);
         system.assertEquals(false, ve.AcceptWaiver);
 
@@ -67,6 +72,9 @@ private class VolunteerEventRegisterBootstrapTEST {
         List<CampaignMember> testresult = [select id, Nr_in_Group__c from campaignmember where campaignid = :ve.c.id];
         system.assertEquals(1, testresult.size());
         system.assertEquals(1, testresult[0].Nr_in_Group__c, 'CM inserted without specifying Nr_in_Group__c and should have been set to 1.');
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        Lead ResultLead = [SELECT Mailing_Lists__c from Lead where id =: TestLeadId];
+        System.assertEquals(Setting.Online_signup_newsletter__c,ResultLead.Mailing_Lists__c,'Should have set mailing_lists to e-newsletter');
 
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         ve.setSignUp();
@@ -123,12 +131,15 @@ private class VolunteerEventRegisterBootstrapTEST {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Campaign camp = ctv.fetchTestCampaign();
+        Camp.CompletionURL__c='google.com';
         system.debug('TestContact is ' + TestContact);
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
         insert mc;
-
         camp.Master_Campaign__c = mc.Id;
+
+//        Text_Document__c TD = ctv.fetchWaiver();
+//        ctv.TestCampaign.Waiver__c = TD.Id;
         update camp;
 
         System.currentPageReference().getParameters().put('mid', mc.Id);
@@ -157,16 +168,23 @@ private class VolunteerEventRegisterBootstrapTEST {
 
         ve.coc.volunteerInterests.add('Education and Outreach');
         ve.coc.howHeard = 'Google';
+        ve.AcceptWaiver=true;
+
         system.debug('Contact Custom is now ' + ve.coc);
 
         List<CampaignMember> CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
 
-        ve.signUp();
+        PageReference CompletionURLRef = new PageReference('http://google.com');
+        // Run the signup() method.
+        // Does the ExitToCompletionURL method give the right URl?
+        PageReference TestPR = ve.Signup();
+        system.debug('Resulting PageReference is ' + TestPR);
+        //system.assertEquals(CompletionURLRef.getURL(),ve.signUp().getURL());
         CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
         system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
-        ve.ExitToCompletionURL();
+        system.assertEquals(CompletionURLRef.getURL(),ve.ExitToCompletionURL().getURL(), 'ExitToCompletionURL method not working');
     }
 
     @istest

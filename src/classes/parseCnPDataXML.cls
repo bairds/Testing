@@ -2,6 +2,7 @@
 // Added Exception Handling, send errors to WG_Error_Log;
 // 7 Dec removed search for application by name, search for WGCampaignId now works.
 // 11 Mar 2018 Parses for leadsource
+// 16 Sept 2019 Parse CnPs campaign node which is within the OrderItem
 public class parseCnPDataXML{
         public WGSettings__mdt Setting;
     
@@ -15,7 +16,7 @@ public class parseCnPDataXML{
         //string toparse = [select id, CnP_PaaS__DataXML__c from
         //CnP_PaaS__CnPData__c where CnP_PaaS__OrderNumber__c = :OrderNumber][0].CnP_PaaS__DataXML__c;
         WGSettings__mdt Setting = WGHelpers.getWGSettings();
-        Integer i = 0;
+        Integer i;
         Map<string, string> result = new Map<string, string>{
             'firstname' => null,
                 'lastname' => null,
@@ -27,9 +28,12 @@ public class parseCnPDataXML{
                 'zip' => null,
                 'email' => null,
                 'tracker' => null,
-                'campaign' => null,
-                'CampaignName' => null,
-                'WGCampaignId' => null,
+                'transactioncampaign' => null,
+                'transactionnodecampaignname' => null,
+                'transactionnodecampaignid' => null,
+                'orderitemcampname' => null,
+                'orderitemnodecampid' => null,
+                'orderitemnodecampname' => null,
                 'windowname' => null,
                 'windowid' => null,
                 'totalcharge' => null,
@@ -131,24 +135,38 @@ public class parseCnPDataXML{
         } // end if (xrcustomfieldlist != null)
         
         
-        xbillingrec = xr2.getchildelements() ; // get all record elements for this level 2 node
-        
-        for (Dom.XMLNode child : xbillingrec) { // loop through records
+        xbillingrec = xr2.getchildelements() ; // get TRANSACTION DETAILS
 
-            if (child.getname() != NULL) result.put(child.getname().tolowercase(), string.escapesinglequotes(child.getText()));
-        }
+            for (Dom.XMLNode child : xbillingrec) { // loop through records
+                system.debug('xbillingrec is ' + xbillingrec);
+                if (child.getname() == 'campaign') {
+                    result.put('transactioncampaignname', string.escapesinglequotes(child.getText()));
+                } else {
+                    if (child.getname() != NULL) result.put(child.getname().tolowercase(), string.escapesinglequotes(child.getText()));
+                }
+            }
             
         xbillingrec = xr2paymentMethod.getchildelements() ; // get all record elements for this level 2 node
-        
         for (Dom.XMLNode child : xbillingrec) { // loop through records
-            /*
-if (child.getname() == 'paymentType') result.put('paymentType', child.getText());
-if (child.getname() == 'nameOnCard') result.put('nameOnCard', child.getText());
-if (child.getname() == 'CardNumber') result.put('CardNumber', child.getText());
-if (child.getname() == 'ExpirationDate') result.put('ExpirationDate', child.getText());
-*/
             if (child.getname() != NULL) result.put(child.getname().tolowercase(), string.escapesinglequotes(child.getText()));
-        } 
+        }
+
+            // GET TRANSACTION DETAIL CAMPAIGNLIST
+            system.debug('XRCampaignList is ' + xrcampaignlist);
+            if (xrcampaignlist != null) {
+                // the following code never runs
+                system.debug('XRCampaignList is ' + xrcampaignlist);
+                list<dom.XmlNode> xrcampaignNodes = xrcampaignlist.getchildelements() ;
+                if (xrcampaignnodes != null) {
+                    // ONLY USE THE FIRST CAMPAIGN NAME IN THE NODE STRUCTURE.
+                    Dom.XMLNode child = xrcampaignnodes[0];
+                    system.debug('Transaction Campaign node is ' + child);
+                    if (child.getChildElement('CampaignName', null) != null) result.put('transactionnodecampaignname', child.getChildElement('CampaignName', null).getText());
+                    // Connect uses SF Campaign Ids, so pull that.
+                    if (child.getChildElement('CampaignExternalID', null) != null) result.put('transactionnodecampaignid', child.getChildElement('CampaignExternalID', null).getText());
+                }
+
+            }
             
 //CustomPaymentMethod
             if(xr3custompayment != null) {
@@ -180,18 +198,48 @@ if (child.getname() == 'TotalDue') result.put('TotalDue', child.getText());
                 if (child.getname() != NULL) result.put(child.getname().tolowercase(), child.getText());
             }
         } // end if (xrrecurring != null)
-        
-        if (xr3 != null) {	
-            list<dom.XmlNode> xrorderItems = xr3.getchildelements() ; 
-            System.debug('parseCnPDataXML has found ' + String.valueOf(xrorderItems.size()) + 'order items.');
-            result.put('orderitems',string.valueOf(xrorderItems.size()));
+        // ORDER ITEM LIST
+            i = 0;
+        if (xr3 != null) {
+            list<dom.XmlNode> xrorderItems = xr3.getchildelements() ;
+            System.debug('parseCnPDataXML has found ' + String.valueOf(xrorderItems.size()) + ' order items.');
+            result.put('orderitems', string.valueOf(xrorderItems.size()));
             for (Dom.XMLNode child : xrorderitems) {
-                List<dom.XmlNode> grandchildren = child.getchildelements();
+                List<Dom.XmlNode> grandchildren = child.getchildelements();
                 for (Dom.XmlNode grandchild : grandchildren) {
-                    
-                    if (grandchild.getname() != NULL) result.put(grandchild.getname().tolowercase() + i, grandchild.getText());
-                    system.debug(grandchild.getname().tolowercase() + i + ':' + grandchild.getText());
-                    /*
+
+                    if (grandchild.getname().toLowerCase() == 'campaignname') {
+                        result.put('OrderItem' + i + 'CampaignName', grandchild.getText());
+
+                    } else {
+                        if (grandchild.getname() != NULL) result.put(grandchild.getname().tolowercase() + i, grandchild.getText());
+                        system.debug(grandchild.getname().tolowercase() + i + ':' + grandchild.getText());
+                    }
+
+                    // Parse CnPs campaign node which is within the OrderItem
+                    if (grandchild.getname().tolowercase() == 'campaignlist') {
+                        List<dom.XMLNode> greatgrandchildren = grandchild.getchildelements();
+                        dom.XmlNode ggchild = greatgrandchildren[0]; {
+                            if (ggchild.getname().tolowercase() == 'campaignnode') {
+                                List<dom.XMLNode> g2gchildren = ggchild.getchildelements();
+                                if (g2gchildren != null) {
+                                    For (dom.XMLNode g2gchild : g2gchildren) {
+                                        system.debug('getname.tolowercase is ' + g2gchild.getname() + ':' + g2gchild.getText());
+                                        if (g2gchild.getname().toLowerCase() == 'campaignexternalid')
+                                            result.put('OrderItem' + i + 'NodeCampId', g2gchild.getText());
+                                        if (g2gchild.getname().tolowercase() == 'campaignname'){
+                                            result.put('OrderItem' + i + 'NodeCampName', g2gchild.getText());
+                                        system.debug('OrderItem' + i + 'NodeCampName is ' + g2gchild.getText());
+                                    }
+                                        if (g2gchild.getname().tolowercase() != null)
+                                            result.put(g2gchild.getname().tolowercase() + i, g2gchild.getText());
+                                    }
+                                }
+                            }
+                        }
+
+                        /*
+this also includes the fields campaignname and campaignexternalId
 if (grandchild.getname() == 'ItemID') result.put('ItemID' + i, grandchild.getText());
 System.debug('In xrOrderItems, just Set ItemID' + i + ' to ' + grandchild.getText());
 if (grandchild.getname() == 'ItemID') result.put('ItemID' + i, grandchild.getText());
@@ -205,31 +253,18 @@ if (grandchild.getname() == 'DiscountCharge') result.put('DiscountCharge' + i, g
 if (grandchild.getname() == 'DiscountDue') result.put('DiscountDue' + i, grandchild.getText());
 if (grandchild.getname() == 'SKU') result.put('SKU' + i, grandchild.getText());
 */
-                    
-                } //end grandchild loop
-                i = i + 1;
-            } // end child loop
-        } // END IF xr3 != null
-            
-        system.debug('After looking at transactiondetail result is ' + result);
-        
-        
-        // WE TAKE ONLY THE FIRST CAMPAIGN NAME, SET IT EQUAL TO CampaignName.
-            system.debug('XRCampaignList is ' + xrcampaignlist);
-            if (xrcampaignlist != null) {
-                // the following code never runs
-                system.debug('XRCampaignList is ' + xrcampaignlist);
-                list<dom.XmlNode> xrcampaignNodes = xrcampaignlist.getchildelements() ; 
-                if (xrcampaignnodes != null) {
-                    // ONLY USE THE FIRST CAMPAIGN NAME IN THE NODE STRUCTURE.    
-                    Dom.XMLNode child = xrcampaignnodes[0];
-                    system.debug('XXX ' + child.getChildElement('CampaignName',null));
-                    if (child.getChildElement('CampaignName',null)!=null) result.put('CampaignName', child.getChildElement('CampaignName',null).getText());
-					// Connect uses SF Campaign Ids, so pull that.
-                    if (child.getChildElement('CampaignExternalID',null)!=null) result.put('WGCampaignId', child.getChildElement('CampaignExternalID',null).getText());                                       
-                }
-            }
-        system.debug(result);
+
+                    } //end grandchild loop
+                } // end child loop
+                i++;
+            } // END IF xr3 != null
+
+            system.debug('After looking at transactiondetail result is ' + result);
+
+
+
+        }
+            for (string s : result.keySet()) system.debug(s+':'+result.get(s));
             // If periodicity = Yearly, change it to Annually to avoid error on insert.
             if (result.get('periodicity')=='Yearly') result.put('periodicity','Annually');
         return result;

@@ -1,0 +1,1175 @@
+<apex:page controller="EACCLightning" sidebar="false" docType="html-5.0" action="{!setEnterContrib}">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"/>
+    <apex:includeScript value="{!URLFOR($Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.min.js')}"
+                        loadOnReady="true"/>
+    <apex:includeScript value="{!$Resource.EnterAccountContactJS}"/>
+    <apex:includeScript value="{!$Resource.JoseJS}"/>
+
+    <apex:stylesheet value="{!URLFOR($Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.min.css')}"/>
+    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
+
+    <script type="text/javascript">
+        function ExitEACC() {
+            if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
+                sforce.one.back();
+            } else {
+                window.location = '/';
+            }
+        }
+
+        function CreateAcctCtct() {
+            if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
+                var url = '/lightning/n/EACC_Baird?c__a=2&c__step=2';
+                sforce.one.navigateToURL(url, true);
+            } else {
+                window.location = '?a=2&step=2';
+            }
+        }
+
+        function cancelButton() {
+            if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
+                sforce.one.back();
+            } else {
+                window.history.back();
+            }
+        }
+
+        function submitNext(templateId, contribId, formats) {
+            openTemplate(templateId, contribId, formats);
+            next();
+        }
+
+        function submitExit(templateId, contribId, formats) {
+            openTemplate(templateId, contribId, formats);
+            exit();
+        }
+
+        function openTemplate(templateId, contribId, formats) {
+            if (templateId != '' && contribId != '' && (formats.search('Print') >= 0 || formats.search('Email') >= 0)) {
+                if (formats.search('Email') >= 0)
+                    sendEmail();
+
+                if (formats.search('Print') >= 0) {
+                    window.open('/apex/Print?template=' + templateId + '&contrib=' + contribId);
+                    attachLetter();
+                }
+            }
+        }
+    </script>
+
+    <apex:form>
+        <apex:pageMessages></apex:pageMessages>
+        <div class="bPageBlock pr" style="border-top:initial">
+            <apex:outputPanel layout="block" html-color="blue" styleClass="dib">
+                <div class="container ma">
+                    <div class="title p6">
+                        Manage Account, Contacts &amp; Contributions
+                    </div>
+
+                    <div class="input control">
+                        <div>
+                            <apex:actionRegion>
+                                <c:AutoCompleteV2 labelField="Name" SObject="Account;Contact;Lead" valueField="Id"
+                                                  syncManualEntry="false" targetField="{!personId}"
+                                                  styleClass="autocomplete ma"
+                                                  autoSubmit="true"
+                                                  selectPC="selectPerson"
+                                                  placeholder="search & select account, contact or lead"
+                                                  allowClear="false"/>
+                                <apex:actionFunction action="{!selectPerson}" name="selectOption" rerender=""/>
+                            </apex:actionRegion>
+                        </div>
+
+                        <input type="button" class="btn" value="create account & contact(s)"
+                               onclick="CreateAcctCtct()"/>
+                        <input type="button" class="btn" value="exit" onclick="ExitEACC()"/>
+                    </div>
+
+                    <apex:outputPanel layout="block" rendered="{!step == '2'}" styleClass="bcw">
+                        <apex:outputPanel layout="block" html-color="{!if(acct.Id == null,'green','blue')}"
+                                          rendered="{!IF(acct.Id != null || co.Id != null || l != null,true,false)}">
+                            <div class="p11 {!if(a == '1','output','input')}">
+                                <apex:outputPanel layout="block" styleClass="table">
+                                    <div class="title"> {!t} </div>
+
+                                    <apex:outputPanel layout="none" rendered="{!l != null}">
+                                        <table>
+                                            <tr>
+                                                <td>
+                                                    <apex:outputText value="name" rendered="{!a == '1'}"/>
+                                                    <apex:outputText value="first name" rendered="{!a == '3'}"/>
+                                                </td>
+                                                <td>
+                                                    <apex:outputField value="{!l.Name}" rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!l.FirstName}" rendered="{!a == '3'}"/>
+                                                </td>
+
+                                                <td class="label">
+                                                    <apex:outputText value="type" rendered="{!a == '1'}"/>
+                                                    <apex:outputText value="last name" rendered="{!a == '3'}"/>
+                                                </td>
+                                                <td>
+                                                    <apex:outputText value="{!l.RecordType.Name} Lead"
+                                                                     rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!l.LastName}" rendered="{!a == '3'}"/>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td> phone</td>
+                                                <td>
+                                                    <apex:outputField value="{!l.Phone}" rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!l.Phone}" rendered="{!a == '3'}"/>
+                                                </td>
+
+                                                <td class="label"> company</td>
+                                                <td>
+                                                    <apex:outputField value="{!l.Company}" rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!l.Company}" rendered="{!a == '3'}"/>
+                                                </td>
+                                            </tr>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '1'}">
+                                                <tr>
+                                                    <td> address</td>
+                                                    <td>
+                                                        {!l.Street} <br/>
+                                                        {!l.City}, {!l.State} {!l.PostalCode}
+                                                    </td>
+
+                                                    <td class="label"></td>
+                                                    <td></td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '3'}">
+                                                <tr>
+                                                    <td> street</td>
+                                                    <td>
+                                                        <apex:inputField value="{!l.Street}"/>
+                                                    </td>
+
+                                                    <td class="label"> city</td>
+                                                    <td>
+                                                        <apex:inputField value="{!l.City}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> state</td>
+                                                    <td>
+                                                        <apex:inputField value="{!l.State}"/>
+                                                    </td>
+
+                                                    <td class="label"> postal code</td>
+                                                    <td>
+                                                        <apex:inputField value="{!l.PostalCode}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+                                        </table>
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel layout="none"
+                                                      rendered="{!IF(co.Id != null && acct.Id == null,true,false)}">
+                                        <table>
+                                            <apex:outputPanel rendered="{!a == '1'}" layout="none">
+                                                <tr>
+                                                    <td> name</td>
+                                                    <td>
+                                                        <apex:outputField value="{!co.Name}"/>
+                                                    </td>
+
+                                                    <td class="label"> type</td>
+                                                    <td> Contact</td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel rendered="{!a == '3'}" layout="none">
+                                                <tr>
+                                                    <td> first name</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.FirstName}"/>
+                                                    </td>
+
+                                                    <td class="label"> last name</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.LastName}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <tr>
+                                                <td> phone</td>
+                                                <td>
+                                                    <apex:outputField value="{!co.Phone}" rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!co.Phone}" rendered="{!a == '3'}"/>
+                                                </td>
+
+                                                <td class="label" rowspan="2"> account</td>
+                                                <td rowspan="2">
+                                                    <apex:commandLink action="{!selectAccount}"
+                                                                      value="{!co.Account.Name}" reRender="">
+                                                        <apex:param value="{!co.AccountId}" assignTo="{!personId}"
+                                                                    name="person_id"/>
+                                                    </apex:commandLink>
+                                                </td>
+                                            </tr>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '1'}">
+                                                <tr>
+                                                    <td> email</td>
+                                                    <td>
+                                                        <apex:outputField value="{!co.Email}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> address</td>
+                                                    <td>
+                                                        {!co.MailingStreet} <br/>
+                                                        {!co.MailingCity}, {!co.MailingState} {!co.MailingPostalCode}
+                                                    </td>
+
+                                                    <td class="label"></td>
+                                                    <td></td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '3'}">
+                                                <tr>
+                                                    <td> email</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.Email}" type="email"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> street</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingStreet}"/>
+                                                    </td>
+
+                                                    <td class="label"> city</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingCity}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> state</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingState}"/>
+                                                    </td>
+
+                                                    <td class="label"> postal code</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingPostalCode}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                         var="fc">
+                                                <tr>
+                                                    <td> {!fc.Label} </td>
+                                                    <td>
+                                                        <apex:inputField value="{!co[fc]}" rendered="{!a == '3'}"/>
+                                                        <apex:outputField value="{!co[fc]}" rendered="{!a == '1'}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel layout="none" rendered="{!acct.Id != null}">
+                                        <table>
+                                            <tr>
+                                                <td> name</td>
+                                                <td>
+                                                    <apex:outputField value="{!acct.Name}" rendered="{!a == '1'}"/>
+                                                    <apex:inputField value="{!acct.Name}" rendered="{!a == '3'}"/>
+                                                </td>
+
+                                                <apex:outputPanel layout="none" rendered="{!a == '1'}">
+                                                    <td class="label"> type</td>
+                                                    <td>
+                                                        <apex:outputField value="{!acct.RecordTypeID}"/>
+                                                        Account
+                                                    </td>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none" rendered="{!a == '3'}">
+                                                    <td class="label"> push to contacts</td>
+                                                    <td>
+                                                        <apex:inputCheckbox value="{!CreateDummyContact}"
+                                                                            styleClass="checkbox"/>
+                                                    </td>
+                                                </apex:outputPanel>
+                                            </tr>
+
+                                            <apex:outputPanel layout="none">
+                                                <tr>
+                                                    <td> dear</td>
+                                                    <td>
+                                                        <apex:outputField value="{!acct.Dear__c}"
+                                                                          rendered="{!a == '1'}"/>
+                                                        <apex:inputField value="{!acct.Dear__c}"
+                                                                         rendered="{!a == '3'}"/>
+                                                    </td>
+
+                                                    <td class="label"> addressee</td>
+                                                    <td>
+                                                        <apex:outputField value="{!acct.Addressee__c}"
+                                                                          rendered="{!a == '1'}"/>
+                                                        <apex:inputField value="{!acct.Addressee__c}"
+                                                                         rendered="{!a == '3'}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '1'}">
+                                                <tr>
+                                                    <td> address</td>
+                                                    <td>
+                                                        {!acct.BillingStreet} <br/>
+                                                        {!acct.BillingCity}
+                                                        , {!acct.BillingState} {!acct.BillingPostalCode}
+                                                    </td>
+
+                                                    <td class="label"> phone</td>
+                                                    <td>
+                                                        <apex:outputField value="{!acct.Phone}"/>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '3'}">
+                                                <tr>
+                                                    <td> street</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingStreet}"/>
+                                                    </td>
+
+                                                    <td class="label"> city</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingCity}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> state</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingState}"/>
+                                                    </td>
+
+                                                    <td class="label"> postal code</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingPostalCode}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> phone</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.Phone}"/>
+                                                    </td>
+
+                                                    <td class="label"></td>
+                                                    <td></td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:repeat value="{!$ObjectType.Account.FieldSets.eACAccountFields}"
+                                                         var="fc">
+                                                <tr>
+                                                    <td> {!fc.Label} </td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct[fc]}" rendered="{!a == '3'}"/>
+                                                        <apex:outputField value="{!acct[fc]}" rendered="{!a == '1'}"/>
+                                                    </td>
+
+                                                    <td class="label"></td>
+                                                    <td></td>
+                                                </tr>
+                                            </apex:repeat>
+                                        </table>
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel layout="none" rendered="{!a2 == '1'}">
+                                        <div class="buttons">
+                                            <apex:outputPanel rendered="{!a == '1'}" layout="none">
+                                                <apex:commandButton value="update info" action="{!updatePerson}"
+                                                                    reRender=""/>
+                                                <apex:commandButton value="add contact" action="{!addContact}"
+                                                                    reRender="" rendered="{!acct.Id != null}"/>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!a == '3'}">
+                                                <input type="button" class="btn" value="cancel"
+                                                       onclick="cancelButton()"/>
+                                                <apex:commandButton value="save" action="{!savePerson}" reRender=""/>
+                                            </apex:outputPanel>
+                                        </div>
+                                    </apex:outputPanel>
+
+                                    <apex:outputPanel layout="block"
+                                                      rendered="{!IF(acct.Id != null && a == '1',true,false)}"
+                                                      styleClass="p11 bcw" html-color="green">
+                                        <apex:outputPanel styleClass="table output" style="width: initial"
+                                                          rendered="{!a2 == '1' }" layout="block">
+                                            <apex:outputPanel rendered="{!PrimaryContributor.Id == null}" layout="none">
+                                                <div class="title"> Contacts in Account</div>
+
+                                                <table class="table">
+                                                    <tr class="col-header">
+                                                        <td> Choose Primary Contributor</td>
+                                                        <td> Name</td>
+                                                        <td> Role</td>
+                                                        <td> Primary Contact</td>
+                                                        <td></td>
+                                                    </tr>
+
+                                                    <apex:actionFunction action="{!redirect}" name="selectPC"
+                                                                         reRender="">
+                                                        <apex:param assignTo="{!PrimaryContributor.Id}" name="primary_contributor"
+                                                                    value=""/>
+                                                    </apex:actionFunction>
+
+                                                    <apex:repeat value="{!cocs}" var="coc">
+                                                        <tr class="row">
+                                                            <td><input type="radio" name="primary_contributor"
+                                                                       value="{!coc.id}"
+                                                                       onchange="selectPC('{!coc.id}')"/></td>
+
+                                                            <td>
+                                                                <apex:commandLink action="{!selectContact}"
+                                                                                  value="{!coc.name}" reRender="">
+                                                                    <apex:param value="{!coc.id}" assignTo="{!personId}"
+                                                                                name="person_id"/>
+                                                                </apex:commandLink>
+                                                            </td>
+
+                                                            <td> {!coc.acr.Role} </td>
+                                                            <td>
+                                                                <apex:outputField value="{!coc.acr.IsPrimary}"/>
+                                                            </td>
+                                                            <td>
+                                                                <apex:commandLink action="{!selectContact}" value="edit"
+                                                                                  reRender="">
+                                                                    <apex:param value="{!coc.id}" assignTo="{!personId}"
+                                                                                name="person_id"/>
+                                                                    <apex:param value="3" assignTo="{!a}" name="a"/>
+                                                                </apex:commandLink>
+       </td>
+                                                        </tr>
+                                                    </apex:repeat>
+
+                                                    <tr class="col-header">
+                                                        <td colspan="5"> Choose a Primary Contributor who is NOT in the
+                                                            Account.
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr class="row">
+                                                        <td colspan="5" style="padding: 11px;">
+                                                            <!--<apex:actionRegion>-->
+                                                                <c:AutoCompleteV2 labelField="Name" SObject="Contact"
+                                                                                  valueField="Id"
+                                                                                  syncManualEntry="false"
+                                                                                  targetField="{!PersonId}"
+                                                                                  styleClass="autocomplete ma"
+                                                                                  autoSubmit="true"
+                                                                                  selectPC="selectPrimaryContributor"
+                                                                                  placeholder="search & select primary contributor"
+                                                                                  allowClear="false"
+                                                                                  importJQuery="false"/>
+                                                                <apex:actionFunction action="{!selectPrimaryContributor}"
+                                                                                     name="selectOption2" rerender="PrimaryContributorBlock"/>
+                                                            <!--</apex:actionRegion>-->
+                                                        </td>
+                                                    </tr>
+                                                </table>
+
+                                                <!--<div class="buttons"> <apex:commandButton value="add account contact" action="{!addContact}" reRender="" /> </div> -->
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel id="PrimaryContributorBlock" rendered="{!PrimaryContributor.Id != null}" layout="none">
+                                                <div class="title"> Primary Contributor</div>
+
+                                                <table>
+                                                    <tr>
+                                                        <td> name</td>
+                                                        <td>
+                                                            <apex:outputField value="{!PrimaryContributor.Name}"/>
+                                                        </td>
+
+                                                        <td class="label"> email</td>
+                                                        <td>
+                                                            <apex:outputField value="{!PrimaryContributor.Email}"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td> address</td>
+                                                        <td>
+                                                            {!PrimaryContributor.MailingStreet} <br/>
+                                                            {!PrimaryContributor.MailingCity}
+                                                            , {!PrimaryContributor.MailingState} {!PrimaryContributor.MailingPostalCode}
+                                                        </td>
+
+                                                        <td class="label"></td>
+                                                        <td></td>
+                                                    </tr>
+                                                </table>
+
+                                                <div class="buttons">
+                                                    <input type="button" class="btn" value="cancel"
+                                                           onclick="window.location = document.referrer"/>
+                                                    <apex:commandButton id="updateContact" value="update info"
+                                                                        action="{!updatePrimaryContributor}"
+                                                                        reRender=""/>
+                                                    <apex:commandButton id="backbutton" value="back"
+                                                                        action="{!resetPrimaryContributor}"
+                                                                        reRender=""/>
+                                                </div>
+                                            </apex:outputPanel>
+                                        </apex:outputPanel>
+
+                                        <apex:outputPanel styleClass="table input" style="width: initial"
+                                                          rendered="{!if(a2 == '2' || a2 == '3', true, false)}"
+                                                          layout="block">
+                                            <div class="title">
+                                                <apex:outputText value="Add Contact" rendered="{!a2 == '2'}"/>
+                                                <apex:outputText value="Update Contact" rendered="{!a2 == '3'}"/>
+                                            </div>
+
+                                            <table>
+                                                <tr>
+                                                    <td> first name</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.FirstName}"/>
+                                                    </td>
+
+                                                    <td class="label"> last name</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.LastName}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> phone</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.Phone}"/>
+                                                    </td>
+
+                                                    <td class="label"> email</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.Email}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> street</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingStreet}"/>
+                                                    </td>
+
+                                                    <td class="label"> city</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingCity}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> state</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingState}"/>
+                                                    </td>
+
+                                                    <td class="label"> postal code</td>
+                                                    <td>
+                                                        <apex:inputField value="{!co.MailingPostalCode}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                             var="fc">
+                                                    <tr>
+                                                        <td> {!fc.Label} </td>
+                                                        <td>
+                                                            <apex:inputField value="{!co[fc]}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:repeat>
+                                            </table>
+
+                                            <div class="buttons">
+                                                <input type="button" class="btn" value="cancel"
+                                                       onclick="cancelButton()"/>
+                                                <apex:commandButton value="save" action="{!savePerson}"/>
+                                            </div>
+                                        </apex:outputPanel>
+                                    </apex:outputPanel>
+                                </apex:outputPanel>
+                            </div>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel rendered="{!IF(acct.Id == null && co.Id == null && l == null,true,false)}"
+                                          layout="block">
+                            <div class="p11 input">
+                                <div class="table">
+                                    <div class="title"> Create Account &amp; Contact(s)</div>
+                                    <div class="df p11 pr">
+                                        <div class="table" id="account" style="width: initial">
+                                            <div class="title"> Enter Account</div>
+
+                                            <table id="account_input">
+                                                <tr>
+                                                    <td> type</td>
+                                                    <td id="record_type">
+                                                        <apex:inputField value="{!acct.RecordTypeID}"
+                                                                         onchange="setRequiredFields(this)"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> name</td>
+                                                    <td>
+                                                        <div class="requiredInput" id="account_name">
+                                                            <div class="requiredBlock dn"/>
+                                                            <apex:inputText value="{!acct.Name}"
+                                                                            html-placeholder="leave empty for Family"/>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> dear ___</td>
+                                                    <td>
+                                                        <apex:inputfield value="{!acct.Dear__c}"
+                                                                         html-placeholder="leave blank for autofill"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> Addressee</td>
+                                                    <td>
+                                                        <apex:inputfield value="{!acct.Addressee__c}"
+                                                                         html-placeholder="leave blank for autofill"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> phone</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.Phone}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> street</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingStreet}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> city</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingCity}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> state</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingState}"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td> zip code</td>
+                                                    <td>
+                                                        <apex:inputField value="{!acct.BillingPostalCode}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <apex:repeat value="{!$ObjectType.Account.FieldSets.eACAccountFields}"
+                                                             var="fa">
+                                                    <tr>
+                                                        <td> {!fa.Label} </td>
+                                                        <td>
+                                                            <apex:inputField value="{!acct[fa]}"></apex:inputField>
+                                                        </td>
+                                                    </tr>
+                                                </apex:repeat>
+                                            </table>
+                                        </div>
+
+                                        <div color="green" class="ml11">
+                                            <div class="table input">
+                                                <div class="title df" style="padding: initial">
+                                                    <div class="f1 p6 tac wsn"> Enter Contact(s)</div>
+
+                                                    <div class="cg bcw f1 p6 tac">
+                                                        <div class="dib">
+                                                            <div class="dib"> #</div>
+
+                                                            <div class="dib">
+                                                                <div class="requiredInput" id="contacts_in_account">
+                                                                    <div class="requiredBlock dn"/>
+                                                                    <apex:selectList id="chooseNrContacts"
+                                                                                     value="{!ContactsInAccount}"
+                                                                                     size="1"
+                                                                                     onchange="validateContacts()">
+                                                                        <apex:selectOptions value="{!NrContacts}"/>
+                                                                    </apex:selectList>
+                                                                    <!--<apex:inputText value="{!ContactsInAccount}" onchange="validateContacts()" style="width: initial; padding: 1px" /> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <apex:outputPanel layout="block" styleClass="df p6" id="contacts">
+                                                    <apex:outputPanel layout="block"
+                                                                      rendered="{!ContactsInAccount == '1' || ContactsInAccount == '2'}">
+                                                        <table>
+                                                            <tr>
+                                                                <td> first name</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.FirstName}"
+                                                                                     required="true"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> last name</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.LastName}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> dear ___</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.Dear__c}"
+                                                                                     html-placeholder="leave blank for autofill"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> title</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.Title}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> home phone</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.HomePhone}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> mobile phone</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.MobilePhone}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> email</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co.Email}"/>
+                                                                </td>
+                                                            </tr>
+
+                                                            <apex:repeat
+                                                                    value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                                    var="fc">
+                                                                <tr>
+                                                                    <td> {!fc.Label} </td>
+                                                                    <td>
+                                                                        <apex:inputField value="{!co[fc]}"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </apex:repeat>
+                                                        </table>
+                                                    </apex:outputPanel>
+
+                                                    <apex:outputPanel layout="block"
+                                                                      rendered="{!ContactsInAccount == '2'}"
+                                                                      styleClass="ml6">
+                                                        <table>
+                                                            <tr>
+                                                                <td> first name</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.FirstName}"
+                                                                                     required="true"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> last name</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.LastName}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> dear ___</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.Dear__c}"
+                                                                                     html-placeholder="leave blank for autofill"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> title</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.Title}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> home phone</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.HomePhone}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> mobile phone</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.MobilePhone}"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td> email</td>
+                                                                <td>
+                                                                    <apex:inputfield value="{!co2.Email}"/>
+                                                                </td>
+                                                            </tr>
+
+                                                            <apex:repeat
+                                                                    value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                                    var="fc">
+                                                                <tr>
+                                                                    <td> {!fc.Label} </td>
+                                                                    <td>
+                                                                        <apex:inputField value="{!co2[fc]}"/>
+                                                                    </td>
+                                                                </tr>
+                                                            </apex:repeat>
+                                                        </table>
+                                                    </apex:outputPanel>
+                                                </apex:outputPanel>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="buttons" id="buttons">
+                                        <input type="button" class="btn" value="cancel" onclick="cancelButton()"/>
+                                        <apex:commandButton action="{!saveAccountContacts}" value="submit" reRender=""/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <apex:actionRegion immediate="true">
+                                <apex:actionFunction name="setContacts" action="{!setContacts}" rerender="contacts"
+                                                     onbeforedomupdate="hideLoading(1)">
+                                    <apex:param name="ContactsInAccount" assignTo="{!ContactsInAccount}"
+                                                value="{!contactsInAccount}"/>
+                                    <apex:param name="createDummyContact" assignTo="{!CreateDummyContact}"
+                                                value="{!CreateDummyContact}"/>
+                                </apex:actionFunction>
+                            </apex:actionRegion>
+
+                            <script>
+                                contactsInAccount = document.getElementById('contacts_in_account').lastElementChild;
+                                contactsInAccount.lastIndex = contactsInAccount.selectedIndex;
+
+                                setRequiredFields(document.getElementById('record_type').firstElementChild);
+                            </script>
+                        </apex:outputPanel>
+
+                        <apex:outputPanel layout="block"
+                                          rendered="{!if(a == '1' && (acct.Id == null || PrimaryContributor.Id != null), true, false)}"
+                                          styleClass="buttons">
+                            <apex:commandButton value="enter contribution" action="{!enterContribution}" reRender="enterContributionBlock"/>
+                        </apex:outputPanel>
+                    </apex:outputPanel>
+
+                    <apex:outputPanel id="enterContributionBlock" layout="block" rendered="{!step == '3'}" html-color="olive">
+                        <div class="p11 input">
+                            <div class="table" style="width: initial">
+                                <div class="title"> Enter Contribution</div>
+
+                                <div class="bcw p6 bbg">
+                                    <apex:actionRegion immediate="true">
+                                        <apex:selectRadio value="{!oRT}" required="true" styleClass="selectcheckboxes"
+                                                          style="font-size: 11pt">
+                                            <apex:selectOptions value="{!oc.recordTypes}"/>
+                                            <apex:actionSupport event="onchange" action="{!redirect}" reRender=""/>
+                                        </apex:selectRadio>
+                                    </apex:actionRegion>
+                                </div>
+
+                                <div class="df">
+                                    <div class="f1">
+                                        <table>
+                                            <tr>
+                                                <td> account</td>
+                                                <td>
+                                                    <apex:commandLink action="{!selectAccount}" value="{!acct.Name}"
+                                                                      immediate="true" reRender=""/>
+                                                </td>
+                                            </tr>
+
+                                            <apex:outputPanel layout="none" rendered="{!o.RecordTypeId != null}">
+                                                <tr>
+                                                    <td> campaign</td>
+                                                    <td>
+                                                        <apex:inputField value="{!o.CampaignId}" required="true"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> date</td>
+                                                    <td>
+                                                        <apex:inputField value="{!o.CloseDate}" required="true"/>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> {!fieldLabel['Amount']} </td>
+                                                    <td>
+                                                        <apex:inputField value="{!o.Amount}" required="true"
+                                                                         rendered="{!oc.recordType.Name != 'Volunteer Task'}"/>
+                                                        <apex:inputField value="{!o.Hours_Actual__c}" required="true"
+                                                                         rendered="{!oc.recordType.Name == 'Volunteer Task'}"/>
+                                                    </td>
+                                                </tr>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!oc.recordType.Name == 'Event'}">
+                                                    <tr>
+                                                        <td> tax deductible amount</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Tax_Deductible_Amount__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none" rendered="{!showField['PaymentType']}">
+                                                    <tr>
+                                                        <td> payment type</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Payment_Type__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> check #</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Check_Num_Text__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> check date</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Check_Date__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!showField['ChallengeOrPledge']}">
+                                                    <tr>
+                                                        <td> challenge or pledge</td>
+                                                        <td>
+                                                            <apex:inputField
+                                                                    value="{!o.Matches_Which_Challenge_or_Pledge__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!oc.recordType.Name == 'Event'}">
+                                                    <tr>
+                                                        <td> attendees</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Attendee__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!oc.recordType.Name == 'InKind'}">
+                                                    <tr>
+                                                        <td> description</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Description}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!oc.recordType.Name == 'Pledge'}">
+                                                    <tr>
+                                                        <td> payments begin</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Start_Date__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> # of payments</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Number_of_Payments__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> payments periodicity</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Periodicity__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> installment amount</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Installment_Amount__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+
+                                                <apex:outputPanel layout="none"
+                                                                  rendered="{!oc.recordType.Name == 'Volunteer Task'}">
+                                                    <tr>
+                                                        <td> hourly rate for task</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Hourly_Rate_for_Vol_Task__c}"/>
+                                                        </td>
+                                                    </tr>
+
+                                                    <tr>
+                                                        <td> supervisor satisfaction</td>
+                                                        <td>
+                                                            <apex:inputField value="{!o.Supervisor_Satisfaction__c}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                        </table>
+
+                                    </div>
+
+                                    <div class="f1">
+                                        <table>
+                                            <apex:outputPanel layout="none"
+                                                              rendered="{!IF(PrimaryContributor != null || o.RecordTypeId != null,true,false)}">
+                                                <tr>
+                                                    <td> main contributor</td>
+                                                    <td>
+                                                        <apex:commandLink action="{!selectContact}" value="{!PrimaryContributor.Name}"
+                                                                          immediate="true" reRender="">
+                                                            <apex:param assignTo="{!personId}" value="{!PrimaryContributor.Id}"
+                                                                        name="person_id"/>
+                                                        </apex:commandLink>
+                                                    </td>
+                                                </tr>
+                                            </apex:outputPanel>
+
+                                            <apex:outputPanel layout="none" rendered="{!o.RecordTypeId != null}">
+                                                <tr>
+                                                    <td>Thank You Letter</td>
+                                                    <td>
+                                                        <div>
+                                                            <apex:selectList value="{!oc.thankYouLetter}" size="1"
+                                                                             onchange="showOptions('tylf', this.value)">
+                                                                <apex:selectOptions value="{!oc.thankYouLetters}"/>
+                                                            </apex:selectList>
+                                                        </div>
+
+                                                        <div class="mt11 horizontal dn" id="tylf">
+                                                            <apex:selectCheckboxes value="{!oc.thankYouLetterFormats}"
+                                                                                   styleClass="selectcheckboxes">
+                                                                <apex:selectOptions
+                                                                        value="{!oc.thankYouLetterFormatsList}"/>
+                                                            </apex:selectCheckboxes>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td> add complementary membership?</td>
+                                                    <td>
+                                                        <div>
+                                                            <input type="checkbox"
+                                                                   onchange="showOptions('CompMembership', this.checked)"/>
+                                                        </div>
+
+                                                        <div class="mt11 dn" id="CompMembership">
+                                                            <div>
+                                                                <apex:inputField
+                                                                        value="{!CompMembership.Membership_Start_Date__c}"
+                                                                        html-placeholder="start date"/>
+                                                            </div>
+
+                                                            <div class="mt11">
+                                                                <apex:inputField
+                                                                        value="{!CompMembership.Membership_End_Date__c}"
+                                                                        html-placeholder="end date"/>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+
+                                                <apex:repeat value="{!ofs}" var="of">
+                                                    <tr class="input-row">
+                                                        <td class="ttl"> {!of.Label} </td>
+                                                        <td class="wsn">
+                                                            <apex:inputField value="{!o[of.Name]}"
+                                                                             styleClass="input-field"
+                                                                             rendered="{!of.Type == 'field'}"/>
+
+                                                            <apex:selectRadio value="{!of.Value.Str}"
+                                                                              rendered="{!of.Type == 'PICKLIST'}"
+                                                                              layout="pageDirection"
+                                                                              styleClass="selectcheckboxes">
+                                                                <apex:selectOptions value="{!of.Picklist}"
+                                                                                    html-class="input-field"/>
+                                                            </apex:selectRadio>
+
+                                                            <apex:selectCheckboxes value="{!of.Value.StrL}"
+                                                                                   styleClass="selectcheckboxes"
+                                                                                   rendered="{!of.Type == 'MULTIPICKLIST'}"
+                                                                                   layout="pageDirection">
+                                                                <apex:selectOptions value="{!of.Picklist}"
+                                                                                    html-class="input-field"/>
+                                                            </apex:selectCheckboxes>
+
+                                                            <apex:input value="{!of.Value.Str}" type="tel"
+                                                                        styleClass="input-field"
+                                                                        rendered="{!of.Type == 'PHONE'}"/>
+                                                        </td>
+                                                    </tr>
+                                                </apex:repeat>
+                                            </apex:outputPanel>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="buttons">
+                                    <input type="button" class="btn" value="cancel" onclick="cancelButton()"/>
+
+                                    <apex:outputPanel layout="none" rendered="{!o.RecordTypeId != null}">
+                                        <apex:commandButton value="submit & next" action="{!submitContribution}"
+                                                            oncomplete="submitNext('{!oc.thankYouLetter}', '{!o.Id}', '{!oc.thankYouLetterFormats}')"/>
+
+                                        <apex:commandButton value="submit & exit" action="{!submitContribution}"
+                                                            oncomplete="submitExit('{!oc.thankYouLetter}', '{!o.Id}', '{!oc.thankYouLetterFormats}')"/>
+
+                                        <apex:actionFunction name="sendEmail" action="{!sendEmail}" rerender=""/>
+                                        <apex:actionFunction name="attachLetter" action="{!attachLetter}" rerender=""/>
+                                        <apex:actionFunction name="next" action="{!next}" reRender=""/>
+                                        <apex:actionFunction name="exit" action="{!exit}" reRender=""/>
+                                    </apex:outputPanel>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                </div>
+            </apex:outputPanel>
+
+            <c:Loading/>
+        </div>
+    </apex:form>
+
+</apex:page>

@@ -465,7 +465,6 @@ for (EnhancedIOProcess EIO : records) {
     )
         MatchingNames.add(IO.Person_FirstName__c.tolowercase() + IO.Person_LastName__c.tolowercase()+ IO.Address_ZipCode__c.tolowercase());
     }
-
 }
 
 private void setupLookupMap() {
@@ -521,13 +520,9 @@ for (Contact MatchingContacts : database.query(sContactLegacyQuery) ) {
 for (Contact MatchingContacts : database.query(sContactEmailQuery) ) {
     accountContactLookupMap.put(MatchingContacts.AccountId, null);
     if (String.isNotBlank(MatchingContacts.email)) addtoSOList(MatchingContacts.email, MatchingContacts);
-
     if (String.isNotBlank(MatchingContacts.Personal_Email__c)) addtoSOList(MatchingContacts.Personal_Email__c, MatchingContacts);
-
     if (String.isNotBlank(MatchingContacts.Other_Email__c)) addtoSOList(MatchingContacts.Other_Email__c, MatchingContacts);
-
     if (String.isNotBlank(MatchingContacts.Work_Email__c)) addtoSOList(MatchingContacts.Work_Email__c, MatchingContacts);
-
 }
 
 for (Contact MatchingContacts : database.query(sContactNameQuery)) {
@@ -605,6 +600,4 @@ for (Contact MatchingContacts : database.query(sContactNameQuery)) {
                 }
     return DataImportFieldMap;
     }
-
-
 }

@@ -5,8 +5,8 @@ public without sharing class VolunteerEventRegisterBootstrap
     public Campaign c { get; set; }
     public CampaignCustom cc { get; set; }
     public CampaignMember cm { get; set; }
-    // public datetime DateTimeStartAdjusted {get; set;}
-    // public datetime DateTimeEndAdjusted {get; set;}
+    public datetime DateTimeStartAdjusted {get; set;}
+    public datetime DateTimeEndAdjusted {get; set;}
     public Contact co { get; set; }
     public ContactCustom coc { get; set; }
     public List<FieldSetCustom> cofs { get; set; }
@@ -14,7 +14,7 @@ public without sharing class VolunteerEventRegisterBootstrap
     public Lead l { get; set; }
     public Opportunity o { get; set; }
     public List<CampaignMember> checkCM {get; set;}
-    public boolean WaiverExists {get; set;}
+    public boolean WaiverRequired {get; set;}
     public boolean AcceptWaiver {get; set;}
     public boolean DeclineWaiver {get; set;}
     public boolean LastAccepted {get;set;}
@@ -23,14 +23,14 @@ public without sharing class VolunteerEventRegisterBootstrap
 
     public String step { get; set; } //step
     public String query { get; set; }
+    public String mid { get; set; }
 
     public String lo { get; set; } //logo
     public String title { get; set; }
     public String errors { get; set; }
     public double tzoffset {get; set;}
     public timezone tz {get; set;}
-    // public url initialurl {get; set;}
-    public string mid {get; set;}
+    public url initialurl {get; set;}
 
     public VolunteerEventRegisterBootstrap()
     {
@@ -56,12 +56,9 @@ public without sharing class VolunteerEventRegisterBootstrap
                 'WHERE Event_Date_Time__c >= TODAY AND (recordtype.name = \'Public Event\' OR recordtype.name = \'Volunteer Event\') AND IsActive = true';
         if (mid!=null) query += ' AND Master_Campaign__c = \'' + mid + '\'';
         query += ' ORDER BY Event_Date_Time__c, Name';
-        cs = Database.query(query);
-        system.debug('After searching for Master campaign campaign is ' + cs);
-        if (cs[0].Master_Campaign__r.Name!=null)
-        title = cs[0].Master_Campaign__r.Name;
+        system.debug('Query is ' + query);
 
-                // .Master_Campaigns__r[0].Name;
+        cs = Database.query(query);
 
         // Remove campaign from list if it's a Corporate volunteer event with a Group Leader
         system.debug('Before looping through Corporate Event CMs to remove Group Leader, cs is ' + cs);
@@ -108,14 +105,14 @@ public without sharing class VolunteerEventRegisterBootstrap
                     Custom_Signup_Question__c, Custom_Signup_Question_2__c, Allow_Group_Signup__c
             FROM Campaign WHERE Id =: cid LIMIT 1];
 
- /*           //Adjust the times for timezone and dst
-            CampaignPlus CP = new CampaignPlus(c);
-            DateTimeStartAdjusted = cp.datetimelocal;
-            DateTimeEndAdjusted = cp.datetimelocalend;
-*/
+            /*           //Adjust the times for timezone and dst
+                       CampaignPlus CP = new CampaignPlus(c);
+                       DateTimeStartAdjusted = cp.datetimelocal;
+                       DateTimeEndAdjusted = cp.datetimelocalend;
+           */
             title = 'Sign Up for ' + this.c.Name;
 
-            WaiverExists = (c.Waiver__c != null && c.Waiver__r.Body__c != null);
+            WaiverRequired = (c.Waiver__c != null && c.Waiver__r.Body__c != null);
 
             if(String.isNotEmpty(this.c.Logo__c))
                 this.lo = this.c.Logo__c;
@@ -188,7 +185,7 @@ public without sharing class VolunteerEventRegisterBootstrap
     private Contact getContact(String i)
     {
         //if (co != null){
-        String q =  'SELECT Id, FirstName, LastName, Email, Phone, MailingPostalCode';
+        String q =  'SELECT Id, FirstName, LastName, Email, Phone, Mailing_Lists__c, MailingPostalCode';
 
         for(Schema.FieldSetMember f : SObjectType.Contact.FieldSets.volunteerEventRegister.getFields())
             q += ', ' + f.getFieldPath();
@@ -202,7 +199,7 @@ public without sharing class VolunteerEventRegisterBootstrap
 
     private Lead getLead(String i)
     {
-        return [SELECT Id, FirstName, LastName, Email, Phone, PostalCode, Street, City, State, Volunteer_Interests__c, How_Heard__c FROM Lead WHERE IsConverted=false AND Id =: i LIMIT 1];
+        return [SELECT Id, FirstName, LastName, Email, Phone, PostalCode, Street, City, State, Mailing_Lists__c, Volunteer_Interests__c, How_Heard__c FROM Lead WHERE IsConverted=false AND Id =: i LIMIT 1];
     }
 
     public PageReference setSignee()
@@ -272,7 +269,9 @@ public without sharing class VolunteerEventRegisterBootstrap
     {
         String u = '/apex/ConfirmVolunteerEventRegistration?cid=' + this.c.Id;
         system.debug('Beginning signUp, AcceptWaiver is ' + AcceptWaiver + ' and DeclineWaiver is ' + DeclineWaiver);
-        if (c.Waiver_Required__c==true&&acceptWaiver!=true) {
+        system.debug('WaiverRequired is ' + WaiverRequired);
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        if (WaiverRequired==true&&acceptWaiver!=true) {
 
             PageReference url;
             this.errors = 'You must accept the waiver in order to sign up for this event.';
@@ -333,10 +332,13 @@ public without sharing class VolunteerEventRegisterBootstrap
         if(this.l.Id != null) {
             this.cm.LeadId = this.l.Id;
 
-            if(this.coc.Newsletter)
-                this.l.HasOptedOutOfEmail = false;
-            else
-                    this.l.HasOptedOutOfEmail = true;
+            if(this.coc.Newsletter) {
+                if (l.Mailing_Lists__c==null){
+                    l.Mailing_Lists__c = Setting.Online_signup_newsletter__c;
+                } else {
+                    l.Mailing_Lists__c += ', ' + Setting.Online_signup_newsletter__c;
+                }
+            }
 
             Set<String> lf = SObjectType.Lead.fields.getMap().keySet();
 
@@ -359,12 +361,15 @@ public without sharing class VolunteerEventRegisterBootstrap
             system.debug('cm is ' + cm + ' co is ' + co);
             this.cm.ContactId = this.co.Id;
 
-            if(this.coc.Newsletter)
-                this.co.HasOptedOutOfEmail = false;
-            else
-                    this.co.HasOptedOutOfEmail = true;
+            if(this.coc.Newsletter) {
+                if (co.Mailing_Lists__c==null){
+                    co.Mailing_Lists__c = Setting.Online_signup_newsletter__c;
+                } else {
+                    co.Mailing_Lists__c += ', ' + Setting.Online_signup_newsletter__c;
+                }
 
-            update this.co;
+            }
+                update this.co;
 
             cmCheck= [SELECT Id FROM CampaignMember WHERE ContactId =: this.co.Id AND CampaignId =: this.c.Id];
         }
@@ -424,9 +429,8 @@ public without sharing class VolunteerEventRegisterBootstrap
         string u = null;
         if(String.isNotBlank(this.c.CompletionURL__c)) {
             u = 'http://' + this.c.CompletionURL__c.replace('http://', '');
-        } else {
-            return null;
         }
+
         PageReference url = new PageReference(u);
         url.setRedirect(true);
         return url;

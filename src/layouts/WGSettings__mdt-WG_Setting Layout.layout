@@ -58,6 +58,10 @@
                 <behavior>Edit</behavior>
                 <field>HourlyVolunteerRate__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Google_API_Key__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

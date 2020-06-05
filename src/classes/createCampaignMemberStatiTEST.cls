@@ -1,5 +1,6 @@
 /**
  * Created by Baird on 7/4/2019.
+ * Revised 5/2020 to avoid errors due to Capitalization or UpperCase
  */
 
 @IsTest
@@ -22,7 +23,7 @@ private class createCampaignMemberStatiTEST {
     }
 
     @IsTest
-    static void campaignInsertAndCloneTest() {
+    static void campaignInsertTest() {
         // Test single record insert
         System.debug('Inserting 1 campaign record... (single record validation)');
         Campaign c = new Campaign(Name='Test');
@@ -47,6 +48,8 @@ private class createCampaignMemberStatiTEST {
         system.debug('CMValues.size() is ' + CMValues.size());
         // Is this equal to the number of CampaignSTati in the custom metadata + 5?
         List<CampaignStatiMDT__mdt> resultList = [select id from CampaignStatiMDT__mdt];
+        system.debug('resultList found ' + resultList.size() + ' values in the Custom metadata for campaignstati.');
+        for (CampaignStatiMDT__mdt r : resultList) system.debug('resultList value is ' + resultList);
         system.AssertEquals(resultList.size()+5,CMValues.size());
 
         Campaign c2 = c.clone(false,false,false,false);
@@ -68,18 +71,23 @@ private class createCampaignMemberStatiTEST {
         update c;
         CMValues = [select id, label, sortorder, isdefault from CampaignMemberStatus where campaignID = :c.id];
         system.debug('After updating there are ' + CMValues.size() + ' CampaignMemberStatus values');
+        // Are the stati values created?
+        Boolean foundCustomStatus4;
+        // Test for all the stati from the custom metadata
+        List<CampaignStatiMDT__mdt> SettingCMs = [select Label from CampaignStatiMDT__mdt];
+        system.assertEquals(10,SettingCMs.size(),'There should be ten CampaignStati in the metadata');
+        List<string> Stati = new List<String>();
+        For (CampaignStatiMDT__mdt csm : SettingCMs) Stati.add(csm.Label.toUpperCase());
+        system.assertEquals(10,Stati.size(),'Are there ten campaign stati from meta data?');
+        integer StatiFromCustomSetting = 0;
         for (CampaignMemberStatus campmemstat : CMValues) {
-            system.debug('Campaign Status: ' + campmemstat);
+            system.debug('Is Campaign Status: ' + campmemstat.Label + ' contained in ' + Stati);
+            if (campmemstat.label=='CustomStatus4') foundCustomStatus4 = true;
+            if (Stati.contains(campmemstat.Label.ToUpperCase())) StatiFromCustomSetting += 1;
         }
-        system.assertEquals(16,CMValues.size());
-
-        /*system.debug('Cloned campaign is ' + c2);
-        insert c2;
-        CMValues = [select id, label, sortorder, isdefault from CampaignMemberStatus where campaignID = :c2.id];
-        system.AssertEquals(resultList.size()+5,CMValues.size());
-        // Were custom CMSs preserved?
-        CMValues = [select id, label, SortOrder, isdefault from CampaignMemberStatus where campaignID = :c2.id AND label like 'CustomStatus%'];
-        system.AssertEquals(3,CMValues.size());*/
+        system.assertEquals(true,foundCustomStatus4);
+        system.debug('StatiFromCustomSetting is ' + StatiFromCustomSetting);
+        system.assertEquals(SettingCMs.size(),StatiFromCustomSetting,'Did not create all the stati from the meta data.  The stati are ' + CMValues);
 
     }
 
@@ -87,17 +95,25 @@ private class createCampaignMemberStatiTEST {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Campaign TestCamp = ctv.fetchTestCampaign();
         List<Campaign> ListCamps = new List<Campaign>();
-        For (integer i = 0; i < 50; i++) {
+        For (integer i = 0; i < 10; i++) {
             Campaign Camp = new Campaign(
                     name = 'TestCamp' + i
             );
             ListCamps.add(Camp);}
         insert ListCamps;
-        List<CampaignMemberStatus> CMSs = [select cms.Id, cms.Label, cms.isDefault from CampaignMemberStatus cms where cms.CampaignId = :ListCamps[49].Id];
-        system.assertEquals(CMSs.size(),12);
-
-
+        List<CampaignMemberStatus> CMSs = [select cms.Id, cms.Label, cms.isDefault from CampaignMemberStatus cms where cms.CampaignId = :ListCamps[9].Id];
+        For (CampaignMemberStatus CMS : CMSs) system.debug('CampaignMemberStatus is ' + CMS);
+        // system.assertEquals(12,CMSs.size());
         List<CampaignStatiMDT__mdt> SettingCMs = [select Label from CampaignStatiMDT__mdt];
+        List<string> Stati = new List<String>();
+        For (CampaignStatiMDT__mdt csm : SettingCMs) Stati.add(csm.Label.toUpperCase());
+        integer StatiFromCustomSetting = 0;
+        for (CampaignMemberStatus campmemstat : CMSs) {
+            system.debug('Campaign Status: ' + campmemstat);
+            if (Stati.contains(campmemstat.Label.toUpperCase())) StatiFromCustomSetting += 1;
+        }
+        system.assertEquals(SettingCMs.size(),StatiFromCustomSetting,'Did not create all the stati from the meta data');
+
 // Find all the settings for this campaign
         CMSs = [select cms.Id, cms.Label, cms.isDefault from CampaignMemberStatus cms where cms.CampaignId = :ListCamps[0].Id];
         system.assertEquals(CMSs.size(), SettingCMs.size()+2, 'Should have found all the CampaignStatiMDT values in the Campaign Member Stati, plus "Added to Campaign" and "Donated."');

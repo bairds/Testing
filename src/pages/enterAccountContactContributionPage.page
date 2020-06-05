@@ -503,7 +503,7 @@
                                                 </div>
 
                                                 <apex:outputPanel layout="block" styleClass="df p6" id="contacts">
-                                                    <apex:outputPanel layout="block" rendered="{!ContactsInAccount != null}">
+                                                    <apex:outputPanel layout="block" rendered="{!ContactsInAccount == '1' || ContactsInAccount == '2'}">
                                                         <table>
                                                             <tr> <td> first name</td><td> <apex:inputfield value="{!co.FirstName}" required="true" /> </td></tr>
                                                             <tr> <td> last name </td> <td> <apex:inputfield value="{!co.LastName}" /> </td> </tr>
@@ -554,7 +554,7 @@
                             </apex:actionRegion>
 
                             <script>
-                            	contactsInAccount = document.getElementById('contacts_in_account').lastElementChild;
+                                contactsInAccount = document.getElementById('contacts_in_account').lastElementChild;
                                 contactsInAccount.lastIndex = contactsInAccount.selectedIndex;
 
                                 setRequiredFields(document.getElementById('record_type').firstElementChild);
@@ -725,16 +725,16 @@
                                                     <td> add complementary membership? </td>
                                                     <td>
                                                         <div>
-                                                            <input type="checkbox" onchange="showOptions('cm', this.checked)" />
+                                                            <input type="checkbox" onchange="showOptions('CompMmbership', this.checked)" />
                                                         </div>
 
-                                                        <div class="mt11 dn" id="cm">
+                                                        <div class="mt11 dn" id="CompMmbership">
                                                             <div>
-                                                                <apex:inputField value="{!cm.Membership_Start_Date__c}" html-placeholder="start date" />
+                                                                <apex:inputField value="{!CompMmbership.Membership_Start_Date__c}" html-placeholder="start date" />
                                                             </div>
 
                                                             <div class="mt11">
-                                                                <apex:inputField value="{!cm.Membership_End_Date__c}" html-placeholder="end date" />
+                                                                <apex:inputField value="{!CompMmbership.Membership_End_Date__c}" html-placeholder="end date" />
                                                             </div>
                                                         </div>
                                                     </td>
@@ -799,8 +799,8 @@
     
         function submitExit(templateId, contribId, formats)
         {
-            openTemplate(templateId, contribId, formats);    	
-            exit();     
+            openTemplate(templateId, contribId, formats);       
+            exit();
         }
     
         function openTemplate(templateId, contribId, formats)
@@ -810,7 +810,7 @@
                     sendEmail();
                 
                 if(formats.search('Print') >= 0) {
-                	window.open('/apex/Print?template=' + templateId + '&contrib=' + contribId);
+                    window.open('/apex/Print?template=' + templateId + '&contrib=' + contribId);
                     attachLetter(); 
                 }
             }

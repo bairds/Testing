@@ -13,16 +13,28 @@
     <defaultCaseOwnerType>User</defaultCaseOwnerType>
     <defaultCaseUser>testing@watergrass.org</defaultCaseUser>
     <emailToCase>
-        <enableEmailToCase>false</enableEmailToCase>
+        <enableE2CSourceTracking>true</enableE2CSourceTracking>
+        <enableEmailToCase>true</enableEmailToCase>
+        <enableHtmlEmail>true</enableHtmlEmail>
+        <enableOnDemandEmailToCase>false</enableOnDemandEmailToCase>
+        <enableThreadIDInBody>true</enableThreadIDInBody>
+        <enableThreadIDInSubject>true</enableThreadIDInSubject>
+        <notifyOwnerOnNewCaseEmail>false</notifyOwnerOnNewCaseEmail>
+        <preQuoteSignature>false</preQuoteSignature>
     </emailToCase>
     <enableCaseFeed>true</enableCaseFeed>
+    <enableDraftEmails>false</enableDraftEmails>
     <enableEarlyEscalationRuleTriggers>false</enableEarlyEscalationRuleTriggers>
+    <enableEmailActionDefaultsHandler>false</enableEmailActionDefaultsHandler>
     <enableSuggestedSolutions>true</enableSuggestedSolutions>
+    <keepRecordTypeOnAssignmentRule>true</keepRecordTypeOnAssignmentRule>
     <notifyContactOnCaseComment>false</notifyContactOnCaseComment>
     <notifyDefaultCaseOwner>false</notifyDefaultCaseOwner>
     <notifyOwnerOnCaseComment>false</notifyOwnerOnCaseComment>
     <notifyOwnerOnCaseOwnerChange>false</notifyOwnerOnCaseOwnerChange>
+    <showEmailAttachmentsInCaseAttachmentsRL>true</showEmailAttachmentsInCaseAttachmentsRL>
     <useSystemEmailAddress>true</useSystemEmailAddress>
+    <useSystemUserAsDefaultCaseUser>false</useSystemUserAsDefaultCaseUser>
     <webToCase>
         <caseOrigin>Web</caseOrigin>
         <defaultResponseTemplate>unfiled$public/SupportCaseCreatedWebInquiries</defaultResponseTemplate>

@@ -70,7 +70,7 @@ public class ManageContacts {
                         RecordTypeId = FamilyRTId,
                         Name = c.LastName + ', ' + c.FirstName + ' Household',
                         Is_Dummy__c = true,
-                        Dear__c = c.Dear__c,
+                        Dear__c = c.FirstName,
                         Addressee__c = c.FirstName + ' ' + c.LastName,
                         Phone = c.MobilePhone,
                         BillingStreet = c.MailingStreet,
@@ -78,6 +78,7 @@ public class ManageContacts {
                         BillingState = c.MailingState,
                         BillingPostalCode = c.MailingPostalCode,
                         BillingCountry = c.MailingCountry,
+                            Active__c = 'Active',
                         Description='Created when contact without account was injected directly into database without searching for match & creating account.');
                     AcctsToCreate.add(a);
                     tasks.add(setTask(c,'Review New Account/Contact'));   

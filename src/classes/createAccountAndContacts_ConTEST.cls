@@ -4,12 +4,6 @@
  */
 @istest
 private class createAccountAndContacts_ConTEST {
-/*
-
-    @testsetup static void setup() {
-        createCustomSettings.createCustomSettings();
-    }
-*/
 
     @istest static void testSingleContact() {
         Test.setCurrentPage(Page.enterAccountContactPage);

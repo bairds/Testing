@@ -1,45 +1,53 @@
+<!--  Revised March 2020, for bootstrap, using exisitng Email_Signup_Controller -->
 <apex:page standardController="Contact" extensions="Email_Signup_Controller" showHeader="false"
            standardStylesheets="false">
-    <apex:stylesheet value="{!$Resource.wg_styles}"/>
-    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>-->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
 
     <header>
-        <style>.note {
+        <style>
+            .note {
                 text-align: center;
-                height: 80px;
+                height: auto;
                 background-color: #406B8C;
                 color: #fff;
+                font-size: large;
                 font-weight: bold;
                 border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
             }
 
             .form-content {
+                font-family: Arial, Helvetica, sans-serif;
                 padding: 0%;
                 border: 0px solid #406B8C;
-                margin-bottom: 0%;
+                margin: 10px;
                 background-color: ghostwhite;
             }
 
             .form-control {
                 border: 2px solid #406B8C;
                 border-radius: .5rem;
-                width: 90%;
             }
 
             .btnSubmit {
                 border: none;
                 border-radius: 1.5rem;
-                padding: 1%;
-                width: 20%;
+                spadding: 1%;
                 cursor: pointer;
                 background: #2C6636;
                 color: #fff;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
             }
-            .WGPageTitle{
-                padding-top: 0px;
+
+            .CustomQuestion{
+                Margin-left: 16px;
             }
         </style>
 
@@ -50,17 +58,25 @@
     <apex:outputpanel id="pContactInfo">
         <apex:messages style="color: #red;"/>
 
-        <apex:form >
+        <apex:form>
             <apex:outputPanel html-class="container register-form">
                 <apex:outputPanel rendered="{!NOT(ThanksPage)}">
-                <div class="form">
-                    <div rendered="{!CampaignExists}">
-                        <div class="note WGPageTitle">
-                            <p>{!Camp.Description_Long__c}</p>
-                        </div>
-                    </div>
+                    <apex:outputPanel rendered="{!if(CampaignExists && !ISNULL(Camp.Register_Page_Message__c),true,false)}">
+                            <div class="note">
+                                {!Camp.Register_Page_Message__c}
+                            </div>
+                    </apex:outputPanel>
 
                     <div class="form-content">
+                        <apex:outputPanel rendered="{!!CampaignExists}">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <b>Sign up for our newsletter and stay up to date!</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:outputPanel>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
@@ -74,10 +90,12 @@
                                                      html-placeholder="Last Name" required="true"/>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <apex:inputText value="{!contact.MailingPostalCode}" styleclass="form-control"
-                                                     html-placeholder="Your Zip Code" required="true"/>
+                                                    html-placeholder="Your Zip Code" required="true"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -86,25 +104,43 @@
                                                      html-placeholder="Your Email" required="true"/>
                                 </div>
                             </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <apex:inputText value="{!Orgname}" styleclass="form-control"
-                                                     html-placeholder="Your Organization" required="true"/>
+                        </div>
+                        <apex:outputPanel id="CustomQuestion1" rendered="{!Camp.Custom_Signup_Question__c!=null}">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="CustomQuestion">
+                                    <apex:outputText value="{!Camp.Custom_Signup_Question__c}"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <apex:inputTextarea value="{!CustomQuestion1Answer}"
+                                                            styleclass="form-control"/>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <apex:inputCheckbox id="SetUpTrial" value="{!SetUpTrial}"/>
-                                Please create a trial for me and send me the login information.
+                        </apex:outputPanel>
+                        <apex:outputPanel id="CustomQuestion2" rendered="{!Camp.Custom_Signup_Question_2__c!=null}">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <div class="CustomQuestion">
+                                        <apex:outputText value="{!Camp.Custom_Signup_Question_2__c}"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-9">
+                                    <div class="form-group">
+                                        <apex:inputTextarea value="{!CustomQuestion2Answer}"
+                                                            styleclass="form-control"/>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        </apex:outputPanel>
                         <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group">
                                     <apex:inputField value="{!contact.Description}"
                                                      html-placeholder="Your Requests, Comments or Questions"
-                                                     styleclass="form-control" style="width: 480px; height: 100px"/>
+                                                     styleclass="form-control"/>
                                 </div>
                             </div>
                         </div>
@@ -112,7 +148,6 @@
                             <apex:commandButton action="{!submit}" value="Submit" styleclass="btnSubmit"/>
                         </div>
                     </div>
-                </div>
                 </apex:outputPanel>
             </apex:outputPanel>
 
@@ -124,7 +159,7 @@
                 </div>
             </apex:outputPanel>
 
-    </apex:form>
+        </apex:form>
     </apex:outputpanel>
 
     </body>

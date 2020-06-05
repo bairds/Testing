@@ -47,7 +47,7 @@ public with sharing class generateMasterCampURLs {
         List<SelectOption> SelectCampaignOptions = new List<SelectOption>();
         SelectCampaignOptions.add(new SelectOption('', '-none-'));
         List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE Name like '%select%' ORDER BY Description];
-        For (apexPage p : VFPages) if (p.Description != null) {
+        For (apexPage p : VFPages) if (p.Description != null && !p.Description.TOUPPERCASE().CONTAINS('DEPRECATED')) {
             SelectCampaignOptions.add(new selectOption(p.id, String.ValueOf(p.description).LEFT(50)));
             VFPageMap.put(p.Id, p);
         }

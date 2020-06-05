@@ -1,5 +1,6 @@
 /**
  * Created by Baird on 3/14/2019.
+ * Deployed to all instances on 11 May 2020
  */
 
 public with sharing class WGHelpTab {
@@ -11,6 +12,7 @@ public with sharing class WGHelpTab {
 
         Try {
             Site Sitio = [select MasterLabel, Name, Status, Subdomain, Description, UrlPathPrefix, GuestUserId from Site where MasterLabel = :'Signup' LIMIT 1];
+            If (Sitio==null) ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING, 'Sorry, cannot find the site named Signup, which is required for WG signup pages.  Please go to Setup / Sites and rename your default site to Signup.'));
             String path = '/sites/servlet.SiteDebugMode';
             PageReference pr = new PageReference(path);
             pr.getParameters().put('guid', Sitio.GuestUserId);

@@ -176,10 +176,12 @@ List<Contact> ctctlist = new List<Contact>();
         List<Contact> ctctlist = new List<Contact>();
         ctctlist.add(newCtct);
         insert ctctlist;
-        List<Contact> testctcts = [select id, lastname, Account.name, Account.is_Dummy__c from Contact where lastname = 'TestContact'];
+        List<Contact> testctcts = [select id, lastname, Account.name, Account.is_Dummy__c, Account.Dear__c, Account.Active__c from Contact where lastname = 'TestContact'];
         system.assertEquals(1,testctcts.size(),'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
         system.assertEquals('TestContact, Test Household',testctcts[0].account.name,'ManageContacts trigger got name wrong for new account created for contact.');
         system.assertEquals(true,testctcts[0].Account.is_Dummy__c,'ManageContacts trigger created Account but is_Dummy__c not set to true.');
+        system.assertEquals('Active',testctcts[0].Account.Active__c,'ManageContacts trigger created Account but Account.Active__c not set to Active.');
+        system.assertEquals('Test',testctcts[0].Account.Dear__c,'ManageContacts trigger created Account but Account.Dear__c not set to Test.');
     }    
    
         }

@@ -29,7 +29,9 @@ public with sharing class generateCampaignURLs {
         VFPageMapJSON = JSON.serialize(VFPageMap);
         DomainString = 'https://'+URL.getSalesforceBaseURL().getHost();
         system.debug('After serializing VFPageMapJSON is ' + VFPageMapJSON);
-        Try {
+
+        SalesforceBaseUrl = URL.getSalesforceBaseUrl().getHost();
+            Try{
             Sitio = [select MasterLabel, Name, Status, Subdomain, Description, UrlPathPrefix, GuestUserId from Site where MasterLabel = :'Signup' LIMIT 1];
             String path = '/sites/servlet.SiteDebugMode';
             PageReference pr = new PageReference(path);
@@ -42,13 +44,13 @@ public with sharing class generateCampaignURLs {
                 system.debug('In controller, BaseURL is calculated to be ' + BaseURL);
             }
 
-
             SitioJSON = JSON.serialize(Sitio);
         } catch (QueryException e) {
             System.debug(e.getMessage());
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING, 'Sorry, cannot find the site named Signup, which is required for WG signup pages.  Please go to Setup / Sites and rename your default site to Signup.'));
         }
         SalesforceBaseUrl = URL.getSalesforceBaseUrl().getHost();
+        // BaseUrl = WGHelpers.getSitioBaseURL();
     }
 
     public List<SelectOption> getSelectCampaignOptions() {
@@ -65,9 +67,9 @@ public with sharing class generateCampaignURLs {
     public List<SelectOption> getRegisterOptions() {
         List<SelectOption> RegisterOptions = new List<SelectOption>();
         RegisterOptions.add(new SelectOption('','-none-'));
-        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE ((Name like '%register%') OR (Name like '%event_signup%')) AND (NOT Description LIKE 'Default Force.com User%') ORDER BY Description];
+        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE ((Name like '%register%') OR (Name like '%event_signup%') OR Description like '%CampaignURLList%') AND (NOT Description LIKE 'Default Force.com User%') AND(NOT Description like '%Deprecated%') ORDER BY Description];
         For (apexPage p : VFPages) if (p.Description != null) {
-            RegisterOptions.add(new selectOption(p.id,String.ValueOf(p.description).LEFT(50)));
+            RegisterOptions.add(new selectOption(p.id,String.ValueOf(p.description).LEFT(39)));
             VFPageMap.put(p.Id,p);
         }
         System.debug('Does RegisterOptions have legit values? ' + RegisterOptions);

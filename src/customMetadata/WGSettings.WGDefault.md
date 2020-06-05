@@ -27,6 +27,10 @@
         <value xsi:type="xsd:string">Completed</value>
     </values>
     <values>
+        <field>Google_API_Key__c</field>
+        <value xsi:type="xsd:string">AIzaSyA4j_x1_ko7jQcBmHRGmAU_2DK-bSUTcqE</value>
+    </values>
+    <values>
         <field>HourlyVolunteerRate__c</field>
         <value xsi:type="xsd:double">24.14</value>
     </values>

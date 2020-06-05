@@ -7,6 +7,7 @@
 // Apr 2018 Pull donor level, membership exp date, Agreed_To_Waiver, Member_Since to
 // incorporate into app
 // May 2018 Refactor, make variable names uniform,
+// May 2020 Add EmergencyContactName, Phone to response
 
 @RestResource(urlMapping='/SignInRESTAPI2/*')
 global with sharing class SignInREST2 {
@@ -35,7 +36,7 @@ global with sharing class SignInREST2 {
                             CampaignMember.State, CampaignMember.PostalCode, CampaignMember.Status, CampaignMember.Send_Member_Info__c,
                             CampaignMember.Follow_Up_Task__c, CampaignMember.Interests__c, CampaignMember.Add_To_TY_Message__c,
                             CampaignMember.Hours__c, CampaignMember.Agreed_to_Waiver__c, CampaignMember.Invite_to_Next_Level__c,
-                            CampaignMember.Autosend_TY_Msg__c,
+                            CampaignMember.Autosend_TY_Msg__c, CampaignMember.Emergency_Contact_Name__c, CampaignMember.Emergency_Contact_Phone__c,
                             CampaignMember.ContactId, CampaignMember.Contact.FirstName,
                             CampaignMember.Contact.LastName, CampaignMember.Contact.Email, CampaignMember.Contact.Phone,
                             CampaignMember.Contact.MailingCity, CampaignMember.Contact.MailingState, CampaignMember.Contact.MailingCountry,
@@ -77,6 +78,8 @@ global with sharing class SignInREST2 {
                         cmw.MembershipExpires = cm.Contact.Account.Account_Membership_Expires__c;
                         cmw.DonorLevel = cm.Contact.Lifetime_Giving__c > 250 ? 'generousdonor' : 'donor';
                         cmw.MemberSince = cm.Contact.Account.First_Member_Date__c;
+                        cmw.EmergencyContactName = cm.Emergency_Contact_Name__c;
+                        cmw.EmergencyContactPhone = cm.Emergency_Contact_Phone__c;
                         CMWs.add(cmw);
                     }
                     CR.CMWs = CMWs;
@@ -84,7 +87,7 @@ global with sharing class SignInREST2 {
                     CR.EventLocation= SelectedCampaign.Event_Location__c;
                     CR.EventStartTime = SelectedCampaign.Event_Date_Time__c;
                     CR.EventEndTime = SelectedCampaign.Event_End_Time__c;
-                    CR.OrganizerName = Organizer.FirstName + ' ' + Organizer.LastName;
+                    CR.OrganizerName = Organizer.FirstName == null ? Organizer.LastName : Organizer.FirstName + ' ' + Organizer.LastName;
                     CR.OrganizerPhone = Organizer.Phone;
                     CR.OrganizerEmail = Organizer.Email;
                     System.debug('Response is CR ' + CR);
@@ -165,6 +168,9 @@ global with sharing class SignInREST2 {
                     if (member.InviteNextLevel == true) cm.Invite_to_Next_Level__c = member.InviteNextLevel;
                     if (member.AgreedToWaiver != null) cm.Agreed_to_Waiver__c = member.AgreedToWaiver;
                     if (member.AutosendTY == true) cm.AutosendTY__c = 'send';
+                    if (member.EmergencyContactName != null) cm.Emergency_Contact_Name__c = member.EmergencyContactName;
+                    if (member.EmergencyContactPhone != null) cm.Emergency_Contact_Phone__c = member.EmergencyContactPhone;
+
                     update cm;
 
                     //Insert contribution
@@ -291,6 +297,8 @@ global with sharing class SignInREST2 {
         public Date MembershipExpires;
         public String DonorLevel;
         public Date MemberSince;
+        public String EmergencyContactName;
+        public String EmergencyContactPhone;
     }
 
     global class CampaignResponse {

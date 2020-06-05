@@ -26,6 +26,9 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 <apex:component controller="AutoCompleteV2_Con" selfClosing="true">
+    <apex:attribute name="selectPC"
+                    description="Should AutoCompleteV2 call the selectPerson or the selectPrimaryContributor actionFunction"
+                    type="String"/>
     <apex:attribute name="functionname" type="String" description="TODO: Describe me"/>
     <apex:attribute name="SObject" description="SOQL Object to query"
         type="String" assignTo="{!sObjVal}" required="true" />
@@ -63,12 +66,12 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     
         <apex:attribute name="autoSubmit" type="Boolean" default="false"
 					description="Auto submit when option is selected." />
-    
 	<apex:attribute name="placeholder" type="String" default="Search"
 					description="Text to display as a placeholder in the search input box." />
     <apex:attribute name="onChange"
                     description="JS method to be invoked when the value changes"
                     type="String" />
+
     <!--Required js files-->
     <apex:outputPanel rendered="{!importJquery}">
         <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"/>
@@ -88,7 +91,9 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
         autocompleteV2{!randomJsIden}.prototype={
             init : function($){
-          
+                var testpc = '{!selectPC}';
+                var testpc2 = '{!placeholder}';
+                console.log(testpc+ ' testpc2 is ' + testpc2);
                        var $elem = $( ".auto{!randomJsIden}" ).select2({
                            minimumInputLength: 2,
                            placeholder: '{!placeholder}',
@@ -113,7 +118,13 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
                                
                               if({!autoSubmit}) {
                               	showLoading("{!loadingId}");
-                                selectOption();                                      
+                              	console.log('selectCtctOrPrimaryContrib is  + {!selectPC}');
+                              	var varfn = '{!SelectPC}';
+                              	if (varfn === 'selectPrimaryContributor') {
+                              	    selectOption2();
+                                } else {
+                                    selectOption();
+                                }
                               }
                           }
                        });

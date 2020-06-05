@@ -5,10 +5,6 @@
 @IsTest
 private class processParticipantListTEST {
 
-    @testsetup static void setup() {
-        createCustomSettings.createCustomSettings();
-    }
-
     @istest static void TestContactInCampaignAlready() {
 
         Create_Test_Variables ctv = new Create_Test_Variables();
@@ -25,17 +21,18 @@ private class processParticipantListTEST {
 
         ProcessParticipantList PLPC = new ProcessParticipantList(new ApexPages.StandardController(Testcampaign));
         system.assertEquals(1, PLPC.UnprocessedAttendees.size());
+        string ConfirmSupervisorDefaultRating = PLPC.getSupervisorDefaultRating();
+        system.assert(ConfirmSupervisorDefaultRating!=null,'SupervisorDefaultRating should not be null, should have been set in constructor');
         PLPC.getStati();
         PLPC.getRoles();
 
 // These two fire when the AutoComplete chooses a person
         PLPC.newContactForm = false;
 
-
 //        //Give attendee hours
         PLPC.UnprocessedAttendees[0].Hours = 4;
         PLPC.UnprocessedAttendees[0].Contribution.Supervisor_Satisfaction__c = '4';
-        PLPC.UnprocessedAttendees[0].Contribution.Location_of_Task__c = 'Location 1';
+        PLPC.UnprocessedAttendees[0].Contribution.Location_of_Task__c = 'ANN ARBOR CITY';
 
         PLPC.processSelected();
         system.assertEquals(1, PLPC.UpdateAttendees.size());
@@ -46,7 +43,12 @@ private class processParticipantListTEST {
         List<Opportunity> ConfirmOpps = [select id, hours_actual__c, Location_of_Task__c, Supervisor_Satisfaction__c from Opportunity where campaignId = :Testcampaign.Id];
         system.assertEquals(4, ConfirmOpps[0].Hours_Actual__c, 'PLP failed to create opportunity with 4 hours for existing campaign member');
         system.assertEquals('4', ConfirmOpps[0].Supervisor_Satisfaction__c, 'PLP failed to transfer Supervisor Satisfaction from Page to Opp');
-        system.assertEquals('Location 1', ConfirmOpps[0].Location_of_Task__c, 'PLP failed to transfer Location of Task from Page to Opp');
+        // If the Location_of_Task__c field is in the fieldset, test it too.  Otherwise not.
+        List<Schema.FieldSetMember> FieldSetMemberList = Schema.SObjectType.Opportunity.fieldSets.ParticipantListFieldset.getFields();
+        for (Schema.FieldSetMember f : FieldSetMemberList) {
+            if (f.getFieldPath() == 'Location_of_Task__c')
+                system.assertEquals('ANN ARBOR CITY', ConfirmOpps[0].Location_of_Task__c, 'PLP failed to transfer Location of Task from Page to Opp');
+        }
 
         PLPC.exitToWaterGrass();
     }

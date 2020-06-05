@@ -59,14 +59,17 @@
                 <value>
                     <fullName>Donated</fullName>
                     <default>true</default>
+                    <label>Donated</label>
                 </value>
                 <value>
                     <fullName>Responded Yes</fullName>
                     <default>false</default>
+                    <label>Responded Yes</label>
                 </value>
                 <value>
                     <fullName>Contributed</fullName>
                     <default>false</default>
+                    <label>Contributed</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -87,21 +90,37 @@
                 <value>
                     <fullName>Completed</fullName>
                     <default>true</default>
+                    <label>Completed</label>
                 </value>
                 <value>
                     <fullName>Contributed</fullName>
                     <default>false</default>
+                    <label>Contributed</label>
                 </value>
                 <value>
                     <fullName>Took Action</fullName>
                     <default>false</default>
+                    <label>Took Action</label>
                 </value>
                 <value>
                     <fullName>Responded Yes</fullName>
                     <default>false</default>
+                    <label>Responded Yes</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>Google_API_Key__c</fullName>
+        <description>For calling the Google API for Location geolocation.</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <inlineHelpText>For calling the Google API for Location geolocation.</inlineHelpText>
+        <label>Google API Key</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>HourlyVolunteerRate__c</fullName>

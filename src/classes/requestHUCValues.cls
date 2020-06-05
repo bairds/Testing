@@ -231,6 +231,16 @@ public class requestHUCValues {
         FailedWLatestURL = true;
         return LatestURL;  
     }
+
+    public list<Decimal> getHUCTolerance(){
+            List<Decimal> GHT = new List<Decimal>();
+            String HUCTolString = WGHelpers.getWGSettings().HUCTolerance__c;
+            if (HUCTolString == null) HUCTolString = '5.67546681849675499509185629536401E-13';
+            Decimal HUCTol = Decimal.valueOf(HUCTolString);
+            GHT.add(1/HUCTol);
+            GHT.add(1/system.now().getTime());
+        return GHT;
+            }
     
     public HTTPResponse getResp(string URLINfo, string level, integer bracket){
         String[] urlParts = URLInfo.split('\\|', 6);

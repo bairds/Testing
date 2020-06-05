@@ -2,7 +2,7 @@
 // When they sign up for a campaign, the name of the campaign is inserted into contact.mailing_lists__c.
 // Jan 7 2017 Included the insertEmailListContact so that the Prescott Creeks RESTEmail controller can use this too.
 // 23 May 2019 Added code to append new Dsscription to exisitng description field for Lead and Contact
-global with sharing class Email_Signup_Controller {
+global without sharing class Email_Signup_Controller {
     
     public Contact pcontact;
     WGSettings__mdt Setting;
@@ -12,7 +12,8 @@ global with sharing class Email_Signup_Controller {
     public Boolean Thankspage {get; set;}
     public Boolean CampaignExists {get; set;}
     public Boolean SetUpTrial {get; set;}
-
+    public String CustomQuestion1Answer {get;set;}
+    public String CustomQuestion2Answer {get;set;}
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
         this.pcontact=(Contact)Controller.getRecord();
         // In the case that the page is signing up a person for a specific campaign
@@ -20,10 +21,15 @@ global with sharing class Email_Signup_Controller {
         if (ApexPages.currentPage().getParameters().get('cid')!=null) {
             string CampID = ApexPages.currentPage().getParameters().get('cid');
             Camp = [select campaign.name, id, Description, Description_Long__c, Event_Location__c, Event_Date_Time__c, 
-                    recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c, type from Campaign where 
+                    recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c,
+                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type from Campaign where
                     id = :CampID];
         }
-        if (Camp!=null) CampaignExists = true;
+        if (Camp!=null) {
+            CampaignExists = true;
+        } else {
+            CampaignExists = false;
+        }
         mailing_list = WGHelpers.getWGSettings().Online_signup_newsletter__c;
         system.debug('In constructor, mailing_list is ' + mailing_list);
         ThanksPage = false;
@@ -82,6 +88,8 @@ global with sharing class Email_Signup_Controller {
                 ContactId = stype == 'Contact'?  tempContact.id : null,
                 CampaignId = camp.id,
                 Questions_or_Comments__c = 'Signed up for ' + OrgName + ' with comments ' + pcontact.Description,
+                    SignupQuestionAnswer__c = CustomQuestion1Answer==null ? null : CustomQuestion1Answer,
+                    SignupQuestionAnswer2__c = CustomQuestion2Answer==null ? null : CustomQuestion2Answer,
                 Status = 'Responded Yes');
             CMList.add(cm);
         }
@@ -151,69 +159,42 @@ global with sharing class Email_Signup_Controller {
                        }
         }
     }
-    
-    
-    // The following code for a Captcha button    
-    @RemoteAction 
+
+
+    // The following code for a Captcha button
+    @RemoteAction
     global static boolean validCaptcha(string challenge, string response)
     {
         boolean correctResponse = false;
         string secret = '6LcoI9kSAAAAAAABNpurbDy8hTEyRi2tW81n4yTz';
         string publicKey = '6LcoI9kSAAAAAJ-eFtBToTbDqT6s8BZ5-QMXMCDJ';
-        string baseUrl = 'https://www.google.com/recaptcha/api/verify'; 
-        
+        string baseUrl = 'https://www.google.com/recaptcha/api/verify';
+
         string body ='privatekey='+ secret +  '&remoteip=' + remoteHost() + '&challenge=' + challenge + '&response=' + response + '&error=incorrect-captcha-sol';
-        
-        HttpRequest req = new HttpRequest();   
+
+        HttpRequest req = new HttpRequest();
         req.setEndpoint( baseUrl );
         req.setMethod('POST');
         req.setBody (body);
-        try 
+        try
         {
             Http http = new Http();
             HttpResponse captchaResponse = http.send(req);
             System.debug('response: '+ captchaResponse);
             System.debug('body: '+ captchaResponse.getBody());
-            if ( captchaResponse != null ) 
-            {  
+            if ( captchaResponse != null )
+            {
                 correctResponse = ( captchaResponse.getBody().contains('true') );
-            }          
-            
-        } 
-        catch( System.Exception e) 
+            }
+
+        }
+        catch( System.Exception e)
         {
             System.debug('ERROR: '+ e);
-        }                             
+        }
         return correctResponse;
     }
-    
-    global static string remoteHost() 
-    { 
-        string ret = '127.0.0.1';
-        // also could use x-original-remote-host 
-        try
-        {
-            map<string , string> hdrs = ApexPages.currentPage().getHeaders();
-            if ( hdrs.get('x-original-remote-addr') != null)
-            {
-                ret =  hdrs.get('x-original-remote-addr');
-            }
-            else if ( hdrs.get('X-Salesforce-SIP') != null)
-            {   
-                ret =  hdrs.get('X-Salesforce-SIP');
-            }
-        }
-        catch(exception e)
-        {
-            
-        }
-        return ret;
-    }
-// JAGMOHAN, THIS IS THE METHOD THAT THE REST API SHOULD FEED THE CONTACT PARAMETERS INTO.
-// IT TAKES CONTACT.FIRSTNAME, LASTNAME, EMAIL, MAILINGSTREET, MAILINGCITY, MAILINGSTATE, MAILINGPOSTALCODE, PHONE
-// FIRST AND LASTNAME, EMAIL, AND MAILINGPOSTALCODE ARE ALL REQUIRED BECAUSE THEY ARE USED IN THE identifyorcreatePerson method.
 
- 
 public string insertEmailListContact(contact pcontact) {
     system.debug('in insertEmailListContact mailing_list is ' + mailing_list);
     String[] sresults = identifyorcreatePerson.IdentifyOrCreatePerson(pContact);
@@ -248,5 +229,28 @@ public string insertEmailListContact(contact pcontact) {
         } // END ELSE CHECK IF 
         return 'Inserted ' + stype + ' with ID ' + sID;
 }
-    
+
+
+    global static string remoteHost()
+    {
+        string ret = '127.0.0.1';
+        // also could use x-original-remote-host
+        try
+        {
+            map<string , string> hdrs = ApexPages.currentPage().getHeaders();
+            if ( hdrs.get('x-original-remote-addr') != null)
+            {
+                ret =  hdrs.get('x-original-remote-addr');
+            }
+            else if ( hdrs.get('X-Salesforce-SIP') != null)
+            {
+                ret =  hdrs.get('X-Salesforce-SIP');
+            }
+        }
+        catch(exception e)
+        {
+
+        }
+        return ret;
+    }
 }

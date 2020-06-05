@@ -20,7 +20,8 @@ public class processParticipantList {
     public integer AttendeeToDeleteIndex { get; set; }
     public CampaignMember CMToDelete { get; set; }
 
-    static public String DefaultRating = '3 - Good';
+    // static public String DefaultRating = '3-Good';
+    static public String SupervisorDefaultRating {get; set;}
     static public List<Schema.PicklistEntry> LeadershipLevels { get; set; }
     public String DefaultLeadership { get; set; }
 
@@ -40,6 +41,7 @@ public class processParticipantList {
             if (pv.isDefaultValue()) DefaultLeadership = pv.getValue();
         }
         system.debug('DefaultLeadership is ' + DefaultLeadership);
+        SupervisorDefaultRating = getSupervisorDefaultRating();
         CMToDelete = new CampaignMember();
         review = false;
         cid = System.currentPageReference().getParameters().get('cid');
@@ -169,9 +171,9 @@ public class processParticipantList {
 
                 // If user has changed hours, comments, rating, or status
 
-                if (a.Hours != null || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != processParticipantList.DefaultRating || a.OriginalStatus != a.CM.Status) {
-                    /*system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != DefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != DefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
-                SYSTEM.debug('a.Hours are ' + a.Hours + 'and a.Supervisor_Satisfaction is '+ a.Contribution.Supervisor_Satisfaction__c + ' and Default RAting is ' + DefaultRating);*/
+                if (a.Hours != null || a.Comments != '' || a.Contribution.Supervisor_Satisfaction__c != processParticipantList.SupervisorDefaultRating || a.OriginalStatus != a.CM.Status) {
+                    /*system.debug('a.Hours != blank? ' + string.ValueOf(a.Hours != null) + 'a.Comments != blank? ' +  string.ValueOf(a.Comments != '') + 'a.Contribution.Supervisor_Satisfaction__c != SupervisorDefaultRating? '+  string.ValueOf(a.Contribution.Supervisor_Satisfaction__c != SupervisorDefaultRating) +'a.OriginalStatus != a.CM.Status?' +  string.ValueOf(a.OriginalStatus != a.CM.Status));
+                SYSTEM.debug('a.Hours are ' + a.Hours + 'and a.Supervisor_Satisfaction is '+ a.Contribution.Supervisor_Satisfaction__c + ' and Default RAting is ' + SupervisorDefaultRating);*/
                     UpdateAttendees.add(a);
                     if (a.Hours != null)
                         TotalHours += a.Hours;
@@ -354,7 +356,9 @@ public class processParticipantList {
             opp.AccountId = lcr.getAccountId();
             system.debug('Just set contact__c and accountid for opp, which is now is ' + opp);
         } else {
-            System.debug('Just found this is a contact, opp is ' + opp);
+            // HERE NEED TO CHECK TO MAKE SURE THAT THERE REALLY IS A CONTACTID.  THERE MAY NOT BE.
+            // In fact, some CMs are converted leads without a ContactId!
+            System.debug('Not a lead.  Is it a contact with id ' + a.CM.ContactId + ' and opp is ' + opp);
             opp.Contact__c = a.CM.ContactId;
             opp.AccountId = a.CM.Contact.AccountId;
             System.debug('Just set contact__c and accountid for opp, which is now is ' + opp);
@@ -421,7 +425,7 @@ this.PPL = PPL;
 CM = campmmbr;
 OriginalStatus = CM.Status;
 Contribution = new Opportunity();
-Contribution.Supervisor_Satisfaction__c = DefaultRating;
+Contribution.Supervisor_Satisfaction__c = SupervisorDefaultRating;
 Contribution.Leadership_Level__c = PPL.DefaultLeadership;
 system.debug('Creating Attendee from CM and Leadership Level is ' + PPL.DefaultLeadership);
 }
@@ -431,7 +435,7 @@ this.PPL = PPL;
 CM = new CampaignMember(CampaignId = Camp.Id);
 OriginalStatus = CM.Status;
 Contribution = new Opportunity();
-Contribution.Supervisor_Satisfaction__c = DefaultRating;
+Contribution.Supervisor_Satisfaction__c = SupervisorDefaultRating;
 Contribution.Leadership_Level__c = PPL.DefaultLeadership;
 }
 }
@@ -459,5 +463,19 @@ ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.WARNING, 'Tha
 ApexPages.addMessage(myMsg);
 return null;
 }
+
+    public string getSupervisorDefaultRating(){
+        Schema.DescribeFieldResult fieldResult = Opportunity.Supervisor_Satisfaction__c.getDescribe();
+        List<Schema.PicklistEntry> ples = fieldResult.getPicklistValues();
+        For (Schema.PicklistEntry ple : ples) {
+            if (ple.isDefaultValue()) {
+                SupervisorDefaultRating = ple.getLabel();
+        break;
+    }
+    }
+        if (SupervisorDefaultRating == null) SupervisorDefaultRating = '3 - Good';
+        system.debug('SupervisorDefaultRating is ' + supervisorDefaultRating);
+        return supervisorDefaultRating;
+    }
 
 }

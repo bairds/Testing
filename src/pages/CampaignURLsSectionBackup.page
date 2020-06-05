@@ -1,0 +1,112 @@
+<!--
+ - Created by Baird on 2/15/2019.
+ - AS a section on the Campaigns Page Layout, to help users connect to their signup pages
+ - User chooses the template
+ - RecordType must be Volunteer or Public Event
+ - Page generate URLs for VolunteerEventSelect page for all campaigns, and
+ - the VolunteerEventRegisterPage for the current campaign.  Users can click on the URLs to open a new window and see them.
+ -->
+
+<apex:page id="CampaignURLsSection" standardController="Campaign" extensions="generateCampaignURLs" lightningStyleSheets="true">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
+    <apex:includeScript value="https://apis.google.com/js/api.js"/>
+    <script>
+        function ShowSelectURL(selectedvalue) {
+            var mypagename = '{!VFPageMapJSON}';
+            var domainString = '{!DomainString}';
+            var jsPageMap = JSON.parse(mypagename);
+            var sitio = JSON.parse('{!SitioJSON}');
+            var PathPrefix;
+            if (sitio.UrlPathPrefix == null) {
+                PathPrefix = '';
+            } else {
+                PathPrefix = '\/';
+            }
+            var BaseURL = '{!BaseURL}';
+            console.log('Site.subdomain is ' + sitio.Subdomain);
+            console.log('Site.UrlPathPrefix is ' + sitio.UrlPathPrefix);
+            console.log('Site.Name is ' + sitio.Name);
+            console.log('Site.MasterLabel is ' + sitio.MasterLabel);
+            console.log('URL.getSalesforceBaseUrl is {!SalesforceBaseUrl}');
+            if (selectedvalue!='') {
+                var selectedSelectPage = jsPageMap[selectedvalue];
+                document.getElementById('ShowSelectCampaignURL').innerHTML = 'Signup page URL listing all campaigns is <a target="_blank" href="' + BaseURL + PathPrefix + selectedSelectPage.Name + '">' + BaseURL + PathPrefix + selectedSelectPage.Name+ '</a>';
+            }
+        }
+
+        function ShowRegisterURL(selectedvalue) {
+            var BaseURL = '{!BaseURL}';
+            var mypagename = '{!VFPageMapJSON}';
+            var jsPageMap = JSON.parse(mypagename);
+            var sitio = JSON.parse('{!SitioJSON}');
+            var PathPrefix;
+            if (sitio.UrlPathPrefix == null) {
+                PathPrefix = '';
+            } else {
+                PathPrefix = '\/';
+            }
+            if (selectedvalue!='') {
+                var selectedRegisterPage = jsPageMap[selectedvalue];
+                document.getElementById('ShowRegisterCampaignURL').innerHTML = 'Signup page URL for this particular campaign: <a target="_blank" href="' + BaseURL + PathPrefix + selectedRegisterPage.Name + '?cid={!CampId}">' + BaseURL + PathPrefix + selectedRegisterPage.Name + '?cid={!CampId}</a>';
+            }
+        }
+    </script>
+    <apex:form >
+        <apex:pageBlock title="URLs for signup pages">
+            <apex:pageMessages />
+            <table columns="2">
+                <tr>
+                    <td>
+                        <table columns="1">
+                            <tr>
+                                <td>
+                                    <div id="ShowSelectCampaignURL"/>
+                                    <br/>
+                                </td>
+                            </tr>
+                        </table>
+                        <table columns="2">
+                            <tr>
+                                <td>
+                                    <apex:outputText value="Choose the template for selecting a campaign.  If you choose this, you don't need a registration template."/>
+                                </td>
+                                <td>
+                                    <apex:selectList value="{!camp.Select_Template__c}" size="3"
+                                                     onClick="ShowSelectURL(this.value)"
+                                                     id="PickSelectTemplate">
+                                        <apex:selectOptions value="{!selectCampaignOptions}"/>
+                                    </apex:selectList>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table columns="1">
+                            <tr>
+                                <td>
+                                    <div id="ShowRegisterCampaignURL"/>
+                                    <br/>
+                                    {!camp.Select_Template__c}
+                                </td>
+                            </tr>
+                        </table>
+                        <table columns="2">
+                            <tr>
+                                <td>
+                                    <apex:outputText value="Or choose the registration template for this specific campaign."/>
+                                </td>
+                                <td>
+                                    <apex:selectList value="{!camp.Register_Template__c}" size="3"
+                                                     onClick="ShowRegisterURL(this.value)" id="PickRegisterTemplate">
+                                        <apex:selectOptions value="{!RegisterOptions}"/>
+                                    </apex:selectList>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

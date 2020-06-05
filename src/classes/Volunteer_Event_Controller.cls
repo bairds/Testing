@@ -36,6 +36,7 @@ public class Volunteer_Event_Controller {
     Id leadrt = [select Id from RecordType where Name = 'Online Signup' AND SobjectType = 'Lead'].Id;
     Public Boolean createnewlead { get; set; }
     Public Boolean readytosubmit { get; set; }
+    public boolean WaiverRequired {get; set;}
     Public Boolean AgreedToWaiver { get; set; }
     Public Boolean Agreed_To_Waiver { get; set; } // This is somewhere on the page.  cant find it.
     Public Boolean Must_Sign_Waiver { get; set; }
@@ -99,6 +100,7 @@ public class Volunteer_Event_Controller {
         ];
         if (camp.Slots_Remaining__c < 1) isEventFull = true;
         System.debug('Camp.ID is now ' + camp.Id);
+        WaiverRequired = (camp.Waiver__c != null && camp.Waiver__r.Body__c != null);
         return camp;
     }
 

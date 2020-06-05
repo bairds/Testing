@@ -77,7 +77,7 @@ global class AutoCompleteV2_Con {
     *This method queries data according to the passed parameters
     ***/
     @RemoteAction
-    public static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param,String filterClause)
+    global static List<AutoCompleteData> getData(String sObjVal,String labelFieldVar,String valueFieldVar,String param,String filterClause)
     {
         List<AutoCompleteData> result = new List<AutoCompleteData>();
 
@@ -116,7 +116,7 @@ global class AutoCompleteV2_Con {
         return result;
     }
 
-    public class AutoCompleteData{
+    global class AutoCompleteData{
         public String id;
         public String text;
 
