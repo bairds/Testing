@@ -19,7 +19,7 @@
 
         function CreateAcctCtct() {
             if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
-                var url = '/lightning/n/EACC_Baird?c__a=2&c__step=2';
+                var url = '/lightning/n/EACCLightning?c__a=2&c__step=2';
                 sforce.one.navigateToURL(url, true);
             } else {
                 window.location = '?a=2&step=2';
