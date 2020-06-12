@@ -151,10 +151,18 @@
                 </apex:outputPanel>
             </apex:outputPanel>
 
-            <apex:outputPanel rendered="{!ThanksPage}">
+            <apex:outputPanel rendered="{!ThanksPage && ThanksMessageExists}">
                 <div class="form container register-form">
                     <div class="note WGPageTitle" html-style="width: 60%">
-                        <p>Thanks for signing up.<br/>We'll be in touch shortly.</p>
+                        <apex:outputText value="{!Camp.Thank_You_Message__c}" escape="false"/>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel rendered="{!ThanksPage && !ThanksMessageExists}">
+                <div class="form container register-form">
+                    <div class="note WGPageTitle" html-style="width: 60%">
+                        <apex:outputText value="Thank you for registering.  We will be in touch." escape="false"/>
                     </div>
                 </div>
             </apex:outputPanel>

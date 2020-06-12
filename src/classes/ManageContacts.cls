@@ -1,4 +1,4 @@
-public class ManageContacts {  
+    public class ManageContacts {
     
     public List<Contact> cs;
     public static List<Id> AccountIds;

@@ -467,19 +467,19 @@ for (EnhancedIOProcess EIO : records) {
     }
 }
 
-private void setupLookupMap() {
+    private void setupLookupMap() {
 // Create map of Lead and Contact who match list of newRecords
-lookupMap = new map<string,List<sObject> >();
-accountContactLookupMap = new Map<Id, Map<String, Contact>>();
+        lookupMap = new map<string, List<sObject> >();
+        accountContactLookupMap = new Map<Id, Map<String, Contact>>();
 
-String sLeadQuery = 'SELECT id, Name, Legacy_Contact_ID__c, email, firstname, lastname, phone, mobilephone,Home_Phone__c,' +
-        ' Company,Street, City, State,PostalCode, Country,Salutation, Personal_Email__c,Other_Email__c, Lookup_Key__c, ' +
-        ' Work_Email__c, Title, Volunteer_Interests__c, Mailing_Lists__c, Do_Not__c FROM Lead WHERE isConverted = FALSE ';
-String sLeadLegacyQuery = sLeadQuery +  ' AND Legacy_Contact_ID__c in :LegacyIds';
-String sLeadEmailQuery = sLeadQuery +  ' AND ( ' +
-        ' email IN :MatchingEmails OR Personal_Email__c IN :MatchingEmails ' +
-        ' OR Other_Email__c IN :MatchingEmails OR Work_Email__c IN :MatchingEmails ) ';
-String sLeadNameQuery = sLeadQuery +  ' AND Lookup_Key__c in :MatchingNames ';
+        String sLeadQuery = 'SELECT id, Name, Legacy_Contact_ID__c, email, firstname, lastname, phone, mobilephone,Home_Phone__c,' +
+                ' Company,Street, City, State,PostalCode, Country,Salutation, Personal_Email__c,Other_Email__c, Lookup_Key__c, ' +
+                ' Work_Email__c, Title, Volunteer_Interests__c, Mailing_Lists__c, Do_Not__c FROM Lead WHERE isConverted = FALSE ';
+        String sLeadLegacyQuery = sLeadQuery + ' AND Legacy_Contact_ID__c in :LegacyIds';
+        String sLeadEmailQuery = sLeadQuery + ' AND ( ' +
+                ' email IN :MatchingEmails OR Personal_Email__c IN :MatchingEmails ' +
+                ' OR Other_Email__c IN :MatchingEmails OR Work_Email__c IN :MatchingEmails ) ';
+        String sLeadNameQuery = sLeadQuery + ' AND Lookup_Key__c in :MatchingNames ';
 
 //Leads first so that matched Contacts will overwrite
 
@@ -488,57 +488,57 @@ String sLeadNameQuery = sLeadQuery +  ' AND Lookup_Key__c in :MatchingNames ';
         }
 
 
-for (Lead MatchingLeads : database.query(sLeadEmailQuery) ) {
-    if (String.isNotBlank(MatchingLeads.email)) addtoSOList(MatchingLeads.email, MatchingLeads);
+        for (Lead MatchingLeads : database.query(sLeadEmailQuery)) {
+            if (String.isNotBlank(MatchingLeads.email)) addtoSOList(MatchingLeads.email, MatchingLeads);
 
-    if (String.isNotBlank(MatchingLeads.Personal_Email__c)) addtoSOList(MatchingLeads.Personal_Email__c, MatchingLeads);
+            if (String.isNotBlank(MatchingLeads.Personal_Email__c)) addtoSOList(MatchingLeads.Personal_Email__c, MatchingLeads);
 
-    if (String.isNotBlank(MatchingLeads.Other_Email__c)) addtoSOList(MatchingLeads.Other_Email__c, MatchingLeads);
+            if (String.isNotBlank(MatchingLeads.Other_Email__c)) addtoSOList(MatchingLeads.Other_Email__c, MatchingLeads);
 
-    if (String.isNotBlank(MatchingLeads.Work_Email__c)) addtoSOList(MatchingLeads.Work_Email__c, MatchingLeads);
-}
+            if (String.isNotBlank(MatchingLeads.Work_Email__c)) addtoSOList(MatchingLeads.Work_Email__c, MatchingLeads);
+        }
 
-for (Lead MatchingLeads : database.query(sLeadNameQuery)) {
-    addtoSOList(MatchingLeads.Lookup_Key__c, MatchingLeads);
-}
+        for (Lead MatchingLeads : database.query(sLeadNameQuery)) {
+            addtoSOList(MatchingLeads.Lookup_Key__c, MatchingLeads);
+        }
 
-    String sContactQuery = 'SELECT Id, Legacy_Contact_ID__c, Name, accountid, email, firstname, lastname, homephone, mobilephone, ' +
-            ' MailingStreet, MailingCity, MailingState,MailingPostalCode, MailingCountry,OtherPhone, Salutation, Lookup_Key__c, ' +
-            ' Personal_Email__c,Other_Email__c, Work_Email__c, Title, Volunteer_Interests__c, Mailing_Lists__c, Do_Not__c FROM Contact ';
-    String sContactLegacyQuery = sContactQuery +  ' WHERE Legacy_Contact_ID__c in :LegacyIds';
-    String sContactEmailQuery = sContactQuery +  ' WHERE ( ' +
-            ' email IN :MatchingEmails OR Personal_Email__c IN :MatchingEmails ' +
-            ' OR Other_Email__c IN :MatchingEmails OR Work_Email__c IN :MatchingEmails ) ';
-    String sContactNameQuery = sContactQuery +  ' WHERE Lookup_Key__c in :MatchingNames ';
+        String sContactQuery = 'SELECT Id, Legacy_Contact_ID__c, Name, accountid, email, firstname, lastname, homephone, mobilephone, ' +
+                ' MailingStreet, MailingCity, MailingState,MailingPostalCode, MailingCountry,OtherPhone, Salutation, Lookup_Key__c, ' +
+                ' Personal_Email__c,Other_Email__c, Work_Email__c, Title, Volunteer_Interests__c, Mailing_Lists__c, Do_Not__c FROM Contact ';
+        String sContactLegacyQuery = sContactQuery + ' WHERE Legacy_Contact_ID__c in :LegacyIds';
+        String sContactEmailQuery = sContactQuery + ' WHERE ( ' +
+                ' email IN :MatchingEmails OR Personal_Email__c IN :MatchingEmails ' +
+                ' OR Other_Email__c IN :MatchingEmails OR Work_Email__c IN :MatchingEmails ) ';
+        String sContactNameQuery = sContactQuery + ' WHERE Lookup_Key__c in :MatchingNames ';
 
-for (Contact MatchingContacts : database.query(sContactLegacyQuery) ) {
-    //Add to Account Lookup Map to check for Contact 2
-    accountContactLookupMap.put(MatchingContacts.AccountId, null );
-    addtoSOList(MatchingContacts.Legacy_Contact_ID__c, MatchingContacts);
-}
+        for (Contact MatchingContacts : database.query(sContactLegacyQuery)) {
+            //Add to Account Lookup Map to check for Contact 2
+            accountContactLookupMap.put(MatchingContacts.AccountId, null);
+            addtoSOList(MatchingContacts.Legacy_Contact_ID__c, MatchingContacts);
+        }
 
-for (Contact MatchingContacts : database.query(sContactEmailQuery) ) {
-    accountContactLookupMap.put(MatchingContacts.AccountId, null);
-    if (String.isNotBlank(MatchingContacts.email)) addtoSOList(MatchingContacts.email, MatchingContacts);
-    if (String.isNotBlank(MatchingContacts.Personal_Email__c)) addtoSOList(MatchingContacts.Personal_Email__c, MatchingContacts);
-    if (String.isNotBlank(MatchingContacts.Other_Email__c)) addtoSOList(MatchingContacts.Other_Email__c, MatchingContacts);
-    if (String.isNotBlank(MatchingContacts.Work_Email__c)) addtoSOList(MatchingContacts.Work_Email__c, MatchingContacts);
-}
+        for (Contact MatchingContacts : database.query(sContactEmailQuery)) {
+            accountContactLookupMap.put(MatchingContacts.AccountId, null);
+            if (String.isNotBlank(MatchingContacts.email)) addtoSOList(MatchingContacts.email, MatchingContacts);
+            if (String.isNotBlank(MatchingContacts.Personal_Email__c)) addtoSOList(MatchingContacts.Personal_Email__c, MatchingContacts);
+            if (String.isNotBlank(MatchingContacts.Other_Email__c)) addtoSOList(MatchingContacts.Other_Email__c, MatchingContacts);
+            if (String.isNotBlank(MatchingContacts.Work_Email__c)) addtoSOList(MatchingContacts.Work_Email__c, MatchingContacts);
+        }
 
-for (Contact MatchingContacts : database.query(sContactNameQuery)) {
-    accountContactLookupMap.put(MatchingContacts.AccountId, null);
-    addtoSOList(MatchingContacts.Lookup_Key__c, MatchingContacts);
-}
+        for (Contact MatchingContacts : database.query(sContactNameQuery)) {
+            accountContactLookupMap.put(MatchingContacts.AccountId, null);
+            addtoSOList(MatchingContacts.Lookup_Key__c, MatchingContacts);
+        }
 
-    //Now populate Acount Lookup Map
-    For (Account atemp: [Select Id, (Select Id, FirstName, LastName from Contacts) FROM Account WHERE ID in :accountContactLookupMap.keyset()]) {
-                Map<String, Contact> ctempmap = new Map<String, Contact>();
-                    for (Contact c: atemp.Contacts) {
-                        ctempmap.put(c.FirstName+':'+c.LastName, c);
-                    }
-        accountContactLookupMap.put(atemp.Id,ctempmap);
+        //Now populate Acount Lookup Map
+        For (Account atemp : [Select Id, (Select Id, FirstName, LastName from Contacts) FROM Account WHERE ID in :accountContactLookupMap.keyset()]) {
+            Map<String, Contact> ctempmap = new Map<String, Contact>();
+            for (Contact c : atemp.Contacts) {
+                ctempmap.put(c.FirstName + ':' + c.LastName, c);
+            }
+            accountContactLookupMap.put(atemp.Id, ctempmap);
+        }
     }
-}
 
     public void setupLists() {
         EIMatches = new List< List<EnhancedIOProcess > > ();

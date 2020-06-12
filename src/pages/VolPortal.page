@@ -1,0 +1,96 @@
+<!--
+ - Created by Baird on 6/12/2020.
+ -->
+
+<apex:page id="VolPortal" controller="displayVolPortal" lightningStylesheets="true" showHeader="false">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" />
+
+    <script>
+        function WillTakeEffectLater() {
+            alert("Your changes will be saved provisionally.  They won't take effect fully until they have been approved.");
+            editContactInfoApex();
+        }
+    </script>
+
+
+    <apex:form >
+        <apex:pageBlock title="No Record Found" rendered="{!!URLCorrect}">
+            Please contact {!OrgName} for the correct link to your page.<br/>
+        </apex:pageBlock>
+        <apex:PageBlock title="Volunteer Record forr {!guu.Firstname__c} {!guu.LastName__c}"  rendered="{!URLCorrect}">
+            <apex:actionRegion id="ContactInfoSection">
+                <apex:outputPanel id="outputContactInfo" rendered="{!editmode=='display'}">
+                    <br/>
+                    Mailing address: {!guu.MailingStreet__c}, {!guu.MailingCity__c}, {!guu.MailingState__c}  {!guu.MailingPostalCode__c}<br/>
+                    Email: {!guu.Email__c}<br/>
+                    Preferred phone: {!guu.Phone__c}
+                    <div id="EditContactInfo">
+                        <apex:commandbutton action="{!editContactInfo}" value="Edit my contact information."/>
+
+                    </div>
+                </apex:outputPanel>
+                <apex:outputPanel id="inputContactInfo" rendered="{!editmode=='editContactInfo'}">
+                    <h1>Edit your contact information below:</h1>
+                    Firstname: <apex:inputField value="{!guu.Firstname__c}"/><br/>
+                    Lastname: <apex:inputField value="{!guu.LastName__c}"/><br/>
+                    Mailing street: <apex:inputField value="{!guu.MailingStreet__c}"/>,<br/>
+                    City: <apex:inputField value="{!guu.MailingCity__c}"/>,<br/>
+                    State: <apex:inputField value="{!guu.MailingState__c}"/><br/>
+                    Zip code:<apex:inputField value="{!guu.MailingPostalCode__c}"/><br/>
+                    Email: <apex:inputField value="{!guu.Email__c}"/><br/>
+                    Preferred phone: <apex:inputField value="{!guu.Phone__c}"/><br/>
+                    <div id="EditContactInfo">
+                        <apex:commandbutton action="{!submit}" value="Save my changes." onClick="WillTakeEffectLater()"/>
+                        <apex:commandbutton action="{!cancelEditContactInfo}" value="Cancel."/>
+                    </div>
+                </apex:outputPanel>
+            </apex:actionRegion>
+        </apex:PageBlock>
+        <apex:PageBlock title="Current Year" rendered="{!URLCorrect}">
+            <apex:dataTable value="{!ListOfOne}" var="l" cellPadding="4" border="1" width="80%">
+                <apex:column >
+                    <apex:facet name="header">Volunteer Hours</apex:facet>
+                    {!VolHoursThisYear}
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Volunteer Miles Driven</apex:facet>
+                    {!VolMilesThisYear}
+                </apex:column>
+            </apex:dataTable>
+        </apex:PageBlock>
+        <apex:PageBlock title="Lifetime Totals" rendered="{!URLCorrect}">
+            <apex:dataTable value="{!ListOfOne}" var="l" cellPadding="4" border="1" width="80%">
+                <apex:column >
+                    <apex:facet name="header">Service Project Hours</apex:facet>
+                    {!VolHoursAll}
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Service Project Miles</apex:facet>
+                    {!VolMilesAll}
+                </apex:column>
+            </apex:dataTable>
+        </apex:PageBlock>
+
+        <apex:PageBlock title="Your Volunteer Hours" rendered="{!URLCorrect}">
+            <apex:dataTable value="{!VolTasks}" var="v" cellPadding="4" border="1" width="80%">
+                <apex:column >
+                    <apex:facet name="header">Name</apex:facet>
+                    {!v.Name}
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Hours</apex:facet>
+                    {!v.Hours_Actual__c}
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Start Date</apex:facet>
+                    <apex:outputField value="{!v.CloseDate}"/>
+                </apex:column>
+                <apex:column >
+                    <apex:facet name="header">Description</apex:facet>
+                    {!v.Description}
+                </apex:column>
+            </apex:dataTable>
+        </apex:PageBlock>
+
+    </apex:form>
+</apex:page>

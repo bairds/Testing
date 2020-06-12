@@ -14,6 +14,7 @@ global without sharing class Email_Signup_Controller {
     public Boolean SetUpTrial {get; set;}
     public String CustomQuestion1Answer {get;set;}
     public String CustomQuestion2Answer {get;set;}
+    public Boolean ThanksMessageExists {get;set;}
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
         this.pcontact=(Contact)Controller.getRecord();
         // In the case that the page is signing up a person for a specific campaign
@@ -22,7 +23,7 @@ global without sharing class Email_Signup_Controller {
             string CampID = ApexPages.currentPage().getParameters().get('cid');
             Camp = [select campaign.name, id, Description, Description_Long__c, Event_Location__c, Event_Date_Time__c, 
                     recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c,
-                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type from Campaign where
+                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type, Thank_You_Message__c from Campaign where
                     id = :CampID];
         }
         if (Camp!=null) {
@@ -33,6 +34,7 @@ global without sharing class Email_Signup_Controller {
         mailing_list = WGHelpers.getWGSettings().Online_signup_newsletter__c;
         system.debug('In constructor, mailing_list is ' + mailing_list);
         ThanksPage = false;
+        ThanksMessageExists = Camp.Thank_You_Message__c != null;
     }
     
     // public Email_Signup_Controller(){}
