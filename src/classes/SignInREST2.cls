@@ -108,10 +108,11 @@ global with sharing class SignInREST2 {
         WGSettings__mdt Setting = WGHelpers.getWGSettings();
         CampaignMember checkcm;
         Campaign SelectedCampaign;
+        Id ConvertedAccountId;
         List<Opportunity> ListOpps = new List<Opportunity>();
         Response res = new Response();
         if (RestContext.request.params.get('Org_Id') != null && RestContext.request.params.get('Org_Id') == UserInfo.getOrganizationId()) {
-            try {
+            /*try {*/
                 String body = RestContext.request.requestBody.toString();
                 List<CampaignMemberWrapper> members = (List<CampaignMemberWrapper>) JSON.deserialize(body, List<CampaignMemberWrapper>.class);
                 Map<String, ResponseCM> ResponseCMMap = new Map<String, ResponseCM>();
@@ -122,7 +123,13 @@ global with sharing class SignInREST2 {
                     // fetch campaign
                     If (SelectedCampaign==null) SelectedCampaign = [SELECT Id, Name, Event_Date_Time__c FROM Campaign WHERE Id =: member.campaignId];
                     // Does person already exist in campaign?  If not, identify them and create a campaign member record
-                    if (member.memberId!= null) checkcm = [select Id, ContactId, Contact.AccountId, Contact.FirstName, Contact.LastName, LeadId, CampaignId, AutosendTY__c from CampaignMember where Id =: member.memberId];
+                    if (member.memberId!= null) {
+                        try {
+                            checkcm = [select Id, ContactId, Contact.AccountId, Contact.FirstName, Contact.LastName, LeadId, CampaignId, AutosendTY__c from CampaignMember where Id = :member.memberId];
+                        } catch(QueryException qe){
+                            checkcm=null;
+                        }
+                    }
                     if (member.memberId==null || checkcm==null) {
                         Contact ct = new Contact();
                         ct.FirstName = member.firstName;
@@ -139,8 +146,10 @@ global with sharing class SignInREST2 {
                         if(gotResult[1] == 'Lead') {
                             List<Id> results = ConvertLeadToContact.ConvertLeadToContact(gotResult[0]);
                             gotResult[0] = results[0];
+                            ConvertedAccountId = Results[1];
                         }
                         // insert campaignmember
+                        system.debug('Line 152, new campaign member Id is ' + gotResult[0]);
                         CampaignMember newcm = new CampaignMember(
                                 CampaignId = SelectedCampaign.Id,
                                 ContactId = gotResult[0]);
@@ -165,22 +174,26 @@ global with sharing class SignInREST2 {
                     system.debug('Setting.HourlyVolunteerRate__c is' + Setting.HourlyVolunteerRate__c);
                     if (member.VolunteerHours != null && Setting.HourlyVolunteerRate__c != null) cm.HoursValue__c = cm.Hours__c*Setting.HourlyVolunteerRate__c;
                     cm.TempAndroidId__c = member.tempId;
+                    system.debug('Member.InviteNextLevel is ' + Member.InviteNextLevel);
                     if (member.InviteNextLevel == true) cm.Invite_to_Next_Level__c = member.InviteNextLevel;
                     if (member.AgreedToWaiver != null) cm.Agreed_to_Waiver__c = member.AgreedToWaiver;
                     if (member.AutosendTY == true) cm.AutosendTY__c = 'send';
                     if (member.EmergencyContactName != null) cm.Emergency_Contact_Name__c = member.EmergencyContactName;
                     if (member.EmergencyContactPhone != null) cm.Emergency_Contact_Phone__c = member.EmergencyContactPhone;
+                    cm.Request_Body__c = String.valueOf(member);
+                    system.debug('Just set cm.Request_Body__c to ' + cm.Request_Body__c);
 
                     update cm;
 
                     //Insert contribution
                     if (cm.Hours__c > 0) {
                         // Convert lead if necessary
-                        Id ConvertedAccountId;
-                        if (cm.LeadId != null) {
+                        // Id ConvertedAccountId;
+                        // SHOULD HAVE BEEN CONVERTED ALREADY
+                        if (cm.ContactId == null) {
                             List<Id> Results = ConvertLeadToContact.ConvertLeadToContact(cm.LeadId);
-                            cm.ContactId = Results[0];
-                            ConvertedAccountId = Results[2];
+                            // cm.ContactId = Results[0];
+                            ConvertedAccountId = Results[1];
                         } // end conversion of lead
                         String Oppname = member.lastName == null ? cm.Contact.FirstName + ' ' + cm.Contact.LastName : member.firstName + ' ' + member.lastName;
                         System.debug('Oppname is ' + Oppname);
@@ -223,7 +236,7 @@ global with sharing class SignInREST2 {
                 res.message = 'OK';
                 res.cmrMap = ResponseCMMap;
                 System.debug('Assigning result to map. Results sent back to app is now ' + res);
-            } catch (DmlException ex) {
+           /* } catch (DmlException ex) {
                 res.statusCode = 500;
                 res.message = ex.getMessage();
                 System.debug('##### --> ' + ex.getMessage());
@@ -231,7 +244,7 @@ global with sharing class SignInREST2 {
                 res.statusCode = 500;
                 res.message = ex.getMessage();
                 System.debug('##### --> ' + ex.getMessage());
-            }
+            }*/
             System.debug('POST returns response: ' + res);
         }
         return res;

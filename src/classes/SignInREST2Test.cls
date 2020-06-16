@@ -293,7 +293,6 @@ private class SignInREST2Test {
     }
 
     static testMethod void upsertCampaignMemberStatusForContact() {
-
         Campaign cgn = new Campaign();
         cgn.Type = 'Public Event';
         cgn.Name = 'Test Update Member Activity';
@@ -307,8 +306,8 @@ private class SignInREST2Test {
 
         Contact ct = new Contact();
         ct.AccountId = acc.Id;
-        ct.FirstName = 'Test first';
-        ct.LastName = 'Test last';
+        ct.FirstName = 'Test';
+        ct.LastName = 'Tester';
         ct.Email = 'bdstraughan@gmail.com';
         ct.Phone = '8872301302';
         ct.MailingStreet = 'some street';
@@ -323,7 +322,7 @@ private class SignInREST2Test {
         cm.Status = 'Added to campaign';
         insert cm;
 
-        String input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"InviteNextLevel\":true, \"VolunteerHours\":\"2\", \"AutosendTY\":true, \"status\":\"Attended\"}]';
+        String input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", "lastName":"Tester", "firstName":"Test", \"recordType\":\"Contact\", \"InviteNextLevel\":true, \"VolunteerHours\":\"2\", \"AutosendTY\":true, \"status\":\"Attended\"}]';
 
         //build request
         RestRequest req = new RestRequest();
@@ -358,7 +357,7 @@ private class SignInREST2Test {
 
         // Now submit a request string with a bad memberId
 
-        input = '[{\"memberId\":\"'+ String.valueOf(cm.Id).left(8) +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ String.valueOf(cm.Id).left(8) +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", "lastName":"Tester", "firstName":"Test", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
 
         //build request
         req = new RestRequest();
@@ -375,7 +374,7 @@ private class SignInREST2Test {
         System.debug('RestContext.response= '+res);
 
         result = SignInREST2.upsertCampaignMembers();
-        System.assertEquals(result.statusCode, 500, 'Should have been 500 DML error because of invalid memberId!');
+        System.assertEquals(result.statusCode, 200, 'Invalid MemberId, but routine finds campaign member based on name.');
 
 
         // Now insert when the AutosendTY message has already been sent;
@@ -454,7 +453,7 @@ private class SignInREST2Test {
         //Update the campaign member again, using the MemberId which should now find the Contact.
         //The need for this test only arises when there are multiple updates to a lead.
 
-        input = '[{\"memberId\":\"'+ cm.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"recordId\":\"'+ cm2[0].ContactId +'\", \"recordType\":\"Lead\", \"VolunteerHours\":4.0, \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ cm.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"recordId\":\"'+ cm2[0].ContactId +'\", \"recordType\":\"Lead\", "VolunteerHours":4.0, "InviteNextLevel":true, \"status\":\"Attended\"}]';
 
         //build request
         RestRequest req2 = new RestRequest();
@@ -469,9 +468,11 @@ private class SignInREST2Test {
         RestContext.response = res;
 
         result = SignInREST2.upsertCampaignMembers();
-        CampaignMember TestResultCM = [SELECT Id, LeadId, Lead.IsConverted, ContactId, Hours__c, Status, LastName FROM CampaignMember where Id=: cm.Id];
+        CampaignMember TestResultCM = [SELECT Id, LeadId, Request_Body__c,Lead.IsConverted, ContactId, Hours__c, Status, LastName,Invite_to_Next_Level__c FROM CampaignMember where Id=: cm.Id];
         System.debug('CMs are ' + TestResultCM);
         System.assertEquals(true,TestResultCM.Lead.IsConverted,'Lead.IsConverted should be true.');
         System.assertEquals(4.0,TestResultCM.Hours__c,'Hours should have been updated to 4.0');
+        System.assertEquals(true,TestResultCM.Invite_to_Next_Level__c,'Did not insert Invite to Next Level in campaign member.');
+        System.assert(TestResultCM.Request_Body__c.CONTAINS('CampaignMemberWrapper:'),'Wrong request body stored in cm');
     }
 }
