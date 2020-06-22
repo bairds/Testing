@@ -17,7 +17,7 @@
         <apex:pageBlock title="No Record Found" rendered="{!!URLCorrect}">
             Please contact {!OrgName} for the correct link to your page.<br/>
         </apex:pageBlock>
-        <apex:PageBlock title="Volunteer Record forr {!guu.Firstname__c} {!guu.LastName__c}"  rendered="{!URLCorrect}">
+        <apex:PageBlock title="Volunteer Record for {!guu.Firstname__c} {!guu.LastName__c}"  rendered="{!URLCorrect}">
             <apex:actionRegion id="ContactInfoSection">
                 <apex:outputPanel id="outputContactInfo" rendered="{!editmode=='display'}">
                     <br/>
@@ -71,7 +71,7 @@
             </apex:dataTable>
         </apex:PageBlock>
 
-        <apex:PageBlock title="Your Volunteer Hours" rendered="{!URLCorrect}">
+        <apex:PageBlock title="Your Volunteer Tasks" rendered="{!URLCorrect}">
             <apex:dataTable value="{!VolTasks}" var="v" cellPadding="4" border="1" width="80%">
                 <apex:column >
                     <apex:facet name="header">Name</apex:facet>

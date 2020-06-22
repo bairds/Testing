@@ -21,7 +21,7 @@ public with sharing class displayVolPortal {
         OrgName = UserInfo.getOrganizationName();
         id cid = ApexPages.currentPage().getParameters().get('cid');
         VToken = apexPages.currentPage().getParameters().get('VToken');
-        ctct = [SELECT id, firstname, lastname, mailingstreet, mailingcity, mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c from Contact where id = :cid];
+        ctct = [SELECT id, firstname, lastname, mailingstreet, mailingPostalCode, mailingcity, mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c from Contact where id = :cid];
         if (VToken != ctct.VolToken__c) {
             URLCorrect = false;
         } else {
@@ -40,7 +40,7 @@ public with sharing class displayVolPortal {
                 homephone__c = ctct.homephone,
                 phone__c = ctct.phone
         );
-        VolTasks = new List<Opportunity>();
+        // VolTasks = new List<Opportunity>();
         ListOfOne = new List<String>();
         ListOfOne.add('Only one item');
         VolHoursAll = 0;
@@ -48,17 +48,18 @@ public with sharing class displayVolPortal {
         VolMilesAll = 0;
         VolMilesThisYear = 0;
         Id VolTaskRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId();
-        List<Opportunity> VolTasks = [
+        VolTasks = [
                 SELECT id, name,Hours_Actual__c,Miles_Driven__c,CloseDate,RecordTypeId,Description,Supervisor_Satisfaction__c
                 from Opportunity
                 where RecordTypeId = :VolTaskRTID AND Contact__c = :cid
         ];
+        system.debug('Found ' + VolTasks.size() + ' volunteer tasks.');
         for (Opportunity opp : VolTAsks) {
             if (opp.Hours_Actual__c > 0) VolHoursAll += opp.Hours_Actual__c;
             if (opp.Hours_Actual__c > 0) VolHoursThisYear = opp.CloseDate.Year() == system.now().Year() ? VolHoursThisYear + opp.Hours_Actual__c : VolHoursThisYear;
             if (opp.Miles_Driven__c > 0) VolMilesAll += opp.Miles_Driven__c;
             if (opp.Miles_Driven__c > 0) VolMilesThisYear = opp.CloseDate.Year() == system.now().Year() ? VolMilesThisYear + opp.MIles_Driven__c : VolMilesThisYear;
-            VolTasks.add(opp);
+            // VolTasks.add(opp);
         }
         editMode = 'display';
     }
