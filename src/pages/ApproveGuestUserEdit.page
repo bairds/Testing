@@ -12,7 +12,7 @@
 
     <header>
         <style>
-            .note {
+            .titlebar {
                 text-align: center;
                 height: auto;
                 background-color: #406B8C;

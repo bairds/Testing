@@ -2,13 +2,13 @@
  * Created by Baird on 6/12/2020.
  */
 
-public without sharing class requestVolPortalEntry {
+public without sharing class requestVolPortalAccess {
 
 public Contact Ctct {get;set;}
 public Contact Volunteer {get;set;}
 public string VolunteerFound {get;set;}
 
-public requestVolPortalEntry(){
+public requestVolPortalAccess(){
 Ctct = new Contact();
 }
 

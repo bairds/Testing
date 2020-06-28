@@ -16,12 +16,18 @@ public with sharing class displayVolPortal {
     public Boolean URLCorrect { get; set; }
     public string VToken { get; set; }
     public string OrgName {get; set;}
+    public List<Campaign> VolInterestCamps {get; set;}
+    public List<CampEx> VolInterestCampExs {get; set;}
+    public string JSONVICExs {get; set;}
+    public Map<Id,CampEx> CampToExtendedCampMap {get; set;}
+    public string JSONCTECs {get; set;}
 
     public displayVolPortal() {
         OrgName = UserInfo.getOrganizationName();
         id cid = ApexPages.currentPage().getParameters().get('cid');
         VToken = apexPages.currentPage().getParameters().get('VToken');
-        ctct = [SELECT id, firstname, lastname, mailingstreet, mailingPostalCode, mailingcity, mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c from Contact where id = :cid];
+        ctct = [SELECT id, firstname, lastname, mailingstreet, mailingPostalCode, mailingcity,
+                mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c from Contact where id = :cid];
         if (VToken != ctct.VolToken__c) {
             URLCorrect = false;
         } else {
@@ -62,7 +68,35 @@ public with sharing class displayVolPortal {
             // VolTasks.add(opp);
         }
         editMode = 'display';
+        // Query for Volunteer Interest Signup Campaigns
+        VolInterestCampExs = new List<CampEx>();
+        Id SignupRTID = Schema.SObjectType.Campaign.getRecordTypeInfosByName().get('Signup').getRecordTypeId();
+        system.debug('Line 71 Campaigns are ' + [SELECT Name, Type, RecordType.Name from Campaign]);
+        VolInterestCamps = [SELECT Id, Description, Name, Type, (SELECT Unsubscribed__c,Id from CampaignMembers
+                WHERE ContactId =: cid) from Campaign where RecordTypeId =: SignupRTID AND
+                Type = 'Volunteer Interest'];
+        System.debug('VolInterestCamps includes ' + VolInterestCamps);
+        CampToExtendedCampMap = new Map<Id,CampEx>();
+        For (Campaign c: VolInterestCamps) {
+            If (c.CampaignMembers.size()==0){
+                CampEx cex = new CampEx(c,null,null);
+                VolInterestCampExs.add(Cex);
+                CampToExtendedCampMap.put(c.Id,Cex);
+            } else {
+                CampEx cex = new CampEx(
+                        c,
+                        c.CampaignMembers[0].Id,
+                        c.CampaignMembers[0].Unsubscribed__c==true ? 'Unsubscribed' : 'Registered');
+                VolInterestCampExs.add(Cex);
+                CampToExtendedCampMap.put(c.Id,Cex);
+            }
+                }
+        JSONVICExs=json.SERIALIZE(VolInterestCampExs);
+        system.debug('JSONVICExs is ' + JSONVICExs);
+        JSONCTECs=json.SERIALIZE(CampToExtendedCampMap);
+
     }
+
 
     public pageReference editContactInfo() {
         editmode = 'editContactInfo';
@@ -80,5 +114,18 @@ public with sharing class displayVolPortal {
     public pageReference cancelEditContactInfo() {
         editMode = 'display';
         return null;
+    }
+
+
+    public class CampEx {
+        public campaign camp;
+        Id CMId;
+        String InitialStatus;
+        String FinalStatus;
+
+        public CampEx(Campaign c, Id CampMmbrId, String InitStatus) {
+            camp = c;
+            InitialStatus = InitStatus;
+        }
     }
 }
