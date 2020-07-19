@@ -76,8 +76,8 @@ system.assertEquals(10, dVP.VolHoursAll, 'displayVolPortal should have summed to
 system.assertEquals(10, dVP.VolMilesAll, 'displayVolPortal should have summed to 10 miles');
 //Test edit functions
 dVP.editContactInfo();
-dVP.guu.email__C = 'ChangedTestContact@dontbotherme.org';
-dVP.Submit();
+dVP.GUU.email__C = 'ChangedTestContact@dontbotherme.org';
+dVP.submitContactInfo();
 GuestUserUpdate__c GUUResult = [SELECT Id,RelatedContact__c,PageSource__c FROM GuestUserUpdate__c
 LIMIT 1];
 system.assertEquals(TestContact.Id,GUUResult.RelatedContact__c,'Submit function should have inserted RelatedContact.Id');
@@ -88,12 +88,49 @@ dVP.cancelEditContactInfo();
 
 @IsTest
 static void ThreeCampaignsTest(){
+    Contact TestContact = [SELECT id, firstname, lastname from Contact where lastname = 'TestContact' limit 1];
         PageReference pageRef = Page.VolPortal;
         Test.setCurrentPage(pageRef);
-    Contact TestContact = [SELECT id, firstname, lastname from Contact where lastname = 'TestContact' limit 1];
     ApexPages.currentPage().getParameters().put('cid', TestContact.Id);
         displayVolPortal dVP = new displayVolPortal();
         system.assertEquals(3,dVP.VolInterestCampExs.size());
-        }
+
+    // Contact is signed up for Campaigns 1 &2;
+    // Unsubscribe contact from Campaign 1, Subscribe them to Campaign 3
+    dVP.VolInterestCampExs[0].FinalStatus = 'Unsubscribed';
+    dVP.VolInterestCampExs[2].FinalStatus = 'Registered';
+    string testString = JSON.serialize(dVP.VolInterestCampExs);
+    system.debug('String sent to page is ' + Teststring);
+    dVP.setCMStatus();
+    List<CampaignMember> ResultCMs = [SELECT Id, CampaignId, Campaign.Name,Status, Unsubscribed__c from CampaignMember WHERE
+    contactId =: TestContact.Id];
+    For (CampaignMember cm : ResultCMs){
+        if (cm.Campaign.Name=='SignupCampaign0') system.assertEquals(true,cm.Unsubscribed__c,'Campaign Member was registered, should have unsubscribed.');
+        if (cm.Campaign.Name=='SignupCampaign2') system.assertEquals('Responded Yes',cm.Status,'Contact was not initially registered, but should have registered.');
+    }
+}
+
+    @IsTest
+    static void InsertVolunteerTask(){
+        PageReference pageRef = Page.VolPortal;
+        Test.setCurrentPage(pageRef);
+        Contact TestContact = [SELECT id, firstname, lastname from Contact where lastname = 'TestContact' limit 1];
+        ApexPages.currentPage().getParameters().put('cid', TestContact.Id);
+        displayVolPortal dVP = new displayVolPortal();
+
+        //Submit new Volunteer Task before submitting any other changes
+        Campaign TestCampaign = [select Id, Name from campaign where Name = 'TestCampaign'];
+        dVP.GUUT.Campaign__c=TestCampaign.Id;
+        dVP.GUUT.Hours__c = 3;
+        dvP.GUUT.Description__c = 'Helped Gregg monitor Dark Branch.';
+        dVP.GUUT.Date_and_Time__c = Datetime.newInstance(2020,2,22,3,0,0);
+        dVP.GUUT.Date_and_Time_Ended__c = Datetime.newInstance(2020,2,22,5,0,0);
+        dVP.SubmitVolTask();
+        List<GUUTask__c> ResultsList = dVP.SubmittedTasks;
+
+                System.assertEquals(true,dVP.HasSubmittedTasks,'Should have set HasSubmittedTasks flag to true so that Submitted Task List will show.');
+        system.debug('In test, list of Submitted TAsks is now ' + ResultsList);
+        System.assertEquals(1,ResultsList.size(),'Should have found one submitted task.');
+    }
 
 }
