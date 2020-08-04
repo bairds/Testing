@@ -165,6 +165,7 @@ public class ManageContributions{
             a.Last_Contrib_Date__c = null;
             a.Last_Donate_Amount__c = 0;
             a.Last_Membership_Amount__c = 0;
+            a.First_Contrib_Date__c = null;
             a.Last_Donate_Date__c = null;
             a.First_Donate_Date__c = null;
             a.First_Donate_Amount__c = 0;
@@ -296,6 +297,7 @@ public class ManageContributions{
                     if (i==a.Opportunities.size()-1) {
                         a.First_Contrib_Source__c = a.Opportunities[i].Campaign.Name;
                         a.First_Contrib_Cat__c = a.Opportunities[i].RecordType.Name;
+                        a.First_Contrib_Date__c = a.Opportunities[i].CloseDate;
                     }
                     //Largest contribution
                     if(a.Largest_Contrib__c < a.Opportunities[i].Amount) {
@@ -389,6 +391,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             c.Last_Contrib_Date__c = null;
             c.Last_Donate_Amt__c = 0;
             c.Last_Donate_Date__c = null;
+            c.First_Contrib_Date__c = null;
             c.First_Donate_Amount__c = 0;
             c.First_Donate_Date__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
@@ -423,6 +426,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                     }
                     c.First_Contrib_Source__c = OppsForThisCtct[i].Campaign.Name;
                     c.First_Contrib_Cat__c = OppsForThisCtct[i].RecordType.Name;
+                    c.First_Contrib_Date__c = OppsForThisCtct[i].CloseDate;
 
                     // Assign pledges to PledgeIds for further processing
                     if (OppsForThisCtct[i].RecordTypeId == PledgeRTID) PledgeIds.add(OppsForThisCtct[i].Id);
