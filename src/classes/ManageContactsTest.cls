@@ -770,7 +770,6 @@ private class ManageContactsTEST {
             CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
         }
 
-
         Test.startTest();
         List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
         Test.stopTest();
@@ -796,5 +795,19 @@ private class ManageContactsTEST {
                 system.assertEquals(date.today(), c.Last_Email_Overwrite__c.date());
             }
         }
+    }
+
+    @IsTest
+    static void TestTrigger(){
+        Create_Test_Variables CTV = new Create_Test_Variables();
+        Account Testaccount = ctv.fetchFamilyTestAccount();
+    Contact Testcontact = new Contact(
+        firstname = 'Test',
+        lastname = 'TestContact',
+        email='testcontact@dontbotherme.org',
+        accountId = Testaccount.Id);
+        insert TestContact;
+        Contact resultContact = [SELECT Id,Preferred_Email__c from Contact where Id =: TestContact.Id];
+        system.assertEquals('Personal',resultContact.Preferred_Email__c,'Since Account was Family account contact should have had Preferred_Email set to Personal.');
     }
 }

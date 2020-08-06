@@ -11,6 +11,21 @@ trigger ManageContacts on Contact (before insert, after insert, before delete, a
     if(Trigger.isBefore && Trigger.isInsert) {
              ManageContacts.BeforeInsert(Trigger.New); 
     }
+
+    if(Trigger.isBefore && Trigger.isUpdate){
+        List<Contact> NewContacts = new List<Contact>();
+        List<Contact> OldContacts;
+        for (Contact ctct : Trigger.new) {
+            if (Trigger.NewMap.get(ctct.Id).email!=Trigger.OldMap.get(ctct.Id).email  ||
+                    Trigger.NewMap.get(ctct.Id).Preferred_Email__c!=Trigger.OldMap.get(ctct.Id).Preferred_Email__c  ||
+                    Trigger.NewMap.get(ctct.Id).Personal_Email__c!=Trigger.OldMap.get(ctct.Id).Personal_Email__c  ||
+                    Trigger.NewMap.get(ctct.Id).Work_Email__c!=Trigger.OldMap.get(ctct.Id).Work_Email__c  ||
+                    Trigger.NewMap.get(ctct.Id).Other_Email__c!=Trigger.OldMap.get(ctct.Id).Other_Email__c)
+                NewContacts.add(ctct);
+            OldContacts.add(Trigger.oldMap.get(ctct.Id));
+        }
+        ManageContacts.BeforeUpdate(NewContacts,OldContacts);
+    }
   
    if(Trigger.isBefore && Trigger.isDelete){
       ManageContacts.beforeDelete(Trigger.new,Trigger.old ); 

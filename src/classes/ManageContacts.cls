@@ -15,9 +15,35 @@ public class ManageContacts {
     // PNC 4/12/2010
     // Revised Baird 3 July 2018 to catch direct injections of contacts without accounts from other applications like EventBrite.
 
-    // This method just serves to catch direct injection of contacts without accounts
+    // This method arranges emails into the 3 email system
     public static List<Contact> beforeInsert(Contact [] ctcts){
         system.debug('Triggernew contacts is ' + ctcts);
+        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
+        List<Contact> CtctsWEmails = new List<Contact>();
+
+        // Check for emails
+        For (Contact ctct : ctcts) {
+            if (ctct.Email != null || ctct.Personal_Email__c != null || ctct.Work_Email__c != null
+                    || ctct.Other_Email__c != null) {
+                CtctsWEmails.add(ctct);
+            }
+        }
+        List<Id> AccountIds = new List<Id>();
+        For (Contact c : CtctsWEmails) {
+            if (c.AccountId != null) AccountIds.add(c.AccountId);
+        }
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
+        For (Account acct : Accounts) {
+            RecordTypeMap.put(acct.Id, acct.RecordTypeId);
+        }
+        For (Contact c : CtctsWEmails) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
+        }
+        arrangeEmails(CtctsWEmails, CtctRTypeMap);
+
+
+        // This method catches direction injection of contacts without accounts.
         List<Task> Tasks = new List<Task>();
         // First, check to see whether there are any such contacts.
         List<Contact> CtctsWoutAcct = new List<Contact>();
@@ -105,6 +131,99 @@ public class ManageContacts {
         return ctcts;
     }
 
+    public static void beforeUpdate(List<Contact> NewContacts, List<Contact> OldContacts) {
+        // Principles:
+        // Allow users to make changes and not be overwritten.
+        // Force users to make changes by using Personal, Work, Other and Preferred.
+        // Manage automated processes (SDI, etc.) to keep ctct.Email and Preferred synchronized.
+
+        // Pseudocode:
+        // Is ctct.Email changed?  If so, this is an automated process.
+        // Does new ctct.email match any of the other WGemails?
+        // If so, set Preferred to the Matching Email.
+        // If not,
+        // If Other_Email is populated, move it to Legacy_Emails__c.
+        // Insert old ctct.email in Other_Email.
+        // Set Preferred to Other_Email.
+        // Would any of the automated processes also change the Personal, Work or Other?
+        // For now, assume the answer is no.  (SDI is the possible exception.)
+        // Are there changes beside ctct.Email?  If so, this is a user.
+        // Does the Ctct.Email agree with both the Preferred field and the email to which Preferred Points?
+        // If so, do nothing.
+        // If not,
+        // Are both the Preferred field and the email to which it points populated?
+        // If not, send error message to UI.
+        // If so,
+        // If Other_Email is populated, move it to Legacy_Emails__c.
+        // Insert old ctct.email in Other_Email.
+        // Set Preferred to Other_Email.
+
+        for (integer i = 0; i < NewContacts.size(); i++) {
+            if (NewContacts[i].Email != OldContacts[i].Email) {
+                if (NewContacts[i].Email == NewContacts[i].Personal_Email__c) {
+                    NewContacts[i].Preferred_Email__c = 'Personal';
+                    //store old Email
+                    if (OldContacts[i].Email != NewContacts[i].Personal_Email__c &&
+                            OldContacts[i].Email != NewContacts[i].Work_Email__c &&
+                            OldContacts[i].Email != NewContacts[i].Other_Email__c) {
+                        if (NewContacts[i].Other_Email__c != null) {
+                            if (NewContacts[i].Legacy_Emails__c == null) {
+                                NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c;
+                            } else {
+                                NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c + ', ' + NewContacts[i].Legacy_Emails__c;
+                            }
+                        }
+                        NewContacts[i].Other_Email__c = OldContacts[i].Email;
+                    }
+                } else {
+                    if (NewContacts[i].Email == NewContacts[i].Work_Email__c) {
+                        NewContacts[i].Preferred_Email__c = 'Work';
+                        //store old Email
+                        if (OldContacts[i].Email != NewContacts[i].Personal_Email__c &&
+                                OldContacts[i].Email != NewContacts[i].Work_Email__c &&
+                                OldContacts[i].Email != NewContacts[i].Other_Email__c) {
+                            if (NewContacts[i].Other_Email__c != null) {
+                                if (NewContacts[i].Legacy_Emails__c == null) {
+                                    NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c;
+                                } else {
+                                    NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c + ', ' + NewContacts[i].Legacy_Emails__c;
+                                }
+                            }
+                            NewContacts[i].Other_Email__c = OldContacts[i].Email;
+                        }
+                    } else {
+                        // New Email has to go into Other
+                        NewContacts[i].Preferred_Email__c = 'Other';
+                        //store old Email
+                        if (NewContacts[i].Other_Email__c != null) {
+                            if (NewContacts[i].Legacy_Emails__c == null) {
+                                NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c + ', ' + OldContacts[i].Email;
+                            } else {
+                                NewContacts[i].Legacy_Emails__c = NewContacts[i].Other_Email__c + ', ' + OldContacts[i].Email + ', ' + NewContacts[i].Legacy_Emails__c;
+                            }
+                        }
+                        NewContacts[i].Other_Email__c = NewContacts[i].Email;
+                    }
+                }
+            } else {
+                // Contact.Email was not changed, so the change was in one of the other fields and made through the UI
+                // Do Contact.Email, Preferred and the email field it points to agree?
+                If ((NewContacts[i].Preferred_Email__c=='Personal' && NewContacts[i].Personal_Email__c == NewContacts[i].Email) ||
+                        (NewContacts[i].Preferred_Email__c=='Work' && NewContacts[i].Work_Email__c == NewContacts[i].Email) ||
+                        (NewContacts[i].Preferred_Email__c=='Other' && NewContacts[i].Other_Email__c == NewContacts[i].Email)){
+                    // do nothing
+                } else {
+                    if (NewContacts[i].Preferred_Email__c==null ||
+                            (NewContacts[i].Preferred_Email__c=='Personal' && NewContacts[i].Personal_Email__c==null) ||
+                            (NewContacts[i].Preferred_Email__c=='Work' && NewContacts[i].Work_Email__c==null) ||
+                            (NewContacts[i].Preferred_Email__c=='Other' && NewContacts[i].Other_Email__c==null))
+                        // post error message for user
+                        ApexPages.Message EmailErrorOnContactInsert = new ApexPages.Message(ApexPages.Severity.ERROR, 'The contact Preferred Email field is blank or it points to a blank email field.');
+                }
+            // How does this changed NewContacts get back to the Trigger.New?
+            }
+        }
+    }
 
 
 
