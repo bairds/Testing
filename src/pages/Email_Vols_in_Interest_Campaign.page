@@ -1,0 +1,47 @@
+<!--
+ - Created by Baird on 8/7/2020.
+ -->
+
+<apex:page id="Email_Vols_in_Interest_Campaign" showHeader="false" sidebar="false"
+           standardController="Campaign" extensions = "emailVolsInInterestCampaign">
+    <!--
+     - Created by  on 10/31/2018.
+     -->
+
+        <apex:form >
+            <apex:sectionHeader id="contactsList" title="{!numberMembers} contacts and leads in campaign {!campaignName}"/>
+            <apex:dataTable value="{!CmpMmbrs}" var="cmx" cellPadding="10" border="0">
+                <apex:column width="100px" style="vertical-align: top;">
+                    <apex:facet name="header">Delete?</apex:facet>
+                    <apex:inputCheckbox value="{!cmx.ToDelete}"/>
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">First Name</apex:facet>
+                    {!cmx.cm.firstname}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Last Name</apex:facet>
+                    {!cmx.cm.lastname}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Account or Company</apex:facet>
+                    {!IF(cmx.cm.contact.account.name==null, cmx.cm.lead.company, cmx.cm.contact.account.name)}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Email</apex:facet>
+                    {!cmx.cm.email}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Status</apex:facet>
+                    {!cmx.cm.status}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Lead?</apex:facet>
+                    {!IF(cmx.cm.contact.lastname==null, 'Lead', '')}
+                </apex:column>
+
+            </apex:dataTable>
+
+            <apex:commandButton action="{!deleteRefresh}" value="Delete checked persons from campaign." id="deleteRefresh" />
+        </apex:form>
+    </apex:page>
