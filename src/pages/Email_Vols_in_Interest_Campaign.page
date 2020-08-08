@@ -12,8 +12,12 @@
             <apex:sectionHeader id="contactsList" title="{!numberMembers} contacts and leads in campaign {!campaignName}"/>
             <apex:dataTable value="{!CmpMmbrs}" var="cmx" cellPadding="10" border="0">
                 <apex:column width="100px" style="vertical-align: top;">
+                    <apex:actionRegion>
                     <apex:facet name="header">Delete?</apex:facet>
-                    <apex:inputCheckbox value="{!cmx.ToDelete}"/>
+                    <apex:inputCheckbox value="{!cmx.ToDelete}">
+                        <apex:ActionSupport  rerender="sendInvitationsButton"/>
+                    </apex:inputCheckbox>
+                    </apex:actionRegion>
                 </apex:column>
                 <apex:column style="vertical-align: top;">
                     <apex:facet name="header">First Name</apex:facet>
@@ -42,6 +46,9 @@
 
             </apex:dataTable>
 
-            <apex:commandButton action="{!deleteRefresh}" value="Delete checked persons from campaign." id="deleteRefresh" />
+            <apex:commandButton action="{!deleteRefresh}" value="Delete checked persons from campaign." id="deleteRefreshButton" />
+            <apex:commandButton action="{!sendInvitationEmails}" value="Send invitations to the list." id="sendInvitationsButton"/>
+            <!--Would like to disable the sendInvitationsButton if none of the Delete checkboxes are checked.-->
+
         </apex:form>
     </apex:page>

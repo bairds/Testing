@@ -45,8 +45,11 @@ public with sharing class emailVolsInInterestCampaign {
 
     public PageReference sendInvitationEmails() {
         emailTemplate eT = [SELECT Id from EmailTemplate WHERE Name like '%Invite_Interested_Vols%' LIMIT 1];
-
-        // Load Subcamp values into Campaign
+        if (eT == null) {
+            ApexPages.addmessage(new ApexPages.message(ApexPages.severity.Error, 'Could not find an email Template with the name Invite_Interested_Vols, so cannot send emails.'));
+            return null;
+        }
+        // Load Subcamp values into Campaign so they are available to the email template
         VolIntCamp.SubCamp_Description_Long__c = camp.Description_Long__c;
         VolIntCamp.SubCamp_Date_Time__c = camp.Event_Date_Time__c;
         VolIntCamp.SubCamp_Description__c = camp.Description;
@@ -65,7 +68,6 @@ public with sharing class emailVolsInInterestCampaign {
             emailMessage.fromName = UserInfo.getUserName(); // from name
             string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
             emailMessage.subject = subjectstring; // email subject
-
             String[] RecipientIds = new List<String>();
             RecipientIds.add(cmx.cm.Id);
             emailMessage.toIds = RecipientIds;
