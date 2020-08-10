@@ -5,17 +5,22 @@
 public with sharing class emailVolsInInterestCampaign {
     // User calls the method from a button on a campaign detail page.
     // Find the related Vol_Interest campaign, if it exists, pull its campaign members, email them.
-    private final Campaign camp;
+    public Campaign camp;
     public List<CMExtended> CmpMmbrs {get;set;}
     public Campaign VolIntCamp {get;set;}
     public Integer numberMembers {get;set;}
     Public String campaignName { get; set; }
+    public Messaging.SendEmailResult results;
+    public String FinishedStatus {get; set;}
 
     public emailVolsInInterestCampaign(ApexPages.StandardController stdController){
         camp = (Campaign)stdController.getRecord();
+        camp = [SELECT Vol_Interest_Campaign__c, Description_Long__c, Description,
+                Event_Date_Time__c, Name from Campaign where Id =: camp.Id];
         VolIntCamp = [
                 SELECT Name, Event_Date_Time__c, Description, Description_Long__c,
-                Id, (SELECT FirstName, LastName from CampaignMembers)
+                Id, (SELECT FirstName, LastName, Email, ContactId, Contact.Account.Name, LeadId, Status,
+                        Lead.Company from CampaignMembers)
                 FROM Campaign
                 WHERE Id = :Camp.Vol_Interest_Campaign__c
         ];
@@ -56,25 +61,59 @@ public with sharing class emailVolsInInterestCampaign {
         VolIntCamp.SubCamp_Name__c = camp.Name;
         VolIntCamp.SubCamp_Id__c = camp.Id;
         update VolIntCamp;
+        List<Messaging.SingleEmailMessage> messages = new List<Messaging.SingleEmailMessage>();
         For (CMExtended cmx : CmpMmbrs) {
             // from https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_emailmessage.htm
             // if EnhancedEmail Perm is not enabled, continue logging the email as a task
             // if EnhancedEmail Perm is enabled, create an EmailMessage object
-            EmailMessage emailMessage = new EmailMessage();
-            emailMessage.EmailTemplateId = eT.Id;
-            emailMessage.status = '3'; // email was sent
-            emailMessage.relatedToId = cmx.cm.Id; // related to record e.g. an opportunity
-            emailMessage.fromAddress = UserInfo.getUserEmail(); // from address
-            emailMessage.fromName = UserInfo.getUserName(); // from name
+
+
+            // Alternative using SingleEmailMessage
+            Messaging.SingleEmailMessage eMessage = new Messaging.SingleEmailMessage();
+            // EmailMessage eMessage = new EmailMessage();
+            eMessage.setTemplateId(eT.Id);
+            // eMessage.status = '3'; // email was sent
+            eMessage.setWhatId(cmx.cm.Id); // related to record e.g. an opportunity
+            eMessage.setReplyTo(UserInfo.getUserEmail()); // from address
+            eMessage.setSenderDisplayName(UserInfo.getUserName()); // from name
             string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
-            emailMessage.subject = subjectstring; // email subject
+            eMessage.subject = subjectstring; // email subject
+            eMessage.setTargetObjectId(cmx.cm.contactId == null ? cmx.cm.LeadId : cmx.cm.ContactId);
+            // insert eMessage;
+            system.debug('eMessage is ' + eMessage);
+            eMessage.saveAsActivity = false;
+            messages.add(eMessage);
+        }
+        List<Messaging.SendEmailResult> results = Messaging.sendEmail(messages,true);
+        if (results[0].success) {
+            System.debug('The email was sent successfully.');
+        } else {
+            System.debug('The email failed to send: '
+                    + results[0].errors[0].message);
+        }
+
+        //  Alternative Using EmailMessage.  But will EmailMessage allow a relatedToId to be a CampaignMemberId?
+/*            EmailMessage eMessage = new EmailMessage();
+            eMessage.EmailTemplateId = eT.Id;
+            eMessage.status = '3'; // email was sent
+            eMessage.relatedToId = cmx.cm.Id; // related to record e.g. an opportunity
+            eMessage.fromAddress = UserInfo.getUserEmail(); // from address
+            eMessage.fromName = UserInfo.getUserName(); // from name
+            string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
+            eMessage.subject = subjectstring; // email subject
             String[] RecipientIds = new List<String>();
             RecipientIds.add(cmx.cm.Id);
-            emailMessage.toIds = RecipientIds;
-// additional recipients who don’t have a corresponding contact, lead or user id in the Salesforce org (optional)
-            insert emailMessage; // insert
-        }
-        return null;
+            eMessage.ToAddress = cmx.cm.email;
+
+            insert eMessage;
+            system.debug('eMessage is ' + eMessage);
+
+            List<Messaging.SendEmailResult> results = Messaging.sendEmailMessage(new ID[]{
+                    eMessage.Id
+            });
+        } */
+            FinishedStatus = 'All Done';
+            return null;
     }
 
     public class CMExtended {
@@ -86,4 +125,21 @@ public with sharing class emailVolsInInterestCampaign {
             this.ToDelete = false;
         }
     }
+
+    // Alternative using SingleEmailMessage
+    /*           Messaging.SingleEmailMessage eMessage = new Messaging.SingleEmailMessage();
+            // EmailMessage eMessage = new EmailMessage();
+            eMessage.setTemplateId(eT.Id);
+            // eMessage.status = '3'; // email was sent
+            eMessage.setWhatId(cmx.cm.Id); // related to record e.g. an opportunity
+            eMessage.setReplyTo(UserInfo.getUserEmail()); // from address
+            eMessage.setSenderDisplayName(UserInfo.getUserName()); // from name
+            string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
+            eMessage.subject = subjectstring; // email subject
+            eMessage.setTargetObjectId(cmx.cm.contactId == null ? cmx.cm.LeadId : cmx.cm.ContactId);
+            // insert eMessage;
+            system.debug('eMessage is ' + eMessage);
+            eMessage.saveAsActivity = false;
+            messages.add(eMessage);
+            */
 }
