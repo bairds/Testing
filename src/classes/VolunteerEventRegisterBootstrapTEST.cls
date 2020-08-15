@@ -296,4 +296,73 @@ private class VolunteerEventRegisterBootstrapTEST {
         system.assertEquals(2, TestCampResults[0].Slots_Reserved__c, 'Volunter signed up and did not change the count in number_in_group');
     }
 
+    @istest
+    public static void DuplicateCampaignMember() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Contact TestContact = ctv.fetchTestContact();
+        Campaign camp = ctv.fetchTestCampaign();
+        Camp.CompletionURL__c='google.com';
+        system.debug('TestContact is ' + TestContact);
+
+        Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
+        insert mc;
+        camp.Master_Campaign__c = mc.Id;
+
+//        Text_Document__c TD = ctv.fetchWaiver();
+//        ctv.TestCampaign.Waiver__c = TD.Id;
+        update camp;
+
+        System.currentPageReference().getParameters().put('mid', mc.Id);
+        System.currentPageReference().getParameters().put('cid', camp.Id);
+        System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
+        // System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
+
+        VolunteerEventRegisterBootstrap ve = new VolunteerEventRegisterBootstrap();
+
+        ve.setMasterCampaign();
+
+        ve.setSignUp();
+        system.debug('After setSignup, Contact Custom is ' + ve.coc);
+
+        ve.setSignee();
+
+        ve.coc.email = ctv.TestContact.Email;
+        ve.coc.lastName = ctv.TestContact.LastName;
+
+        ve.setSignee();
+        ve.coc.setVolunteerInterests();
+
+        ve.coc.volunteerInterests.add('Education and Outreach');
+        ve.coc.howHeard = 'Google';
+        ve.AcceptWaiver=true;
+
+        system.debug('Contact Custom is now ' + ve.coc);
+
+        List<CampaignMember> CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
+        system.debug('CampaignMembers are ' + CMs);
+
+        PageReference CompletionURLRef = new PageReference('http://google.com');
+        // Run the signup() method.
+        // Does the ExitToCompletionURL method give the right URl?
+        PageReference TestPR = ve.Signup();
+        system.debug('Resulting PageReference is ' + TestPR);
+        //system.assertEquals(CompletionURLRef.getURL(),ve.signUp().getURL());
+        CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
+        system.debug('CampaignMembers are ' + CMs);
+        system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
+
+        // SIGN THEM UP AGAIN
+
+        System.currentPageReference().getParameters().put('cid', camp.Id);
+        ve = new VolunteerEventRegisterBootstrap();
+        ve.setMasterCampaign();
+        ve.setSignup();
+        system.debug('TestContact is ' + TestContact);
+        ve.coc.email = TestContact.Email;
+        ve.coc.lastName = TestContact.LastName;
+        ve.setSignee();
+        system.assertEquals(true,ve.DuplicateCampMember,'After adding same contact to campaign twice, should have found the Duplicate');
+
+    }
+
 }
