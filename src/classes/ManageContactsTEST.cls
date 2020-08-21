@@ -4,36 +4,33 @@ private class ManageContactsTEST {
     @isTest
     static void contactInsertTestAddUpdateRemoveContactRole() {
         // Create test data
-        Account a = new Account(Name='Test XX 1');
+        Account a = new Account(Name = 'Test XX 1');
         insert a;
-        Contact c = new Contact(LastName='Test', AccountId=a.Id,email='testcontact@dontbotherme.org', Active__c='Active');
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org', Active__c = 'Active');
         insert c;
         //Since this isn't a list, it will fail the test if more than one row returned
         AccountContactRole testacr1 = [Select ContactId, IsPrimary, Role, Account.Nr_Contacts_In_Acct__c from AccountContactRole where AccountId = :a.Id];
-        system.assertequals(c.Id,testacr1.ContactId);
-        system.assertequals(TRUE,testacr1.IsPrimary);
-        system.assertequals('Decision Maker',testacr1.Role);
-        system.assertequals(1,testacr1.account.Nr_Contacts_In_Acct__c);
-        Contact c2 = new Contact(LastName='Test2', AccountId=a.Id, Active__c='Active');
+        system.assertequals(c.Id, testacr1.ContactId);
+        system.assertequals(TRUE, testacr1.IsPrimary);
+        system.assertequals('Decision Maker', testacr1.Role);
+        system.assertequals(1, testacr1.account.Nr_Contacts_In_Acct__c);
+        Contact c2 = new Contact(LastName = 'Test2', AccountId = a.Id, Active__c = 'Active');
         insert c2;
         testacr1 = [Select ContactId, IsPrimary, Role, Account.Nr_Contacts_In_Acct__c from AccountContactRole where AccountId = :a.Id];
-        system.assertequals(2,testacr1.account.Nr_Contacts_In_Acct__c);
+        system.assertequals(2, testacr1.account.Nr_Contacts_In_Acct__c);
         LIST<AccountContactRole> countACR = [select Id from AccountContactRole where accountid = :a.id];
-        System.assertEquals(1,countACR.size());
+        System.assertEquals(1, countACR.size());
         //Since this isn't a list, it will fail the test if more than one row returned
         AccountContactRole testacr2 = [Select ContactId, IsPrimary, Role, Account.Nr_Contacts_In_Acct__c from AccountContactRole where AccountId = :a.Id];
-        system.assertequals(2,testacr2.account.Nr_Contacts_In_Acct__c);
+        system.assertequals(2, testacr2.account.Nr_Contacts_In_Acct__c);
         //And Check still first Contact as Primary
-        system.assertequals(c.Id,testacr2.ContactId);
-        try
-        {
+        system.assertequals(c.Id, testacr2.ContactId);
+        try {
             //try to delete contact set as primary
             delete c;
-        }
-        Catch (DmlException e)
-        {
+        } Catch (DmlException e) {
             //Check error message is displayed
-            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage() );
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
         }
         //Change the primary to c2 - Created the following 2 lines when Peter's code began throwing errors, "DUPLICATE_VALUE, Contact has already been added in that Contact Role: [ContactId, Role]"
         testacr1.ContactId = c2.Id;
@@ -46,20 +43,17 @@ private class ManageContactsTEST {
         //Is Number of contacts now 1?
         Account confirmAcct = [Select id, Nr_Contacts_In_Acct__c, (select id from Contacts) from Account where Id = :a.Id];
         // Was one contact deleted?
-        system.assertEquals(1,confirmAcct.contacts.size());
+        system.assertEquals(1, confirmAcct.contacts.size());
         // Was the account.Nr_Contacts_In_Acct__c updated?
-        system.assertEquals(1,confirmAcct.Nr_Contacts_In_Acct__c);
+        system.assertEquals(1, confirmAcct.Nr_Contacts_In_Acct__c);
 
         //but not now c2        
-        try
-        {
+        try {
             //try to delete contact set as priamry
             delete c2;
-        }
-        Catch (DmlException e)
-        {
+        } Catch (DmlException e) {
             //Check error message is displayed
-            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage() );
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
         }
     }
 
@@ -69,65 +63,62 @@ private class ManageContactsTEST {
 
         List<Account> a2 = new List<Account>();
         List<Contact> conl2 = new List<Contact>();
-        for(integer i=0; i<99; i++) {
-            a2.add(new Account(Name='Test Account' + i));
+        for (integer i = 0; i < 99; i++) {
+            a2.add(new Account(Name = 'Test Account' + i));
         }
         insert a2;
         test.starttest();
-        for(integer i=0; i<99; i++) {
-            conl2.add( new Contact(LastName='Test Con' + i, AccountId = a2[i].Id));
-            conl2.add( new Contact(LastName='Test Con' + 100 + i, AccountId = a2[i].Id));
+        for (integer i = 0; i < 99; i++) {
+            conl2.add(new Contact(LastName = 'Test Con' + i, AccountId = a2[i].Id));
+            conl2.add(new Contact(LastName = 'Test Con' + 100 + i, AccountId = a2[i].Id));
         }
         insert conl2;
         test.stoptest();
         //Check an insert only inserted one Primary, and was frst one - select will fail if count > 1
         AccountContactRole testacr1 = [Select Contact.LastName, IsPrimary, Role from AccountContactRole where AccountId = :a2[50].Id];
-        system.assertequals('Test Con50',testacr1.Contact.LastName);
-        system.assertequals(TRUE,testacr1.IsPrimary);
-        system.assertequals('Decision Maker',testacr1.Role);
-        try
-        {
+        system.assertequals('Test Con50', testacr1.Contact.LastName);
+        system.assertequals(TRUE, testacr1.IsPrimary);
+        system.assertequals('Decision Maker', testacr1.Role);
+        try {
             //try to delete contact set as priamry
             delete conl2;
-        }
-        Catch (DmlException e)
-        {
+        } Catch (DmlException e) {
             //Check error message is displayed
-            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage() );
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
         }
 
     }
 
     @isTest
-    static void insertContactNoAccount(){
+    static void insertContactNoAccount() {
         Contact NewCtct = new Contact(
                 firstname = 'Test',
                 lastname = 'TestContact',
-                email='testcontact@dontbotherme.org');
+                email = 'testcontact@dontbotherme.org');
         // insert contact into ContactCustom method;
         List<Contact> ctctlist = new List<Contact>();
         ctctlist.add(newCtct);
         insert ctctlist;
         List<Contact> testctcts = [select id, Account.name, Account.is_Dummy__c from Contact where lastname = 'TestContact'];
-        system.assertEquals(1,testctcts.size(),'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
-        system.assertEquals('TestContact, Test Household',testctcts[0].account.name,'ManageContacts trigger got name wrong for new contact without account.');
-        system.assertEquals(true,testctcts[0].Account.is_Dummy__c,'ManageContacts trigger created Account but is_Dummy__c not set to true.');
+        system.assertEquals(1, testctcts.size(), 'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
+        system.assertEquals('TestContact, Test Household', testctcts[0].account.name, 'ManageContacts trigger got name wrong for new contact without account.');
+        system.assertEquals(true, testctcts[0].Account.is_Dummy__c, 'ManageContacts trigger created Account but is_Dummy__c not set to true.');
     }
 
     @isTest
-    static void insertContactNoAccountBulk(){
+    static void insertContactNoAccountBulk() {
         List<Contact> ctctlist = new List<Contact>();
-        for (integer i=0;i<100;i++) {
+        for (integer i = 0; i < 100; i++) {
             Contact NewCtct = new Contact(
                     firstname = 'Test',
-                    lastname = 'TestContact'+i,
-                    email='testcontact@dontbotherme.org');
+                    lastname = 'TestContact' + i,
+                    email = 'testcontact@dontbotherme.org');
             // insert contact into ContactCustom method;
             ctctlist.add(newCtct);
         }
-        system.assertEquals(100,ctctlist.size());
+        system.assertEquals(100, ctctlist.size());
         List<Contact> ConfirmList = ManageContacts.beforeInsert(ctctlist);
-        system.assertEquals(100,ConfirmList.size(),'Should have returned a list of 100 contacts.');
+        system.assertEquals(100, ConfirmList.size(), 'Should have returned a list of 100 contacts.');
         // List<Contact> testctcts = [select id, Account.name from Contact where lastname like 'TestContact%' ORDER BY Lastname];
         // system.assertEquals(100,testctcts.size(),'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
         // system.assertEquals('TestContact99, Test Household',testctcts[99].account.name,'ManageContacts trigger got name wrong for new contact without account.');
@@ -136,63 +127,63 @@ private class ManageContactsTEST {
     // Converting a lead should not trigger the beforeInsert method
     // because by converting the new contact will also receive an accountId
     @isTest
-    static void convertLead(){
+    static void convertLead() {
         Lead NewLead = new Lead(
                 firstname = 'Test',
                 lastname = 'TestLead',
                 company = 'none',
-                email='testcontact@dontbotherme.org');
+                email = 'testcontact@dontbotherme.org');
         insert NewLead;
         // Convert lead
         List<Id> results = ConvertLeadToContact.ConvertLeadToContact(NewLead.Id);
-        system.assertEquals(1,[select id from Account where name like 'TestLead%'].size(),'Converting lead but more than one account created probably because of error in ManageCcontacts');
+        system.assertEquals(1, [select id from Account where name like 'TestLead%'].size(), 'Converting lead but more than one account created probably because of error in ManageCcontacts');
     }
 
     @isTest
-    static void insertContactNoAccountMatchExists(){
-        Account a = new Account(Name='Test XX 1');
+    static void insertContactNoAccountMatchExists() {
+        Account a = new Account(Name = 'Test XX 1');
         insert a;
-        Contact c = new Contact(LastName='Test', AccountId=a.Id,email='testcontact@dontbotherme.org');
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
         insert c;
         Contact NewCtct = new Contact(
                 firstname = 'Test',
                 lastname = 'TestContact',
-                email='testcontact@dontbotherme.org');
+                email = 'testcontact@dontbotherme.org');
         // insert contact into ContactCustom method;
         List<Contact> ctctlist = new List<Contact>();
         ctctlist.add(newCtct);
         insert ctctlist;
         List<Contact> testctcts = [select id, lastname, Account.name, Account.is_Dummy__c from Contact where lastname = 'TestContact'];
-        system.assertEquals(1,testctcts.size(),'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
-        system.assertEquals('Test XX 1',testctcts[0].account.name,'ManageContacts trigger got name wrong for new contact without account.');
-        system.assertEquals(false,testctcts[0].Account.is_Dummy__c,'ManageContacts trigger created Account but is_Dummy__c set to true.');
+        system.assertEquals(1, testctcts.size(), 'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
+        system.assertEquals('Test XX 1', testctcts[0].account.name, 'ManageContacts trigger got name wrong for new contact without account.');
+        system.assertEquals(false, testctcts[0].Account.is_Dummy__c, 'ManageContacts trigger created Account but is_Dummy__c set to true.');
     }
 
 
     @isTest
-    static void insertContactNoAccountNoMatchExists(){
-        Account a = new Account(Name='Test XX 1');
+    static void insertContactNoAccountNoMatchExists() {
+        Account a = new Account(Name = 'Test XX 1');
         insert a;
-        Contact c = new Contact(LastName='Test', AccountId=a.Id,email='testcontact@dontbotherme.org');
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
         insert c;
         Contact NewCtct = new Contact(
                 firstname = 'Test',
                 lastname = 'TestContact',
-                email='testcontact@dontbotherme2.org');
+                email = 'testcontact@dontbotherme2.org');
         // insert contact into ContactCustom method;
         List<Contact> ctctlist = new List<Contact>();
         ctctlist.add(newCtct);
         insert ctctlist;
         List<Contact> testctcts = [select id, lastname, Account.name, Account.is_Dummy__c, Account.Dear__c, Account.Active__c from Contact where lastname = 'TestContact'];
-        system.assertEquals(1,testctcts.size(),'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
-        system.assertEquals('TestContact, Test Household',testctcts[0].account.name,'ManageContacts trigger got name wrong for new account created for contact.');
-        system.assertEquals(true,testctcts[0].Account.is_Dummy__c,'ManageContacts trigger created Account but is_Dummy__c not set to true.');
-        system.assertEquals('Active',testctcts[0].Account.Active__c,'ManageContacts trigger created Account but Account.Active__c not set to Active.');
-        system.assertEquals('Test',testctcts[0].Account.Dear__c,'ManageContacts trigger created Account but Account.Dear__c not set to Test.');
+        system.assertEquals(1, testctcts.size(), 'ManageContacts trigger did not create just one new contact after insertion of a contact without account.');
+        system.assertEquals('TestContact, Test Household', testctcts[0].account.name, 'ManageContacts trigger got name wrong for new account created for contact.');
+        system.assertEquals(true, testctcts[0].Account.is_Dummy__c, 'ManageContacts trigger created Account but is_Dummy__c not set to true.');
+        system.assertEquals('Active', testctcts[0].Account.Active__c, 'ManageContacts trigger created Account but Account.Active__c not set to Active.');
+        system.assertEquals('Test', testctcts[0].Account.Dear__c, 'ManageContacts trigger created Account but Account.Dear__c not set to Test.');
     }
 
     @IsTest
-    static void ChangePreferredEmail(){
+    static void ChangePreferredEmail() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAccount = ctv.fetchTestAccount();
         TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -201,17 +192,17 @@ private class ManageContactsTEST {
         List<Contact> LContacts = new List<Contact>();
         LContacts.add(ctct);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, RecordTypeId from Account where Id IN: AccountIds];
-        For (Account a : Accounts) RecordTypeMap.put(a.Id,a.RecordTypeId);
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, RecordTypeId from Account where Id IN:AccountIds];
+        For (Account a : Accounts) RecordTypeMap.put(a.Id, a.RecordTypeId);
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
-        system.assertEquals('Work',ResultContacts[0].Preferred_Email__c,'Should have set Preferred Email to Personal because Account was Family');
+        system.assertEquals('Work', ResultContacts[0].Preferred_Email__c, 'Should have set Preferred Email to Personal because Account was Family');
     }
 
     @IsTest
@@ -224,15 +215,15 @@ private class ManageContactsTEST {
         LContacts.add(TestFamilyContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, RecordTypeId from Account where Id IN: AccountIds];
-        For (Account a : Accounts) RecordTypeMap.put(a.Id,a.RecordTypeId);
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, RecordTypeId from Account where Id IN:AccountIds];
+        For (Account a : Accounts) RecordTypeMap.put(a.Id, a.RecordTypeId);
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testfamilycontact@dontbotherme.org', c.Email);
@@ -256,21 +247,21 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
             system.debug('For account ' + a + ' recordTypeId is ' + a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -296,21 +287,21 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
             system.debug('For account ' + a + ' recordTypeId is ' + a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -338,20 +329,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -381,20 +372,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -420,20 +411,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
@@ -459,20 +450,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('other@dontbotherme.org', c.Email);
@@ -497,20 +488,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
@@ -535,20 +526,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('other@dontbotherme.org', c.Email);
@@ -574,20 +565,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
@@ -608,33 +599,12 @@ private class ManageContactsTEST {
         Testcontact.Email = 'testcontact@dontbotherme.org';
         Testcontact.Work_Email__c = 'work@dontbotherme.org';
         Testcontact.Preferred_Email__c = 'Other';
-        update Testcontact;
-
-        List<Contact> LContacts = new List<Contact>();
-        LContacts.add(TestContact);
-        system.debug('LContacts is ' + LContacts);
-        List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
-        For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
-        }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
-        }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
-        }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
-        system.debug('ResultContacts is ' + ResultContacts);
-        For (Contact c : ResultContacts) {
-            system.assertEquals('testcontact@dontbotherme.org', c.Email);
-            system.assertEquals('work@dontbotherme.org', c.Work_Email__c);
-            system.assertEquals('personal@dontbotherme.org', c.Personal_Email__c);
-            system.assertEquals('testcontact@dontbotherme.org', c.Other_Email__c);
-            system.assertEquals('Other', c.Preferred_Email__c);
+        try {
+            update Testcontact;
+            System.Assert(1 == 0, 'The update should not have occurred.  This test pointed Preferred Email at an empty Other_Email field, so it should have generated a DMLException.');
+        } catch (DmlException e) {
+            System.assert(e.getMessage().CONTAINS('Please set Preferred Email field to point to an email field which is not empty.'),
+                    'This test pointed Preferred Email at an empty Other_Email field, so it should have generated a DMLException.');
         }
     }
 
@@ -656,20 +626,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('personal@dontbotherme.org', c.Email);
@@ -699,20 +669,20 @@ private class ManageContactsTEST {
         LContacts.add(TestContact);
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account a : Accounts) {
-            RecordTypeMap.put(a.Id,a.RecordTypeId);
+            RecordTypeMap.put(a.Id, a.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('personal@dontbotherme.org', c.Email);
@@ -725,7 +695,7 @@ private class ManageContactsTEST {
         }
     }
 
-    @IsTest    static void BatchTest() {
+    @IsTest static void BatchTest() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account a = ctv.fetchTestAccount();
         a.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -735,9 +705,9 @@ private class ManageContactsTEST {
         insert b;
         List<Contact> LContacts = new List<Contact>();
 
-        for (Integer i=0;i<25;i++){
+        for (Integer i = 0; i < 25; i++) {
             Contact c = new Contact(
-                    LastName = 'Testcontact'+i+'a',
+                    LastName = 'Testcontact' + i + 'a',
                     Personal_Email__c = 'personal@dontbotherme.org',
                     Email = 'testcontact@dontbotherme.org',
                     Work_Email__c = 'work@dontbotherme.org',
@@ -746,32 +716,32 @@ private class ManageContactsTEST {
                     AccountId = a.Id);
             LContacts.add(c);
             Contact d = new Contact(
-                    LastName = 'Testcontact'+i+'b',
+                    LastName = 'Testcontact' + i + 'b',
                     Personal_Email__c = 'personal@dontbotherme.org',
                     Email = 'testcontact@dontbotherme.org',
                     Work_Email__c = 'work@dontbotherme.org',
                     AccountId = b.Id);
             LContacts.add(d);
         }
-        system.assertEquals(50,LContacts.size());
+        system.assertEquals(50, LContacts.size());
         insert LContacts;
         List<Id> AccountIds = new List<Id>();
-        For (Contact c:LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id,Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN: AccountIds];
+        For (Contact c : LContacts) AccountIds.add(c.AccountId);
+        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
         For (Account acct : Accounts) {
-            RecordTypeMap.put(acct.Id,acct.RecordTypeId);
+            RecordTypeMap.put(acct.Id, acct.RecordTypeId);
         }
-        Map<Id,Id> CtctRTypeMap = new Map<Id,Id>();
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
-        For (Contact c: LContacts) {
-            CtctRTypeMap.put(c.Id,RecordTypeMap.get(c.AccountId));
+        For (Contact c : LContacts) {
+            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
         }
 
         Test.startTest();
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts,CtctRTypeMap);
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
         Test.stopTest();
 
         system.debug('ResultContacts is ' + ResultContacts);
@@ -798,16 +768,128 @@ private class ManageContactsTEST {
     }
 
     @IsTest
-    static void TestTrigger(){
+    static void TestBeforeTrigger() {
         Create_Test_Variables CTV = new Create_Test_Variables();
         Account Testaccount = ctv.fetchFamilyTestAccount();
-    Contact Testcontact = new Contact(
-        firstname = 'Test',
-        lastname = 'TestContact',
-        email='testcontact@dontbotherme.org',
-        accountId = Testaccount.Id);
+        Contact Testcontact = new Contact(
+                firstname = 'Test',
+                lastname = 'TestContact',
+                email = 'testcontact@dontbotherme.org',
+                accountId = Testaccount.Id);
         insert TestContact;
-        Contact resultContact = [SELECT Id,Preferred_Email__c from Contact where Id =: TestContact.Id];
-        system.assertEquals('Personal',resultContact.Preferred_Email__c,'Since Account was Family account contact should have had Preferred_Email set to Personal.');
+        Contact resultContact = [SELECT Id,Preferred_Email__c from Contact where Id = :TestContact.Id];
+        system.assertEquals('Personal', resultContact.Preferred_Email__c, 'Since Account was Family account contact should have had Preferred_Email set to Personal.');
     }
+
+
+    @isTest
+    static void UpdateEmailTests1() {
+        Account a = new Account(Name = 'Test XX 1');
+        insert a;
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
+        insert c;
+        ApexTrigger EETrigger = [Select Id, Status from ApexTrigger where name = 'ManageContacts' LIMIT 1];
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Personal', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Email);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+        }
+        // An external program like Salsa injects an email
+        c.email = 'changedemail@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Other', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('changedemail@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('changedemail@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+            system.assertEquals(null, ResultContacts[0].Legacy_Emails__c);
+        }
+        c.email = 'changed2email@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Other', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('changed2email@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('changed2email@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('changedemail@dontbotherme.org', ResultContacts[0].Legacy_Emails__c);
+        }
+        c.Preferred_Email__c = 'Personal';
+        c.Personal_Email__c = 'Personal@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Personal', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('personal@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('changed2email@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org, changedemail@dontbotherme.org', ResultContacts[0].Legacy_Emails__c);
+        }
+        c.Personal_Email__c = 'personalemail@dontbotherme.org';
+        c.Work_Email__c = 'work@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Other', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('personalemail@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+            system.assertEquals('changed2email@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org, changedemail@dontbotherme.org', ResultContacts[0].Legacy_Emails__c);
+        }
+        c.Work_Email__c = 'work2@dontbotherme.org';
+        c.Preferred_Email__c = 'Work';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Work', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('work2@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('personalemail@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+            system.assertEquals('work2@dontbotherme.org', ResultContacts[0].Work_Email__c);
+            system.assertEquals('changed2email@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('work@dontbotherme.org, testcontact@dontbotherme.org, changedemail@dontbotherme.org', ResultContacts[0].Legacy_Emails__c);
+        }
+    }
+
+    @IsTest
+    static void UpdateEmailTests2() {
+        Account a = new Account(Name = 'Test XX 1');
+        insert a;
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
+        insert c;
+        ApexTrigger EETrigger = [Select Id, Status from ApexTrigger where name = 'ManageContacts' LIMIT 1];
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Personal', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Email);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+        }
+        c.Preferred_Email__c = 'Other';
+        c.Other_Email__c = 'other2@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.debug('ResultContacts is ' + ResultContacts);
+            system.assertEquals('Other', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('other2@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+            system.assertEquals(null, ResultContacts[0].Work_Email__c);
+            system.assertEquals('other2@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals(null, ResultContacts[0].Legacy_Emails__c);
+        }
+}
 }
