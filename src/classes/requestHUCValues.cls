@@ -112,10 +112,10 @@ public class requestHUCValues {
                                     for (String s2: sMapFeatures.KeySet()) {
                                         system.debug('s2 is ' + s2);
                                         if (HUCValues.containsKey(s2)) {
-                                            If (s2 == 'NAME' && s=='10') HUCValues.put('Watershed', (String)sMapFeatures.get(s2));
-                                            If (s2 == 'HUC10' && sMapFeatures.get(S2) != null) HUCValues.put('HUC10',(String)sMapFeatures.get(S2));
-                                            If (s2 == 'NAME' && s=='12') HUCValues.put('Subwatershed', (String)sMapFeatures.get(s2));
-                                            If (s2 == 'HUC12' && sMapFeatures.get(S2) != null) HUCValues.put('HUC12',(String)sMapFeatures.get(S2));
+                                            If (s2.toUpperCase() == 'NAME' && s=='10') HUCValues.put('Watershed', (String)sMapFeatures.get(s2));
+                                            If (s2.toUpperCase() == 'HUC10' && sMapFeatures.get(S2) != null) HUCValues.put('HUC10',(String)sMapFeatures.get(S2));
+                                            If (s2.toUpperCase() == 'NAME' && s=='12') HUCValues.put('Subwatershed', (String)sMapFeatures.get(s2));
+                                            If (s2.toUpperCase() == 'HUC12' && sMapFeatures.get(S2) != null) HUCValues.put('HUC12',(String)sMapFeatures.get(S2));
                                         }
                                     }
                                     HUCVALUES.put('Status','Current');

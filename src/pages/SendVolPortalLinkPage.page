@@ -1,0 +1,49 @@
+<!--
+ - Created by Baird on 9/26/2020.
+ -->
+
+<apex:page id="SendVolPortalLinkPage" standardController="Contact" extensions="sendVolPortalLink"
+           showHeader="false"
+           standardStylesheets="false">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.css" rel="stylesheet" id="bootstrap-css"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+    <style>
+        .centerButton{
+            text-align: center;
+        }
+    </style>
+    <apex:form >
+    <div class="container centercontainer" id="sendVolPortalLinkBody">
+        <apex:messages style="color: #red;"/>
+        <br/>
+        <div class="row">
+            <div class="col-xs-12 ml11">
+                Do you want to send {!Contact.FirstName} {!Contact.LastName} a link to their
+                <apex:outputLink value="https://wgtesting-developer-edition.na89.force.com/VolPortal?cid={!Contact.Id}&VToken={!Contact.VolToken__c}">
+                    Personal Volunteer Portal
+                </apex:outputLink>?
+                <br/>
+                <br/>
+            </div>
+        </div>
+        <div class="row">
+        <div class="col-8 tac">
+            <apex:commandButton id="AddVolTask" styleClass="btn" value="Send Link"
+                   action="{!sendVolPortalLink}"/><br/>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-8 tac">
+        <apex:outputPanel rendered="{!SendStatus!=null}">
+            {!SendStatus}
+        </apex:outputPanel>
+            </div>
+        </div>
+    </div>
+    </apex:form>
+</apex:page>

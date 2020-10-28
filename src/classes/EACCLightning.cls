@@ -243,6 +243,17 @@ public class EACCLightning
         }
     }
 
+    public PageReference step2(){
+        step = '2';
+        a = '2';
+        String url = '/apex/EACCLightningPage?step=' + step;
+        url += '&a=' + a;
+        pr = new PageReference(url);
+        pr.setRedirect(true);
+        system.debug('Redirect() sets URL to ' + pr);
+        return pr;
+    }
+
     public PageReference redirect()
     {
         String url = '/apex/EACCLightningPage?step=' + step;
@@ -483,7 +494,7 @@ public class EACCLightning
                 update l;
             else if(co != null && co.Id != null)
                 update co;
-            else if(acct != null) {
+            else if(acct.id != null) {
                 if(CreateDummyContact) {
                     for(Contact co : cos) {
                         if(!co.Protected__c) {
@@ -498,7 +509,7 @@ public class EACCLightning
                     update cos;
                 }
 
-                update acct;
+                // update acct;
             }
         }
         else {

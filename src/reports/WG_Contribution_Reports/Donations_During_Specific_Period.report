@@ -35,6 +35,7 @@
     <filter>
         <criteriaItems>
             <column>RECORDTYPE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Opportunity.Challenge,Opportunity.Donation,Opportunity.Major_Donation,Opportunity.Membership,Opportunity.InKind</value>

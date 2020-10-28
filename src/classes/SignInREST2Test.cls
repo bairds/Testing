@@ -1,5 +1,6 @@
 /**
  * Created by Baird on 9/20/2018.
+ * June 2020 Add test for waivertext
  */
 @isTest
 private class SignInREST2Test {
@@ -108,9 +109,17 @@ private class SignInREST2Test {
 
 
     static testMethod void testGetCampaignsById() {
+        Text_Document__c TD = new Text_Document__c(
+                Title__c='Test Waiver',
+                Body__c='I am <b>volunteering</b> for this activity.'
+        );
+        Insert TD;
+        Campaign TestCamp = [SELECT Id FROM Campaign where Name =: 'Testcampaign' LIMIT 1];
+        TestCamp.Waiver__c = TD.Id;
+        TestCamp.Signup_Questions__c = 'Require Emergency Contact Info;';
+        update TestCamp;
+        System.assert(TestCamp.Id!=null,'TestCamp not found by the test.');
 
-        Id TestCampId = [SELECT Id FROM Campaign where Name =: 'Testcampaign' LIMIT 1].Id;
-        System.assert(TestCampId!=null,'TestCamp not found by the test.');
 
 //build request
         RestRequest req = new RestRequest();
@@ -119,7 +128,7 @@ private class SignInREST2Test {
         req.requestURI = '/services/apexrest/SignInREST2API';
         req.addHeader('Content-Type', 'application/json');
         req.httpMethod = 'GET';
-        req.addParameter('campaignId', TestCampId);
+        req.addParameter('campaignId', TestCamp.Id);
         req.addParameter('Org_Id',UserInfo.getOrganizationId());
         RestContext.request = req;
         RestContext.response = res;
@@ -136,6 +145,8 @@ private class SignInREST2Test {
         System.assertEquals('Emergency Contact Name',CR.CMWs[0].EmergencyContactName,'Failed to find right campaignmember.EmergencyContactName');
         System.assertEquals('333 333 3333',CR.CMWs[0].EmergencyContactPhone,'Failed to find right campaignmember.EmergencyContactPhone');
         System.assertEquals(System.today().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date');
+        system.assertEquals('I am <b>volunteering</b> for this activity.',CR.Waiver,'CampaignResponse to GET does not include Waiver HTML string.');
+        System.assertEquals(true,CR.RequireEmergencyContact,'Should have required Emergency Contact.');
 
         // System.assertEquals('Donated',CR.CMWs[0].status);
         // system.debug('CampaignResponse is ' + CR);
@@ -382,7 +393,7 @@ private class SignInREST2Test {
         cm2.AutosendTY__c = 'sent';
         update cm2;
 
-        input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"AutosendTY\":true, \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"AutosendTY\":true, "AddToTyMessage":"xxx", "VolunteerHours":"2", \"status\":\"Attended\"}]';
 
         //build request
         req = new RestRequest();
@@ -399,8 +410,9 @@ private class SignInREST2Test {
         System.debug('RestContext.response= '+res);
         result = SignInREST2.upsertCampaignMembers();
         System.debug('CampaignMembers are now ' + [select Id, AutosendTY__c, Status from CampaignMember]);
-        cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Hours__c FROM CampaignMember WHERE Id =: cm.Id];
+        cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Add_To_TY_Message__c, Hours__c FROM CampaignMember WHERE Id =: cm.Id];
         System.assertEquals('Attended', cm2.Status, 'Status update failed!');
+        System.assertEquals('Xxx',cm2.Add_To_TY_Message__c);
         // This depends on the Process, which can't be deployed, so should not be included in the test.
         // System.assertEquals('sent', cm2.AutosendTY__c, 'AutosendTY update failed!');
     }

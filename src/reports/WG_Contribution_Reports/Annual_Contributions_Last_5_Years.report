@@ -44,18 +44,21 @@
     <filter>
         <criteriaItems>
             <column>RECORDTYPE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Opportunity.Challenge,Opportunity.Donation,Opportunity.Major_Donation,Opportunity.Membership,Opportunity.InKind</value>
         </criteriaItems>
         <criteriaItems>
             <column>CLOSE_DATE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterOrEqual</operator>
             <value>LAST_N_YEARS:5</value>
         </criteriaItems>
         <criteriaItems>
             <column>WON</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>1</value>

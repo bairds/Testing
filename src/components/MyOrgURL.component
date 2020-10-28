@@ -1,0 +1,7 @@
+<!--
+ - Created by Baird on 10/15/2020.
+ -->
+
+<apex:component id="MyOrgURL" controller="MyOrgURL" access="global">
+    <a href="{!MyOrgURL}/apex/ApproveVolTaskPage" target="_blank">this page</a>
+</apex:component>

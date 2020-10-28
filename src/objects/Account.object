@@ -246,6 +246,16 @@
         <fullName>eACAccountFields</fullName>
         <description>In the enterAccountContact link, you can add custom fields to this fieldset in order to include them on the Account section of the enterAccountContact page.</description>
         <displayedFields>
+            <field>AnnualRevenue</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Active__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
             <field>Description</field>
             <isFieldManaged>false</isFieldManaged>
             <isRequired>false</isRequired>
@@ -594,6 +604,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Contrib_Date__c</fullName>
+        <description>The date that the contact first contributed in any way.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date that the contact first contributed in any way.</inlineHelpText>
+        <label>First Contrib Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>First_Contrib_Source__c</fullName>
         <description>Source of the first contribution made by this account</description>
         <externalId>false</externalId>
@@ -819,16 +839,6 @@
         <type>Currency</type>
     </fields>
     <fields>
-        <fullName>Last_Donate_Amt__c</fullName>
-        <externalId>false</externalId>
-        <label>Last_Donate_Amt</label>
-        <precision>11</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Currency</type>
-    </fields>
-    <fields>
         <fullName>Last_Donate_Date__c</fullName>
         <description>Not a roll-up.  This is calculated by the ManageContribs controller.</description>
         <externalId>false</externalId>
@@ -837,18 +847,6 @@
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Date</type>
-    </fields>
-    <fields>
-        <fullName>Last_Member_Amt__c</fullName>
-        <description>Amount of last membership payment.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Amount of last membership payment.</inlineHelpText>
-        <label>Last_Member_Amt</label>
-        <precision>11</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Currency</type>
     </fields>
     <fields>
         <fullName>Last_Membership_Amount__c</fullName>
@@ -916,16 +914,6 @@
         <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Currency</type>
-    </fields>
-    <fields>
-        <fullName>Major_Donor_Now__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Set this flag if you want this account treated as a major donor account.  That means they won&apos;t be picked up by the Renewals report which pulls names for renewal mailings, or by the appeals report which pulls names for the appeal mailings.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Set this flag if you want this account treated as a major donor account.  That means they won&apos;t be picked up by the Renewals report which pulls names for renewal mailings, or by the appeals report which pulls names for the appeal mailings.</inlineHelpText>
-        <label>Major Donor Now</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Map__c</fullName>
@@ -5526,6 +5514,24 @@ TEXT(DAY(TODAY()))
         <masterLabel>Update HUC</masterLabel>
         <openType>newWindow</openType>
         <page>RequestHUCPage</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_HUC_KS</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Update HUC KS</masterLabel>
+        <openType>newWindow</openType>
+        <page>RequestHUCPageKS</page>
         <position>none</position>
         <protected>false</protected>
         <showsLocation>false</showsLocation>

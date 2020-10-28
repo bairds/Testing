@@ -1,6 +1,6 @@
 /**
  * Created by Baird on 7/4/2019.
- * Revised 5/2020 to avoid errors due to Capitalization or UpperCase
+ * Revised 5/2020 to avoid errors due to Capitalization or UpperCase    
  */
 
 @IsTest
@@ -75,10 +75,10 @@ private class createCampaignMemberStatiTEST {
         Boolean foundCustomStatus4;
         // Test for all the stati from the custom metadata
         List<CampaignStatiMDT__mdt> SettingCMs = [select Label from CampaignStatiMDT__mdt];
-        system.assertEquals(10,SettingCMs.size(),'There should be ten CampaignStati in the metadata');
+        system.assertEquals(resultList.size(),SettingCMs.size(),'There should be each CampaignStati in the metadata');
         List<string> Stati = new List<String>();
         For (CampaignStatiMDT__mdt csm : SettingCMs) Stati.add(csm.Label.toUpperCase());
-        system.assertEquals(10,Stati.size(),'Are there ten campaign stati from meta data?');
+        system.assertEquals(resultList.size(),Stati.size(),'Do we have each campaignstati from meta data?');
         integer StatiFromCustomSetting = 0;
         for (CampaignMemberStatus campmemstat : CMValues) {
             system.debug('Is Campaign Status: ' + campmemstat.Label + ' contained in ' + Stati);

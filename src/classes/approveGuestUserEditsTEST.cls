@@ -3,15 +3,19 @@
  */
 
 @IsTest
-private class ApproveMultipoleGUUEditsTEST {
+private class approveGuestUserEditsTEST {
     @TestSetup
     static void setupGUUs(){
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Account TestAccount = ctv.fetchTestAccount();
+        Id UnknownCampId = WGHelpers.getUnknownCampaignId();
         List<Contact> ListCtcts = new List<Contact>();
         For (integer i=0;i<9;i++) {
             Contact Ctct = new Contact(
                     FirstName = 'Test',
                     LastName = 'Tester' + i,
-                    Email = 'test' + i + '@tester.com'
+                    Email = 'test' + i + '@tester.com',
+                    AccountId = TestAccount.Id
             );
             ListCtcts.add(Ctct);
         }
@@ -32,30 +36,33 @@ private class ApproveMultipoleGUUEditsTEST {
         ListGUUs[8].Processing_Status__c='Rejected';
         ListGUUs[0].Email__c='ChangedTest8@tester.com';
         insert ListGUUs;
-        List<GUUTask__c> ListGUUTs = new List<GUUTask__c>();
+        List<Opportunity> ListOpps = new List<Opportunity>();
         For (integer i=0;i<9;i++){
-            GUUTask__c newGUUT = new GUUTask__c(
-                    GuestUserUpdate__c=ListGUUs[i].Id,
-                    Description__c='Description of work',
-                    Hours__c=2,
-                    Processing_Status__c='Review'
+            Opportunity newOpp = new Opportunity(
+                    Contact__c=ListCtcts[i].Id,
+                    Description='Description of work',
+                    Hours_Actual__c=2,
+                    StageName='Task Submitted',
+                    CloseDate=system.today(),
+                    AccountId = TestAccount.Id,
+                    CampaignId = UnknownCampId,
+                    Name = 'VolTask'+i
             );
-            ListGUUTs.add(newGUUT);
+            ListOpps.add(newOpp);
         }
-        ListGUUTs[8].Processing_Status__c='Rejected';
-        insert ListGUUTs;
+        ListOpps[8].StageName='Task Rejected';
+        insert ListOpps;
     }
     @IsTest
     static void processAll() {
-        PageReference pageRef = Page.ApproveMultipleGUUEdits;
+        PageReference pageRef = Page.ApproveGuestUserEdits;
         Test.setCurrentPage(pageRef);
-        ApproveMultipleGUUEdits AMGE = new ApproveMultipleGUUEdits();
+        approveGuestUserEdits AMGE = new approveGuestUserEdits();
         system.assertEquals(8,AMGE.GUUs.size());
         // Change one more processing status
         // Only 7 should go into the processing
         AMGE.GUUs[1].Processing_Status__c = 'Rejected';
         AMGE.submitEdits();
         system.AssertEquals(1,[SELECT Id from Contact where email = 'ChangedTest8@tester.com'].size(),'Should have found one Contact with a changed email.');
-
     }
 }

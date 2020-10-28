@@ -1,8 +1,8 @@
 .bcb { background-color: #DBE8F6; }
-.bcb2 { background-color: #406B8C; }
+.bgprimary { background-color: #406B8C; }
 .bcbl { background-color: black; }
 .bcg { background-color: #BBE2BB; }
-.bcg2 { background-color: #DEF6DE; }
+.bcprimary-mid { background-color: #DEF6DE; }
 .bco { background-color: #EDE9D6; }
 .bco2 { background-color: #A69343; }
 .bcp { background-color: #D2D2EB; }

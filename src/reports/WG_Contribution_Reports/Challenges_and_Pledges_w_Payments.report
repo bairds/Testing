@@ -35,12 +35,14 @@
     <filter>
         <criteriaItems>
             <column>Opportunity$RecordType</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Opportunity.Challenge,Opportunity.Pledge</value>
         </criteriaItems>
         <criteriaItems>
             <column>Opportunity$Name</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>contains</operator>
             <value></value>

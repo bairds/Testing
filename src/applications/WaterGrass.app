@@ -21,5 +21,6 @@
     <tabs>Text_Document__c</tabs>
     <tabs>ImportObject__c</tabs>
     <tabs>Process_Import_Records</tabs>
-    <tabs>Location__c</tabs>
+    <tabs>EACCLightningPage</tabs>
+    <tabs>GuestUserUpdate__c</tabs>
 </CustomApplication>

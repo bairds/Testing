@@ -13,8 +13,6 @@ public static testMethod void Email_Signup_Test1() {
         insert Testaccount;
         Contact TestContact = new Contact (firstname='Test', lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
         insert Testcontact;
-        Lead TestLead = new Lead (lastname = 'Lead', firstname = 'Test', company = 'None', email = 'testlead@dontbotherme.org');
-        insert TestLead;
 
 ApexPages.StandardController sc = new ApexPages.StandardController(testcontact);
 Email_Signup_Controller ECR1 = new Email_Signup_Controller(sc);

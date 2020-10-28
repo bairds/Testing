@@ -61,7 +61,7 @@
             }
         }
     </script>
-    <apex:form>
+    <apex:form >
         <apex:PageBlock title="Links for online signup pages">
             <div class="container centercontainer">
                 <apex:outputPanel id="URLsSection">
@@ -75,7 +75,7 @@
                                     <b>Choose the template for <i>selecting</i> a campaign.</b>
                                 </div>
                                 <div class="col-sm-3">
-                                    <apex:selectList value="{!camp.Select_Template__c}" size="3"
+                                    <apex:selectList value="{!camp.Select_Template__c}" size="4"
                                                      onClick="ShowSelectURL(this.value)"
                                                      id="PickSelectTemplate">
                                         <apex:selectOptions value="{!selectCampaignOptions}"/>
@@ -88,11 +88,11 @@
                             <br/>
                         </div>
                         <div class="row">
-                            <div class="col-sm-3">
-                                <b>Or the registration page for this specific campaign.</b>
+                            <div class="col-sm-2">
+                                <b>Or the registration<br/> page for this<br/> specific campaign.</b>
                             </div>
-                            <div class="col-sm-3">
-                                <apex:selectList value="{!camp.Register_Template__c}" size="3"
+                            <div class="col-sm-4">
+                                <apex:selectList value="{!camp.Register_Template__c}" size="4"
                                                  onClick="ShowRegisterURL(this.value)"
                                                  id="PickRegisterTemplate">
                                     <apex:selectOptions value="{!RegisterOptions}"/>

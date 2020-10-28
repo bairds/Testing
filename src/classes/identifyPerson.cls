@@ -5,7 +5,7 @@
 // if not match found, return null
 // August 2017 Jose modifies to add different matching conditions, Baird makes matching contact and lead available
 // Sept 2 2017 Baird modifies to also pass Contact.AccountId to requesting method
-public with sharing class identifyPerson {
+public without sharing class identifyPerson {
 	
 public static List<String> person {get; set;}
 public static Contact returnContact;

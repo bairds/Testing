@@ -31,9 +31,6 @@
         <field>Account.Account_Membership_Expires__c</field>
     </columns>
     <columns>
-        <field>Account.Last_Member_Amt__c</field>
-    </columns>
-    <columns>
         <field>Account.Last_Membership_Amount__c</field>
     </columns>
     <columns>
@@ -43,6 +40,7 @@
     <filter>
         <criteriaItems>
             <column>PRIMARY</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>1</value>

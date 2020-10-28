@@ -1,4 +1,4 @@
-public class WGHelpers {
+public without sharing class WGHelpers {
 
     private static boolean Auth = false;
 
@@ -23,7 +23,6 @@ public class WGHelpers {
         result = tz.getOffset(DateTime.now()) / (1000 * 3600);
         return result;
     }
-
 
     public static Id getUnknownCampaignId() {
         Campaign UnknownCampaign;
@@ -151,27 +150,30 @@ public class WGHelpers {
         return sFinalToken;
     }
 
-    /*        Try {
-            Sitio = [select MasterLabel, Name, Status, Subdomain, Description, UrlPathPrefix, GuestUserId from Site where MasterLabel = :'Signup' LIMIT 1];
+    public static string getBaseURL() {
+        string OrgID18 = [select id from Organization].Id;
+        string BaseURL;
+
+        Try {
+            Site Sitio = [select MasterLabel, Name, Status, Subdomain, Description, UrlPathPrefix, GuestUserId from Site where MasterLabel = :'Signup' LIMIT 1];
+            If (Sitio == null) ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING, 'Sorry, cannot find the site named Signup, which is required for WG signup pages.  Please go to Setup / Sites and rename your default site to Signup.'));
             String path = '/sites/servlet.SiteDebugMode';
             PageReference pr = new PageReference(path);
             pr.getParameters().put('guid', Sitio.GuestUserId);
             pr.getParameters().put('sitedebugmode', 'x');
-            if(Test.isRunningTest()){
+            if (Test.isRunningTest()) {
                 BaseURL = 'BaseURL';
-            }else{
+            } else {
                 BaseUrl = pr.getContent().toString().substringAfter('URL=').substringBefore(path);
                 system.debug('In controller, BaseURL is calculated to be ' + BaseURL);
             }
-
-            SitioJSON = JSON.serialize(Sitio);
         } catch (QueryException e) {
             System.debug(e.getMessage());
             ApexPages.addmessage(new ApexPages.message(ApexPages.severity.WARNING, 'Sorry, cannot find the site named Signup, which is required for WG signup pages.  Please go to Setup / Sites and rename your default site to Signup.'));
         }
-        SalesforceBaseUrl = URL.getSalesforceBaseUrl().getHost();
-        // BaseUrl = WGHelpers.getSitioBaseURL();
-    }*/
+        return BaseURL;
+    }
+
 
     //  -------------------------------------------------------------------------
 //  HELPER method: sendTemplatedEmail
@@ -191,8 +193,6 @@ public class WGHelpers {
             throw new QueryException ('Unable to locate EmailTemplate using name: ' + templateApiName +
                     ' refer to Setup | Communications Templates ' + templateApiName);
         }
-
-
         email.setToAddresses(toRecipients);
         email.setCcAddresses(ccRecipients);
         email.setTargetObjectId(targetObjId);
@@ -210,5 +210,24 @@ public class WGHelpers {
         catch (EmailException e) {throw new EmailException('sendTemplatedEmail error. ' + e.getMessage());}
 
     }
-
 }
+
+
+/* THIS MAY NOT BE USEFUL, EXCEPT THAT IT DOES ALLOW US TO BE DYNAMIC WITH THE soBJECTNAME
+public static Map<String,Schema.SObjectField> FieldSetWDescription(string SObjectName,string FieldSetName){
+SObject obj = (SObject) Type.forName(SObjectName).newInstance();
+DescribeSObjectResult objdescribe = obj.getSObjectType().getDescribe();
+Schema.FieldSet fieldSetObj = objdescribe.FieldSets.getMap().get(FieldSetName);
+system.debug(fieldSetObj);
+List<string> LS = new List<String>();
+for (Schema.FieldSetMember f : fieldsetObj.getFields()){
+LS.add(f.Label);
+}
+system.debug('List of field labels is ' + LS);
+// Find matching fieldnames
+Schema.DescribeSObjectResult dsr = GUUTask__c.sObjectType.getDescribe();
+Map<String, Schema.SObjectField> fieldMap = Schema.SObjectType.GUUTask__c.fields.getMap();
+// Map<String,String> fieldSetHelpMap = new Map<string,string>();
+// For (string s : fieldMap.keyset())
+return fieldMap;
+} */

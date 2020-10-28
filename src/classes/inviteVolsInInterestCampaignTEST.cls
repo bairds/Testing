@@ -3,7 +3,7 @@
  */
 
 @IsTest
-private class emailVolsInInterestCampaignTEST {
+private class inviteVolsInInterestCampaignTEST {
 
     @IsTest
     static void OneCampaignMember(){
@@ -29,7 +29,7 @@ private class emailVolsInInterestCampaignTEST {
         );
         Insert Testcm;
         ApexPages.StandardController stdcontroller = new ApexPages.StandardController(SubCampaign);
-        emailVolsInInterestCampaign eVIIC = new emailVolsInInterestCampaign(stdcontroller);
+        inviteVolsInInterestCampaign eVIIC = new inviteVolsInInterestCampaign(stdcontroller);
         eVIIC.sendInvitationEmails();
         // system.assertEquals(true, eVIIC.results[0].success);
 

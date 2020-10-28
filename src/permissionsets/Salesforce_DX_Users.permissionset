@@ -248,17 +248,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Account.Last_Donate_Amt__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Account.Last_Donate_Date__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.Last_Member_Amt__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -289,11 +279,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Account.Lifetime_Donations__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Account.Major_Donor_Now__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -553,7 +538,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Affiliation__c.End_date__c</field>
+        <field>Affiliation__c.End_Date__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -589,6 +574,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Asset.Description</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Asset.DigitalAssetStatus</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -938,6 +928,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Campaign.Register_Page_Message__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Campaign.Register_Template__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -984,6 +979,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Campaign.Status</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Campaign.Thank_You_Message__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1193,6 +1193,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>CampaignMember.Request_Body__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>CampaignMember.Role__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -1254,6 +1259,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>CampaignMember.To_Delete__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>CampaignMember.Unsubscribed__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1393,7 +1403,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>CnP_PaaS_Bridge__CnPData__c.CnP_PaaS_Bridge__DataXML__c</field>
+        <field>CnPData__c.DataXML</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1608,6 +1618,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Contact.Last_Email_Overwrite__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Contact.Last_Year_Donations__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -1629,6 +1644,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Contact.Legacy_Contact_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contact.Legacy_Emails__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1728,11 +1748,6 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>Contact.Other_emails__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
         <field>Contact.Over_18__c</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -1779,6 +1794,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Contact.Today_Text_Contacts__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Contact.VolToken__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1974,21 +1994,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Event.WhoId</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Goal.CompletionDate</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Goal.IsKeyCompanyGoal</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Goal.OrigGoalId__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2498,12 +2503,22 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Lead.Last_Email_Overwrite__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Lead.LeadSource</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>Lead.Legacy_Contact_ID__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
+        <field>Lead.Legacy_Emails__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2544,11 +2559,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Lead.Other_Email__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Lead.Other_emails__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2639,11 +2649,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Master_Campaign__c.Select_Template__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Metric.OrigMetricId__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3013,6 +3018,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>Opportunity.Miles_Driven__c</field>
+        <readable>false</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>Opportunity.NextStep</field>
         <readable>false</readable>
     </fieldPermissions>
@@ -3024,11 +3034,6 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Opportunity.Next_Payment_Date__c</field>
-        <readable>false</readable>
-    </fieldPermissions>
-    <fieldPermissions>
-        <editable>false</editable>
-        <field>Opportunity.Next_Payment_Due__c</field>
         <readable>false</readable>
     </fieldPermissions>
     <fieldPermissions>

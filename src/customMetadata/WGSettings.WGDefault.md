@@ -28,7 +28,11 @@
     </values>
     <values>
         <field>Google_API_Key__c</field>
-        <value xsi:type="xsd:string">AIzaSyA4j_x1_ko7jQcBmHRGmAU_2DK-bSUTcqE</value>
+        <value xsi:nil="true"/>
+    </values>
+    <values>
+        <field>HUCTolerance__c</field>
+        <value xsi:type="xsd:string">6.37017331967568173594867169145938E-13</value>
     </values>
     <values>
         <field>HourlyVolunteerRate__c</field>
@@ -37,6 +41,10 @@
     <values>
         <field>LeadSource_QuestionCnP__c</field>
         <value xsi:type="xsd:string">If this is your first donation or payment to our organization, please tell us how you first heard about us.</value>
+    </values>
+    <values>
+        <field>ManageContactEmails__c</field>
+        <value xsi:type="xsd:boolean">true</value>
     </values>
     <values>
         <field>ManageContribsTrigger__c</field>

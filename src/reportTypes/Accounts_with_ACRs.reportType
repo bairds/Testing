@@ -477,11 +477,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Major_Donor_Now__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Map__c</field>
             <table>Account</table>
         </columns>
@@ -548,16 +543,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Is_Dummy__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Last_Donate_Amt__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Last_Member_Amt__c</field>
             <table>Account</table>
         </columns>
         <columns>
@@ -1065,7 +1050,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Other_emails__c</field>
+            <field>Legacy_Emails__c</field>
             <table>Account.AccountContactRelations</table>
         </columns>
         <columns>

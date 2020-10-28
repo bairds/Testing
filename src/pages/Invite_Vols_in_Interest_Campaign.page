@@ -2,8 +2,8 @@
  - Created by Baird on 8/7/2020.
  -->
 
-<apex:page id="Email_Vols_in_Interest_Campaign" showHeader="false" sidebar="false"
-           standardController="Campaign" extensions = "emailVolsInInterestCampaign">
+<apex:page id="Invite_Vols_in_Interest_Campaign" showHeader="false" sidebar="false"
+           standardController="Campaign" extensions="inviteVolsInInterestCampaign">
     <!--
      - Created by  on 10/31/2018.
      -->
@@ -12,10 +12,10 @@
             <apex:sectionHeader id="contactsList" title="{!numberMembers} members interested in volunteering for {!campaignName}"/>
             <apex:dataTable value="{!CmpMmbrs}" var="cmx" cellPadding="10" border="0">
                 <apex:column width="100px" style="vertical-align: top;">
-                    <apex:actionRegion>
+                    <apex:actionRegion >
                     <apex:facet name="header">Delete?</apex:facet>
                     <apex:inputCheckbox value="{!cmx.ToDelete}">
-                        <apex:ActionSupport  rerender="sendInvitationsButton"/>
+                        <apex:ActionSupport rerender="sendInvitationsButton"/>
                     </apex:inputCheckbox>
                     </apex:actionRegion>
                 </apex:column>
@@ -50,7 +50,7 @@
             <apex:commandButton action="{!sendInvitationEmails}" value="Send invitations to the list." id="sendInvitationsButton"/>
             <!--Would like to disable the sendInvitationsButton if none of the Delete checkboxes are checked.-->
 
-            <apex:outputPanel rendered = "{!FinishedStatus=='All Done'}">
+            <apex:outputPanel rendered="{!FinishedStatus=='All Done'}">
                 <br/><br/>
                 <table>
                     <tr>

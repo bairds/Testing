@@ -34,6 +34,7 @@
     <filter>
         <criteriaItems>
             <column>HAS_RESPONDED</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value>1</value>

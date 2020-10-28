@@ -34,6 +34,7 @@
     <filter>
         <criteriaItems>
             <column>Account.Account_Membership_Expires__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterThan</operator>
             <value>TODAY</value>

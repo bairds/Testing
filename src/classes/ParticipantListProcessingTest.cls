@@ -147,7 +147,7 @@ private class ParticipantListProcessingTest {
         attendee.Contribution.Supervisor_Satisfaction__c = '3 - Good';
 
         return attendee;
-
+        
  */
     }
 }

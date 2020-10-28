@@ -2,7 +2,7 @@
  - Created by Baird on 6/12/2020.
  -->
 
-<apex:page id="requestVolPortalEntry" controller="requestVolPortalAccess" showHeader="false" standardStylesheets="false">
+<apex:page id="RequestVolPortalAccess" controller="requestVolPortalAccess" showHeader="false" standardStylesheets="false">
     <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>-->
     <!--<apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>-->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>

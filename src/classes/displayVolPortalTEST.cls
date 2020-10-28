@@ -99,14 +99,40 @@ static void ThreeCampaignsTest(){
     // Unsubscribe contact from Campaign 1, Subscribe them to Campaign 3
     dVP.VolInterestCampExs[0].FinalStatus = 'Unsubscribed';
     dVP.VolInterestCampExs[2].FinalStatus = 'Registered';
-    string testString = JSON.serialize(dVP.VolInterestCampExs);
-    system.debug('String sent to page is ' + Teststring);
+    string testString = JSON.serialize(dVP.CampToExtendedCampMap);
+    apexpages.currentPage().getParameters().put('firstParam',testString);
+    system.debug('String sent to page is ' + testString);
     dVP.setCMStatus();
     List<CampaignMember> ResultCMs = [SELECT Id, CampaignId, Campaign.Name,Status, Unsubscribed__c from CampaignMember WHERE
     contactId =: TestContact.Id];
     For (CampaignMember cm : ResultCMs){
-        if (cm.Campaign.Name=='SignupCampaign0') system.assertEquals(true,cm.Unsubscribed__c,'Campaign Member was registered, should have unsubscribed.');
-        if (cm.Campaign.Name=='SignupCampaign2') system.assertEquals('Responded Yes',cm.Status,'Contact was not initially registered, but should have registered.');
+        if (cm.Campaign.Name=='SignupCampaign0') {
+            system.assertEquals(true, cm.Unsubscribed__c, 'Campaign Member was registered, should have unsubscribed.');
+            system.assertEquals('Unsubcribed',cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
+        }
+        if (cm.Campaign.Name=='SignupCampaign2'){
+            system.assertEquals('Responded Yes',cm.Status,'Contact was not initially registered, but should have registered.');
+            system.assertEquals(false,cm.Unsubscribed__c, 'Contact was registered and status should have been Subscribed.');
+        }
+    }
+    // Resubscribe contact to Campaign 1, Unsubscribe them from Campaign 3
+    dVP.VolInterestCampExs[0].FinalStatus = 'Registered';
+    dVP.VolInterestCampExs[2].FinalStatus = 'Unsubscribed';
+    testString = JSON.serialize(dVP.CampToExtendedCampMap);
+    apexpages.currentPage().getParameters().put('firstParam',testString);
+    system.debug('String sent to page is ' + testString);
+    dVP.setCMStatus();
+    ResultCMs = [SELECT Id, CampaignId, Campaign.Name,Status, Unsubscribed__c from CampaignMember WHERE
+            contactId =: TestContact.Id];
+    For (CampaignMember cm : ResultCMs) {
+        if (cm.Campaign.Name == 'SignupCampaign0') {
+            system.assertEquals(false, cm.Unsubscribed__c, 'Campaign Member was registered, should have unsubscribed.');
+            system.assertEquals('Responded Yes', cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
+        }
+        if (cm.Campaign.Name == 'SignupCampaign2') {
+            system.assertEquals('Unsubscribed', cm.Status, 'Contact was not initially registered, but should have registered.');
+            system.assertEquals(true, cm.Unsubscribed__c, 'Contact was registered and status should have been Subscribed.');
+        }
     }
 }
 
@@ -120,15 +146,15 @@ static void ThreeCampaignsTest(){
 
         //Submit new Volunteer Task before submitting any other changes
         Campaign TestCampaign = [select Id, Name from campaign where Name = 'TestCampaign'];
-        dVP.GUUT.Campaign__c=TestCampaign.Id;
-        dVP.GUUT.Hours__c = 3;
-        dvP.GUUT.Description__c = 'Helped Gregg monitor Dark Branch.';
-        dVP.GUUT.Date_and_Time__c = Datetime.newInstance(2020,2,22,3,0,0);
-        dVP.GUUT.Date_and_Time_Ended__c = Datetime.newInstance(2020,2,22,5,0,0);
+        dVP.Opp.CampaignId=TestCampaign.Id;
+        dVP.Opp.Hours_Actual__c = 3;
+        dvP.Opp.Description = 'Helped Gregg monitor Dark Branch.';
+        dVP.Opp.Date_and_Time_Start__c = Datetime.newInstance(2020,2,22,3,0,0);
+        dVP.Opp.Date_and_Time_End__c = Datetime.newInstance(2020,2,22,5,0,0);
         dVP.SubmitVolTask();
-        List<GUUTask__c> ResultsList = dVP.SubmittedTasks;
+        List<Opportunity> ResultsList = dVP.SubmittedTasks;
 
-                System.assertEquals(true,dVP.HasSubmittedTasks,'Should have set HasSubmittedTasks flag to true so that Submitted Task List will show.');
+        System.assertEquals(true,dVP.HasSubmittedTasks,'Should have set HasSubmittedTasks flag to true so that Submitted Task List will show.');
         system.debug('In test, list of Submitted TAsks is now ' + ResultsList);
         System.assertEquals(1,ResultsList.size(),'Should have found one submitted task.');
     }

@@ -155,9 +155,9 @@
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
         <fullName>Account_LegacyID__c</fullName>
-        <description>The ID from the previous database, if there is one.</description>
+        <description>If this ID matches an existing Account, the incoming data goes into this Account, otherwise it is put into the Account Legacy ID field and a new Account is created.</description>
         <externalId>false</externalId>
-        <inlineHelpText>The ID from the previous database, if there is one.</inlineHelpText>
+        <inlineHelpText>If this ID matches an existing Account, the incoming data goes into this Account, otherwise it is put into the Account Legacy ID field and a new Account is created.</inlineHelpText>
         <label>Account_LegacyID</label>
         <length>255</length>
         <required>false</required>

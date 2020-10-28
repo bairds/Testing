@@ -12,7 +12,7 @@
         <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
 
         <header>
-            <style>.note {
+            <style>.titlebar {
                     text-align: center;
                     height: 80px;
                     background-color: #406B8C;

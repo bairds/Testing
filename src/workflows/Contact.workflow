@@ -19,6 +19,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Email_to_Preferred_Email</fullName>
@@ -38,6 +39,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Personal_Email_to_Email</fullName>
@@ -47,6 +49,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Preferred_Email_as_Alternate</fullName>
@@ -56,6 +59,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Preferred_Email_as_Personal</fullName>
@@ -65,6 +69,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Preferred_Email_as_Work</fullName>
@@ -74,6 +79,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Update_Original_Contact_LeadSource</fullName>
@@ -83,6 +89,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Update_Original_LeadSource</fullName>
@@ -103,6 +110,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <rules>
         <fullName>Contact%2EAltEmail third</fullName>
@@ -114,7 +122,7 @@
             <name>Preferred_Email_as_Alternate</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Contact.Preferred_Email__c</field>
             <operation>equals</operation>
@@ -144,7 +152,7 @@
             <name>Preferred_Email_as_Alternate</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Contact.Personal_Email__c</field>
             <operation>equals</operation>
@@ -170,7 +178,7 @@
             <name>Preferred_Email_as_Personal</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Contact.Personal_Email__c</field>
             <operation>notEqual</operation>
@@ -196,7 +204,7 @@
             <name>Preferred_Email_as_Personal</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Contact.Preferred_Email__c</field>
             <operation>equals</operation>
@@ -218,31 +226,9 @@
             <name>Email_to_Preferred_Email</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <description>This workflow overwrites the existing value in the standard Email field when the Preferred Email field value changes (for when other fields do not change).</description>
         <formula>ISCHANGED( Preferred_Email__c)</formula>
-        <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>Contact%2EWorkEmail first</fullName>
-        <actions>
-            <name>Preferred_Email_as_Work</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <actions>
-            <name>Work_Email_to_Email</name>
-            <type>FieldUpdate</type>
-        </actions>
-        <active>true</active>
-        <criteriaItems>
-            <field>Contact.Preferred_Email__c</field>
-            <operation>equals</operation>
-        </criteriaItems>
-        <criteriaItems>
-            <field>Contact.Work_Email__c</field>
-            <operation>notEqual</operation>
-        </criteriaItems>
-        <description>If the work email is populated and no preferred selection is made, make it the preferred email.  Part of a set of three rules that run and automatically choose the preferred email when a preferred selection is not made already.</description>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
@@ -255,7 +241,7 @@
             <name>Work_Email_to_Email</name>
             <type>FieldUpdate</type>
         </actions>
-        <active>true</active>
+        <active>false</active>
         <criteriaItems>
             <field>Contact.Personal_Email__c</field>
             <operation>equals</operation>
@@ -269,6 +255,28 @@
             <operation>equals</operation>
         </criteriaItems>
         <description>When the only email provided is &quot;Work&quot;, set the preferred phone field to &quot;Work&quot;.</description>
+        <triggerType>onAllChanges</triggerType>
+    </rules>
+    <rules>
+        <fullName>Contact%2EWorkEmailFirst</fullName>
+        <actions>
+            <name>Preferred_Email_as_Work</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <actions>
+            <name>Work_Email_to_Email</name>
+            <type>FieldUpdate</type>
+        </actions>
+        <active>false</active>
+        <criteriaItems>
+            <field>Contact.Preferred_Email__c</field>
+            <operation>equals</operation>
+        </criteriaItems>
+        <criteriaItems>
+            <field>Contact.Work_Email__c</field>
+            <operation>notEqual</operation>
+        </criteriaItems>
+        <description>If the work email is populated and no preferred selection is made, make it the preferred email.  Part of a set of three rules that run and automatically choose the preferred email when a preferred selection is not made already.</description>
         <triggerType>onAllChanges</triggerType>
     </rules>
     <rules>
@@ -307,16 +315,6 @@
         </criteriaItems>
         <description>The first time leadsource is created, populate this field. Then don&apos;t overwrite it. Only Admins can edit it.</description>
         <triggerType>onAllChanges</triggerType>
-    </rules>
-    <rules>
-        <fullName>Set Primary Contact for Account</fullName>
-        <active>true</active>
-        <criteriaItems>
-            <field>Account.Addressee__c</field>
-            <operation>equals</operation>
-        </criteriaItems>
-        <description>The first time a contact is created for an account, populate the account.contact role with the contact.  Populate the Dear__ field with contact.firstname unless it is already filled.  Subsequently, do not make any changes.</description>
-        <triggerType>onCreateOnly</triggerType>
     </rules>
     <tasks>
         <fullName>SendBirthdayCard</fullName>

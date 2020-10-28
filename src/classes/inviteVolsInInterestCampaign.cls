@@ -2,7 +2,7 @@
  * Created by Baird on 8/7/2020.
  */
 
-public with sharing class emailVolsInInterestCampaign {
+public with sharing class inviteVolsInInterestCampaign {
     // User calls the method from a button on a campaign detail page.
     // Find the related Vol_Interest campaign, if it exists, pull its campaign members, email them.
     public Campaign camp;
@@ -12,8 +12,10 @@ public with sharing class emailVolsInInterestCampaign {
     Public String campaignName { get; set; }
     public Messaging.SendEmailResult results;
     public String FinishedStatus {get; set;}
+    Integer TotalEmailsSent {get; set;}
+    Integer TotalEmailsArrived {get; set;}
 
-    public emailVolsInInterestCampaign(ApexPages.StandardController stdController){
+    public inviteVolsInInterestCampaign(ApexPages.StandardController stdController){
         camp = (Campaign)stdController.getRecord();
         camp = [SELECT Vol_Interest_Campaign__c, Description_Long__c, Description,
                 Event_Date_Time__c, Name from Campaign where Id =: camp.Id];
@@ -62,6 +64,7 @@ public with sharing class emailVolsInInterestCampaign {
         VolIntCamp.SubCamp_Id__c = camp.Id;
         update VolIntCamp;
         List<Messaging.SingleEmailMessage> messages = new List<Messaging.SingleEmailMessage>();
+        TotalEmailsSent = CmpMmbrs.size();
         For (CMExtended cmx : CmpMmbrs) {
             // from https://developer.salesforce.com/docs/atlas.en-us.api.meta/api/sforce_api_objects_emailmessage.htm
             // if EnhancedEmail Perm is not enabled, continue logging the email as a task
@@ -69,49 +72,48 @@ public with sharing class emailVolsInInterestCampaign {
 
 
             // Alternative using SingleEmailMessage
-            Messaging.SingleEmailMessage eMessage = new Messaging.SingleEmailMessage();
+            //vMessaging.SingleEmailMessage eMessage = new Messaging.SingleEmailMessage();
             // EmailMessage eMessage = new EmailMessage();
-            eMessage.setTemplateId(eT.Id);
+            // eMessage.setTemplateId(eT.Id);
             // eMessage.status = '3'; // email was sent
-            eMessage.setWhatId(cmx.cm.Id); // related to record e.g. an opportunity
-            eMessage.setReplyTo(UserInfo.getUserEmail()); // from address
-            eMessage.setSenderDisplayName(UserInfo.getUserName()); // from name
-            string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
-            eMessage.subject = subjectstring; // email subject
-            eMessage.setTargetObjectId(cmx.cm.contactId == null ? cmx.cm.LeadId : cmx.cm.ContactId);
+            // eMessage.setWhatId(cmx.cm.Id); // related to record e.g. an opportunity
+//            eMessage.setReplyTo(UserInfo.getUserEmail()); // from address
+//            eMessage.setSenderDisplayName(UserInfo.getUserName()); // from name
+//            string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
+//            eMessage.subject = subjectstring; // email subject
+            // eMessage.setTargetObjectId(TargetObjectId);
             // insert eMessage;
-            system.debug('eMessage is ' + eMessage);
-            eMessage.saveAsActivity = false;
-            messages.add(eMessage);
-        }
-        List<Messaging.SendEmailResult> results = Messaging.sendEmail(messages,true);
-        if (results[0].success) {
-            System.debug('The email was sent successfully.');
-        } else {
-            System.debug('The email failed to send: '
-                    + results[0].errors[0].message);
+            // system.debug('eMessage is ' + eMessage);
+            // eMessage.saveAsActivity = false;
+            Id TargetObjectId = cmx.cm.contactId == null ? cmx.cm.LeadId : cmx.cm.ContactId;
+            Messaging.SingleEmailMessage em =
+                    Messaging.renderStoredEmailTemplate(eT.Id,TargetObjectId,cmx.cm.Id);
+            em.saveAsActivity = false;
+            system.debug('em is ' + em);
+            messages.add(em);
         }
 
-        //  Alternative Using EmailMessage.  But will EmailMessage allow a relatedToId to be a CampaignMemberId?
-/*            EmailMessage eMessage = new EmailMessage();
-            eMessage.EmailTemplateId = eT.Id;
-            eMessage.status = '3'; // email was sent
-            eMessage.relatedToId = cmx.cm.Id; // related to record e.g. an opportunity
-            eMessage.fromAddress = UserInfo.getUserEmail(); // from address
-            eMessage.fromName = UserInfo.getUserName(); // from name
-            string subjectstring = 'New Volunteer Opportunity with '; // + {!$Organization.Name};
-            eMessage.subject = subjectstring; // email subject
-            String[] RecipientIds = new List<String>();
-            RecipientIds.add(cmx.cm.Id);
-            eMessage.ToAddress = cmx.cm.email;
+        List<Messaging.SendEmailResult> results = Messaging.sendEmail(messages,false);
+        TotalEmailsArrived = 0;
+        For (Messaging.SendEmailResult ser : results) {
+            if (ser.success) {
+                System.debug('The email was sent successfully.');
+                TotalEmailsArrived += 1;
+            } else {
+                System.debug('The email failed to send: '
+                        + results[0].errors[0].message);
+            }
+        }
+            Task EmailSent = new Task(
+                    WhatId = camp.Id,
+                    TaskSubtype = 'ListEmail',
+                    Type = 'Email',
+                    Subject = messages[0].getTemplateName() + ' via List Email',
+                    Status = 'Completed',
+                    OwnerId = UserInfo.getUserId(),
+                    Description = 'Sent ' + TotalEmailsSent + ' of which ' + TotalEmailsArrived + ' arrived.');
+            insert EmailSent;
 
-            insert eMessage;
-            system.debug('eMessage is ' + eMessage);
-
-            List<Messaging.SendEmailResult> results = Messaging.sendEmailMessage(new ID[]{
-                    eMessage.Id
-            });
-        } */
             FinishedStatus = 'All Done';
             return null;
     }
@@ -125,7 +127,7 @@ public with sharing class emailVolsInInterestCampaign {
             this.ToDelete = false;
         }
     }
-
+}
     // Alternative using SingleEmailMessage
     /*           Messaging.SingleEmailMessage eMessage = new Messaging.SingleEmailMessage();
             // EmailMessage eMessage = new EmailMessage();
@@ -142,4 +144,3 @@ public with sharing class emailVolsInInterestCampaign {
             eMessage.saveAsActivity = false;
             messages.add(eMessage);
             */
-}

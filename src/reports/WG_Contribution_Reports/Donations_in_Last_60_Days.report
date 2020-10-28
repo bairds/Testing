@@ -23,6 +23,7 @@
     <filter>
         <criteriaItems>
             <column>AMOUNT</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterThan</operator>
             <value>0</value>

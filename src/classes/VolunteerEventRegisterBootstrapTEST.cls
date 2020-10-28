@@ -131,7 +131,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Campaign camp = ctv.fetchTestCampaign();
-        Camp.CompletionURL__c='google.com';
+        Camp.CompletionURL__c='https://google.com';
         system.debug('TestContact is ' + TestContact);
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
@@ -175,7 +175,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         List<CampaignMember> CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
 
-        PageReference CompletionURLRef = new PageReference('http://google.com');
+        PageReference CompletionURLRef = new PageReference('https://google.com');
         // Run the signup() method.
         // Does the ExitToCompletionURL method give the right URl?
         PageReference TestPR = ve.Signup();
@@ -184,7 +184,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
         system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
-        system.assertEquals(CompletionURLRef.getURL(),ve.ExitToCompletionURL().getURL(), 'ExitToCompletionURL method not working');
+        system.assertEquals(STRING.VALUEOF(CompletionURLRef.getURL()),ve.ExitToCompletionURL().getURL(), 'ExitToCompletionURL method not working');
     }
 
     @istest

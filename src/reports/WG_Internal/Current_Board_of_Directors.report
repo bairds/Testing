@@ -16,24 +16,27 @@
         <field>Affiliation__c.Start_Date__c</field>
     </columns>
     <columns>
-        <field>Affiliation__c.End_date__c</field>
+        <field>Affiliation__c.End_Date__c</field>
     </columns>
     <description>Affiliated with Board of Directors, start date &lt; today, end date &gt;= today</description>
     <filter>
         <criteriaItems>
             <column>Affiliation__c.Account__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Test Account</value>
         </criteriaItems>
         <criteriaItems>
             <column>Affiliation__c.Start_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>lessThan</operator>
             <value>TODAY</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Affiliation__c.End_date__c</column>
+            <column>Affiliation__c.End_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterOrEqual</operator>
             <value>TODAY</value>
@@ -51,7 +54,7 @@
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>false</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Affiliation__c.End_date__c</dateColumn>
+        <dateColumn>Affiliation__c.End_Date__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

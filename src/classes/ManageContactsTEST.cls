@@ -587,7 +587,7 @@ private class ManageContactsTEST {
             system.assertEquals('Work', c.Preferred_Email__c);
         }
     }
-
+/*
     @IsTest
     static void SFEmailWGEmailPreferred() {
         Create_Test_Variables ctv = new Create_Test_Variables();
@@ -607,7 +607,7 @@ private class ManageContactsTEST {
                     'This test pointed Preferred Email at an empty Other_Email field, so it should have generated a DMLException.');
         }
     }
-
+*/
     @IsTest
     static void SFEmailWGEmailMatchesPreferred() {
         Create_Test_Variables ctv = new Create_Test_Variables();

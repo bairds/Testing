@@ -354,6 +354,18 @@
             <fullName>Planned</fullName>
             <default>false</default>
         </values>
+        <values>
+            <fullName>Task Approved</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Task Rejected</fullName>
+            <default>false</default>
+        </values>
+        <values>
+            <fullName>Task Submitted</fullName>
+            <default>false</default>
+        </values>
     </businessProcesses>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
     <enableFeeds>true</enableFeeds>
@@ -442,6 +454,21 @@
         <fullName>Service</fullName>
         <description>enter Account Contact Contribution</description>
         <label>Service</label>
+    </fieldSets>
+    <fieldSets>
+        <fullName>VolTaskFieldSet</fullName>
+        <description>Used in the VolPortal, these are additional fields that can be added to the list of fields in the form.</description>
+        <displayedFields>
+            <field>Miles_Driven__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Do_It_Again__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>VolTaskFieldSet</label>
     </fieldSets>
     <fieldSets>
         <fullName>Volunteer_Task</fullName>
@@ -555,6 +582,18 @@
         <fullName>CampaignId</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Campaign_Guess__c</fullName>
+        <description>The volunteer&apos;s guess at the name of the campaign, if they know.  The organizer will later use this to enter the correct campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The volunteer&apos;s guess at the name of the campaign, if they know.  The organizer will later use this to enter the correct campaign.</inlineHelpText>
+        <label>Campaign Guess</label>
+        <length>252</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Challenge_Target__c</fullName>
@@ -847,6 +886,25 @@ TEXT(DAY( CloseDate ))
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Date_and_Time_End__c</fullName>
+        <description>For use with volunteer tasks</description>
+        <externalId>false</externalId>
+        <inlineHelpText>For use with volunteer tasks</inlineHelpText>
+        <label>Date and Time End</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Date_and_Time_Start__c</fullName>
+        <description>For use with volunteer tasks</description>
+        <externalId>false</externalId>
+        <label>Date and Time Start</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>DateTime</type>
     </fields>
     <fields>
         <fullName>Dedication_Acknowledgement_Type__c</fullName>
@@ -1387,6 +1445,19 @@ TEXT(DAY( CloseDate ))
         </valueSet>
     </fields>
     <fields>
+        <fullName>Miles_Driven__c</fullName>
+        <description>Miles driven as part of a volunteer task.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Miles driven as part of a volunteer task.</inlineHelpText>
+        <label>Miles Driven</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Name</fullName>
         <trackFeedHistory>true</trackFeedHistory>
     </fields>
@@ -1408,16 +1479,6 @@ TEXT(DAY( CloseDate ))
         <externalId>false</externalId>
         <inlineHelpText>The date the next pledge payment is due.</inlineHelpText>
         <label>Next_Payment_Date</label>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Date</type>
-    </fields>
-    <fields>
-        <fullName>Next_Payment_Due__c</fullName>
-        <description>Calculated by the last installment date + the period to the next payment.  If this is a CnP donation, calculated from the CnP Next Installment Due field.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Calculated by the last installment date + the period to the next payment.  If this is a CnP donation, calculated from the CnP Next Installment Due field.</inlineHelpText>
-        <label>Next Payment Due</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Date</type>
@@ -1732,7 +1793,7 @@ TEXT(DAY( CloseDate ))
                 </value>
                 <value>
                     <fullName>3 - Good</fullName>
-                    <default>false</default>
+                    <default>true</default>
                     <label>3 - Good</label>
                 </value>
                 <value>
@@ -2009,6 +2070,38 @@ TEXT(DAY(TODAY()))
             <value>1</value>
         </filters>
         <label>Private</label>
+    </listViews>
+    <listViews>
+        <fullName>Recent_Donations</fullName>
+        <columns>OPPORTUNITY.NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>OPPORTUNITY.STAGE_NAME</columns>
+        <columns>OPPORTUNITY.CLOSE_DATE</columns>
+        <columns>OPPORTUNITY.AMOUNT</columns>
+        <columns>OPPORTUNITY.LAST_UPDATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>Recent Donations</label>
+    </listViews>
+    <listViews>
+        <fullName>Submitted_Volunteer_Tasks</fullName>
+        <columns>OPPORTUNITY.NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>OPPORTUNITY.STAGE_NAME</columns>
+        <columns>OPPORTUNITY.CLOSE_DATE</columns>
+        <columns>OPPORTUNITY.AMOUNT</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>OPPORTUNITY.TYPE</field>
+            <operation>equals</operation>
+            <value>Self-reported Vol Task</value>
+        </filters>
+        <filters>
+            <field>OPPORTUNITY.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Opportunity.Volunteer_Task</value>
+        </filters>
+        <label>Submitted Volunteer Tasks</label>
     </listViews>
     <listViews>
         <fullName>Won</fullName>
@@ -5043,6 +5136,346 @@ TEXT(DAY(TODAY()))
         </picklistValues>
     </recordTypes>
     <recordTypes>
+        <fullName>Sponsorship</fullName>
+        <active>true</active>
+        <businessProcess>Major Donation</businessProcess>
+        <label>Sponsorship</label>
+        <picklistValues>
+            <picklist>Dedication_Acknowledgement_Type__c</picklist>
+            <values>
+                <fullName>Email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mail</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>None</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Dedication_Type__c</picklist>
+            <values>
+                <fullName>in honor</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>in memory</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>on behalf</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>DeliveryInstallationStatus__c</picklist>
+            <values>
+                <fullName>Completed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>In progress</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yet to begin</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Do_It_Again__c</picklist>
+            <values>
+                <fullName>1 - Absolutely Not</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2 - Probably not</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 - Probably</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 - Yes%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>5 - Enthusiastic yes%21</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>ForecastCategoryName</picklist>
+            <values>
+                <fullName>Best Case</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Commit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Omitted</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pipeline</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Fund__c</picklist>
+            <values>
+                <fullName>Annual Fund</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Building Fund</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Capital</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>LeadSource</picklist>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Leadership_Level__c</picklist>
+            <values>
+                <fullName>1 - Volunteer</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2 - Leader</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Location_of_Task__c</picklist>
+            <values>
+                <fullName>Location 1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Location 3</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Matching_Status__c</picklist>
+            <values>
+                <fullName>Not Posted</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Posted</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Membership_Type__c</picklist>
+            <values>
+                <fullName>New Membership</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Payment_Type__c</picklist>
+            <values>
+                <fullName>Cash</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Check</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Click and Pledge</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Credit Card</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EFT</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Stock</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>Annually</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 2 Weeks</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Every 6 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Monthly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Quarterly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Weekly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yearly</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Program_Designation__c</picklist>
+            <values>
+                <fullName>Annual cleanup</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Instream structures</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Legal</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Quality_of_Supervisor_Support__c</picklist>
+            <values>
+                <fullName>1 - Not at all%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2 - Not completely%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 - It was adequate%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 - Yes</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>5 - Enthusiastic yes%21</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>RecurringMethod__c</picklist>
+            <values>
+                <fullName>Installment</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Subscription</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Supervisor_Satisfaction__c</picklist>
+            <values>
+                <fullName>1 - Inadequate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2 - Okay</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3 - Good</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4 - Excellent</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>5 - Amazing%21</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Type</picklist>
+            <values>
+                <fullName>Complimentary Membership</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Matching Gift</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Membership</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Memorial Gift</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>New Member</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Renewal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Sponsorship</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
         <fullName>Volunteer_Task</fullName>
         <active>true</active>
         <businessProcess>Volunteer_Task</businessProcess>
@@ -5365,6 +5798,10 @@ TEXT(DAY(TODAY()))
                 <default>false</default>
             </values>
             <values>
+                <fullName>Self-reported Vol Task</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Sponsorship</fullName>
                 <default>false</default>
             </values>
@@ -5374,6 +5811,7 @@ TEXT(DAY(TODAY()))
         <customTabListAdditionalFields>OPPORTUNITY.NAME</customTabListAdditionalFields>
         <customTabListAdditionalFields>ACCOUNT.NAME</customTabListAdditionalFields>
         <customTabListAdditionalFields>OPPORTUNITY.CLOSE_DATE</customTabListAdditionalFields>
+        <listViewButtons>Enter_Account_Contact_Contribution</listViewButtons>
         <lookupDialogsAdditionalFields>OPPORTUNITY.NAME</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>ACCOUNT.NAME</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>ACCOUNT.SITE</lookupDialogsAdditionalFields>
@@ -5386,13 +5824,15 @@ TEXT(DAY(TODAY()))
         <searchResultsAdditionalFields>OPPORTUNITY.STAGE_NAME</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>OPPORTUNITY.CLOSE_DATE</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
+        <searchResultsCustomButtons>Enter_Account_Contact_Contribution</searchResultsCustomButtons>
+        <searchResultsCustomButtons>Approve_Vol_Tasks</searchResultsCustomButtons>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Must_enter_a_primary_campaign_source</fullName>
         <active>true</active>
         <description>On entering a contribution, must enter a primary campaign source</description>
-        <errorConditionFormula>ISBLANK( CampaignId )</errorConditionFormula>
+        <errorConditionFormula>AND($User.FirstName != &apos;IATSAura&apos;,$User.Alias != &apos;guest&apos;, CampaignId == null)</errorConditionFormula>
         <errorDisplayField>CampaignId</errorDisplayField>
         <errorMessage>Please enter the name of the campaign activity from which this contribution came.  In a pinch, you can use &quot;Unknown&quot; or &quot;Individual Initiative&quot;</errorMessage>
     </validationRules>
@@ -5400,9 +5840,22 @@ TEXT(DAY(TODAY()))
         <fullName>Must_fill_in_Primary_Contact</fullName>
         <active>true</active>
         <description>If Primary Contact left blank</description>
-        <errorConditionFormula>ISNULL( Contact__c )</errorConditionFormula>
+        <errorConditionFormula>AND($User.FirstName != &apos;IATSAura&apos;,$User.Alias != &apos;guest&apos;,ISBLANK(Contact__c))</errorConditionFormula>
         <errorMessage>Please enter a Primary Contributor.  (This is the person the Thank You letter will go to.)</errorMessage>
     </validationRules>
+    <webLinks>
+        <fullName>Approve_Vol_Tasks</fullName>
+        <availability>online</availability>
+        <description>When volunteers submit tasks online, approve them here.</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Approve Vol Tasks</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>/apex/ApproveVolTaskPage</url>
+    </webLinks>
     <webLinks>
         <fullName>DeliveryStatus</fullName>
         <availability>online</availability>
@@ -5421,6 +5874,19 @@ TEXT(DAY(TODAY()))
         <showsLocation>true</showsLocation>
         <showsStatus>true</showsStatus>
         <url>http://www.fedex.com/cgi-bin/tracking?tracknumbers={!Opportunity_Tracking_Number}&amp;action=track&amp;language=english&amp;cntry_code=us</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Enter_Account_Contact_Contribution</fullName>
+        <availability>online</availability>
+        <description>List Button</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Enter Account Contact Contribution</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/EACCLightningWrapperPage?step=1&amp;a=1</url>
     </webLinks>
     <webLinks>
         <fullName>Organization_Donation_History</fullName>

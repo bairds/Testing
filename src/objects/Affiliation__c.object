@@ -297,14 +297,14 @@
     <fields>
         <fullName>Current__c</fullName>
         <externalId>false</externalId>
-        <formula>IF( AND(Start_Date__c &lt;= TODAY(), TODAY() &lt;=  End_date__c) , TRUE, FALSE)</formula>
+        <formula>IF( AND(Start_Date__c &lt;= TODAY(), TODAY() &lt;=  End_Date__c) , TRUE, FALSE)</formula>
         <label>Current?</label>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>End_date__c</fullName>
+        <fullName>End_Date__c</fullName>
         <description>Date the affiliation ended.  For instance, date that Helen was no longer on the Board.</description>
         <externalId>false</externalId>
         <inlineHelpText>Date the affiliation ended.  For instance, date that Helen was no longer on the Board.</inlineHelpText>

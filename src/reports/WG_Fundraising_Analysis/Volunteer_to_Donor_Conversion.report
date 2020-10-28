@@ -18,6 +18,7 @@
     <filter>
         <criteriaItems>
             <column>Account.First_Contrib_Cat__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Volunteer Task</value>

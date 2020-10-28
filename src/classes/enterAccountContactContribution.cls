@@ -450,7 +450,7 @@ public class enterAccountContactContribution
                update l;
            else if(co != null && co.Id != null)
                update co;
-            else if(acct != null) {
+            else if(acct.id != null) {
                 if(CreateDummyContact) {
                     for(Contact co : cos) {
                         if(!co.Protected__c) {
@@ -465,7 +465,7 @@ public class enterAccountContactContribution
                     update cos;
                 }
 
-               update acct;
+               // update acct;
             }
         }
         else {

@@ -362,6 +362,21 @@
         <label>SignInList</label>
     </fieldSets>
     <fieldSets>
+        <fullName>VolPortal</fullName>
+        <description>Additional contact fields to be added to the volunteer portal.</description>
+        <displayedFields>
+            <field>Volunteer_Skills__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Communication_Preference__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <label>VolPortal</label>
+    </fieldSets>
+    <fieldSets>
         <fullName>eACContactFields</fullName>
         <description>in enterAccountContacts, the additional custom fields you want displayed.</description>
         <label>eACContactFields</label>
@@ -631,6 +646,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Contrib_Date__c</fullName>
+        <description>The first time this contact gave a contribution of any kind.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The first time this contact gave a contribution of any kind.</inlineHelpText>
+        <label>First Contrib Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>First_Contrib_Source__c</fullName>
         <description>From ManageContribs</description>
         <externalId>false</externalId>
@@ -837,6 +862,16 @@
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Last_Email_Overwrite__c</fullName>
+        <description>The last date/time that an external process (like Salsa or some other external app) overwrote the primary Email field. We capture this so that you can check on this change and make sure that it&apos;s what you want.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date/time that an external process (like Salsa or some other external app) overwrote the primary Email field. We capture this so that you can check on this change and make sure that it&apos;s what you want.</inlineHelpText>
+        <label>Last Email Overwrite</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
         <fullName>Last_Year_Donations__c</fullName>
         <description>Individual donations from the last calendar year.</description>
         <externalId>false</externalId>
@@ -885,6 +920,18 @@
         <inlineHelpText>Include here any legacy ID number from the old database.  A hard-learned lesson: If you ever want to correct errors in data import, it&apos;s very helpful to have this.</inlineHelpText>
         <label>Legacy Contact ID</label>
         <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Legacy_Emails__c</fullName>
+        <description>Store other emails here.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Store other emails here, like this:  Home: johnd@home.org.  Work: Johnd@abc.com.  When you need to use them, type them into the &quot;Email to use&quot; field.  (It&apos;s clunky but it always works.)</inlineHelpText>
+        <label>Legacy Emails</label>
+        <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Text</type>
@@ -991,26 +1038,6 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(MailingPostalCode),
             <valueSetDefinition>
                 <sorted>false</sorted>
                 <value>
-                    <fullName>Deep Mine updates</fullName>
-                    <default>false</default>
-                    <label>Deep Mine updates</label>
-                </value>
-                <value>
-                    <fullName>Allegheny Energy Center updates</fullName>
-                    <default>false</default>
-                    <label>Allegheny Energy Center updates</label>
-                </value>
-                <value>
-                    <fullName>Trail news</fullName>
-                    <default>false</default>
-                    <label>Trail news</label>
-                </value>
-                <value>
-                    <fullName>Youghiogheny River issues</fullName>
-                    <default>false</default>
-                    <label>Youghiogheny River issues</label>
-                </value>
-                <value>
                     <fullName>Shale Gas issues</fullName>
                     <default>false</default>
                     <label>Shale Gas issues</label>
@@ -1019,6 +1046,11 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(MailingPostalCode),
                     <fullName>Volunteer opportunities</fullName>
                     <default>false</default>
                     <label>Volunteer opportunities</label>
+                </value>
+                <value>
+                    <fullName>e-newsletter</fullName>
+                    <default>false</default>
+                    <label>e-newsletter</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1175,18 +1207,6 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(MailingPostalCode),
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Other_emails__c</fullName>
-        <description>Store other emails here.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Store other emails here, like this:  Home: johnd@home.org.  Work: Johnd@abc.com.  When you need to use them, type them into the &quot;Email to use&quot; field.  (It&apos;s clunky but it always works.)</inlineHelpText>
-        <label>Other emails</label>
-        <length>255</length>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Over_18__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -1236,9 +1256,9 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(MailingPostalCode),
                     <label>Work</label>
                 </value>
                 <value>
-                    <fullName>Alternate</fullName>
+                    <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Alternate</label>
+                    <label>Other</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -1308,6 +1328,16 @@ TEXT(DAY(TODAY()))
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>VolToken__c</fullName>
+        <externalId>false</externalId>
+        <label>VolToken</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Vol_Event_Count__c</fullName>
         <description>How many volunteer events has this person participated in?</description>
         <externalId>false</externalId>
@@ -1331,81 +1361,16 @@ Project Clean Stream
 Fundraising
 Office Work
 Public Relations
-Education and Outreach</description>
+Education and Outreach
+Not interested in volunteering</description>
         <externalId>false</externalId>
         <label>Volunteer Interests</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>MultiselectPicklist</type>
         <valueSet>
-            <valueSetDefinition>
-                <sorted>false</sorted>
-                <value>
-                    <fullName>Education and Outreach</fullName>
-                    <default>false</default>
-                    <label>Education and Outreach</label>
-                </value>
-                <value>
-                    <fullName>Fundraising</fullName>
-                    <default>false</default>
-                    <label>Fundraising</label>
-                </value>
-                <value>
-                    <fullName>Invasive Species Removal</fullName>
-                    <default>false</default>
-                    <label>Invasive Species Removal</label>
-                </value>
-                <value>
-                    <fullName>Mining Issue</fullName>
-                    <default>false</default>
-                    <label>Mining Issue</label>
-                </value>
-                <value>
-                    <fullName>Nursery Maintenance</fullName>
-                    <default>false</default>
-                    <label>Nursery Maintenance</label>
-                </value>
-                <value>
-                    <fullName>Office Administration</fullName>
-                    <default>false</default>
-                    <label>Office Administration</label>
-                </value>
-                <value>
-                    <fullName>Public Relations</fullName>
-                    <default>false</default>
-                    <label>Public Relations</label>
-                </value>
-                <value>
-                    <fullName>Rainbarrel</fullName>
-                    <default>false</default>
-                    <label>Rainbarrel</label>
-                </value>
-                <value>
-                    <fullName>Stream Cleanup</fullName>
-                    <default>false</default>
-                    <label>Stream Cleanup</label>
-                </value>
-                <value>
-                    <fullName>Street Tree</fullName>
-                    <default>false</default>
-                    <label>Street Tree</label>
-                </value>
-                <value>
-                    <fullName>Trail Maintenance</fullName>
-                    <default>false</default>
-                    <label>Trail Maintenance</label>
-                </value>
-                <value>
-                    <fullName>Tree Planting</fullName>
-                    <default>false</default>
-                    <label>Tree Planting</label>
-                </value>
-                <value>
-                    <fullName>Water Quality Monitoring</fullName>
-                    <default>false</default>
-                    <label>Water Quality Monitoring</label>
-                </value>
-            </valueSetDefinition>
+            <restricted>true</restricted>
+            <valueSetName>Volunteer_Interests</valueSetName>
         </valueSet>
         <visibleLines>10</visibleLines>
     </fields>
@@ -1650,6 +1615,7 @@ Education and Outreach</description>
         <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE4</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE5</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CONTACT.PHONE6</lookupPhoneDialogsAdditionalFields>
+        <lookupPhoneDialogsAdditionalFields>ACCOUNT.PHONE1</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>FULL_NAME</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>ACCOUNT.NAME</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>ACCOUNT.SITE</searchResultsAdditionalFields>
@@ -1657,7 +1623,7 @@ Education and Outreach</description>
         <searchResultsAdditionalFields>CONTACT.EMAIL</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
-    <sharingModel>ControlledByParent</sharingModel>
+    <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Choose_One_of_the_Emails_to_be_Preferred</fullName>
         <active>false</active>
@@ -1673,8 +1639,15 @@ Education and Outreach</description>
         <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
     </validationRules>
     <validationRules>
-        <fullName>Preferred_Email_Choice_Must_Exist</fullName>
+        <fullName>Contact_must_have_an_account</fullName>
         <active>true</active>
+        <errorConditionFormula>AND($User.FirstName != &apos;IATSAura&apos;,$User.Alias != &apos;guest&apos;, AccountId == null)</errorConditionFormula>
+        <errorDisplayField>AccountId</errorDisplayField>
+        <errorMessage>Please assign the contact to an account.  Contacts without accounts can only be seen by you, so they get lost.</errorMessage>
+    </validationRules>
+    <validationRules>
+        <fullName>Preferred_Email_Choice_Must_Exist</fullName>
+        <active>false</active>
         <description>Show error if Preferred Email selection is not populated.</description>
         <errorConditionFormula>or(
             and( ispickval(Preferred_Email__c , &quot;Personal&quot;) , Personal_Email__c = null ),
@@ -1761,6 +1734,25 @@ Education and Outreach</description>
         <showsLocation>false</showsLocation>
         <showsStatus>false</showsStatus>
         <url>https://mail.google.com/mail?view=cm&amp;tf=0&amp;to={!Contact.Email}&lt;{!Contact.LastName}, {!Contact.FirstName}&gt;&amp;tf=1</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Send_Vol_Portal_Link</fullName>
+        <availability>online</availability>
+        <description>User sends to the contact the link for their Volunteer Portal.</description>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Send Vol Portal Link</masterLabel>
+        <openType>newWindow</openType>
+        <page>SendVolPortalLinkPage</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
     </webLinks>
     <webLinks>
         <fullName>View_Connections</fullName>

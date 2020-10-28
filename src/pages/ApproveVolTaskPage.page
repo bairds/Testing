@@ -1,0 +1,117 @@
+<!--
+ - Created by Baird on 8/27/2020.
+ -->
+
+<apex:page id="ApproveVolTaskPage" Controller="approveVolTasks" showheader="true"
+           standardStylesheets="false">
+    <!--<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+    <header>
+        <style>
+
+            .titlebar {
+                text-align: center;
+                height: auto;
+                background-color: #406B8C;
+                color: #fff;
+                font-size: large;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
+            }
+
+            .form-content {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin: 10px;
+                background-color: ghostwhite;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+            }
+
+            .btnSubmit {
+                border: none;
+                border-radius: 1.5rem;
+                spadding: 1%;
+                cursor: pointer;
+                background: #2C6636;
+                color: #fff;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
+            }
+
+            .CustomQuestion{
+                Margin-left: 16px;
+            }
+        </style>
+    </header>
+
+    <apex:Form >
+        <div class="WGPageTitle">Volunteers Submitted Tasks and Hours</div>
+        <apex:outputPanel html-class="container register-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <apex:outputText value=" "/>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div class="WGPageTitle2 br6 d-none d-sm-block">Volunteer and Task</div>
+                </div>
+                <div class="col-sm-4 col-md-3 d-none d-sm-block">
+                    <div class="WGPageTitle2 br6">Campaign</div>
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    <apex:outputText value=" "/>
+                </div>
+                <div class="col-md-2">
+                    <apex:outputText value=" "/>
+                </div>
+            </div>
+            <apex:repeat value="{!ListOpps}" var="o">
+                <div class="row">
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                    <div class="col-2 d-sm-none">
+                        Task:
+                    </div>
+                    <div class="col-10 col-sm-4 col-md-3">
+                        {!o.Contact__r.FirstName} {!o.Contact__r.LastName}<br/>
+                        <apex:outputField value="{!o.Date_and_Time_Start__c} "/> to <apex:outputText value=" "/><apex:outputField value="{!o.Date_and_Time_End__c}"/><br/>
+                        {!o.Hours_Actual__c} hours<br/>
+                        <i>Description: </i>{!o.Description}<br/>
+                    </div>
+                    <div class="col-2 d-sm-none">
+                    </div>
+                    <div class="col-10 col-sm-4 col-md-3">
+                        <i>Volunteer's guess:</i> {!o.Campaign_Guess__c}<br/>
+                        <div class="alerttext">Correct Campaign:</div>
+                        <apex:inputField value="{!o.CampaignId}"/><br/>
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-2">
+                        <br/><br/>
+                        <apex:inputField value="{!o.StageName}" styleClass="form-control"/>
+                    </div>
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                </div>
+                <br/>
+            </apex:repeat>
+            <div class="tac">
+                <apex:commandButton value="Submit Approved Tasks and Close" action="{!submitTasks}" styleClass="btn fwb bgprimary"/>
+            </div>
+        </apex:outputPanel>
+    </apex:Form>
+</apex:page>

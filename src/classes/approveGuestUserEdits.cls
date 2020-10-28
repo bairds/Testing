@@ -2,7 +2,7 @@
  * Created by Baird on 7/17/2020.
  */
 
-public with sharing class ApproveMultipleGUUEdits {
+public with sharing class approveGuestUserEdits {
 
     Public Id GuuId;
     Public List<GuestUserUpdate__c> GUUs { get; set; }
@@ -12,12 +12,12 @@ public with sharing class ApproveMultipleGUUEdits {
     Public Boolean NoContactFound { get; set; }
     Public Boolean ContactProcessed { get; set; }
 
-    public approveMultipleGUUEdits() {
+    public approveGuestUserEdits() {
         GUUs = [
                 SELECT Id, Email__c, FirstName__c,Processed_By__c,
                         LastName__c,HomePhone__c,MailingCity__c,MailingStreet__c,MailingState__c,
                         MailingPostalCode__c,MobilePhone__c,OwnerId,Phone__c,RelatedContact__c,
-                        State__c,Processing_Status__c,GUUOwner__c, Status__c
+                        State__c,Processing_Status__c,GUUOwner__c
                 FROM GuestUserUpdate__c
                 where Processing_Status__c = 'Review'
         ];
@@ -42,6 +42,8 @@ public with sharing class ApproveMultipleGUUEdits {
             ApexPages.addMessage(NoGUU);
         }
         ContactProcessed = false;
+        system.debug('GuestUserUpdate List is ' + GUUs);
+        system.debug('CtctMap is ' + CtctMap);
     }
 
     public PageReference submitEdits() {
@@ -76,7 +78,7 @@ public with sharing class ApproveMultipleGUUEdits {
 
     public PageReference rejectEdits() {
         *//*GUU.Processed_By__c = UserInfo.getUserId();
-        GUU.Status__c = 'Rejected';
+        GUU.Processing_Status__c = 'Rejected';
         ContactProcessed = true;*//*
         return null;
     }*/

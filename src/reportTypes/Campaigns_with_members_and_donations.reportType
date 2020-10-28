@@ -864,7 +864,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Other_emails__c</field>
+            <field>Legacy_Emails__c</field>
             <table>Campaign.ContactCampaignMembers</table>
         </columns>
         <columns>
@@ -1468,11 +1468,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Next_Installment_Date__c</field>
-            <table>Campaign.ContactCampaignMembers.Contributions__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Next_Payment_Due__c</field>
             <table>Campaign.ContactCampaignMembers.Contributions__r</table>
         </columns>
         <columns>

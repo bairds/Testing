@@ -8,13 +8,16 @@
 // incorporate into app
 // May 2018 Refactor, make variable names uniform,
 // May 2020 Add EmergencyContactName, Phone to response
+// July 2020 "without sharing"
+
 
 @RestResource(urlMapping='/SignInRESTAPI2/*')
-global with sharing class SignInREST2 {
+global without sharing class SignInREST2 {
 
     @HttpGet
     global static void getCampaigns() {
         System.debug('Started httpget routine');
+        String waiverText;
         Campaign SelectedCampaign;
         RestContext.response.addHeader('Content-Type', 'application/json');
         // Create the body of the response
@@ -30,7 +33,8 @@ global with sharing class SignInREST2 {
             } else {
                 if (RestContext.request.params.containsKey('campaignId')) {
                     String campaignId = RestContext.request.params.get('campaignId');
-                    SelectedCampaign = [SELECT Id, Name, Campaign.Waiver__c, Campaign.NrHoursToAssign__c, Event_Date_Time__c, Event_End_Time__c, Event_Location__c, OwnerId,
+                    SelectedCampaign = [SELECT Id, Name, Campaign.Waiver__c, Campaign.NrHoursToAssign__c, Event_Date_Time__c,
+                            Event_End_Time__c, Event_Location__c, OwnerId,Signup_Questions__c,
                     (SELECT CampaignMember.Id, CampaignMember.FirstName,
                             CampaignMember.LastName, CampaignMember.Email, CampaignMember.Phone, CampaignMember.Street, CampaignMember.City,
                             CampaignMember.State, CampaignMember.PostalCode, CampaignMember.Status, CampaignMember.Send_Member_Info__c,
@@ -50,6 +54,7 @@ global with sharing class SignInREST2 {
                     FROM Campaign WHERE IsActive = true AND Id = :campaignId];
                     system.debug('UserId is ' + SelectedCampaign.OwnerId);
                     User Organizer = [Select Phone, Email, FirstName, LastName from User where Id =: SelectedCampaign.OwnerId];
+                    If (SelectedCampaign.Waiver__c!=null) WaiverText = [SELECT Body__c from Text_Document__c WHERE Id =: SelectedCampaign.Waiver__c].Body__c;
                     List<CampaignMemberWrapper> CMWs = new List<CampaignMemberWrapper>();
                     for (CampaignMember cm : SelectedCampaign.CampaignMembers)
                     {
@@ -57,8 +62,8 @@ global with sharing class SignInREST2 {
                         cmw.campaignId = SelectedCampaign.Id;
                         cmw.recordId = cm.ContactId==null ? cm.LeadId : cm.ContactId;
                         cmw.memberId = cm.Id;
-                        cmw.firstName = cm.FirstName;
-                        cmw.lastName = cm.LastName;
+                        cmw.FirstName = cm.FirstName;
+                        cmw.LastName = cm.LastName;
                         cmw.email = cm.Email;
                         cmw.phone = cm.Phone;
                         cmw.street = cm.Street;
@@ -83,13 +88,14 @@ global with sharing class SignInREST2 {
                         CMWs.add(cmw);
                     }
                     CR.CMWs = CMWs;
-                    CR.Waiver = SelectedCampaign.Waiver__c;
+                    If (WaiverText!=null) CR.Waiver = WaiverText;
                     CR.EventLocation= SelectedCampaign.Event_Location__c;
                     CR.EventStartTime = SelectedCampaign.Event_Date_Time__c;
                     CR.EventEndTime = SelectedCampaign.Event_End_Time__c;
                     CR.OrganizerName = Organizer.FirstName == null ? Organizer.LastName : Organizer.FirstName + ' ' + Organizer.LastName;
                     CR.OrganizerPhone = Organizer.Phone;
                     CR.OrganizerEmail = Organizer.Email;
+                    if (SelectedCampaign.Signup_Questions__c != null) CR.RequireEmergencyContact = SelectedCampaign.Signup_Questions__c.CONTAINS('Require Emergency Contact Info');
                     System.debug('Response is CR ' + CR);
                 }
             }
@@ -104,6 +110,7 @@ global with sharing class SignInREST2 {
 
     @HttpPost
     global static Response upsertCampaignMembers() {
+        Id VolTaskRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId();
         System.debug('Started httppost routine');
         WGSettings__mdt Setting = WGHelpers.getWGSettings();
         CampaignMember checkcm;
@@ -113,27 +120,50 @@ global with sharing class SignInREST2 {
         Response res = new Response();
         if (RestContext.request.params.get('Org_Id') != null && RestContext.request.params.get('Org_Id') == UserInfo.getOrganizationId()) {
             /*try {*/
-                String body = RestContext.request.requestBody.toString();
+            String body = RestContext.request.requestBody.toString();
+            If (body.contains('SendThankYouEmails')) {
+                SendTYTrigger STYT = (SendTYTrigger) json.deserialize(body, SendTYTrigger.class);
+                if (STYT.SendThankYouEmails == true) {
+                    // Are there any emails to be sent?
+                    List<CampaignMember> TYEmailRecips = [
+                            SELECT ID, Firstname, Lastname, Add_To_TY_Message__c,
+                                    Autosend_TY_Msg__c, Dear__c, Email, Event_Date__c, Invite_to_Next_Level__c, Send_Member_Info__c,
+                                    Unsubscribed__c, AutosendTY__c
+                            from CampaignMember
+                            where campaignId = :STYT.CampId AND AutosendTY__c = 'send' and Email != NULL
+                    ];
+                    if (TYEmailRecips.size() == 0) {
+                        res.statusCode = 500;
+                        res.message = 'Found no campaign members with Autosend Thank You Email set to Send.  Have you already synced your changes?  Or did you already send the Thank You Emails?';
+                    } else {
+                        // run sendTYEmails
+                        res.statusCode = 200;
+                        res.message = 'Sending Thank You Emails';
+                    }
+                }
+            } else {
                 List<CampaignMemberWrapper> members = (List<CampaignMemberWrapper>) JSON.deserialize(body, List<CampaignMemberWrapper>.class);
                 Map<String, ResponseCM> ResponseCMMap = new Map<String, ResponseCM>();
-                for(CampaignMemberWrapper member : members) {
-                    System.debug('member is ' + member);
+                for (CampaignMemberWrapper member : members) {
+                    System.debug('After receiving JSON request member is ' + member);
                     CampaignMember cm = new CampaignMember();
                     System.debug('CAmpaignMemberWrapper member is ' + member);
                     // fetch campaign
-                    If (SelectedCampaign==null) SelectedCampaign = [SELECT Id, Name, Event_Date_Time__c FROM Campaign WHERE Id =: member.campaignId];
+                    If (SelectedCampaign == null) SelectedCampaign = [SELECT Id, Name, Event_Date_Time__c FROM Campaign WHERE Id = :member.campaignId];
                     // Does person already exist in campaign?  If not, identify them and create a campaign member record
-                    if (member.memberId!= null) {
+                    if (member.memberId != null) {
                         try {
-                            checkcm = [select Id, ContactId, Contact.AccountId, Contact.FirstName, Contact.LastName, LeadId, CampaignId, AutosendTY__c from CampaignMember where Id = :member.memberId];
-                        } catch(QueryException qe){
-                            checkcm=null;
+                            checkcm = [select Id, ContactId, Contact.AccountId, FirstName, LastName,
+                                    LeadId, CampaignId, AutosendTY__c from CampaignMember where Id = :member.memberId];
+                        } catch (QueryException qe) {
+                            checkcm = null;
                         }
                     }
-                    if (member.memberId==null || checkcm==null) {
+                    System.debug('After querying based on JSON request info member is ' + member);
+                    if (member.memberId == null || checkcm == null) {
                         Contact ct = new Contact();
-                        ct.FirstName = member.firstName;
-                        ct.LastName = member.lastName;
+                        ct.FirstName = member.FirstName;
+                        ct.LastName = member.LastName;
                         ct.Email = member.email;
                         ct.Phone = member.phone;
                         ct.MailingStreet = member.street;
@@ -143,7 +173,7 @@ global with sharing class SignInREST2 {
                         // identify or create a contact or lead
                         String[] gotResult = identifyOrCreatePerson.identifyorCreatePerson(ct);
                         // If a lead convert to contact
-                        if(gotResult[1] == 'Lead') {
+                        if (gotResult[1] == 'Lead') {
                             List<Id> results = ConvertLeadToContact.ConvertLeadToContact(gotResult[0]);
                             gotResult[0] = results[0];
                             ConvertedAccountId = Results[1];
@@ -156,24 +186,31 @@ global with sharing class SignInREST2 {
                         insert newcm;
                         cm = newcm;
                     } else {
-                        cm = checkcm;
+                        if (checkcm.ContactId == null && checkcm.LeadId != null) {
+                            List<Id> results = ConvertLeadToContact.ConvertLeadToContact(checkcm.LeadId);
+                            cm = [SELECT Id, ContactId, Contact.FirstName, Contact.LastName, Contact.AccountId,
+                            FirstName, LastName, CampaignId from CampaignMember
+                            WHERE ContactId =: results[0] AND CampaignId =: SelectedCampaign.Id LIMIT 1];
+                            // insert cm;
+                            system.debug('After conversion checkcm is ' + checkcm);
+                            system.debug('After conversion cm is ' + cm);
+                        }
                     }
                     // Update campaign member;
                     // the status will be Attended for new campaign members via App
                     cm.Status = member.status;
                     cm.Nr_in_Group__c = 1; // Each person entered in the SignInApp is just one person, not a group
                     // it is manually added from App
-                    cm.TempAndroidId__c = member.tempId;
-                    cm.Campaign_Member_Source__c = 'From WG Signin App';
+                    cm.Campaign_Member_Source__c = 'From WG Signin mobile app';
                     // holds the result of member creation
-                    if (member.SendMemberInfo!=null) cm.Send_Member_Info__c = member.SendMemberInfo;
+                    if (member.SendMemberInfo != null) cm.Send_Member_Info__c = member.SendMemberInfo;
                     cm.Follow_Up_Task__c = member.FollowUpTask;
                     cm.Interests__c = member.Interests;
-                    cm.Add_To_TY_Message__c = member.AddToTyMessage;
+                    if (member.AddToTyMessage != null) cm.Add_To_TY_Message__c = member.AddToTyMessage.capitalize();
                     if (member.VolunteerHours != null) cm.Hours__c = member.VolunteerHours;
                     system.debug('Setting.HourlyVolunteerRate__c is' + Setting.HourlyVolunteerRate__c);
-                    if (member.VolunteerHours != null && Setting.HourlyVolunteerRate__c != null) cm.HoursValue__c = cm.Hours__c*Setting.HourlyVolunteerRate__c;
-                    cm.TempAndroidId__c = member.tempId;
+                    if (member.VolunteerHours != null && Setting.HourlyVolunteerRate__c != null) cm.HoursValue__c = cm.Hours__c * Setting.HourlyVolunteerRate__c;
+                    if (member.tempId != null) cm.TempAndroidId__c = member.tempId;
                     system.debug('Member.InviteNextLevel is ' + Member.InviteNextLevel);
                     if (member.InviteNextLevel == true) cm.Invite_to_Next_Level__c = member.InviteNextLevel;
                     if (member.AgreedToWaiver != null) cm.Agreed_to_Waiver__c = member.AgreedToWaiver;
@@ -181,21 +218,32 @@ global with sharing class SignInREST2 {
                     if (member.EmergencyContactName != null) cm.Emergency_Contact_Name__c = member.EmergencyContactName;
                     if (member.EmergencyContactPhone != null) cm.Emergency_Contact_Phone__c = member.EmergencyContactPhone;
                     cm.Request_Body__c = String.valueOf(member);
+                    system.debug('After loading data cm is now ' + cm);
                     system.debug('Just set cm.Request_Body__c to ' + cm.Request_Body__c);
 
-                    update cm;
+                    //Insert attachment connected to Contact
+                    if(member.SignaturePDF != null){
+                        String jsonStr = '<Base64 String>';
+                        Attachment attach = new Attachment();
+                        attach.contentType = 'application/pdf';
+                        attach.name = SelectedCampaign.Name.Left(40)+' '+member.FirstName+' '+member.LastName+ '.pdf';
+                        attach.parentId = cm.ContactId;
+                        attach.body = EncodingUtil.base64Decode(jsonStr);
+                        insert attach;
+                        cm.SignaturePDFId__c = attach.Id;
+                    }
 
                     //Insert contribution
                     if (cm.Hours__c > 0) {
                         // Convert lead if necessary
                         // Id ConvertedAccountId;
                         // SHOULD HAVE BEEN CONVERTED ALREADY
-                        if (cm.ContactId == null) {
-                            List<Id> Results = ConvertLeadToContact.ConvertLeadToContact(cm.LeadId);
-                            // cm.ContactId = Results[0];
-                            ConvertedAccountId = Results[1];
-                        } // end conversion of lead
-                        String Oppname = member.lastName == null ? cm.Contact.FirstName + ' ' + cm.Contact.LastName : member.firstName + ' ' + member.lastName;
+//                        if (cm.ContactId == null) {
+//                            List<Id> Results = ConvertLeadToContact.ConvertLeadToContact(cm.LeadId);
+//                            // cm.ContactId = Results[0];
+//                            ConvertedAccountId = Results[1];
+//                        } // end conversion of lead
+                        String Oppname = member.FirstName + ' ' + member.LastName;
                         System.debug('Oppname is ' + Oppname);
                         System.debug('SelectedCampaign.name is ' + SelectedCampaign.Name);
                         System.debug('SelectedCampaign.Event_Date_Time__c.date() is ' + SelectedCampaign.Event_Date_Time__c.date());
@@ -207,15 +255,15 @@ global with sharing class SignInREST2 {
                                 Contact__c = cm.ContactId,
                                 CampaignId = SelectedCampaign.Id,
                                 AccountId = ConvertedAccountId == null ? cm.Contact.AccountId : ConvertedAccountId,
-                                RecordTypeId=[select Id from RecordType where Name = 'Volunteer Task'].Id);
+                                RecordTypeId = VolTaskRTID);
                         ListOpps.add(newOpp);
                     }
-
+                    update cm;
 
                     //Prepare response to app
                     ResponseCM cmr = new ResponseCM();
                     cmr.memberId = cm.Id;
-                    cmr.recordId = cm.ContactId==null ? cm.LeadId : cm.ContactId;
+                    cmr.recordId = cm.ContactId == null ? cm.LeadId : cm.ContactId;
                     cmr.recordType = 'Contact';
                     cmr.SendMemberInfo = member.SendMemberInfo != null ? member.SendMemberInfo : null ;
                     cmr.AutosendTY = member.AutosendTY != null ? member.AutosendTY : null ;
@@ -228,15 +276,16 @@ global with sharing class SignInREST2 {
                     cmr.tempId = member.tempId;
                     cmr.Status = member.status;
                     cmr.campaignId = SelectedCampaign.Id;
-                    ResponseCMMap.put(cm.Id,cmr);
+                    ResponseCMMap.put(cm.Id, cmr);
 
                 } // end loop through members
+                system.debug('ListOpps is ' + ListOpps);
                 Insert ListOpps;
                 res.statusCode = 200;
                 res.message = 'OK';
                 res.cmrMap = ResponseCMMap;
                 System.debug('Assigning result to map. Results sent back to app is now ' + res);
-           /* } catch (DmlException ex) {
+                /* } catch (DmlException ex) {
                 res.statusCode = 500;
                 res.message = ex.getMessage();
                 System.debug('##### --> ' + ex.getMessage());
@@ -245,7 +294,8 @@ global with sharing class SignInREST2 {
                 res.message = ex.getMessage();
                 System.debug('##### --> ' + ex.getMessage());
             }*/
-            System.debug('POST returns response: ' + res);
+                System.debug('POST returns response: ' + res);
+            }
         }
         return res;
     }
@@ -289,8 +339,8 @@ global with sharing class SignInREST2 {
         public String recordId; // for contactId or LeadId
         public String memberId;
         public String tempId;
-        public String firstName;
-        public String lastName;
+        public String FirstName;
+        public String LastName;
         public String email;
         public String phone;
         public String street;
@@ -312,6 +362,8 @@ global with sharing class SignInREST2 {
         public Date MemberSince;
         public String EmergencyContactName;
         public String EmergencyContactPhone;
+        public String WaiverText;
+        public String SignaturePDF;
     }
 
     global class CampaignResponse {
@@ -329,6 +381,12 @@ global with sharing class SignInREST2 {
         Public String EventLocation;
         Public Datetime EventStartTime;
         Public Datetime EventEndTime;
+        Public Boolean RequireEmergencyContact;
+    }
+
+    global class SendTYTrigger{
+        public Boolean SendThankYouEmails;
+        public String CampId;
     }
 
 }

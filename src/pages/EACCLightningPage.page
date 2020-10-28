@@ -1,4 +1,4 @@
-<apex:page controller="EACCLightning" sidebar="false" docType="html-5.0" action="{!setEnterContrib}">
+<apex:page controller="EACCLightning" sidebar="false" docType="html-5.0" action="{!setEnterContrib}" showheader="false">
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"/>
     <apex:includeScript value="{!URLFOR($Resource.jQueryUI, 'jquery-ui-1.12.1.custom/jquery-ui.min.js')}"
                         loadOnReady="true"/>
@@ -19,9 +19,11 @@
 
         function CreateAcctCtct() {
             if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
-                var url = '/lightning/n/EACCLightningPage?c__a=2&c__step=2';
+                console.log('UITheme is 4d or 4u');
+                var url = '/apex/EACCLightningPage?c__a=2&c__step=2';
                 sforce.one.navigateToURL(url, true);
             } else {
+                console.log('UITheme is not 4d or 4u');
                 window.location = '?a=2&step=2';
             }
         }
@@ -57,18 +59,21 @@
         }
     </script>
 
-    <apex:form>
-        <apex:pageMessages></apex:pageMessages>
+    <apex:form >
+
+        <apex:actionFunction action="{!step2}" name="step2JS" reRender=""/>
+        
+        <apex:pageMessages ></apex:pageMessages>
         <div class="bPageBlock pr" style="border-top:initial">
             <apex:outputPanel layout="block" html-color="blue" styleClass="dib">
                 <div class="container ma">
                     <div class="title p6">
-                        Manage Account, Contacts &amp; Contributions
+                        Manage Account, Contacts &amp; Contributions, step is {!step}, a is {!a}
                     </div>
 
                     <div class="input control">
                         <div>
-                            <apex:actionRegion>
+                            <apex:actionRegion >
                                 <c:AutoCompleteV2 labelField="Name" SObject="Account;Contact;Lead" valueField="Id"
                                                   syncManualEntry="false" targetField="{!personId}"
                                                   styleClass="autocomplete ma"
@@ -81,7 +86,7 @@
                         </div>
 
                         <input type="button" class="btn" value="create account & contact(s)"
-                               onclick="CreateAcctCtct()"/>
+                               onclick="step2JS()"/>
                         <input type="button" class="btn" value="exit" onclick="ExitEACC()"/>
                     </div>
 
@@ -473,7 +478,6 @@
 
                                                     <tr class="row">
                                                         <td colspan="5" style="padding: 11px;">
-                                                            <!--<apex:actionRegion>-->
                                                                 <c:AutoCompleteV2 labelField="Name" SObject="Contact"
                                                                                   valueField="Id"
                                                                                   syncManualEntry="false"
@@ -486,7 +490,6 @@
                                                                                   importJQuery="false"/>
                                                                 <apex:actionFunction action="{!selectPrimaryContributor}"
                                                                                      name="selectOption2" rerender="PrimaryContributorBlock"/>
-                                                            <!--</apex:actionRegion>-->
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -772,8 +775,7 @@
                                                                 </td>
                                                             </tr>
 
-                                                            <apex:repeat
-                                                                    value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                            <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
                                                                     var="fc">
                                                                 <tr>
                                                                     <td> {!fc.Label} </td>
@@ -834,8 +836,7 @@
                                                                 </td>
                                                             </tr>
 
-                                                            <apex:repeat
-                                                                    value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
+                                                            <apex:repeat value="{!$ObjectType.Contact.FieldSets.eACContactFields}"
                                                                     var="fc">
                                                                 <tr>
                                                                     <td> {!fc.Label} </td>
@@ -972,8 +973,7 @@
                                                     <tr>
                                                         <td> challenge or pledge</td>
                                                         <td>
-                                                            <apex:inputField
-                                                                    value="{!o.Matches_Which_Challenge_or_Pledge__c}"/>
+                                                            <apex:inputField value="{!o.Matches_Which_Challenge_or_Pledge__c}"/>
                                                         </td>
                                                     </tr>
                                                 </apex:outputPanel>
@@ -1080,8 +1080,7 @@
                                                         <div class="mt11 horizontal dn" id="tylf">
                                                             <apex:selectCheckboxes value="{!oc.thankYouLetterFormats}"
                                                                                    styleClass="selectcheckboxes">
-                                                                <apex:selectOptions
-                                                                        value="{!oc.thankYouLetterFormatsList}"/>
+                                                                <apex:selectOptions value="{!oc.thankYouLetterFormatsList}"/>
                                                             </apex:selectCheckboxes>
                                                         </div>
                                                     </td>
@@ -1097,14 +1096,12 @@
 
                                                         <div class="mt11 dn" id="CompMembership">
                                                             <div>
-                                                                <apex:inputField
-                                                                        value="{!CompMembership.Membership_Start_Date__c}"
+                                                                <apex:inputField value="{!CompMembership.Membership_Start_Date__c}"
                                                                         html-placeholder="start date"/>
                                                             </div>
 
                                                             <div class="mt11">
-                                                                <apex:inputField
-                                                                        value="{!CompMembership.Membership_End_Date__c}"
+                                                                <apex:inputField value="{!CompMembership.Membership_End_Date__c}"
                                                                         html-placeholder="end date"/>
                                                             </div>
                                                         </div>
@@ -1168,7 +1165,7 @@
                 </div>
             </apex:outputPanel>
 
-            <c:Loading/>
+            <c:Loading />
         </div>
     </apex:form>
 

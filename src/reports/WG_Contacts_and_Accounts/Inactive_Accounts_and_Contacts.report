@@ -49,18 +49,21 @@
         <booleanFilter>1 OR 2 OR 3</booleanFilter>
         <criteriaItems>
             <column>Account.Active__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Obsolete contact info</value>
         </criteriaItems>
         <criteriaItems>
             <column>EMAIL_BOUNCED_DATE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value></value>
         </criteriaItems>
         <criteriaItems>
             <column>Contact.Deceased__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>1</value>

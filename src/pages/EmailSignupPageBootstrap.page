@@ -9,7 +9,7 @@
 
     <header>
         <style>
-            .note {
+            .titlebar {
                 text-align: center;
                 height: auto;
                 background-color: #406B8C;
@@ -44,6 +44,7 @@
                 font-size: large;
                 font-weight: bolder;
                 margin: 10px;
+                text-align: center;
             }
 
             .CustomQuestion{
@@ -58,7 +59,7 @@
     <apex:outputpanel id="pContactInfo">
         <apex:messages style="color: #red;"/>
 
-        <apex:form>
+        <apex:form >
             <apex:outputPanel html-class="container register-form">
                 <apex:outputPanel rendered="{!NOT(ThanksPage)}">
                     <apex:outputPanel rendered="{!if(CampaignExists && !ISNULL(Camp.Register_Page_Message__c),true,false)}">
@@ -144,7 +145,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div>
+                        <div style="text-align:center">
                             <apex:commandButton action="{!submit}" value="Submit" styleclass="btnSubmit"/>
                         </div>
                     </div>

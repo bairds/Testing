@@ -49,10 +49,10 @@
             <outputObject>Contact</outputObject>
         </objectMapping>
     </duplicateRuleMatchRules>
-    <isActive>true</isActive>
+    <isActive>false</isActive>
     <masterLabel>Standard Rule for Leads with Duplicate Contacts</masterLabel>
     <operationsOnInsert>Report</operationsOnInsert>
     <operationsOnUpdate>Report</operationsOnUpdate>
-    <securityOption>EnforceSharingRules</securityOption>
+    <securityOption>BypassSharingRules</securityOption>
     <sortOrder>1</sortOrder>
 </DuplicateRule>

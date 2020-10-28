@@ -28,13 +28,14 @@ global without sharing class Email_Signup_Controller {
         }
         if (Camp!=null) {
             CampaignExists = true;
+            ThanksMessageExists = Camp.Thank_You_Message__c != null;
         } else {
             CampaignExists = false;
         }
         mailing_list = WGHelpers.getWGSettings().Online_signup_newsletter__c;
         system.debug('In constructor, mailing_list is ' + mailing_list);
         ThanksPage = false;
-        ThanksMessageExists = Camp.Thank_You_Message__c != null;
+        
     }
     
     // public Email_Signup_Controller(){}
@@ -71,6 +72,7 @@ global without sharing class Email_Signup_Controller {
         else {
             if (stype=='Lead') {
                 tempLead = [select id, firstname, lastname, Description, PostalCode, email, Mailing_Lists__c from lead where id = :sID];
+                system.debug('TempLead.Mailing_Lists__c is ' + TempLead.Mailing_Lists__c);
                 /*if (templead.email == null) */ templead.email = pcontact.email;
                 tempLead.LeadSource = 'Online Email Signup';
                 tempLead.email=pcontact.email;
@@ -147,17 +149,19 @@ global without sharing class Email_Signup_Controller {
     
     //Mailing List already exists
     public string getMailingList(string ML){
+        system.debug('Mailing_List string is ' + ML);
         if(Camp!=null && Camp.Add_New_Mailing_List__c == true) {
             if (!ML.contains(Camp.Name)) {
                 return ML + '; ' + Camp.Name;
             } else {
+                system.debug('getMailngList returned ' + ML);
                 return ML;
             }
         } else {
-            if (!ML.contains(mailing_list)) {
-                           return ML + '; ' + mailing_list;
+            if (ML.contains(mailing_list)) {
+                return ML;
             } else {
-                           return ML;
+                return ML + '; ' + mailing_list;
                        }
         }
     }

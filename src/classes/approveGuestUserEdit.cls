@@ -19,7 +19,7 @@ GUU = [
 SELECT Id, Email__c, FirstName__c,Processed_By__c,
 LastName__c,HomePhone__c,MailingCity__c,MailingStreet__c,MailingState__c,
 MailingPostalCode__c,MobilePhone__c,OwnerId,Phone__c,RelatedContact__c,
-State__c,Status__c,GUUOwner__c
+State__c,Processing_Status__c,GUUOwner__c
 FROM GuestUserUpdate__c
 where Id = :GuuId
 ];
@@ -53,7 +53,7 @@ ContactProcessed=false;
 
 public PageReference approveEdits(){
 GUU.Processed_By__c = UserInfo.getUserId();
-GUU.Status__c = 'Processed';
+GUU.Processing_Status__c = 'Approved';
 GUU.GUUOwner__c = Ctct.OwnerId;
 Ctct.Email = GUU.Email__c != null ? GUU.Email__c : Ctct.Email;
 Ctct.FirstName = GUU.FirstName__c != null ? GUU.FirstName__c : Ctct.FirstName;
@@ -73,7 +73,7 @@ return null;
 
 public PageReference cancelEdits(){
 GUU.Processed_By__c = UserInfo.getUserId();
-GUU.Status__c = 'Rejected';
+GUU.Processing_Status__c = 'Rejected';
 Update GUU;
 ContactProcessed = true;
 PageReference ref = new PageReference('/003');

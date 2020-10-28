@@ -662,6 +662,16 @@
         <fullName>LastTransferDate</fullName>
     </fields>
     <fields>
+        <fullName>Last_Email_Overwrite__c</fullName>
+        <description>The last date/time that an external process (like Salsa or some other external app) overwrote the primary Email field. We capture this so that you can check on this change and make sure that it&apos;s what you want.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The last date/time that an external process (like Salsa or some other external app) overwrote the primary Email field. We capture this so that you can check on this change and make sure that it&apos;s what you want.</inlineHelpText>
+        <label>Last Email Overwrite</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
         <fullName>LeadSource</fullName>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Picklist</type>
@@ -673,6 +683,18 @@
         <inlineHelpText>To import from legacy systems</inlineHelpText>
         <label>Legacy Id</label>
         <length>40</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Legacy_Emails__c</fullName>
+        <description>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</description>
+        <externalId>false</externalId>
+        <inlineHelpText>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</inlineHelpText>
+        <label>Legacy Emails</label>
+        <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Text</type>
@@ -797,18 +819,6 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Other_emails__c</fullName>
-        <description>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</description>
-        <externalId>false</externalId>
-        <inlineHelpText>A text field to store other emails for this lead.  Maps to Contact.Other_Emails__c</inlineHelpText>
-        <label>Other emails</label>
-        <length>255</length>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Over_18__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -858,9 +868,9 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                     <label>Work</label>
                 </value>
                 <value>
-                    <fullName>Alternate</fullName>
+                    <fullName>Other</fullName>
                     <default>false</default>
-                    <label>Alternate</label>
+                    <label>Other</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -962,67 +972,18 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
     </fields>
     <fields>
         <fullName>Volunteer_Interests__c</fullName>
+        <description>Alter the values by editing the Volunteer_Interests global value set.</description>
         <externalId>false</externalId>
+        <inlineHelpText>Alter the values by editing the Volunteer_Interests global value set.</inlineHelpText>
         <label>Volunteer Interests</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>MultiselectPicklist</type>
         <valueSet>
-            <valueSetDefinition>
-                <sorted>false</sorted>
-                <value>
-                    <fullName>Education and Outreach</fullName>
-                    <default>false</default>
-                    <label>Education and Outreach</label>
-                </value>
-                <value>
-                    <fullName>Fundraising</fullName>
-                    <default>false</default>
-                    <label>Fundraising</label>
-                </value>
-                <value>
-                    <fullName>Nursery Maintenance</fullName>
-                    <default>false</default>
-                    <label>Nursery Maintenance</label>
-                </value>
-                <value>
-                    <fullName>Office Work</fullName>
-                    <default>false</default>
-                    <label>Office Work</label>
-                </value>
-                <value>
-                    <fullName>Project Clean Stream</fullName>
-                    <default>false</default>
-                    <label>Project Clean Stream</label>
-                </value>
-                <value>
-                    <fullName>Public Relations</fullName>
-                    <default>false</default>
-                    <label>Public Relations</label>
-                </value>
-                <value>
-                    <fullName>Rainbarrel</fullName>
-                    <default>false</default>
-                    <label>Rainbarrel</label>
-                </value>
-                <value>
-                    <fullName>Stream Team</fullName>
-                    <default>false</default>
-                    <label>Stream Team</label>
-                </value>
-                <value>
-                    <fullName>Street Tree</fullName>
-                    <default>false</default>
-                    <label>Street Tree</label>
-                </value>
-                <value>
-                    <fullName>Tree Planting</fullName>
-                    <default>false</default>
-                    <label>Tree Planting</label>
-                </value>
-            </valueSetDefinition>
+            <restricted>true</restricted>
+            <valueSetName>Volunteer_Interests</valueSetName>
         </valueSet>
-        <visibleLines>3</visibleLines>
+        <visibleLines>4</visibleLines>
     </fields>
     <fields>
         <fullName>Volunteer_Skills__c</fullName>
@@ -1475,7 +1436,7 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
         <picklistValues>
             <picklist>Preferred_Email__c</picklist>
             <values>
-                <fullName>Alternate</fullName>
+                <fullName>Other</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -1539,15 +1500,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Nursery Maintenance</fullName>
+                <fullName>Invasive Species Removal</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Office Work</fullName>
+                <fullName>Mining Issue</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Project Clean Stream</fullName>
+                <fullName>Not interested in volunteering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Administration</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -1559,15 +1524,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stream Team</fullName>
+                <fullName>Stream Cleanup</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Street Tree</fullName>
+                <fullName>Trail Maintenance</fullName>
                 <default>false</default>
             </values>
             <values>
                 <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water Quality Monitoring</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -1919,7 +1888,7 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
         <picklistValues>
             <picklist>Preferred_Email__c</picklist>
             <values>
-                <fullName>Alternate</fullName>
+                <fullName>Other</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -1983,15 +1952,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Nursery Maintenance</fullName>
+                <fullName>Invasive Species Removal</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Office Work</fullName>
+                <fullName>Mining Issue</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Project Clean Stream</fullName>
+                <fullName>Not interested in volunteering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Administration</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -2003,15 +1976,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stream Team</fullName>
+                <fullName>Stream Cleanup</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Street Tree</fullName>
+                <fullName>Trail Maintenance</fullName>
                 <default>false</default>
             </values>
             <values>
                 <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water Quality Monitoring</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -2359,7 +2336,7 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
         <picklistValues>
             <picklist>Preferred_Email__c</picklist>
             <values>
-                <fullName>Alternate</fullName>
+                <fullName>Other</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -2423,15 +2400,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Nursery Maintenance</fullName>
+                <fullName>Invasive Species Removal</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Office Work</fullName>
+                <fullName>Mining Issue</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Project Clean Stream</fullName>
+                <fullName>Not interested in volunteering</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Office Administration</fullName>
                 <default>false</default>
             </values>
             <values>
@@ -2443,15 +2424,19 @@ LOWER(FirstName) &amp; LOWER(LastName) &amp; LOWER(PostalCode),
                 <default>false</default>
             </values>
             <values>
-                <fullName>Stream Team</fullName>
+                <fullName>Stream Cleanup</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Street Tree</fullName>
+                <fullName>Trail Maintenance</fullName>
                 <default>false</default>
             </values>
             <values>
                 <fullName>Tree Planting</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Water Quality Monitoring</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

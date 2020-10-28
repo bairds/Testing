@@ -4,6 +4,7 @@
     <availableInTouch>false</availableInTouch>
     <confirmationTokenRequired>false</confirmationTokenRequired>
     <label>volunteerEventSelectPageBootstrap</label>
+    <description>Default layout, Mobile responsive.  Include in MCampURLList.</description>
     <packageVersions>
         <majorNumber>1</majorNumber>
         <minorNumber>0</minorNumber>

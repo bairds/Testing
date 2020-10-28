@@ -21,20 +21,24 @@ public with sharing class displayVolPortal {
     public string JSONVICExs { get; set; }
     public Map<Id, CampEx> CampToExtendedCampMap { get; set; }
     public string JSONCTECs { get; set; }
-    public Map<Id,CampaignMember> CMMap {get; set;}
-    Public string MyString_From_Methode{get;set;}
-    Public GUUTask__c GUUT {get; set;}
-    Public Boolean HasSubmittedTasks {get; set;}
-    Public List<GuUTask__c> SubmittedTasks {get; set;}
+    public Map<Id, CampaignMember> CMMap { get; set; }
+    Public string MyString_From_Methode { get; set; }
+    Public Opportunity Opp { get; set; }
+    Public Boolean HasSubmittedTasks { get; set; }
+    Public List<Opportunity> SubmittedTasks { get; set; }
     Public String st;
+    Public Map<String, Schema.SObjectField> FieldSetWDescriptionMap { get; set; }
+    Public Boolean HasUnprocessedGUUs {get; set;}
+    public Id VolTaskRTID;
 
     public displayVolPortal() {
         OrgName = UserInfo.getOrganizationName();
         id cid = ApexPages.currentPage().getParameters().get('cid');
         VToken = apexPages.currentPage().getParameters().get('VToken');
+        VolTaskRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId();
         ctct = [
                 SELECT id, firstname, lastname, mailingstreet, mailingPostalCode, mailingcity,
-                        mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c
+                        mailingstate, mailingcountry,email,MobilePhone,HomePhone,Phone,VolToken__c, AccountId
                 from Contact
                 where id = :cid
         ];
@@ -45,7 +49,7 @@ public with sharing class displayVolPortal {
         }
         // If this is the first submission
         system.debug('In constructor, before testing whether GuU is null, GUU is ' + GUU);
-        if (GUU==null) {
+        if (GUU == null) {
             GUU = new GuestUserUpdate__c(
                     firstname__c = ctct.firstname,
                     lastname__c = ctct.lastname,
@@ -62,7 +66,11 @@ public with sharing class displayVolPortal {
             );
         }
         // Otherwise use the existing GUU
-        GUUT = new GUUTask__c();
+
+        // Are there already unprocessed GUUs?
+        List<GuestUserUpdate__c> UnprocessedGUUs = [SELECT Id from GuestUserUpdate__c
+        WHERE Processing_Status__c = 'Review' and RelatedContact__c =: ctct.Id];
+        If (UnprocessedGUUs.size() > 0) HasUnprocessedGUUs = true;
 
         // VolTasks = new List<Opportunity>();
         ListOfOne = new List<String>();
@@ -71,26 +79,32 @@ public with sharing class displayVolPortal {
         VolHoursThisYear = 0;
         VolMilesAll = 0;
         VolMilesThisYear = 0;
-        Id VolTaskRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId();
-        VolTasks = [SELECT id, name,Hours_Actual__c,Miles_Driven__c,CloseDate,RecordTypeId,Description,Supervisor_Satisfaction__c,
-                CampaignId, Campaign.Name from Opportunity
+        VolTasks = [
+                SELECT id, name,Hours_Actual__c,Miles_Driven__c,CloseDate,RecordTypeId,Description,Supervisor_Satisfaction__c,
+                        CampaignId, Campaign.Name, Type
+                from Opportunity
                 where RecordTypeId = :VolTaskRTID AND Contact__c = :cid
+                AND IsClosed = TRUE AND IsWon = TRUE
         ];
         system.debug('Found ' + VolTasks.size() + ' volunteer tasks.');
-        for (Opportunity opp : VolTAsks) {
-            if (opp.Hours_Actual__c > 0) VolHoursAll += opp.Hours_Actual__c;
-            if (opp.Hours_Actual__c > 0) VolHoursThisYear = opp.CloseDate.Year() == system.now().Year() ? VolHoursThisYear + opp.Hours_Actual__c : VolHoursThisYear;
-            if (opp.Miles_Driven__c > 0) VolMilesAll += opp.Miles_Driven__c;
-            if (opp.Miles_Driven__c > 0) VolMilesThisYear = opp.CloseDate.Year() == system.now().Year() ? VolMilesThisYear + opp.MIles_Driven__c : VolMilesThisYear;
-            // VolTasks.add(opp);
+        for (Opportunity o : VolTAsks) {
+            if (o.Hours_Actual__c > 0) VolHoursAll += o.Hours_Actual__c;
+            if (o.Hours_Actual__c > 0) VolHoursThisYear = o.CloseDate.Year() == system.now().Year() ? VolHoursThisYear + o.Hours_Actual__c : VolHoursThisYear;
+            if (o.Miles_Driven__c > 0) VolMilesAll += o.Miles_Driven__c;
+            if (o.Miles_Driven__c > 0) VolMilesThisYear = o.CloseDate.Year() == system.now().Year() ? VolMilesThisYear + o.MIles_Driven__c : VolMilesThisYear;
+            // VolTasks.add(opp);aaaaaaa
         }
         editMode = 'display';
         // Find tasks that have been submitted but not approved
 
-        SubmittedTasks= [SELECT Id, Date_and_Time__c, Date_and_Time_Ended__c, Description__c, Campaign_Text__c,
-                GuestUserUPdate__c,Hours__c,GuestUserUpdate__r.RelatedContact__c from GUUTask__c
-        WHERE GuestUserUpdate__r.RelatedContact__c =: ctct.Id];
-        If (SubmittedTasks.size()>0) HasSubmittedTasks=true;
+        SubmittedTasks = [
+                SELECT Id, Date_and_Time_Start__c, Date_and_Time_End__c, Description, Campaign_Guess__c,
+                        Contact__r.FirstName, Contact__r.LastName,Hours_Actual__c,Contact__c,
+                        Type
+                from Opportunity
+                WHERE (Contact__c = :ctct.Id AND StageName = 'Task Submitted' and Type = 'Self-reported Vol Task')
+        ];
+        If (SubmittedTasks.size() > 0) HasSubmittedTasks = true;
         // Query for Volunteer Interest Signup Campaigns
         VolInterestCampExs = new List<CampEx>();
         Id SignupRTID = Schema.SObjectType.Campaign.getRecordTypeInfosByName().get('Signup').getRecordTypeId();
@@ -102,30 +116,32 @@ public with sharing class displayVolPortal {
                 )
                 from Campaign
                 where RecordTypeId = :SignupRTID AND
-                Type = 'Volunteer Interest'
+                Type = 'Volunteer Interest' AND IsActive = TRUE
         ];
         System.debug('VolInterestCamps includes ' + VolInterestCamps);
-        CMMap = new Map<Id,CampaignMember>();
+        CMMap = new Map<Id, CampaignMember>();
         CampToExtendedCampMap = new Map<Id, CampEx>();
         For (Campaign c : VolInterestCamps) {
             If (c.CampaignMembers.size() == 0) {
-                CampEx cex = new CampEx(c, null, null);
+                CampEx cex = new CampEx(c, null, null, null);
                 VolInterestCampExs.add(Cex);
                 CampToExtendedCampMap.put(c.Id, Cex);
             } else {
                 CampEx cex = new CampEx(
                         c,
                         c.CampaignMembers[0].Id,
-                        c.CampaignMembers[0].Unsubscribed__c == true ? 'Unsubscribed' : 'Registered');
-                VolInterestCampExs.add(Cex);
+                        c.CampaignMembers[0].Unsubscribed__c == true ? 'unsubscribed' : 'registered',
+                        null);
+               VolInterestCampExs.add(Cex);
                 CampToExtendedCampMap.put(c.Id, Cex);
-                CMMap.put(c.CampaignMembers[0].Id,c.CampaignMembers[0]);
+                CMMap.put(c.CampaignMembers[0].Id, c.CampaignMembers[0]);
             }
         }
-        JSONVICExs = json.SERIALIZE(VolInterestCampExs);
-        system.debug('JSONVICExs is ' + JSONVICExs);
-        system.debug('CMMap is ' + CMMap);
+        JSONVICExs = json.SERIALIZE(CampToExtendedCampMap.values());
         JSONCTECs = json.SERIALIZE(CampToExtendedCampMap);
+
+        // List<Schema.FieldSetMember> fields = Schema.SObjectType.GUUTask__c.fieldsets.getMap().get('VolTaskFieldSet').getFields();
+        // if (fields.size()>0) FieldSetWDescriptionMap = WgHelpers.FieldSetWDescription('GUUTask__c','VolTaskFieldSet');
     }
 
     public pageReference editContactInfo() {
@@ -136,19 +152,19 @@ public with sharing class displayVolPortal {
     public pageReference submitContactInfo() {
         // Only if there's a change made
         if (!(
-        GUU.firstname__c == ctct.firstname &&
-        GUU.lastname__c == ctct.lastname &&
-        GUU.mailingstreet__c == ctct.mailingstreet &&
-        GUU.mailingcity__c == ctct.mailingcity &&
-        GUU.mailingstate__c == ctct.mailingstate &&
-        GUU.mailingpostalcode__c == ctct.mailingpostalcode &&
-        GUU.mailingcountry__c == ctct.mailingcountry &&
-        GUU.email__c == ctct.email &&
-        GUU.mobilephone__c == ctct.mobilephone &&
-        GUU.homephone__c == ctct.homephone &&
-        GUU.phone__c == ctct.phone &&
-        GUU.RelatedContact__c == ctct.Id
-                )) {
+                GUU.firstname__c == ctct.firstname &&
+                        GUU.lastname__c == ctct.lastname &&
+                        GUU.mailingstreet__c == ctct.mailingstreet &&
+                        GUU.mailingcity__c == ctct.mailingcity &&
+                        GUU.mailingstate__c == ctct.mailingstate &&
+                        GUU.mailingpostalcode__c == ctct.mailingpostalcode &&
+                        GUU.mailingcountry__c == ctct.mailingcountry &&
+                        GUU.email__c == ctct.email &&
+                        GUU.mobilephone__c == ctct.mobilephone &&
+                        GUU.homephone__c == ctct.homephone &&
+                        GUU.phone__c == ctct.phone &&
+                        GUU.RelatedContact__c == ctct.Id
+        )) {
             GUU.PageSource__c = 'UpdateContactInfo';
             GUU.RelatedContact__c = ctct.Id;
             upsert GUU;
@@ -162,84 +178,108 @@ public with sharing class displayVolPortal {
         return null;
     }
 
-    public void setCMStatus2(){
-        MyString_From_Methode='Inserted this string from the controller.';
-    }
-
     public pageReference setCMStatus() {
         string st = apexpages.currentPage().getParameters().get('firstParam');
         system.debug('In apex string passed in is ' + st);
-        // Map<Id, CampEx> CMMap = new Map<Id, CampEx>();
-        Map<Id, CampEx> CMMap = (Map<Id, CampEx>) JSON.deserialize(st, Map<Id, CampEx>.class);
+        Map<Id, CampEx> CMExMap = (Map<Id, CampEx>) JSON.deserialize(st, Map<Id, CampEx>.class);
         List<CampaignMember> UpdateCMs = new List<CampaignMember>();
-        for (CampEx cx : CMMap.values()) {
+        for (CampEx cx : CMExMap.values()) {
             system.debug('CampEx is ' + cx);
-            if (cx.FinalStatus != cx.InitialStatus) {
-                If (cx.FinalStatus == 'Registered') {
+            // ONLY PROCESS CX IF FINAL STATUS HAS BEEN SET
+            if (cx.FinalStatus != null) {
+                If (cx.FinalStatus == 'registered') {
                     If (cx.CMId == null) {
                         CampaignMember newCM = new CampaignMember(
                                 status = 'Responded Yes',
                                 ContactId = ctct.Id,
                                 CampaignId = cx.camp.Id);
-                        UpdateCMs.add(newCM);
+                                insert newCm;
+                        cx.CMId = newCM.Id;
+                        // RESET INITIAL AND FINAL STATUS TO BE READY FOR NEXT CHANGE
+                        cx.InitialStatus = 'registered';
+                        cx.FinalStatus = null;
                     } else {
-                        // Get the campaignMember from the CMMap, update it
+                        // Get the campaignMember from the CMExMap, update it
                         CampaignMember newCM = new CampaignMember(
                                 status = 'Responded Yes',
                                 ContactId = ctct.Id,
                                 Id = cx.CMId,
-                                Unsubscribed__c=false,
+                                Unsubscribed__c = false,
                                 CampaignId = cx.camp.Id);
+                        // RESET INITIAL AND FINAL STATUS TO BE READY FOR NEXT CHANGE
+                        cx.InitialStatus = 'registered';
+                        cx.FinalStatus = null;
                         UpdateCMs.add(newCM);
                     }
                 } else {
-                    // FinalStatus not Registered
-                    if (cx.FinalStatus == 'Unsubscribed'){
-                        CampaignMember newCM = new CampaignMember(
-                                status = 'Responded No',
-                                ContactId = ctct.Id,
-                                Id = cx.CMId,
-                                CampaignId = cx.camp.Id,
-                                Unsubscribed__c = true);
-                        UpdateCMs.add(newCM);
+                    if (cx.FinalStatus == 'unregistered'){
+                        // Don't add them to the campaign
+                        continue;
+                    } else {
+                        // FinalStatus is Unsubscribed
+                        if (cx.FinalStatus == 'unsubscribed') {
+                            CampaignMember newCM = new CampaignMember(
+                                    status = 'Unsubscribed',
+                                    ContactId = ctct.Id,
+                                    Id = cx.CMId,
+                                    CampaignId = cx.camp.Id,
+                                    Unsubscribed__c = true);
+                            // RESET INITIAL AND FINAL STATUS TO BE READY FOR NEXT CHANGE
+                            cx.InitialStatus = 'unsubscribed';
+                            cx.FinalStatus = null;
+                            UpdateCMs.add(newCM);
+                        }
                     }
                 }
             }
+            CampToExtendedCampMap.put(cx.camp.Id, Cx);
+            // JSONVICExs = json.SERIALIZE(VolInterestCampExs);
         }
         Upsert UpdateCMs;
+        JSONVICExs = json.SERIALIZE(CampToExtendedCampMap.values());
+        JSONCTECs = json.SERIALIZE(CMExMap);
         return null;
     }
 
-    public pageReference SubmitVolTask(){
-        string GUUId = GUU.Id;
-        if (GUU.Id==null) {
-            withoutSharingDMLs.saveGUU(GUU);
-            GUUId = GUU.Id;
-        }
-        system.debug('Afterinsert GUUId is ' + GUUId);
-        GUUT.GuestUserUpdate__c = GUUId;
-        withoutSharingDMLs.SaveGUUTask(GUUT);
-        // Clear input for the next volunteer task
-        GUUT = new GUUTask__c();
+    public pageReference SubmitVolTask() {
+
+        Opp = new Opportunity(
+                RecordTypeId = VolTaskRTId,
+                Contact__c = ctct.Id,
+                AccountId = ctct.AccountId,
+                CampaignId = WGHelpers.getUnknownCampaignId(),
+                StageName = 'Task Submitted',
+                Type = 'Self-reported Vol Task',
+                CloseDate = system.today(),
+                Name = Ctct.Firstname + ' ' + Ctct.Lastname + ', ' + Opp.Hours_Actual__c + ' hours submitted on ' + Opp.CloseDate.format()
+        );
+        // Because Im referencing the related contact info, has to save without sharing
+        withoutSharingDMLs.SaveOpportunity(Opp);
         // Update SubmittedTasks
-        SubmittedTasks= [SELECT Id, Date_and_Time__c, Date_and_Time_Ended__c, Description__c, Campaign_Text__c,
-                GuestUserUPdate__c,Hours__c,GuestUserUpdate__r.RelatedContact__c from GUUTask__c
-        WHERE GuestUserUpdate__r.RelatedContact__c =: ctct.Id];
-        If (SubmittedTasks.size()>0) HasSubmittedTasks=true;
+        SubmittedTAsks = withoutSharingDMLs.getListSubmittedTasks(Ctct.Id);
+/*
+        SubmittedTasks = [
+                SELECT Id, Date_and_Time_Start__c, Date_and_Time_End__c, Description, Campaign_Guess__c,
+                        Contact__r.FirstName, Contact__r.LastName,Hours_Actual__c,Contact__c
+                from Opportunity
+                WHERE (Contact__c = :ctct.Id AND StageName = 'Task Submitted')
+        ];
+*/
+        If (SubmittedTasks.size() > 0) HasSubmittedTasks = true;
         return null;
     }
 
-                public class CampEx {
-                public campaign camp;
+    public class CampEx {
+        public campaign camp;
         Id CMId;
         String InitialStatus;
         public String FinalStatus;
 
-        public CampEx(Campaign c, Id CampMmbrId, String InitStatus) {
-        camp = c;
-        CMId = CampMmbrId;
-        InitialStatus = InitStatus;
+        public CampEx(Campaign c, Id CampMmbrId, String InitStatus, String FinStatus) {
+            camp = c;
+            CMId = CampMmbrId;
+            InitialStatus = InitStatus;
+            FinalStatus = FinStatus;
+        }
     }
-}
-
 }

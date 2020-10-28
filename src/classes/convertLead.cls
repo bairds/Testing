@@ -1,4 +1,4 @@
-public class convertLead {
+public without sharing class convertLead {
     public static Database.LeadConvertResult convertLead(Lead l) {
         Account acct;
         Contact ctct;

@@ -4,11 +4,12 @@
 
 <apex:page id="ApproveGuestUserEdit" Controller="approveGuestUserEdit" showHeader="false"
            standardStylesheets="false">
-    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>
-    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>-->
+    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>-->
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
 
     <header>
         <style>
@@ -68,7 +69,7 @@
                         <apex:outputText value=" "/>
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="note">Current Contact Info</div>
+                        <div class="WGPageTitle2">Current Contact Info</div>
                         {!Ctct.FirstName}<br/>
                         {!Ctct.LastName}<br/>
                         {!Ctct.HomePhone}<br/>
@@ -80,7 +81,7 @@
                         {!Ctct.Phone}<br/>
                     </div>
                     <div class="col-xs-6 col-md-3">
-                        <div class="note">Proposed Contact Info</div>
+                        <div class="WGPageTitle2">Proposed Contact Info</div>
                         {!GUU.FirstName__c}<br/>
                         {!GUU.LastName__c}<br/>
                         {!GUU.HomePhone__c}<br/>
@@ -90,7 +91,7 @@
                         {!GUU.MailingPostalCode__c}<br/>
                         {!GUU.MobilePhone__c}<br/>
                         {!GUU.Phone__c}<br/>
-                        {!GUU.Status__c}<br/>
+                        {!GUU.Processing_Status__c}<br/>
                     </div>
                     <div class="col-md-3">
                         <apex:outputText value=" "/>

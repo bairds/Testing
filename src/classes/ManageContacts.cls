@@ -1,4 +1,4 @@
-public class ManageContacts {
+public without sharing class ManageContacts {
 
     public List<Contact> cs;
     public static List<Id> AccountIds;
@@ -28,6 +28,7 @@ public class ManageContacts {
                 CtctsWEmails.add(ctct);
             }
         }
+
         List<Id> AccountIds = new List<Id>();
         For (Contact c : CtctsWEmails) {
             if (c.AccountId != null) AccountIds.add(c.AccountId);
@@ -183,9 +184,11 @@ public class ManageContacts {
                                 if (NewContacts[i].Email != OldContacts[i].Other_Email__c)
                                     NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
                             }
-                            NewContacts[i].Other_Email__c = NewContacts[i].Email;
-                            system.debug('Should have just set NewContacts[i].Other_Email__c to ' + NewContacts[i].Email + ' and it is now ' + NewContacts[i].Other_Email__c);
-                            NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
+                            if (NewContacts[i].Email != null) {
+                                NewContacts[i].Other_Email__c = NewContacts[i].Email;
+                                system.debug('Should have just set NewContacts[i].Other_Email__c to ' + NewContacts[i].Email + ' and it is now ' + NewContacts[i].Other_Email__c);
+                                NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
+                            }
                             System.debug('NewContacts[i].Last_Email_Overwrite__c is ' + NewContacts[i].Last_Email_Overwrite__c);
                             // Avoid the storeOldEmail routine below, which is incorrect for this case
                             continue;
@@ -213,25 +216,21 @@ public class ManageContacts {
                         if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c != null) {
                             if (NewContacts[i].Other_Email__c != NewContacts[i].Email) {
                                 newContacts[i].Email = NewContacts[i].Other_Email__c;
-                                if (newContacts[i].Other_Email__c != OldContacts[i].Other_Email__c) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
+                                if (newContacts[i].Other_Email__c != OldContacts[i].Other_Email__c && OldContacts[i].Other_Email__c != null) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
                             } else continue;
                         } else {
                             if (NewContacts[i].Preferred_Email__c == null && OldContacts[i].Preferred_Email__c != null) {
                                 NewContacts[i].Email = null;
                                 system.debug('Erased email because Preferred set to None.');
-                            } else {
-                                // Preferred does not point to populated email.
-                                newContacts[0].addError('Please set Preferred Email field to point to an email field which is not empty.');
-                                EmailUpdateError.unsetEmailUpdateError();
-                                if (NewContacts[i].Preferred_Email__c == null ||
-                                        (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c == null) ||
-                                        (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c == null) ||
-                                        (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c == null))
-                                    // post error message for user
-                                    EmailUpdateError.setEmailUpdateError();
-                                EmailErrorOnContactInsert();
-                                ApexPages.Message EmailErrorOnContactInsert = new ApexPages.Message(ApexPages.Severity.ERROR, 'Please set Preferred Email to and address that isn\'t empty.');
                             }
+                            // Preferred does not point to populated email
+                            // if Email populated, Preferred points to blank field
+                            if (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c == null)
+                                NewContacts[i].Personal_Email__c = NewContacts[i].Email;
+                            if (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c == null)
+                                NewContacts[i].Work_Email__c = NewContacts[i].Email;
+                            if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c == null)
+                                NewContacts[i].Other_Email__c = NewContacts[i].Email;
                         }
                     }
                 }

@@ -15,6 +15,7 @@
     <filter>
         <criteriaItems>
             <column>CAMPAIGN_TYPE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Corporate volunteer event</value>

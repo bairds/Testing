@@ -885,7 +885,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Other_emails__c</field>
+            <field>Legacy_Emails__c</field>
             <table>Opportunity.OpportunityContactRoles</table>
         </columns>
         <columns>

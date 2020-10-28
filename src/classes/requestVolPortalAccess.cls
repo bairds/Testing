@@ -13,6 +13,7 @@ Ctct = new Contact();
 }
 
 public PageReference submit(){
+    system.debug('Ctct sent to identifyPerson is ' + Ctct);
 List<string> results = identifyPerson.identifyPerson(Ctct);
 system.debug('results of identifyPerson are ' + results);
 if (results!=null) {

@@ -23,7 +23,7 @@
 // May 2019 Add "yearly" to the periodicity values for recurring payments, in recurring payment section
 // June 2020 Filter out "if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)" on lines 60,77,127,333
 
-public class ManageContributions{
+public with sharing class ManageContributions{
     public static Set<Id> AccountIds;
     public static Set<Id> PledgeIds;
     public static Set<Id> ContactIDs;
@@ -132,7 +132,7 @@ public class ManageContributions{
             DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
 
         List<Account> ContribsByAcct = [select Id, Name, Last_Contrib_Date__c, Last_Donate_Date__c,
-                Account_Membership_Expires__c, (select Id, Membership_End_Date__c,
+                Account_Membership_Expires__c, (select Id, Membership_End_Date__c, Contact__c,
                 Amount, CloseDate, RecordTypeId, RecordType.Name, CampaignId, Campaign.Name, Periodicity__c,
                 Start_Date__c, Number_of_Payments__c from Opportunities WHERE (IsWon=true OR StageName LIKE '%Won')
         order by CloseDate DESC, Amount DESC)
@@ -231,8 +231,6 @@ public class ManageContributions{
                             System.debug('MembershipCnt is ' + MembershipCnt + ' and MembershipsInAcct.get(a.id) is ' + MembershipsInAcct.get(a.Id));
                             if (MembershipCnt == MembershipsInAcct.get(a.Id))  {
                                 a.Opportunities[i].Membership_Type__c = 'New Membership';
-                                // a.first_member_source__c = a.opportunities[i].campaign.Name;
-                                // a.First_Member_Date__c = a.Opportunities[i].CloseDate;
                                 System.debug('In MembershipCnt==MembershipsInacct.get(a.Id) and set First_Member_Date__c to ' + a.First_Member_Date__c);
                             } else {
                                 a.Opportunities[i].Membership_Type__c = 'Renewal';
@@ -317,15 +315,12 @@ public class ManageContributions{
 
             updateAccts.add(a);
         } // end account loop
-        try {
-            update updateAccts;
-        }
-        // Caution: Because of the try/catch, in some cases, the previous changes saved (ie the update UpdateOpps in the method)
-        // won't be rolled back.  In this case, that wouldn't be a problem.  Try/catch overrides normal rollback behavior.
-        Catch (Exception Ex) {System.debug(Ex);}
+            withoutSharingDMLs.UpdateAcctsWoutSharing(updateAccts);
+        // The UpdateACCtsWoutSharing method uses database.update() so it will tolerate some errors;
+        // Still need to catch those errors and process them.  Oct 2020.
         System.debug('UpdateContribs is ' + UpdateContribs);
         AvoidRecursiveContributionTrigger.setWorking();
-        update UpdateContribs;
+        withoutSharingDMLs.UpdateOppsWoutSharing(UpdateContribs); // update UpdateContribs;
         AvoidRecursiveContributionTrigger.setClosed();
     } // end method
 
@@ -528,7 +523,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
         } // end contact loop
         try{
             AvoidRecursiveContactTrigger.setWorking();
-            update updateCtcts;
+            withoutSharingDMLs.UpdateCtctsWoutSharing(updateCtcts);
             AvoidRecursiveContactTrigger.setClosed();
         }
         // Caution: Because of the try/catch, in some cases, the previous changes saved (ie the update UpdateOpps in the method)

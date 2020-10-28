@@ -8,15 +8,18 @@ private with sharing class morph1EmailTo3TEST {
     // One SFEmail, One WGEmail. Does SFEmail go into different WGEmail?
     // and preferred is set to it.
     @IsTest
-    static void OneSFEmail(){
-    Create_Test_Variables ctv = new Create_Test_Variables();
-    Contact TestContact = ctv.fetchTestContact();
-    List<Id> CLIds = new List<Id>();
+    static void OneSFEmail() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Account TestAccount = ctv.fetchTestAccount();
+        TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Family').getRecordTypeId();
+        update TestAccount;
+        Contact TestContact = ctv.fetchTestContact();
+        List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         system.debug('ResultCtcts is ' + ResultCtcts);
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -29,7 +32,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void OneSFEmailFromWorkAccount(){
+    static void OneSFEmailFromWorkAccount() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAccount = ctv.fetchTestAccount();
         TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -39,8 +42,8 @@ private with sharing class morph1EmailTo3TEST {
         CLIds.add(TestContact.Id);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         system.debug('ResultCtcts is ' + ResultCtcts);
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
@@ -55,7 +58,7 @@ private with sharing class morph1EmailTo3TEST {
     // One SFEmail, one WGEmail (Personal_Email__c). Does SFEmail go into Work_Email__c?
     // and preferred is set to Work
     @IsTest
-    static void SFEmailWGEmailNoPreferred1(){
+    static void SFEmailWGEmailNoPreferred1() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Personal_Email__c = 'personal@dontbotherme.org';
@@ -63,12 +66,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
             system.assertEquals('personal@dontbotherme.org', c.Personal_Email__c);
@@ -82,7 +85,7 @@ private with sharing class morph1EmailTo3TEST {
     // One SFEmail, two WGEmail (Personal_Email__c and Work_Email__c). Does SFEmail go into Other_Email__c?
     // and Is Preferred is set to Other?
     @IsTest
-    static void SFEmailWGEmailNoPreferred2(){
+    static void SFEmailWGEmailNoPreferred2() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Personal_Email__c = 'personal@dontbotherme.org';
@@ -91,12 +94,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
             system.assertEquals('personal@dontbotherme.org', c.Personal_Email__c);
@@ -110,8 +113,11 @@ private with sharing class morph1EmailTo3TEST {
     // One SFEmail, two WGEmail (Personal_Email__c and Work_Email__c). Does SFEmail go into Other_Email__c?
     // and Is Preferred is set to Other?
     @IsTest
-    static void SFEmailAllWGEmailsNoPreferred(){
+    static void SFEmailAllWGEmailsNoPreferred() {
         Create_Test_Variables ctv = new Create_Test_Variables();
+        Account TestAccount = ctv.fetchTestAccount();
+        TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Family').getRecordTypeId();
+        update TestAccount;
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Personal_Email__c = 'personal@dontbotherme.org';
         Testcontact.Work_Email__c = 'work@dontbotherme.org';
@@ -120,12 +126,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
             system.assertEquals('personal@dontbotherme.org', c.Personal_Email__c);
@@ -137,7 +143,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void NoSFEmailWGEmailNoPreferred1(){
+    static void NoSFEmailWGEmailNoPreferred1() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Email = '';
@@ -146,12 +152,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
             system.assertEquals(null, c.Personal_Email__c);
@@ -162,7 +168,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void NoSFEmailWGEmailNoPreferred2(){
+    static void NoSFEmailWGEmailNoPreferred2() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Email = '';
@@ -171,12 +177,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('other@dontbotherme.org', c.Email);
             system.assertEquals(null, c.Work_Email__c);
@@ -186,7 +192,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void NoSFEmailWGEmailNoPreferredWork(){
+    static void NoSFEmailWGEmailNoPreferredWork() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAccount = ctv.fetchTestAccount();
         TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -198,12 +204,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
             system.assertEquals('work@dontbotherme.org', c.Work_Email__c);
@@ -213,7 +219,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void SFEmailMatchWGEmailNoPreferred1(){
+    static void SFEmailMatchWGEmailNoPreferred1() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Email = 'Other@dontbotherme.org';
@@ -222,12 +228,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('other@dontbotherme.org', c.Email);
             system.assertEquals(null, c.Work_Email__c);
@@ -238,7 +244,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void SFEmailMatchWGEmailNoPreferred2(){
+    static void SFEmailMatchWGEmailNoPreferred2() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Email = 'work@dontbotherme.org';
@@ -248,12 +254,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('work@dontbotherme.org', c.Email);
             system.assertEquals('work@dontbotherme.org', c.Work_Email__c);
@@ -264,7 +270,7 @@ private with sharing class morph1EmailTo3TEST {
     }
 
     @IsTest
-    static void SFEmailNoWGEmailPreferred1(){
+    static void SFEmailNoWGEmailPreferred1() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Email = 'testcontact@dontbotherme.org';
@@ -273,12 +279,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
             system.assertEquals('testcontact@dontbotherme.org', c.Work_Email__c);
@@ -291,7 +297,7 @@ private with sharing class morph1EmailTo3TEST {
     // Preferred exists but is not set to one of the existing wGEmail fields;
     // SFEmail should populate the Preferred field
     @IsTest
-    static void SFEmailWGEmailPreferred(){
+    static void SFEmailWGEmailPreferred() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Personal_Email__c = 'personal@dontbotherme.org';
@@ -302,12 +308,12 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('testcontact@dontbotherme.org', c.Email);
             system.assertEquals('work@dontbotherme.org', c.Work_Email__c);
@@ -319,7 +325,7 @@ private with sharing class morph1EmailTo3TEST {
 
     // SFEmail doesn't match Preferred Email; SFEmail goes into Legacy_Emails__c and Personal_Email goes into Email.
     @IsTest
-    static void SFEmailWGEmailMatchesPreferred(){
+    static void SFEmailWGEmailMatchesPreferred() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
         Testcontact.Personal_Email__c = 'personal@dontbotherme.org';
@@ -330,20 +336,56 @@ private with sharing class morph1EmailTo3TEST {
         system.debug('Testcontact is ' + Testcontact);
         List<Id> CLIds = new List<Id>();
         CLIds.add(TestContact.Id);
-        List<Contact> ResultCtcts = [SELECT Email,Last_Email_Overwrite__c,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
+        List<Contact> ResultCtcts = [SELECT Email,Last_Email_Overwrite__c,Other_Email__c,Personal_Email__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
         SYSTEM.DEBUG('Before calling arrangeEmails() ResultCtcts is ' + ResultCtcts);
         morph1EmailTo3 M1E3 = new morph1EmailTo3();
         M1E3.arrangeEmails(CLIds);
-        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Last_Email_Overwrite__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in: CLIds];
-        system.assertEquals(1,resultCtcts.size(),'Should have returned only the one test contact.');
+        ResultCtcts = [SELECT Email,Other_Email__c,Personal_Email__c,Last_Email_Overwrite__c,Work_Email__c,Preferred_Email__c,Legacy_Emails__c from Contact where Id in:CLIds];
+        system.assertEquals(1, resultCtcts.size(), 'Should have returned only the one test contact.');
         For (Contact c : ResultCtcts) {
             system.assertEquals('personal@dontbotherme.org', c.Email);
             system.assertEquals('work@dontbotherme.org', c.Work_Email__c);
             system.assertEquals('personal@dontbotherme.org', c.Personal_Email__c);
             system.assertEquals('Personal', c.Preferred_Email__c);
             system.assertEquals('testcontact@dontbotherme.org,', c.Legacy_Emails__c);
-            system.assertEquals(date.today(),c.Last_Email_Overwrite__c.date());
+            system.assertEquals(date.today(), c.Last_Email_Overwrite__c.date());
             system.debug(c.Last_Email_Overwrite__c);
+        }
+    }
+
+    @IsTest
+    static void BatchTest() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Account a = ctv.fetchTestAccount();
+        List<Contact> LCs = new List<Contact>();
+        for (Integer i=0;i<50;i++){
+            Contact c = new Contact(
+                    LastName = 'Testcontact'+i,
+                    Personal_Email__c = 'personal@dontbotherme.org',
+                    Email = 'testcontact@dontbotherme.org',
+                    Work_Email__c = 'Work@dontbotherme.org');
+            LCs.add(c);
+        }
+        system.assertEquals(50,LCs.size());
+        insert LCs;
+
+        morph1EmailTo3Batch m1E3 = new morph1EmailTo3Batch();
+        List<SObject> LSOb = new List<SObject>();
+        LCs = [SELECT Id from Contact];
+        for (Contact c : LCs) LSOb.add(c);
+        List<Lead> LLs = [SELECT Id from Lead];
+        for (Lead l : LLs) LSOb.add(l);
+
+        Test.startTest();
+        morph1EmailTo3InvokeBatchForContacts ME3 = new morph1EmailTo3InvokeBatchForContacts();
+        mE3.invokeBatch();
+        Test.stopTest();
+
+        List<Contact> resultContacts = [SELECT Id, email, Personal_Email__c, Work_Email__c, Other_Email__c,
+        Preferred_Email__c from Contact WHERE LastName<>'TestContact'];
+        system.assertEquals(50,resultContacts.size());
+        For (Contact c : resultContacts) {
+            system.assertEquals('Other',c.Preferred_Email__c,'Should have stored Email in Other_Email, set Preferred to Other');
         }
     }
 }

@@ -23,18 +23,21 @@
         <booleanFilter>2 and (1 OR 3)</booleanFilter>
         <criteriaItems>
             <column>Contact.Newsletter_for_Contact_Cutoff_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterOrEqual</operator>
             <value>TODAY</value>
         </criteriaItems>
         <criteriaItems>
             <column>Contact.Newsletter_for_Contact__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Email,Both</value>
         </criteriaItems>
         <criteriaItems>
             <column>Contact.Newsletter_for_Contact_Cutoff_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value></value>

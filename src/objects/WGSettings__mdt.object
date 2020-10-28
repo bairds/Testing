@@ -123,6 +123,17 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>HUCTolerance__c</fullName>
+        <description>Boundary tolerance</description>
+        <externalId>false</externalId>
+        <fieldManageability>DeveloperControlled</fieldManageability>
+        <label>HUCTolerance</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>HourlyVolunteerRate__c</fullName>
         <description>From independent Sector. Change this each year.</description>
         <externalId>false</externalId>
@@ -147,6 +158,16 @@
         <required>false</required>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>ManageContactEmails__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>When unchecked, the ManageContacts Trigger does not rearrange or validate the email fields.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>When unchecked, the ManageContacts Trigger does not rearrange or validate the email fields.</inlineHelpText>
+        <label>ManageContactEmails</label>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>ManageContribsTrigger__c</fullName>

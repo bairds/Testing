@@ -14,6 +14,9 @@ private class Create_Test_Variables_Test {
         system.debug('In CTVTest, fetchtestcontact brought back ' + TestCtct.id);
         Campaign TestCamp = ctv.fetchTestCampaign();
         Opportunity TestOpp = ctv.fetchTestOpportunity();
+        Account FamilyAccount = ctv.fetchFamilyTestAccount();
+        Contact FamilyContact = ctv.fetchTestFamilyContact();
+        Case TestCase = ctv.fetchTestCase();
         Text_Document__c TD = ctv.fetchWaiver();
 
         system.assertEquals('Testcampaign',TestCamp.Name);

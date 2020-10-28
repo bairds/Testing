@@ -57,6 +57,7 @@
     <filter>
         <criteriaItems>
             <column>Opportunity.Matches_Which_Challenge_or_Pledge__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value></value>

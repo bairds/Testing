@@ -232,11 +232,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Major_Donor_Now__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Max_Per_Employee__c</field>
             <table>Account</table>
         </columns>

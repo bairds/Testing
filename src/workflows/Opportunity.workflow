@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workflow xmlns="http://soap.sforce.com/2006/04/metadata">
     <alerts>
+        <fullName>Alert_Organizer_New_Vol_Task_Submitted</fullName>
+        <description>Alert Organizer New Vol Task Submitted</description>
+        <protected>false</protected>
+        <recipients>
+            <recipient>testing@watergrass.org</recipient>
+            <type>user</type>
+        </recipients>
+        <senderType>CurrentUser</senderType>
+        <template>Volunteer_Mgmt_Emails/Alert_Organizer_New_Vol_Task</template>
+    </alerts>
+    <alerts>
         <fullName>Next_Step_Reminder_Email</fullName>
         <description>Next Step Reminder Email</description>
         <protected>false</protected>
@@ -19,6 +30,7 @@
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Membership_End_Date</fullName>
@@ -30,6 +42,7 @@ CloseDate + 365 , Account.Account_Membership_Expires__c + 365)</formula>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Membership_Start_Date</fullName>
@@ -40,6 +53,7 @@ CloseDate, Account.Account_Membership_Expires__c)</formula>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>Note_Reminder_Sent</fullName>
@@ -50,6 +64,7 @@ CloseDate, Account.Account_Membership_Expires__c)</formula>
         <notifyAssignee>false</notifyAssignee>
         <operation>Formula</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <fieldUpdates>
         <fullName>OrphanNoMore</fullName>
@@ -60,6 +75,7 @@ CloseDate, Account.Account_Membership_Expires__c)</formula>
         <notifyAssignee>false</notifyAssignee>
         <operation>Literal</operation>
         <protected>false</protected>
+        <reevaluateOnChange>false</reevaluateOnChange>
     </fieldUpdates>
     <rules>
         <fullName>Auto fill in Contribution Name</fullName>

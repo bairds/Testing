@@ -35,7 +35,7 @@
                         Please Select an Event.<b/>
                     </div>
                 </div>
-                <div class="row bcg2 fs15">
+                <div class="row bcprimary-mid fs15">
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> NAME</div>
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> LOCATION</div>
                     <div class="col-md-3 hidden-sm hidden-xs alignleft"> DESCRIPTION</div>
@@ -46,7 +46,7 @@
                 </div>
 
                 <apex:repeat value="{!cs}" var="c">
-                    <div class="row repeatrow bcg2">
+                    <div class="row repeatrow bcprimary-mid">
                         <div class="col-md-2 col-xs-12">
                             <div class="row">
                                 <div class="hidden-md hidden-lg hidden-xl col-xs-4 cw">

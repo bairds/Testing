@@ -166,7 +166,7 @@ public without sharing class registerForCampaign
                         this.coc.city = this.l.City;
                         this.coc.state = this.l.State;
                         
-                        if(String.isNotBlank(this.l.Volunteer_Interests__c)) 
+                        if(String.isNotBlank(this.l.Volunteer_Interests__c))
                             this.coc.volunteerInterests = this.l.Volunteer_Interests__c.split(';', 0);
                         
                         this.coc.howHeard =  this.l.How_Heard__c;

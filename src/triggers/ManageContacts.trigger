@@ -5,26 +5,33 @@ http://gokubi.com/archives/two-interesting-ways-to-architect-apex-triggers
 */
  
 //trigger ManageContacts on Contact (after insert, after update, before insert, before update, after delete) { 
-trigger ManageContacts on Contact (before insert, after insert, before delete, after delete) { 
+trigger ManageContacts on Contact (before insert, before update, after update, after insert, before delete, after delete) {
     //enums declared in separate class - 
 
     if(Trigger.isBefore && Trigger.isInsert) {
              ManageContacts.BeforeInsert(Trigger.New); 
     }
 
-    if(Trigger.isBefore && Trigger.isUpdate){
-        List<Contact> NewContacts = new List<Contact>();
-        List<Contact> OldContacts;
-        for (Contact ctct : Trigger.new) {
-            if (Trigger.NewMap.get(ctct.Id).email!=Trigger.OldMap.get(ctct.Id).email  ||
-                    Trigger.NewMap.get(ctct.Id).Preferred_Email__c!=Trigger.OldMap.get(ctct.Id).Preferred_Email__c  ||
-                    Trigger.NewMap.get(ctct.Id).Personal_Email__c!=Trigger.OldMap.get(ctct.Id).Personal_Email__c  ||
-                    Trigger.NewMap.get(ctct.Id).Work_Email__c!=Trigger.OldMap.get(ctct.Id).Work_Email__c  ||
-                    Trigger.NewMap.get(ctct.Id).Other_Email__c!=Trigger.OldMap.get(ctct.Id).Other_Email__c)
-                NewContacts.add(ctct);
-            OldContacts.add(Trigger.oldMap.get(ctct.Id));
+    if(Trigger.isBefore && Trigger.isUpdate) {
+        List<WGSettings__mdt> WGSettings = [select ManageContactEmails__c from WGSettings__mdt WHERE DeveloperName = 'WGDefault' limit 1];
+        if (WGSettings[0].ManageContactEmails__c == true) {
+            List<Contact> NewContacts = new List<Contact>();
+            List<Contact> OldContacts = new List<Contact>();
+            for (Contact ctct : Trigger.new) {
+                if (Trigger.NewMap.get(ctct.Id).email != Trigger.OldMap.get(ctct.Id).email ||
+                        Trigger.NewMap.get(ctct.Id).Preferred_Email__c != Trigger.OldMap.get(ctct.Id).Preferred_Email__c ||
+                        Trigger.NewMap.get(ctct.Id).Personal_Email__c != Trigger.OldMap.get(ctct.Id).Personal_Email__c ||
+                        Trigger.NewMap.get(ctct.Id).Work_Email__c != Trigger.OldMap.get(ctct.Id).Work_Email__c ||
+                        Trigger.NewMap.get(ctct.Id).Other_Email__c != Trigger.OldMap.get(ctct.Id).Other_Email__c) {
+                    NewContacts.add(ctct);
+                    system.debug('Emails have changed.');
+                }
+                OldContacts.add(Trigger.oldMap.get(ctct.Id));
+            }
+            system.debug('NewContacts is ' + NewContacts);
+            system.debug('OldContacts is ' + OldContacts);
+            ManageContacts.BeforeUpdate(NewContacts, OldContacts);
         }
-        ManageContacts.BeforeUpdate(NewContacts,OldContacts);
     }
   
    if(Trigger.isBefore && Trigger.isDelete){

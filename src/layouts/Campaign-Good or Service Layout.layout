@@ -68,6 +68,10 @@
                 <behavior>Edit</behavior>
                 <field>FollowOnEvent__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Description_Rich__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

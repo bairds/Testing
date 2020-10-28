@@ -52,7 +52,7 @@ public without sharing class VolunteerEventRegisterBootstrap {
         mid = System.currentPageReference().getParameters().get('mid');
 
         String query = 'SELECT Id, Name, Description, Event_Date_Time__c, Event_End_Time__c, Event_Location__c, Recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, ' +
-                'Slots_Reserved__c, Type, Master_Campaign__r.Name, (select id, Role__c from CampaignMembers) FROM Campaign ' +
+                'Slots_Reserved__c, Type, Master_Campaign__r.Name, Under_18_Parental_Waiver__c, (select id, Role__c from CampaignMembers) FROM Campaign ' +
                 'WHERE Event_Date_Time__c >= TODAY AND (recordtype.name = \'Public Event\' OR recordtype.name = \'Volunteer Event\') AND IsActive = true';
         if (mid != null) query += ' AND Master_Campaign__c = \'' + mid + '\'';
         query += ' ORDER BY Event_Date_Time__c, Name';
@@ -100,11 +100,11 @@ public without sharing class VolunteerEventRegisterBootstrap {
             this.query += '&cid=' + cid;
 
             this.c = [
-                    SELECT Id, Name, Description, Description_Long__c, Event_Cost__c, Event_Location__c, Event_Date_time__c,
+                    SELECT Id, Name, Description, Description_Long__c, Description_Rich__c, Event_Cost__c, Event_Location__c, Event_Date_time__c,
                             Event_End_Time__c, Logo__c, Waiver_Required__c, Slots_Remaining__c,
                             Host__c, Waiver__c, Waiver__r.Body__c, Master_Campaign__c, Signup_Questions__c,
                             Type, AllGroupMmbrsRegister__c, CompletionURL__c, Slots_Reserved__c,
-                            Custom_Signup_Question__c, Custom_Signup_Question_2__c, Allow_Group_Signup__c,
+                            Custom_Signup_Question__c, Custom_Signup_Question_2__c, Allow_Group_Signup__c, Under_18_Parental_Waiver__c,
                             (SELECT Id, LeadId, ContactId from CampaignMembers)
                     FROM Campaign
                     WHERE Id = :cid
@@ -409,7 +409,7 @@ public without sharing class VolunteerEventRegisterBootstrap {
         }
 
         step = '4';
-        return null;
+        return ExitToCompletionURL();
     }
 
 
@@ -433,8 +433,10 @@ public without sharing class VolunteerEventRegisterBootstrap {
 
     public PageReference ExitToCompletionURL() {
         string u = null;
-        if (String.isNotBlank(this.c.CompletionURL__c)) {
-            u = 'http://' + this.c.CompletionURL__c.replace('http://', '');
+        if(String.isNotBlank(c.CompletionURL__c)) {
+            u = 'https://' + c.CompletionURL__c.replace('https://', '');
+        } else {
+            return null;
         }
 
         PageReference url = new PageReference(u);

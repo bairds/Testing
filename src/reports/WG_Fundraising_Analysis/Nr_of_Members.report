@@ -29,18 +29,21 @@
     <filter>
         <criteriaItems>
             <column>RECORDTYPE</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value>Opportunity.Membership</value>
         </criteriaItems>
         <criteriaItems>
             <column>Opportunity.Member_Lapse__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>equals</operator>
             <value></value>
         </criteriaItems>
         <criteriaItems>
             <column>Opportunity.Membership_End_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>true</isUnlocked>
             <operator>greaterOrEqual</operator>
             <value>LAST_90_DAYS</value>

@@ -149,11 +149,14 @@ public with sharing class morph1EmailTo3 {
                                             s.SO.put('Preferred_Email__c', 'Personal');
                                             ChosenEmail = SFEmail;
                                         } else {
-                                            if (OtherEmail == null)
+                                            if (OtherEmail == null) {
                                                 s.SO.put('Other_Email__c', SFEmail);
-                                            s.SO.put('Preferred_Email__c', 'Other');
-                                            ChosenEmail = SFEmail;
-                                        }
+                                                s.SO.put('Preferred_Email__c', 'Other');
+                                                ChosenEmail = SFEmail;
+                                            } else {
+                                                ChosenEmail = SFEmail;
+                                            }
+                                    }
                                     }
                                 }
 
@@ -203,7 +206,7 @@ public with sharing class morph1EmailTo3 {
                 system.debug('After arrangeEmails() s is ' + s.SO);
                 LSOs.add(s.SO);
             }
-            update LSOs;
+            database.update(LSOs,false);
         }
 
         public class SOEx {

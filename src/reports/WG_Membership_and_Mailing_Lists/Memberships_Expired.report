@@ -28,21 +28,17 @@
     <filter>
         <criteriaItems>
             <column>Account$Active__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value>Obsolete contact info</value>
         </criteriaItems>
         <criteriaItems>
             <column>Account$BillingStreet</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value></value>
-        </criteriaItems>
-        <criteriaItems>
-            <column>Account$Major_Donor_Now__c</column>
-            <isUnlocked>false</isUnlocked>
-            <operator>notEqual</operator>
-            <value>1</value>
         </criteriaItems>
     </filter>
     <format>Tabular</format>

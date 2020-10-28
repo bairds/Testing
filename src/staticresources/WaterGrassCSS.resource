@@ -2,19 +2,24 @@
 /*COLORS*/
 
 :root {
-    --primary-color: #DBE8F6;
-    --secondary-color: #DEF6DE;
-    --primary-bgcolor: #406B8C;
-    --secondary-bgcolor: #2C6636;
-    --primary-font-family: "Times New Roman", Times,serif;
-    --secondary-font-family: Arial,Helvetica,sans-serif;
+    --primary-color: #406B8C;
+    --primary-bgcolor: #DBE8F6;
+    --primary-bg2color: #7190a8;
+    --secondary-bgcolor: #DEF6DE;
+    --secondary-color: #2C6636;
+    --primary-font-family: Arial,Helvetica,sans-serif;
+    --secondary-font-family: "Times New Roman", Times,serif;
+    --alert-textcolor: #dda4b4;
+    --alert-bgcolor: #F6E8EC;
 }
 
+/*COLORS*/
+.bcalert {background-color: var(--alert-bgcolor);}
 .bcb { background-color: #DBE8F6; }
-.bcb2 { background-color: var(--primary-color); }
+.bgprimary { background-color: var(--primary-bgcolor); }
 .bcbl { background-color: black; }
-.bcg { background-color: var(--primary-bgcolor); }
-.bcg2 { background-color: var(--secondary-color); }
+.textprimary { color: var(--primary-color); }
+.bcprimary-mid { background-color: var(--primary-bg2color); }
 .bco { background-color: #EDE9D6; }
 .bco2 { background-color: #A69343; }
 .bcp { background-color: #D2D2EB; }
@@ -22,6 +27,15 @@
 .bcr { background-color: #F6E8EC;}
 .bcw { background-color: #F2F6F2; }
 .bcw2 { background-color: #FfFfFf; }
+
+.alerttext { color: var(--alert-textcolor);
+    font-style: italic;
+}
+
+.ReverseColor{
+    background-color: var(--primary-color);
+    color: var(--primary-bgcolor);
+}
 
 .bb { border: 1px solid var(--primary-color); }
 .bg { border: 1px solid var(--secondary-bgcolor); }
@@ -38,7 +52,7 @@
 .br6 { border-radius: 6px; }
 
 .cb { color: var(--primary-bgcolor); }
-.cg { color: var(--secondary-bgcolor); }
+.cg { color: var(--secondary-color); }
 .co { color: #A69343; }
 .cp { color: #222666; }
 
@@ -53,6 +67,7 @@
 
 .fdc { flex-direction: column; }
 
+.fontfamily1 { font-family: var(--primary-font-family);}
 .fontfamily2 { font-family: var(--secondary-font-family);}
 
 .fg1 { flex-grow: 1; }
@@ -81,9 +96,18 @@
     align: right;
 }
 
+.italics{
+    font-style: italic;
+}
+
 .jcr {
     display: flex;
-    justify-content: right; }
+    justify-content: right;
+}
+
+.halfline{
+     line-height: 25px;
+ }
 
 .m11 { margin: 11px; }
 
@@ -100,9 +124,11 @@
 .mt11 { margin-top: 11px; }
 
 .mw222 { max-width: 222px; }
+.mw100 { max-width: 100px; }
 .mw388 { max-width: 388px; }
 .mw422 { max-width: 422px; }
 .mw33 { max-width: 33%; }
+.mb20 {margin-bottom: 20 px}
 
 .oi { opacity: initial; }
 .o66 { opacity: .66; }
@@ -162,16 +188,15 @@ body div.bPageBlock {
 
 .bPageblock[color="SectionColor"]{
     background-color: var(--secondary-bgcolor);
-    border: 1px solid var(--secondary-bgcolor);
-    color: var(--primary-bgcolor);
+    border: 1px solid var(--secondary-color);
+    color: var(--primary-color);
 }
 
 .btn{
-    width: 166px;
     font-size: large;
 }
 .btn[color="SectionColor"]{
-    background-color: var(--secondary-bgcolor);
+    background-color: var(--secondary-color);
 }
 
 .checkboxlarger{
@@ -199,7 +224,7 @@ div[color="green"] div.title,
 div[color="green"] div.buttons,
 div[color] div[color="green"] div.buttons {
     background-color: var(--primary-bgcolor);
-    color: var(--secondary-bgcolor);
+    color: var(--secondary-color);
 }
 
 div.container {
@@ -329,6 +354,12 @@ div.scrollable_box {
     background-color: white;
 }
 
+.photo-image{
+    padding: 10px;
+    padding-top: 0px;
+    padding-bottom: 10px;
+}
+
 .infolabel {
     display: block;
     margin-left: auto;
@@ -336,6 +367,12 @@ div.scrollable_box {
 }
 
 .input div.td { display: table-cell; }
+
+.instruction{
+    font-size: small;
+    font-style: italic;
+    text-align: center;
+}
 
 .legaldoc{
     font-size:large;
@@ -355,12 +392,8 @@ div.scrollable_box {
 
 .repeatrow{
     padding-bottom: 100px;
-    /*text-indent: -999px;*/
 }
-
-.row {
-    padding-bottom:10px;
-    border-top: 0; }
+/*
 
 .row[color=olive]{
     background-color: #F3EFE9;
@@ -375,6 +408,7 @@ div.scrollable_box {
     background-color: #DBE8F6;
     color: var(--primary-bgcolor);
 }
+*/
 
 .row.match-my-cols {
     overflow: hidden;
@@ -447,16 +481,28 @@ tr.col-header > td,
 }
 
 .WGPageTitle[color=SectionColor]{
-    background-color: var(--secondary-bgcolor);
+    background-color: var(--primary-bg2color);
     color: var(--secondary-color);
 }
-.WGPageTitle[color=TitleColor]{
-    background-color: var(--primary-bgcolor);
-    color: #DBE8F6;
+
+.WGAlertTitle{
+    background-color: var(--alert-textcolor);
+    padding-top: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+    vertical-align: middle;
+    height: auto;
 }
-.WGPageTitle[color=AlertColor]{
-    color: #F6E8EC;
-    background-color: #DE2C58;
+
+.WGPageTitle2{
+    padding-top: 8px;
+    text-align: center;
+    font-weight: bold;
+    font-size: x-large;
+    vertical-align: middle;
+    height: auto;
+    background-color: var(--primary-bg2color)
 }
 
 /*MOBILE NOT SURE IF THIS IS USEFUL NOW*/
@@ -702,7 +748,7 @@ div[color] div[color="blue"] div.buttons,
 div[color="blue"] div.title,
 div[color="blue"] div.buttons {
     background-color: var(--primary-bgcolor);
-    color: #C8DEF6;
+    color: var(--primary-color);
 }
 
 div[color="blue"] div.title div.highlight {
@@ -722,7 +768,7 @@ div[color="blue"] .output td:first-child {
 
 div[color] div[color="blue"] div.buttons > input,
 div[color="blue"] div.buttons > input {
-    background-color: #C8DEF6;
+    background-color: var(--primary-color);
     color: var(--primary-bgcolor);
 }
 
@@ -743,8 +789,8 @@ div.blue2 {
 
 div[color] div[color="green"] div.table,
 div[color="green"] div.table {
-    background-color: var(--secondary-bgcolor);
-    border: 1px solid var(--secondary-bgcolor);
+    background-color: var(--secondary-color);
+    border: 1px solid var(--secondary-color);
     color: var(--primary-bgcolor);
 }
 
@@ -753,7 +799,7 @@ div[color="green"] div.title,
 div[color="green"] div.buttons,
 div[color] div[color="green"] div.buttons {
     background-color: var(--primary-bgcolor);
-    color: var(--secondary-bgcolor);
+    color: var(--secondary-color);
 }
 
 div[color="green"] .input div.label,
@@ -766,13 +812,13 @@ div[color] div[color="green"] .input td.label,
 div[color] div[color="green"] .input td:first-child,
 div[color="green"] .input td:first-child {
     background-color: #C9E2C9;
-    color: var(--secondary-bgcolor);
+    color: var(--secondary-color);
 }
 
 div[color] div[color="green"] div.buttons > input,
 div[color="green"] div.buttons > input {
     background-color: var(--primary-bgcolor);
-    color: var(--secondary-bgcolor);
+    color: var(--secondary-color);
 }
 
 div[color] div[color="red"] div.table,

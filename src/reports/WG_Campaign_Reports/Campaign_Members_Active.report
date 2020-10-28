@@ -43,18 +43,21 @@
     <filter>
         <criteriaItems>
             <column>ACCOUNT.ADDRESS1_STREET</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value></value>
         </criteriaItems>
         <criteriaItems>
             <column>Contact.Deceased__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value>1</value>
         </criteriaItems>
         <criteriaItems>
             <column>Account.Active__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value>Obsolete contact info</value>

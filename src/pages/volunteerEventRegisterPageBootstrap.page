@@ -1,4 +1,6 @@
-<!-- Updated Baird July 2020 to allow users to override standard WaterGrassCSS with the WGCustomizedCSS-->
+<!-- Updated Baird July 2020 to allow users to override standard WaterGrassCSS with the WGCustomizedCSS
+August 2020 create field, outputPanel to control request for Parental Waiver.
+-->
 <apex:page id="Test2" controller="VolunteerEventRegisterBootstrap" showheader="false" sidebar="false" docType="html-5.0"
            action="{!setSignUp}" cache="false">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
@@ -159,6 +161,10 @@
                                 <apex:outputField value="{!c.Description_Long__c}"
                                                   rendered="{!step == '1' || step == '4'}"/>
                             </div>
+                            <div class="col-xs-8 col-md-10 tdlabel">
+                                <apex:outputField value="{!c.Description_Rich__c}"
+                                                  rendered="{!step == '1' || step == '4'}"/>
+                            </div>
                         </div> <!--End of third row-->
                     </apex:outputPanel>
                 </apex:outputPanel>
@@ -261,7 +267,7 @@
                         <br></br>
 
                         <apex:outputPanel rendered="{!c.Slots_Remaining__c > 0}">
-                            <div class="buttons btn-lg mw100">
+                            <div class="buttons btn-lg mw100 bcprimary-mid">
                                 <apex:commandButton action="{!setSignee}" value="NEXT"/>
                             </div>
                         </apex:outputPanel>
@@ -744,12 +750,15 @@
                                         <apex:inputCheckbox value="{!coc.Over18}"
                                                             styleClass="checkbox"/>
                                     </div>
-                                    <!--   <div class="row bcb2">
+                                    <apex:outputPanel rendered="{!c.Under_18_Parental_Waiver__c}">
+                                        <br/>
+                                    <div class="row bcb2">
                                            <div class="col-xs-12 tdlabel" color="orange">
                                                Participants under the age of 18 must bring a paper copy of the <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">Waiver</a> signed by a parent
                                                or guardian.
                                            </div>
-                                       </div>  -->
+                                       </div>
+                            </apex:outputPanel>
 
 
                                 </div>
