@@ -1,6 +1,7 @@
 // TEsting dummy change
 // Sept 29 2016 Baird updates to set Lead.Addressee__c and Dear__c
 // March 2018 Baird adds return of AccountId.  Now results LIst<string> is contactId or LeadId, "lead" or "contact", and accountId if a Contact
+// JJune 2020 switch to "without sharing," remove function that updates contact info
 public without sharing class identifyOrCreatePerson {
     
 public static List<String> results {get; set;}
