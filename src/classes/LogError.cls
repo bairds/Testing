@@ -31,7 +31,7 @@ public class LogError{
                     WG_Error_Log__c E = new WG_Error_Log__c(
                           Category__c = 'Database',
                           Error_Level__c = string.ValueOf(err.getStatusCode()),
-                          C_P_Data__c = Opps[i].C_P_Data__c,
+                          CnPDataRecord__c = Opps[i].CnPDataRecord__c,
                           Description__c = DataXMLs[i]);                    	
                     EL.add(E);
                     } // end loop through list of errors in SaveResult

@@ -62,14 +62,14 @@ private class parseCnPDataXMLTest {
 		Campaign TestCamp = ctv.fetchTestCampaign();
 
 		// Create a CnP Data record;
-		CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = testxml,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData = new CnPData__c(
+				DataXML__c = testxml,
+				Order_Number__c = '1207131327206181111');
 		insert testdata;
 
 		system.debug('Testdata record now contains: '+ testdata);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata.DataXML__c);
 		system.assertEquals('TestContact', results.get('lastname'));
 		system.assertEquals('14.00',results.get('totalcharge'));
 		system.assertEquals('14',results.get('unitpricecharge0'));
@@ -130,15 +130,15 @@ private class parseCnPDataXMLTest {
 		System.assertEquals('2013-08-10 16:08:00',parseresults.get('nextinstallmentdate'));
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = testxml,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = testxml,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('TestContact', results.get('lastname'));
 		system.assertEquals('14.00',results.get('totalcharge'));
 		system.assertEquals('0.70', results.get('chargamount'));
@@ -188,15 +188,15 @@ private class parseCnPDataXMLTest {
 		System.assertEquals('2013-08-10 16:08:00',parseresults.get('nextinstallmentdate'));
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = testxml,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = testxml,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('Annually', results.get('periodicity'));
 	}
 
@@ -239,15 +239,15 @@ private class parseCnPDataXMLTest {
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(testxml);
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = testxml,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = testxml,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('TestContact', results.get('lastname'));
 		system.assertEquals('0.70', results.get('chargamount'));
 		System.assertEquals('2',results.get('orderitems'));
@@ -378,15 +378,15 @@ private class parseCnPDataXMLTest {
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('TestContact', results.get('lastname'));
 		system.assertEquals('TestCampaign', results.get('transactioncampaignname'));
 		system.assertEquals('0.00', results.get('chargamount'));
@@ -673,15 +673,15 @@ private class parseCnPDataXMLTest {
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('Straughan', results.get('lastname'));
 		system.assertEquals('Connect', results.get('Application'));
 		system.assertEquals('Testcampaign', results.get('transactionnodecampaignname'));
@@ -888,15 +888,15 @@ private class parseCnPDataXMLTest {
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('Kuranz', results.get('lastname'));
 		system.assertEquals('Connect.Forms', results.get('Application'));
 		system.assertEquals(TestCamp.Id, results.get('transactionnodecampaignid'));
@@ -1036,15 +1036,15 @@ private class parseCnPDataXMLTest {
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
 
 
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('Kuranz', results.get('lastname'));
 		system.assertEquals('Connect.Forms', results.get('Application'));
 		system.assertEquals(TestCamp.Id, results.get('transactionnodecampaignid'));
@@ -1152,14 +1152,14 @@ private class parseCnPDataXMLTest {
 		XMLstring += '</CnPTransactionData>';
 
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.assertEquals('Belich', results.get('lastname'));
 		system.assertEquals('Swiper1', results.get('Application'));
 		system.assertEquals('Android', results.get('ApplicationId'));
@@ -1302,14 +1302,14 @@ private class parseCnPDataXMLTest {
 		XMLstring += '</CnPTransactionData>';
 
 		Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-				CnP_PaaS_Bridge__DataXML__c = XMLstring,
-				CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+		CnPData__c TestData2 = new CnPData__c(
+				DataXML__c = XMLstring,
+				Order_Number__c = '1207131327206181111');
 		insert testdata2;
 
 		system.debug('Testdata record now contains: '+ testdata2);
-		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.CnP_PaaS_Bridge__Order_Number__c);
-		map<string, string> results = parseCNPDataXML.parseXML(testdata2.CnP_PaaS_Bridge__DataXML__c);
+		system.debug('testdata.CnP_PaaS__OrderNumber__c is' + testdata2.Order_Number__c);
+		map<string, string> results = parseCNPDataXML.parseXML(testdata2.DataXML__c);
 		system.debug('results is ' + results);
 		system.assertEquals('Salesforce:CnP_PaaS_Evt:Site', results.get('Application'));
 		system.assertEquals(TestCamp.Id, results.get('OrderItem0NodeCampId'));

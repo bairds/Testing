@@ -64,22 +64,22 @@ private class ManageCnPDataTest {
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusID__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);
         // Capture errors
         List<WG_Error_Log__c> ErrorLogs = [SELECT Category__c, Description__c, Error_Level__c, Status_Code__c from WG_Error_Log__c];
         system.assertEquals(0,ErrorLogs.size(),'Error inserting CnP testdata which generated a WG_Error_Log ');
         if (ErrorLogs.size()>=0) system.debug('On line 71 inserted testdata, which generated an error: '+ErrorLogs);
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -171,18 +171,18 @@ private class ManageCnPDataTest {
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -266,18 +266,18 @@ private class ManageCnPDataTest {
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -340,10 +340,10 @@ private class ManageCnPDataTest {
         XMLstring += '</OrderItem>';
         XMLstring += '</OrderItemList></CnPTransactionData>';
 
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);         
 
@@ -367,7 +367,7 @@ private class ManageCnPDataTest {
         Campaign TestCamp = ctv.fetchTestcampaign();
         
 // create 5 new CnP_Data record        
-        list<CnP_PaaS_Bridge__CnPData__c> TestDataList = new list<CnP_PaaS_Bridge__CnPData__c>();
+        list<CnPData__c> TestDataList = new list<CnPData__c>();
         for (integer x = 0; x<5; x++) {
         string XMLstring ='<?xml version="1.0" encoding="UTF-8"?><CnPTransactionData><Version>40</Version><Patron><BillingInformation><BillingFirstName>Tester</BillingFirstName><BillingMI></BillingMI><BillingLastName>TestContact</BillingLastName><BillingEmail>testcontact@dontbotherme.org</BillingEmail><BillingPhone>333</BillingPhone></BillingInformation><BillingAddress><BillingAddress1>lkj;</BillingAddress1><BillingAddress2></BillingAddress2><BillingAddress3></BillingAddress3><BillingCity>;lkj</BillingCity><BillingStateProvince>Alabama</BillingStateProvince><BillingPostalCode>33333</BillingPostalCode><BillingCountryName>United States of America</BillingCountryName></BillingAddress></Patron><TransactionDetail><OrderNumber>1207131327206181111</OrderNumber><Tracker>TestTracker</Tracker><Campaign></Campaign><WindowName>Wild and Scenic Film Fest</WindowName><WindowId>55337</WindowId><TotalCharge>14.00</TotalCharge><ChargAmount>0.70</ChargAmount><TransactionDate>2012-07-13 13:27:00</TransactionDate><TransactionTimeZone>2012-07-13 13:27:00</TransactionTimeZone><TransactionResult>Authorized</TransactionResult><UrlReferrer>http://leadgreen.org/wordpress/</UrlReferrer><PaymentMethod><PaymentType>Credit Card</PaymentType><CreditCard>';
         XMlstring += '<NameOnCard>Test16 Tester</NameOnCard><CardNumber>41111111</CardNumber><CardName>VISA</CardName>';
@@ -389,14 +389,14 @@ private class ManageCnPDataTest {
         XMLstring += '<CampaignName>Testcampaign</CampaignName>';
         XMLstring += '</OrderItem>';
         XMLstring += '</OrderItemList></CnPTransactionData>';
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, //'<?xml version="1.0" encoding="UTF-8"?><CnPTransactionData><Version>40</Version><Patron><BillingInformation><BillingFirstName>Tester</BillingFirstName><BillingMI></BillingMI><BillingLastName>TestContact</BillingLastName><BillingEmail>testcontact@dontbotherme.org</BillingEmail><BillingPhone>333</BillingPhone></BillingInformation><BillingAddress><BillingAddress1>lkj;</BillingAddress1><BillingAddress2></BillingAddress2><BillingAddress3></BillingAddress3><BillingCity>;lkj</BillingCity><BillingStateProvince>Alabama</BillingStateProvince><BillingPostalCode>33333</BillingPostalCode><BillingCountryName>United States of America</BillingCountryName></BillingAddress></Patron><TransactionDetail><OrderNumber>1207131327206181111</OrderNumber><Tracker>TestTracker</Tracker><Campaign></Campaign><WindowName>Wild and Scenic Film Fest</WindowName><WindowId>55337</WindowId><TotalCharge>14.00</TotalCharge><ChargAmount>0.70</ChargAmount><TransactionDate>2012-07-13 13:27:00</TransactionDate><TransactionTimeZone>2012-07-13 13:27:00</TransactionTimeZone><TransactionResult>Authorized</TransactionResult><UrlReferrer>http://leadgreen.org/wordpress/</UrlReferrer><PaymentMethod><PaymentType>Credit Card</PaymentType></PaymentMethod></TransactionDetail></CnPTransactionData>',
-        CnP_PaaS_Bridge__Order_Number__c = '120718160056431111' + x,
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring, //'<?xml version="1.0" encoding="UTF-8"?><CnPTransactionData><Version>40</Version><Patron><BillingInformation><BillingFirstName>Tester</BillingFirstName><BillingMI></BillingMI><BillingLastName>TestContact</BillingLastName><BillingEmail>testcontact@dontbotherme.org</BillingEmail><BillingPhone>333</BillingPhone></BillingInformation><BillingAddress><BillingAddress1>lkj;</BillingAddress1><BillingAddress2></BillingAddress2><BillingAddress3></BillingAddress3><BillingCity>;lkj</BillingCity><BillingStateProvince>Alabama</BillingStateProvince><BillingPostalCode>33333</BillingPostalCode><BillingCountryName>United States of America</BillingCountryName></BillingAddress></Patron><TransactionDetail><OrderNumber>1207131327206181111</OrderNumber><Tracker>TestTracker</Tracker><Campaign></Campaign><WindowName>Wild and Scenic Film Fest</WindowName><WindowId>55337</WindowId><TotalCharge>14.00</TotalCharge><ChargAmount>0.70</ChargAmount><TransactionDate>2012-07-13 13:27:00</TransactionDate><TransactionTimeZone>2012-07-13 13:27:00</TransactionTimeZone><TransactionResult>Authorized</TransactionResult><UrlReferrer>http://leadgreen.org/wordpress/</UrlReferrer><PaymentMethod><PaymentType>Credit Card</PaymentType></PaymentMethod></TransactionDetail></CnPTransactionData>',
+        Order_Number__c = '120718160056431111' + x,
+        StatusId__c = 1);
             TestDataList.add (TestData);
         }//end loop for creatin Data record
         system.debug('TestDataList contains ' + TestDataList.size() + ' transactions.');
-        system.debug('The OrderNumbers go from ' + TestDataList[0].CnP_PaaS_Bridge__Order_Number__c + ' to ' + TestDataList[4].CnP_PaaS_Bridge__Order_Number__c);
+        system.debug('The OrderNumbers go from ' + TestDataList[0].Order_Number__c + ' to ' + TestDataList[4].Order_Number__c);
 
 test.starttest();
         insert TestDataList;
@@ -442,10 +442,10 @@ test.stoptest();
         XMLstring += '<CampaignName></CampaignName>';
         XMLstring += '</OrderItem>';
         XMLstring += '</OrderItemList></CnPTransactionData>';
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);         
 
@@ -499,10 +499,10 @@ test.stoptest();
         '<CampaignName></CampaignName>' +
         '</OrderItem>' +
         '</OrderItemList></CnPTransactionData>';
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);         
 
@@ -566,18 +566,18 @@ test.stoptest();
         XMLstring += '<CampaignName></CampaignName>';
         XMLstring += '</OrderItem>';
         XMLstring += '</OrderItemList></CnPTransactionData>';
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);         
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
 
 //Has TestData credit card # and expiration date been masked for 15 digit CC number?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -640,18 +640,18 @@ test.stoptest();
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -727,13 +727,13 @@ test.stoptest();
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311112',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311112',
+        StatusId__c = 1);
         insert testData2;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated2 = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated2 = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         // Are there now three contributions - one pledge, two payments?
@@ -806,13 +806,13 @@ test.stoptest();
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311112',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311112',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         // Has two donations been created - One Orphanage for Lost Payments" and one payment?
@@ -864,18 +864,18 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -935,30 +935,30 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment but possibly different campaigns
         system.debug('How many payments were made? Payments are '+[select name,AccountId,campaignId,opportunity.campaign.Name from Opportunity]);
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c 
             from Opportunity where Accountid = :TestAcct.Id order by amount DESC];
         system.AssertEquals(2,Payments.size());
         System.assertEquals(300,Payments[0].amount);
         System.assertEquals('Event',Payments[0].RecordType.Name);
         System.assertEquals(100,Payments[1].amount);
         System.assertEquals('Donation',Payments[1].RecordType.Name);
-        System.assertEquals(Payments[0].C_P_Data__c,TestData.Id);
-        System.assertEquals(Payments[1].C_P_Data__c,TestData.Id);
+        System.assertEquals(Payments[0].CnPDataRecord__c,TestData.Id);
+        System.assertEquals(Payments[1].CnPDataRecord__c,TestData.Id);
         System.assertEquals(Payments[0].AccountID,TestAcct.Id);
         System.assertEquals(Payments[1].AccountID,TestAcct.Id);
         System.assertEquals(Payments[0].Contact__c,TestCtct.Id);
@@ -1009,29 +1009,29 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c 
             from Opportunity where Accountid = :TestAcct.Id order by amount DESC];
         system.AssertEquals(2,Payments.size());
         System.assertEquals(199.98,Payments[0].amount);
         System.assertEquals('Event',Payments[0].RecordType.Name);
         System.assertEquals(100,Payments[1].amount);
         System.assertEquals('Donation',Payments[1].RecordType.Name);
-        System.assertEquals(Payments[0].C_P_Data__c,TestData.Id);
-        System.assertEquals(Payments[1].C_P_Data__c,TestData.Id);
+        System.assertEquals(Payments[0].CnPDataRecord__c,TestData.Id);
+        System.assertEquals(Payments[1].CnPDataRecord__c,TestData.Id);
         System.assertEquals(Payments[0].AccountID,TestAcct.Id);
         System.assertEquals(Payments[1].AccountID,TestAcct.Id);
         System.assertEquals(Payments[0].Contact__c,TestCtct.Id);
@@ -1083,29 +1083,29 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c 
             from Opportunity where Accountid = :TestAcct.Id order by amount DESC];
         system.AssertEquals(2,Payments.size());
         System.assertEquals(300,Payments[0].amount);
         System.assertEquals('Event',Payments[0].RecordType.Name);
         System.assertEquals(100,Payments[1].amount);
         System.assertEquals('Donation',Payments[1].RecordType.Name);
-        System.assertEquals(Payments[0].C_P_Data__c,TestData.Id);
-        System.assertEquals(Payments[1].C_P_Data__c,TestData.Id);
+        System.assertEquals(Payments[0].CnPDataRecord__c,TestData.Id);
+        System.assertEquals(Payments[1].CnPDataRecord__c,TestData.Id);
         System.assertEquals(Payments[0].AccountID,TestAcct.Id);
         System.assertEquals(Payments[1].AccountID,TestAcct.Id);
         System.assertEquals(Payments[0].Contact__c,TestCtct.Id);
@@ -1237,29 +1237,29 @@ test.stoptest();
         XMLstring += '</CnPTransactionData>';
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c, Attendee__c 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c, Attendee__c 
             from Opportunity where Accountid = :TestAcct.Id and campaignid = :TestCamp.id order by amount DESC];
         system.AssertEquals(1,Payments.size());
         System.assertEquals(0,Payments[0].amount);
         System.assertEquals('Event',Payments[0].RecordType.Name);
         //System.assertEquals(100,Payments[1].amount);
         //System.assertEquals('Donation',Payments[1].RecordType.Name);
-        System.assertEquals(Payments[0].C_P_Data__c,TestData.Id);
-        //System.assertEquals(Payments[1].C_P_Data__c,TestData.Id);
+        System.assertEquals(Payments[0].CnPDataRecord__c,TestData.Id);
+        //System.assertEquals(Payments[1].CnPDataRecord__c,TestData.Id);
         System.assertEquals(Payments[0].AccountID,TestAcct.Id);
         //System.assertEquals(Payments[1].AccountID,TestAcct.Id);
         System.assertEquals(Payments[0].Contact__c,TestCtct.Id);
@@ -1449,17 +1449,17 @@ test.stoptest();
         XMLstring += '</CnPTransactionData>';
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         // One new payment has been created, linked to TestContact2
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c, Attendee__c, CampaignID 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c, Attendee__c, CampaignID 
             from Opportunity where Accountid = :TestAcct.Id];
         system.AssertEquals(1,Payments.size());
         System.assertEquals(TestCtct2.id,Payments[0].Contact__c);
@@ -1609,26 +1609,26 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment
-        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,C_P_Data__c,Processing_Fee__c, Attendee__c 
+        Payments = [select id,RecordType.Name,Amount,AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c, Attendee__c 
             from Opportunity where Accountid != :TestAcct.Id and campaignid = :TestCamp.id order by amount DESC];
         system.AssertEquals(1,Payments.size(),'If Payments.size is 0 then the identifyOrCreatePerson controller failed to distinguish between two different contacts which both have an email==null.');
         System.assertEquals(100,Payments[0].amount);
         System.assertEquals('Donation',Payments[0].RecordType.Name);
-        System.assertEquals(Payments[0].C_P_Data__c,TestData.Id);
+        System.assertEquals(Payments[0].CnPDataRecord__c,TestData.Id);
         System.assertNotEquals(Payments[0].AccountID,TestAcct.Id);
         System.assertNOtEquals(Payments[0].Contact__c,TestCtct.Id);
         System.assertEquals(Payments[0].Processing_Fee__c,4.00);
@@ -1772,21 +1772,21 @@ test.stoptest();
         XMLstring +='</CnPTransactionData>';
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // One new donation and one new events payment been created, both linked to the same CnP payment
-        Payments = [select id,RecordType.Name,Amount,Campaign.Name, AccountID,Contact__c,C_P_Data__c,Processing_Fee__c, Attendee__c 
+        Payments = [select id,RecordType.Name,Amount,Campaign.Name, AccountID,Contact__c,CnPDataRecord__c,Processing_Fee__c, Attendee__c 
             from Opportunity where accountId = :TestAcct.Id];
         system.AssertEquals('Testcampaign',Payments[0].campaign.name);
         system.AssertEquals(1,Payments.size());
@@ -1902,13 +1902,13 @@ test.stoptest();
             XMLstring+='</OrderItemList>';
             XMLstring+='</CnPTransactionData>';
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         // Have one new donations been created?
@@ -2076,9 +2076,9 @@ test.stoptest();
         // Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
         
         
-        CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, 
-        CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+        CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring, 
+        Order_Number__c = '1207131327206181111');
         insert testdata2;
         
         Payments = [select id,Name,CampaignID,Amount,AccountID,Contact__c, Attendee__c
@@ -2243,9 +2243,9 @@ test.stoptest();
         // Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
         
         
-        CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, 
-        CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+        CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring, 
+        Order_Number__c = '1207131327206181111');
         insert testdata2;
         
         Payments = [select id,Name,CampaignID,Amount,AccountID,Contact__c, Attendee__c
@@ -2305,18 +2305,18 @@ test.stoptest();
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
         
         // Has one donation and one pledge been created?
         system.debug('TestAcct.id is ' + TestAcct.ID);
@@ -2395,13 +2395,13 @@ test.stoptest();
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         // Have one new donations been created?
@@ -2512,18 +2512,18 @@ XMLstring += '</CnPTransactionData>';
 
       
   // create new CnP_Data record        
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1611301022402635092',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1611301022402635092',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -2690,9 +2690,9 @@ XMLstring += '</CnPTransactionData>';
         Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
         
         
-        CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, 
-        CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+        CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring, 
+        Order_Number__c = '1207131327206181111');
         insert testdata2;
         
         Payments = [select id,Name,CampaignID,Amount,AccountID,Contact__c, Attendee__c
@@ -2860,10 +2860,10 @@ XMLstring+='</OrderItemList>';
 XMLstring+='</CnPTransactionData>';
         
         Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, 
-        CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
-        List<CnP_PaaS_Bridge__CnPData__c> ListTestData = new List<CnP_PaaS_Bridge__CnPData__c>();
+		CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring, 
+        Order_Number__c = '1207131327206181111');
+        List<CnPData__c> ListTestData = new List<CnPData__c>();
             ListTestData.add(TestData2);
         ManageCnPData MCPDB = new ManageCnPData();
         MCPDB.afterInsert(ListTestData,null); 
@@ -3085,10 +3085,10 @@ XMLstring+='</OrderItemList>';
 XMLstring+='</CnPTransactionData>';
         
         Map<String, String> parseResults = parseCnPDataXML.parseXML(XMLstring);
-		CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring, 
-        CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
-        List<CnP_PaaS_Bridge__CnPData__c> ListTestData = new List<CnP_PaaS_Bridge__CnPData__c>();
+		CnPData__c TestData2 = new CnPData__c(
+        DataXML__c = XMLstring, 
+        Order_Number__c = '1207131327206181111');
+        List<CnPData__c> ListTestData = new List<CnPData__c>();
             ListTestData.add(TestData2);
         ManageCnPData MCPDB = new ManageCnPData();
         MCPDB.afterInsert(ListTestData,null);
@@ -3264,18 +3264,18 @@ XMLstring += '</CnPTransactionData>';
 
       
   // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-        CnP_PaaS_Bridge__DataXML__c = XMLstring,
-        CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-        CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+        DataXML__c = XMLstring,
+        Order_Number__c = '1207181600564311111',
+        StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);   
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
             where id = :testdata.id];
         
         //Has TestData credit card # and expiration date been masked?
         Dom.Document docx = new Dom.Document();
-        docx.load(TestDataUpdated.CnP_PaaS_Bridge__DataXML__c);
+        docx.load(TestDataUpdated.DataXML__c);
            
         dom.XmlNode xroot = docx.getrootelement() ;
         dom.XmlNode xr2 = xroot.getchildelement('TransactionDetail', null) ; //Level 2
@@ -3457,9 +3457,9 @@ XMLstring += '</CnPTransactionData>';
 
 
 
-        CnP_PaaS_Bridge__CnPData__c TestData2 = new CnP_PaaS_Bridge__CnPData__c(
-                CnP_PaaS_Bridge__DataXML__c = XMLstring,
-                CnP_PaaS_Bridge__Order_Number__c = '1207131327206181111');
+        CnPData__c TestData2 = new CnPData__c(
+                DataXML__c = XMLstring,
+                Order_Number__c = '1207131327206181111');
         insert testdata2;
 
         List<WG_Error_Log__c> ErrorList = [SELECT id, Description__c, Category__c from WG_Error_Log__c];
@@ -3468,7 +3468,7 @@ XMLstring += '</CnPTransactionData>';
         // system.debug('ErrorList[0].Description__c is ' + ErrorList[0].Description__c);
         // system.debug('ErrorList[0].Category__c is ' + ErrorList[0].Category__c);
 
-        List<CnP_PaaS_Bridge__CnPData__c> CnPData = [SELECT id, CnP_PaaS_Bridge__Order_Number__c FROM CnP_PaaS_Bridge__CnPData__c];
+        List<CnPData__c> CnPData = [SELECT id, Order_Number__c FROM CnPData__c];
         system.assertEquals(1,CnPData.size(),'If try/catch worked, the CnPData should have been saved.');
 
         // No Opportunity saved
@@ -3527,15 +3527,15 @@ XMLstring += '</CnPTransactionData>';
 
 
         // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-                CnP_PaaS_Bridge__DataXML__c = XMLstring,
-                CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-                CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+                DataXML__c = XMLstring,
+                Order_Number__c = '1207181600564311111',
+                StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: ' + testdata);
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [
-                select id, CnP_PaaS_Bridge__DataXML__c
-                from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [
+                select id, DataXML__c
+                from CnPData__c
                 where id = :testdata.id
         ];
         List<WG_Error_Log__c> ErrorList = [SELECT id, Description__c, Category__c from WG_Error_Log__c];
@@ -3543,7 +3543,7 @@ XMLstring += '</CnPTransactionData>';
         system.debug('ErrorList[0].Description__c is ' + ErrorList[0].Description__c);
         system.debug('ErrorList[0].Category__c is ' + ErrorList[0].Category__c);
 
-        List<CnP_PaaS_Bridge__CnPData__c> CnPData = [SELECT id, CnP_PaaS_Bridge__Order_Number__c FROM CnP_PaaS_Bridge__CnPData__c];
+        List<CnPData__c> CnPData = [SELECT id, Order_Number__c FROM CnPData__c];
         system.assertEquals(1, CnPData.size(), 'If try/catch worked, the CnPData should have been saved.');
 
         // No Opportunity saved
@@ -3689,13 +3689,13 @@ XMLstring += '</CnPTransactionData>';
 
 
         // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-                CnP_PaaS_Bridge__DataXML__c = XMLstring,
-                CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-                CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+                DataXML__c = XMLstring,
+                Order_Number__c = '1207181600564311111',
+                StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
         where id = :testdata.id];
         List<Opportunity> Payments = [select id,Name, CampaignID,Amount,AccountID,Contact__c, Campaign.Id, campaign.Name, Account.Name, Attendee__c from Opportunity ];
         system.debug('Payments is ' + Payments);
@@ -3841,13 +3841,13 @@ XMLstring += '</CnPTransactionData>';
 
 
         // create new CnP_Data record
-        CnP_PaaS_Bridge__CnPData__c TestData = new CnP_PaaS_Bridge__CnPData__c(
-                CnP_PaaS_Bridge__DataXML__c = XMLstring,
-                CnP_PaaS_Bridge__Order_Number__c = '1207181600564311111',
-                CnP_PaaS_Bridge__StatusID__c = 1);
+        CnPData__c TestData = new CnPData__c(
+                DataXML__c = XMLstring,
+                Order_Number__c = '1207181600564311111',
+                StatusId__c = 1);
         insert testdata;
         system.debug('Testdata record now contains: '+ testdata);
-        CnP_PaaS_Bridge__CnPData__c TestDataUpdated = [select id, CnP_PaaS_Bridge__DataXML__c from CnP_PaaS_Bridge__CnPData__c
+        CnPData__c TestDataUpdated = [select id, DataXML__c from CnPData__c
         where id = :testdata.id];
         List<Opportunity> Payments = [select id,Name, CampaignID,Amount,AccountID,Contact__c, Campaign.Id, campaign.Name, Account.Name, Attendee__c from Opportunity ];
         system.debug('Payments is ' + Payments);

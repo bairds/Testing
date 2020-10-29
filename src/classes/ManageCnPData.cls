@@ -25,7 +25,7 @@
 
 public with sharing class ManageCnPData {
     public list<Opportunity> newOpps;
-    public List<CnP_PaaS_Bridge__CnPData__c> NewData;
+    public List<CnPData__c> NewData;
     public List<string> DataXMLs = new list<string>();
     public ID WGCampaignId;
     public Boolean foundTransactionCamp = false;
@@ -36,7 +36,7 @@ public with sharing class ManageCnPData {
     public map<string, Id> OppRTMap = new map<string, Id>();
     public map <string, string> parseResults;
     public date Transdate;
-    public CnP_PaaS_Bridge__CnPData__c d;
+    public CnPData__c d;
     public Id sID;
     public contact scontact;
     public Opportunity newPledgeOrRecurring;
@@ -49,14 +49,14 @@ public with sharing class ManageCnPData {
 
 
     // AfterInsert
-    public void afterInsert(CnP_PaaS_Bridge__CnPData__c [] NewData, CnP_PaaS_Bridge__CnPData__c [] oldData) {
+    public void afterInsert(CnPData__c [] NewData, CnPData__c [] oldData) {
         AlreadyRunning = true;
-        for (CnP_PaaS_Bridge__CnPData__c d : newData) {
+        for (CnPData__c d : newData) {
             try {
                 afterInsertMethod(d);
             } catch (Exception ex) {
                 WG_Error_Log__c EL = new WG_Error_Log__c(
-                        C_P_Data__c = d.id,
+                        CnPDataRecord__c = d.id,
                         Description__c = 'Message is: ' + ex.getMessage() + '.  Exception of type ' + ex.getTypeName() + ' occurred at line ' + ex.getLineNumber() + ' because of ' + ex.getCause() + ' and stack trace is ' + ex.getStackTraceString(),
                         Category__c = 'Occurred in afterInsert');
                 insert EL;
@@ -87,10 +87,10 @@ public with sharing class ManageCnPData {
         AlreadyRunning = false;
     }
 
-    public void afterInsertMethod(CnP_PaaS_Bridge__CnPData__c d) {
+    public void afterInsertMethod(CnPData__c d) {
         // IF TRANSACTION NOT AUTHORIZED END METHOD
         // map <string, string> parseResults;
-        parseResults = parseCnPDataXML.parseXML(d.CnP_PaaS_Bridge__DataXML__c);
+        parseResults = parseCnPDataXML.parseXML(d.DataXML__c);
         // If not an authorized transaction or "credit" or customtransactiontype or a free transaction don't continue
         system.debug('parseResults.get(transactionresult) is ' + parseResults.get('transactionresult'));
         system.debug('parseResults.get(PaymentType) is ' + parseResults.get('PaymentType'));
@@ -189,7 +189,7 @@ public with sharing class ManageCnPData {
                         CloseDate = TransDate,
                         stageName = 'Payment Received',
                         CampaignID = OptyCampaignId,
-                        C_P_Data__c = d.id,
+                        CnPDataRecord__c = d.id,
                         Accountid = [select id, accountid from contact where id = :sid][0].accountid,
                         Contact__c = sID,
                         RecordTypeID = parseResults.get('sku' + i) == null ? OppRTMap.get('Donation') : AssignOppRTId(parseResults.get('sku' + i)),
@@ -257,7 +257,7 @@ public with sharing class ManageCnPData {
                     } // End check for orderitem[0]
                 } // End Check for Pledge Payment
 
-                DataXMLs.add(d.CnP_PaaS_Bridge__DataXML__c);
+                DataXMLs.add(d.DataXML__c);
                 // Ensure that campaign exists
                 if (opp.campaignId == null) {
                     if (CampaignMap.get('Generic CnP Campaign') != null) {
@@ -495,7 +495,7 @@ LE.LogOppInsertError(errorList);
                 name = parseResults.get('installments') == '999' ? 'Recurring Payment begun on ' + date.today().format() : 'autofill',
                 stageName = 'Pledge Recorded',
                 CampaignID = OptyCampaignId,
-                C_P_Data__c = CnPDataXMLID,
+                CnPDataRecord__c = CnPDataXMLID,
                 Accountid = [select id, accountid from contact where id = :sid][0].accountid,
                 Contact__c = sID,
                 RecordTypeId = OppRTMap.get('Pledge'),
