@@ -68,6 +68,7 @@ static void NineVTs() {
 PageReference pageRef = Page.VolPortal;
 Test.setCurrentPage(pageRef);
 Contact TestContact = [SELECT id, firstname, lastname from Contact where lastname = 'TestContact' limit 1];
+
 ApexPages.currentPage().getParameters().put('cid', TestContact.Id);
 displayVolPortal dVP = new displayVolPortal();
 system.assertEquals(9, dVP.VolHoursThisYear, 'displayVolPortal should have summed to 9 hours');
@@ -76,7 +77,11 @@ system.assertEquals(10, dVP.VolHoursAll, 'displayVolPortal should have summed to
 system.assertEquals(10, dVP.VolMilesAll, 'displayVolPortal should have summed to 10 miles');
 //Test edit functions
 dVP.editContactInfo();
-dVP.GUU.email__C = 'ChangedTestContact@dontbotherme.org';
+    dVP.GUU.email__C = 'ChangedTestContact@dontbotherme.org';
+    dVP.GUU.MailingStreet__c = 'Changed Street 111';
+    dVP.GUU.MailingCity__c = 'Annapolis';
+    dVP.GUU.MailingState__c = 'MD';
+    dVP.GUU.MailingPostalCode__c = 'Changed Street 111';
 dVP.submitContactInfo();
 GuestUserUpdate__c GUUResult = [SELECT Id,RelatedContact__c,PageSource__c FROM GuestUserUpdate__c
 LIMIT 1];
@@ -96,7 +101,7 @@ static void ThreeCampaignsTest(){
         system.assertEquals(3,dVP.VolInterestCampExs.size());
 
     // Contact is signed up for Campaigns 1 &2;
-    // Unsubscribe contact from Campaign 1, Subscribe them to Campaign 3
+    // Unsubscribe contact from Campaign 1, create new Subscription to Campaign 3
     dVP.VolInterestCampExs[0].FinalStatus = 'Unsubscribed';
     dVP.VolInterestCampExs[2].FinalStatus = 'Registered';
     string testString = JSON.serialize(dVP.CampToExtendedCampMap);
@@ -108,7 +113,7 @@ static void ThreeCampaignsTest(){
     For (CampaignMember cm : ResultCMs){
         if (cm.Campaign.Name=='SignupCampaign0') {
             system.assertEquals(true, cm.Unsubscribed__c, 'Campaign Member was registered, should have unsubscribed.');
-            system.assertEquals('Unsubcribed',cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
+            system.assertEquals('Unsubscribed',cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
         }
         if (cm.Campaign.Name=='SignupCampaign2'){
             system.assertEquals('Responded Yes',cm.Status,'Contact was not initially registered, but should have registered.');
@@ -116,8 +121,12 @@ static void ThreeCampaignsTest(){
         }
     }
     // Resubscribe contact to Campaign 1, Unsubscribe them from Campaign 3
-    dVP.VolInterestCampExs[0].FinalStatus = 'Registered';
-    dVP.VolInterestCampExs[2].FinalStatus = 'Unsubscribed';
+    dVP.CampToExtendedCampMap[0].FinalStatus = 'Registered'; // THIS IS NOT MAKING IT TO TESTSTRING.
+    dVP.VolInterestCampExs[2].FinalStatus = 'Unsubscribed'; // THIS IS NOT MAKING IT TO TESTSTRING.
+    // I ADD THE NEXT THREE LINES TO INSERT IT INTO THE CAMPTOEXTENDEDCAMPMAP.
+    dVP.CampToExtendedCampMap.put(dVP.VolInterestCampExs[0].camp.Id, dVP.VolInterestCampExs[0]);
+    system.assert(dVP.CampToExtendedCampMap.get(dvP.VolInterestCampExs[0].camp.Id).FinalStatus!=null);
+    dVP.CampToExtendedCampMap.put(dVP.VolInterestCampExs[2].camp.Id, dVP.VolInterestCampExs[2]);
     testString = JSON.serialize(dVP.CampToExtendedCampMap);
     apexpages.currentPage().getParameters().put('firstParam',testString);
     system.debug('String sent to page is ' + testString);
@@ -126,12 +135,12 @@ static void ThreeCampaignsTest(){
             contactId =: TestContact.Id];
     For (CampaignMember cm : ResultCMs) {
         if (cm.Campaign.Name == 'SignupCampaign0') {
-            system.assertEquals(false, cm.Unsubscribed__c, 'Campaign Member was registered, should have unsubscribed.');
-            system.assertEquals('Responded Yes', cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
+           system.assertEquals(false, cm.Unsubscribed__c, 'Campaign Member was registered, should have unsubscribed.');
+           system.assertEquals('Responded Yes', cm.Status, 'Campaign Member was unregistered, Status should be Unsubscribed.');
         }
         if (cm.Campaign.Name == 'SignupCampaign2') {
-            system.assertEquals('Unsubscribed', cm.Status, 'Contact was not initially registered, but should have registered.');
-            system.assertEquals(true, cm.Unsubscribed__c, 'Contact was registered and status should have been Subscribed.');
+            system.assertEquals('Unsubscribed', cm.Status, 'Contact was initially registered, but should have unsubscribed.');
+            system.assertEquals(true, cm.Unsubscribed__c, 'Contact was initially registered and status should have been changed to unsubscribed.');
         }
     }
 }

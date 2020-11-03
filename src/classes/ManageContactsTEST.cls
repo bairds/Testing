@@ -1,6 +1,19 @@
 @isTest
 private class ManageContactsTEST {
 
+    @IsTest
+    static void IsAccountDefaultSetToFamily() {
+        Schema.DescribeSObjectResult dsr = Account.SObjectType.getDescribe();
+        Schema.RecordTypeInfo defaultRecordType;
+        for (Schema.RecordTypeInfo rti : dsr.getRecordTypeInfos()) {
+            if (rti.isDefaultRecordTypeMapping()) {
+                defaultRecordType = rti;
+            }
+        }
+        system.debug('default account.recordType is ' + defaultRecordType.getName());
+        system.assertEquals('Family',defaultRecordType.getName(),'Default Account RecordType not set to Family, causes errors in email mgmt.');
+    }
+
     @isTest
     static void contactInsertTestAddUpdateRemoveContactRole() {
         // Create test data
@@ -766,6 +779,7 @@ private class ManageContactsTEST {
             }
         }
     }
+
 
     @IsTest
     static void TestBeforeTrigger() {

@@ -13,7 +13,7 @@ static testMethod void SingleContribution() {
 	User thisUser = [ select Id from User where Id = :UserInfo.getUserId() ];
 	System.runAs ( thisUser ) {
 
-		id ServiceRTID = [select id from RecordType where Name = 'Service'][0].id;
+		id ServiceRTID = [select id from RecordType where DeveloperName = 'Service'][0].id;
 		
 // Create test account, contact, campaign, contribution of recordType 'Service'
 		Create_Test_Variables ctv = new Create_Test_Variables();
@@ -61,7 +61,7 @@ static testMethod void SingleContributionAndDelete() {
 	User thisUser = [ select Id from User where Id = :UserInfo.getUserId() ];
 	System.runAs ( thisUser ) {
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
 		
 // Create test account, contact, campaign, contribution of recordType 'Service'
 		Create_Test_Variables ctv = new Create_Test_Variables();
@@ -112,7 +112,7 @@ static testMethod void SingleContributionAndDelete() {
 
 static testMethod void DoubleContribution() {
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -171,8 +171,8 @@ static testMethod void DoubleContribution() {
 static testMethod void MultipleContribution() {
 				  
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-	id ServiceRTID = [select id from RecordType where Name = 'Service'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+	id ServiceRTID = [select id from RecordType where DeveloperName = 'Service'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -280,8 +280,8 @@ static testMethod void MultipleContribution() {
 //Insert the contributions in different order to make sure that doesn't effect result
 static testMethod void TripleContributionNeOrder() {
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-	id ServiceRTID = [select id from RecordType where Name = 'Service'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+	id ServiceRTID = [select id from RecordType where DeveloperName = 'Service'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -345,9 +345,9 @@ static testMethod void TripleContributionNeOrder() {
 //Insert the contributions in different order to make sure that doesn't effect result
 static testMethod void AddMembership() {
 				  
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-	id ServiceRTID = [select id from RecordType where Name = 'Service'][0].id;
-	id MembershipRTID = [select id from RecordType where Name = 'Membership'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+	id ServiceRTID = [select id from RecordType where DeveloperName = 'Service'][0].id;
+	id MembershipRTID = [select id from RecordType where DeveloperName = 'Membership'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -427,9 +427,9 @@ static testMethod void AddMembership() {
 //the membership should be added onto to the existing memberships, and extended the account_membership_expires date.
 static testMethod void AddTwoMemberships() {
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-	id ServiceRTID = [select id from RecordType where Name = 'Service'][0].id;
-	id MembershipRTID = [select id from RecordType where Name = 'Membership'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+	id ServiceRTID = [select id from RecordType where DeveloperName = 'Service'][0].id;
+	id MembershipRTID = [select id from RecordType where DeveloperName = 'Membership'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -552,8 +552,8 @@ static testMethod void AddTwoMemberships() {
 //Insert the contributions in different order to make sure that doesn't effect result
 static testMethod void OnePledgeTwoPayments() {
 
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-	id PledgeRTID = [select id from RecordType where Name = 'Pledge'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+	id PledgeRTID = [select id from RecordType where DeveloperName = 'Pledge'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -645,8 +645,8 @@ static testMethod void OnePledgeTwoPayments() {
     //Insert the contributions in different order to make sure that doesn't effect result
 static testMethod void NewMembershipVsRenewal() {
 
-	id MembershipRTID = [select id from RecordType where Name = 'Membership'][0].id;
-	id PledgeRTID = [select id from RecordType where Name = 'Pledge'][0].id;
+	id MembershipRTID = [select id from RecordType where DeveloperName = 'Membership'][0].id;
+	id PledgeRTID = [select id from RecordType where DeveloperName = 'Pledge'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		
@@ -710,9 +710,9 @@ static testMethod void NewMembershipVsRenewal() {
 
 static testMethod void LapseTest() {
 				  
-	id MembershipRTID = [select id from RecordType where Name = 'Membership'][0].id;
-	id DonationRTID = [select id from RecordType where Name = 'Donation'][0].id;
-    id PledgeRTID = [select id from RecordType where Name = 'Pledge'][0].id;
+	id MembershipRTID = [select id from RecordType where DeveloperName = 'Membership'][0].id;
+	id DonationRTID = [select id from RecordType where DeveloperName = 'Donation'][0].id;
+    id PledgeRTID = [select id from RecordType where DeveloperName = 'Pledge'][0].id;
 				
 	
 //Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)		

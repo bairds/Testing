@@ -35,7 +35,9 @@ private class OpportunityTriggerTests {
         // Test single record primary contributor change
         System.debug('Updating 1 opportunity record, changing primary contributor... (single record validation)');
         o.Contact__c = c2.Id;
+
         update o;
+
         
         // Test bulk update primary contributor change
         System.debug('Updating 50 opportunity records, changing primary contributor... (bulk validation)');
@@ -48,24 +50,30 @@ private class OpportunityTriggerTests {
         // Test single record primary contributor to NULL
         System.debug('Updating 1 opportunity record, primary contributor to NULL... (single record validation)');
         o.Contact__c=NULL;
-        update o;
+        Database.SaveResult dsr = database.update(o,false);
+        system.assertEquals(false,dsr.isSuccess(),'Should have triggered No Primary Contact data validation error');
         
         // Test bulk update primary contributor to NULL
         System.debug('Updating 50 opportunity records, primary contributor to NULL... (bulk validation)');
         for(integer x=0; x<o2.size();x++) {
             o2[x].Contact__c=NULL;
         }
-        
-        update o2;
+        List<DataBase.SaveResult> ListDSR = database.update(o2,false);
+        For (Database.SaveResult d : ListDSR) {
+            system.assertEquals(false,dsr.isSuccess(),'Should have triggered No Primary Contact data validation error');
+        }
+
         
         // Test single record update where primary contributor did not previously exist
         System.debug('Inserting 1 opportunity record, no primary contributor... (single record validation)');
         Opportunity o3 = new Opportunity(Name='Test',CloseDate=System.today(),Amount=100,Account=a,StageName='Prospecting',CampaignId=camp.Id);
-        insert o3;
-        
+        dsr = database.insert(o3,false);
+        system.assertEquals(false,dsr.isSuccess(),'Should have triggered No Primary Contact data validation error');
+
+
         System.debug('Updating 1 opportunity record, primary contributor did not previously exist... (single record validation)');
         o3.Contact__c=c.Id;
-        update o3;
+        // update o3;
     }
     
     static testMethod void opportunityInsertTestUpdatePrimaryContributorCampaignStatus() {

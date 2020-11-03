@@ -24,9 +24,19 @@ public Create_Test_Variables() {
     RecordtypeID = [select id from recordtype where name = 'Public Event'].id);
     insert Testcampaign;
     // Non Family Account
-    Testaccount = new Account (name='TestAccount');
+    Testaccount = new Account (name='TestAccount',
+            BillingStreet='Test Street 111',
+            BillingCity = 'Annapolis',
+            BillingState = 'Maryland',
+            BillingPostalCode = '22222');
     insert testaccount;
-    TestContact = new Contact (lastname='TestContact', email='testcontact@dontbotherme.org', accountID = TestAccount.ID);
+    TestContact = new Contact (lastname='TestContact',
+            email='testcontact@dontbotherme.org',
+            MailingStreet='Test Street 111',
+            MailingCity = 'Annapolis',
+            MailingState = 'Maryland',
+            MailingPostalCode = '22222',
+            accountID = TestAccount.ID);
     insert testcontact; 
     TestLead = new Lead (firstname = 'Lead', lastname = 'TestLead', email='testlead@dontbotherme.org', company='TestCompany', PostalCode='22222');
     insert TestLead;

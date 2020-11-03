@@ -236,6 +236,7 @@ private class VolunteerEventRegisterBootstrapTEST {
 
         ve.updateSignee();
 
+        ve.co = ctv.fetchTestContact();
         ve.signUp();
 
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);

@@ -32,6 +32,7 @@ public with sharing class displayVolPortal {
     public Id VolTaskRTID;
 
     public displayVolPortal() {
+        Opp = new Opportunity();
         OrgName = UserInfo.getOrganizationName();
         id cid = ApexPages.currentPage().getParameters().get('cid');
         VToken = apexPages.currentPage().getParameters().get('VToken');
@@ -233,7 +234,8 @@ public with sharing class displayVolPortal {
                 }
             }
             CampToExtendedCampMap.put(cx.camp.Id, Cx);
-            // JSONVICExs = json.SERIALIZE(VolInterestCampExs);
+            system.debug('CampToExtendedCampMap is ' + campToExtendedCampMap);
+            system.debug('UpdateCMs is ' + UpdateCMs);
         }
         Upsert UpdateCMs;
         JSONVICExs = json.SERIALIZE(CampToExtendedCampMap.values());
@@ -242,17 +244,14 @@ public with sharing class displayVolPortal {
     }
 
     public pageReference SubmitVolTask() {
-
-        Opp = new Opportunity(
-                RecordTypeId = VolTaskRTId,
-                Contact__c = ctct.Id,
-                AccountId = ctct.AccountId,
-                CampaignId = WGHelpers.getUnknownCampaignId(),
-                StageName = 'Task Submitted',
-                Type = 'Self-reported Vol Task',
-                CloseDate = system.today(),
-                Name = Ctct.Firstname + ' ' + Ctct.Lastname + ', ' + Opp.Hours_Actual__c + ' hours submitted on ' + Opp.CloseDate.format()
-        );
+        Opp.RecordTypeId = VolTaskRTId;
+        Opp.Contact__c = ctct.Id;
+                Opp.AccountId = ctct.AccountId;
+                Opp.CampaignId = WGHelpers.getUnknownCampaignId();
+                Opp.StageName = 'Task Submitted';
+                Opp.Type = 'Self-reported Vol Task';
+                Opp.CloseDate = system.today();
+                Opp.Name = Ctct.Firstname + ' ' + Ctct.Lastname + ', ' + Opp.Hours_Actual__c + ' hours submitted on ' + Opp.CloseDate.format();
         // Because Im referencing the related contact info, has to save without sharing
         withoutSharingDMLs.SaveOpportunity(Opp);
         // Update SubmittedTasks
