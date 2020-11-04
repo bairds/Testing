@@ -63,7 +63,7 @@
         <apex:messages style="color: #red;"/>
 
         <apex:Form >
-            <div class="WGPageTitle">Volunteers Submitted Changes to Their Contact Information</div>
+            <div class="WGPageTitle">Changes Not Yet Approved</div>
             <apex:outputPanel html-class="container register-form">
                 <!--HEADER ROW-->
                 <div class="row">
@@ -120,7 +120,7 @@
                 <div class="row">
                     <div class="col-3"><apex:outputText value=" "/></div>
                     <div class="col-9">
-                        <apex:commandButton value="Submit Approved Changes and Close" action="{!submitEdits}" styleClass="btn fwb bgprimary"/>
+                        <apex:commandButton value="Submit Approved Changes" action="{!submitEdits}" styleClass="btn fwb bgprimary"/>
                     </div>
                 </div>
             </apex:outputPanel>

@@ -62,7 +62,32 @@ private class approveGuestUserEditsTEST {
         // Change one more processing status
         // Only 7 should go into the processing
         AMGE.GUUs[1].Processing_Status__c = 'Rejected';
+        AMGE.GUUs[2].MailingStreet__c = 'New Mailing Street #111';
         AMGE.submitEdits();
-        system.AssertEquals(1,[SELECT Id from Contact where email = 'ChangedTest8@tester.com'].size(),'Should have found one Contact with a changed email.');
+        List<Contact> Results = [SELECT AccountId from Contact where email = 'ChangedTest8@tester.com'];
+        system.AssertEquals(1,results.size(),'Should have found one Contact with a changed email.');
+        Results = [SELECT AccountId, Account.BillingStreet, Contact.MailingStreet from Contact where email = 'test2@tester.com'];
+        system.AssertEquals('New Mailing Street #111',Results[0].Account.BillingStreet,'Should have changed Account Address.');
+    }
+
+    @IsTest
+    static void protectedAccountAddress() {
+        PageReference pageRef = Page.ApproveGuestUserEdits;
+        Test.setCurrentPage(pageRef);
+        approveGuestUserEdits AMGE = new approveGuestUserEdits();
+        system.assertEquals(8,AMGE.GUUs.size());
+        // Change one more processing status
+        // Only 7 should go into the processing
+        AMGE.GUUs[1].Processing_Status__c = 'Rejected';
+        AMGE.GUUs[2].MailingStreet__c = 'New Mailing Street #111';
+        // Protect the contact from account address changes, and vice versa
+        AMGE.CtctMap.get(AMGE.GUUs[2].RelatedContact__c).Protected__c = true;
+        AMGE.submitEdits();
+        List<Contact> Results = [SELECT AccountId from Contact where email = 'ChangedTest8@tester.com'];
+        system.AssertEquals(1,results.size(),'Should have found one Contact with a changed email.');
+        Results = [SELECT MailingStreet from Contact where id =: AMGE.GUUs[2].RelatedContact__c];
+        system.AssertEquals('New Mailing Street #111',results[0].MailingStreet,'Should have found one Contact with a changed email.');
+        Results = [SELECT AccountId, Account.BillingStreet, Contact.MailingStreet from Contact where email = 'test2@tester.com'];
+        system.AssertNotEquals('New Mailing Street #111',Results[0].Account.BillingStreet,'Should have changed Account Address.');
     }
 }

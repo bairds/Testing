@@ -265,6 +265,8 @@ public with sharing class displayVolPortal {
         ];
 */
         If (SubmittedTasks.size() > 0) HasSubmittedTasks = true;
+        // Clear the fields for the next Volunteer Task
+        Opp.clear();
         return null;
     }
 

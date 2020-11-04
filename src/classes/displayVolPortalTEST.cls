@@ -121,12 +121,9 @@ static void ThreeCampaignsTest(){
         }
     }
     // Resubscribe contact to Campaign 1, Unsubscribe them from Campaign 3
-    dVP.CampToExtendedCampMap[0].FinalStatus = 'Registered'; // THIS IS NOT MAKING IT TO TESTSTRING.
-    dVP.VolInterestCampExs[2].FinalStatus = 'Unsubscribed'; // THIS IS NOT MAKING IT TO TESTSTRING.
-    // I ADD THE NEXT THREE LINES TO INSERT IT INTO THE CAMPTOEXTENDEDCAMPMAP.
-    dVP.CampToExtendedCampMap.put(dVP.VolInterestCampExs[0].camp.Id, dVP.VolInterestCampExs[0]);
+    dVP.CampToExtendedCampMap.get(dVP.VolInterestCampExs[0].camp.Id).FinalStatus = 'Registered';
+    dVP.CampToExtendedCampMap.get(dVP.VolInterestCampExs[2].camp.Id).FinalStatus = 'Unsubscribed';
     system.assert(dVP.CampToExtendedCampMap.get(dvP.VolInterestCampExs[0].camp.Id).FinalStatus!=null);
-    dVP.CampToExtendedCampMap.put(dVP.VolInterestCampExs[2].camp.Id, dVP.VolInterestCampExs[2]);
     testString = JSON.serialize(dVP.CampToExtendedCampMap);
     apexpages.currentPage().getParameters().put('firstParam',testString);
     system.debug('String sent to page is ' + testString);
@@ -166,6 +163,8 @@ static void ThreeCampaignsTest(){
         System.assertEquals(true,dVP.HasSubmittedTasks,'Should have set HasSubmittedTasks flag to true so that Submitted Task List will show.');
         system.debug('In test, list of Submitted TAsks is now ' + ResultsList);
         System.assertEquals(1,ResultsList.size(),'Should have found one submitted task.');
+        // Has the Opportunity record been cleared for the next Volunteer Task?
+        System.assertEquals(null,dVP.Opp.Id,'Opportunity record Opp should have been cleared for next entry.');
     }
 
 }

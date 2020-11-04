@@ -158,6 +158,10 @@
                 editContactInfoApex();
             }
 
+            function ConfirmSelection() {
+                confirm("Press a button!");
+            }
+
             function selectCampaign(CampId) {
                 console.log('CampId ' + CampId);
                 var checkmark = document.getElementById(CampId);
@@ -167,21 +171,30 @@
                 var FinalStat = CampToExMap[CampId].FinalStatus;
                 console.log('InitStat is ' + InitStat + ' and FinalStat is ' + FinalStat);
                 if (InitStat == 'unregistered' || InitStat == null) {
-                    checkmark.classList.toggle("unregisteredStyle");
-                    CampToExMap[CampId].FinalStatus = 'registered';
-                    console.log('Changed status from unregistered to registered');
+                    var r = confirm("You will be receive invitations to this type of activity.")
+                    if (r==true) {
+                        checkmark.classList.toggle("unregisteredStyle");
+                        CampToExMap[CampId].FinalStatus = 'registered';
+                        console.log('Changed status from unregistered to registered');
+                    }
                 } else {
                     // if originally registered, unsubscribe.
                     if ((InitStat == 'registered' && FinalStat === null) || (FinalStat == 'registered')) {
-                        // if initially registered, change to unsubscribed
-                        checkmark.classList.toggle("unregisteredStyle");
-                        CampToExMap[CampId].FinalStatus = 'unsubscribed';
-                        console.log('Changed status from registered to unsubscribed');
+                        var r = confirm("You will be unsubscribed from invitations for this type of activity.")
+                        if (r==true) {
+                            // if initially registered, change to unsubscribed
+                            checkmark.classList.toggle("unregisteredStyle");
+                            CampToExMap[CampId].FinalStatus = 'unsubscribed';
+                            console.log('Changed status from registered to unsubscribed');
+                        }
                     } else if ((FinalStat == null && InitStat == 'unsubscribed') || FinalStat == 'unsubscribed') {
-                        // if initially unsubscribed, register
-                        checkmark.classList.toggle("unregisteredStyle");
-                        CampToExMap[CampId].FinalStatus = 'registered';
-                        console.log('Changed status from unsubscribed to registered');
+                        // if initially unsubscribed, reregister
+                        var r = confirm("You will be resubscribed to invitations for this type of activity.")
+                        if (r==true) {
+                            checkmark.classList.toggle("unregisteredStyle");
+                            CampToExMap[CampId].FinalStatus = 'registered';
+                            console.log('Changed status from unsubscribed to registered');
+                        }
                     }
                 }
                 console.log('FinalStatus is ' + CampToExMap[CampId].FinalStatus);
@@ -211,6 +224,13 @@
                 x.style.display = "none";
                 var y = document.getElementById("AddVolTaskButton");
                 y.style.display = "block";
+                var teststring = document.getElementById("VolPortal:j_id5:VolTaskDescription").value;
+                console.log('Vol Task Description contains ' + teststring);
+                document.getElementById("VolPortal:j_id5:VolTaskDescription").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskHours").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskStart").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskEnd").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskCampGuess").value="";
             }
 
             function submitVolTask() {
@@ -472,9 +492,9 @@
                                         Describe the work you did:
                                     </div>
                                     <div class="form-group col-6">
-                                        <apex:inputField value="{!Opp.Description}" styleclass="form-control"
+                                        <apex:inputField value="{!Opp.Description}" styleclass="form-control" id="VolTaskDescription"
                                                          html-placeholder="What you did, with whom, results, etc."
-                                                         required="true" ignoreEditPermissionForRendering="true"/>
+                                                         ignoreEditPermissionForRendering="true"/>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -482,9 +502,9 @@
                                         How many hours did you spend?
                                     </div>
                                     <div class="form-group col-6">
-                                        <apex:inputField value="{!Opp.Hours_Actual__c}" styleclass="form-control"
+                                        <apex:inputField value="{!Opp.Hours_Actual__c}" styleclass="form-control" id="VolTaskHours"
                                                          html-placeholder="Can be sum of hours for multi-day tasks."
-                                                         required="true" ignoreEditPermissionForRendering="true"/>
+                                                         ignoreEditPermissionForRendering="true"/>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -492,7 +512,7 @@
                                         Date and Time You Began:
                                     </div>
                                     <div class="form-group col-6">
-                                        <apex:inputField value="{!Opp.Date_and_Time_Start__c}" styleclass="form-control"
+                                        <apex:inputField value="{!Opp.Date_and_Time_Start__c}" styleclass="form-control" id="VolTaskStart"
                                                          html-placeholder="MM/dd/YYYY HH:mm AM/PM"
                                                          showDatePicker="true" ignoreEditPermissionForRendering="true"/>
                                     </div>
@@ -502,7 +522,7 @@
                                         Date and Time You Ended:
                                     </div>
                                     <div class="form-group col-6">
-                                        <apex:inputField value="{!Opp.Date_and_Time_End__c}" styleclass="form-control"
+                                        <apex:inputField value="{!Opp.Date_and_Time_End__c}" styleclass="form-control" id="VolTaskEnd"
                                                          html-placeholder="MM/dd/YYYY HH:mm AM/PM"
                                                          showDatePicker="true" ignoreEditPermissionForRendering="true"/>
                                     </div>
@@ -512,9 +532,9 @@
                                         Volunteer Event or Campaign This Was a Part Of:
                                     </div>
                                     <div class="form-group col-6">
-                                        <apex:inputField value="{!Opp.Campaign_Guess__c}" styleclass="form-control"
+                                        <apex:inputField value="{!Opp.Campaign_Guess__c}" styleclass="form-control" id="VolTaskCampGuess"
                                                          html-placeholder="name of the event, event or your best guess"
-                                                         showDatePicker="true" required="true"
+                                                         showDatePicker="true"
                                                          ignoreEditPermissionForRendering="true"/>
                                     </div>
                                 </div>
@@ -549,8 +569,8 @@
 
             <apex:outputPanel id="rerenderCode">
                 <script>
-                    CampToExMap = {!JSONCTECs};
-                    console.log('In the actionFunction CampToExMap is ' + JSON.stringify(CampToExMap));
+                    // CampToExMap = {!JSONCTECs};
+                    // console.log('In the actionFunction CampToExMap is ' + JSON.stringify(CampToExMap));
                 </script>
             </apex:outputPanel>
 
