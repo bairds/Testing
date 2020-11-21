@@ -509,7 +509,7 @@ public class EACCLightning
                     update cos;
                 }
 
-                // update acct;
+                 update acct;
             }
         }
         else {

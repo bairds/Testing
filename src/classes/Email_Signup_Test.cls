@@ -23,8 +23,10 @@ Email_Signup_Controller ECR1 = new Email_Signup_Controller(sc);
     ECR1.pcontact.firstname = 'Test';
     ECR1.pcontact.email = 'testcontact@dontbotherme.org';
     ECR1.submit();
+    string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+    WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
     system.assertEquals(true, [select id, mailing_lists__c from Contact where
-        lastname = 'TestContact'][0].mailing_lists__c.contains('enewsletter'));
+        lastname = 'TestContact'][0].mailing_lists__c.contains(enewsletterstring));
     }
 
 // Test for new signup = existing lead      
@@ -46,9 +48,11 @@ Email_Signup_Controller ECR2 = new Email_Signup_Controller(sc);
     ECR2.pcontact.email = 'testlead@dontbotherme.org';
     ECR2.pcontact.Description = 'Added Description';
     ECR2.submit();
+    string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+            WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
     List<Lead> results = [select id, mailing_lists__c, Description from Lead where
             lastname = 'Lead'];
-    system.assertEquals(true, results[0].mailing_lists__c.contains('enewsletter'));
+    system.assertEquals(true, results[0].mailing_lists__c.contains(enewsletterstring));
     system.assertEquals('Original Description; Added Description', results[0].Description);
     }
 
@@ -71,9 +75,11 @@ Email_Signup_Controller ECR3 = new Email_Signup_Controller(sc);
     ECR3.pcontact.email = 'nottestlead@dontbotherme.org';
     ECR3.pcontact.Description = 'Added Description';
     ECR3.submit();
+    string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+            WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
     List<Lead> results = [select id, mailing_lists__c, Description from Lead where
             lastname = 'NewLead'];
-    system.assertEquals(true, results[0].mailing_lists__c.contains('enewsletter'));
+    system.assertEquals(true, results[0].mailing_lists__c.contains(enewsletterstring));
     system.assertEquals('Added Description', results[0].Description);
     }   
     
@@ -97,10 +103,12 @@ Email_Signup_Controller ECR4 = new Email_Signup_Controller(sc);
     ECR4.pcontact.firstname = 'Test';
     ECR4.pcontact.email = 'testcontact@dontbotherme.org';
     ECR4.submit();
+    string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+            WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
     String mailing_list_result = [select id, mailing_lists__c from Contact where
         lastname = 'TestContact'][0].mailing_lists__c;
     system.debug('mailing_list_result is ' + mailing_list_result);
-    //system.assertEquals(true, mailing_list_result.contains('enewsletter'));
+    //system.assertEquals(true, mailing_list_result.contains(enewsletterstring));
     system.assertEquals(true, mailing_list_result.contains('testnewsletter'));            
     }   
     
@@ -123,10 +131,12 @@ Email_Signup_Controller ECR5 = new Email_Signup_Controller(sc);
     ECR5.pcontact.firstname = 'Test';
     ECR5.pcontact.email = 'testlead@dontbotherme.org';
     ECR5.submit();
+    string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+            WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
     String mailing_list_result = [select id, mailing_lists__c from Lead where
         lastname = 'Lead'][0].mailing_lists__c;
     system.debug(mailing_list_result);
-    system.assertEquals(true, mailing_list_result.contains('enewsletter'));
+    system.assertEquals(true, mailing_list_result.contains(enewsletterstring));
     system.assertEquals(true, mailing_list_result.contains('testnewsletter'));        
            
     }
@@ -306,8 +316,10 @@ Email_Signup_Controller ECR10 = new Email_Signup_Controller(sc);
         ECR1.SetUpTrial = true;
         ECR1.OrgName = 'TestOrgName';
         ECR1.submit();
+        string enewsletterstring = [SELECT Online_Signup_Newsletter__c FROM
+                WGSettings__mdt where Label = 'WGDefault' LIMIT 1].Online_signup_newsletter__c;
         system.assertEquals(true, [select id, mailing_lists__c from Contact where
-                lastname = 'TestContact'][0].mailing_lists__c.contains('enewsletter'));
+                lastname = 'TestContact'][0].mailing_lists__c.contains(enewsletterstring));
         List<Task> ConfirmTask = [SELECT Subject, WhatId, WhoId, OwnerId, Status, Type, ReminderDateTime from Task];
         system.assertEquals(1,ConfirmTask.size());
         system.assertEquals(TestContact.Id,ConfirmTask[0].WhoId);

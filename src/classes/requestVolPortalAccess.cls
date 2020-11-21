@@ -26,16 +26,20 @@ update Volunteer;
 // SEND EMAIL
 List<EmailTemplate> emailTemplates = [SELECT Id FROM EmailTemplate WHERE DeveloperName='Volunteer_Portal_Link'];
 List<String> ToAddresses = new List<String>{Volunteer.Email};
-Try{
+Try {
     OrgWideEmailAddress owa = [select id, DisplayName, Address from OrgWideEmailAddress limit 1];
-
-// Results[0] is the id of the person identified.
-WGHelpers.sendTemplatedEmail(ToAddresses,null,'Volunteer_Portal_Link',results[0],null,owa.id,true,null);
+    system.debug('OrgWideEmailAddress is ' + owa);
+    system.assertNotEquals(owa,null,'OrgWideEmailAddress was not set up, so VolPortal cannot send email.');
+    WGHelpers.sendTemplatedEmail(ToAddresses,null,'VolPortalLinkFromOrganizer',results[0],null,owa.id,true,null);
 // Messaging.reserveSingleEmailCapacity(2);
-} catch(queryException qe){
+}
+catch(queryException qe){
     ApexPages.Message myMsg = new ApexPages.Message(ApexPages.Severity.ERROR,'Error: Must set an Organization-Wide Email Address before the volunteer portal can be requested.');
     ApexPages.addMessage(myMsg);
+    return null;
 }
+// Results[0] is the id of the person identified.
+
 } else {
 VolunteerFound = 'NotFound';
 }

@@ -68,7 +68,7 @@
             <apex:outputPanel layout="block" html-color="blue" styleClass="dib">
                 <div class="container ma">
                     <div class="title p6">
-                        Manage Account, Contacts &amp; Contributions, step is {!step}, a is {!a}
+                        Manage Account, Contacts &amp; Contributions <!--, step is {!step}, a is {!a}-->
                     </div>
 
                     <div class="input control">
@@ -87,7 +87,17 @@
 
                         <input type="button" class="btn" value="create account & contact(s)"
                                onclick="step2JS()"/>
+                        <script>
+                            console.log('UITheme is ' + UITheme.getUITheme());
+                            if (UITheme.getUITheme() === 'Theme4d' || UITheme.getUITheme() === 'Theme4u') {
+                                console.log('UITheme is Lighning');
+                            } else {
+                                console.log('UITheme is Classic');
+                            }
+                        </script>
+                        <apex:outputPanel rendered="{!$User.UITheme != 'Theme4d' && $User.UITheme != 'Theme4u'}">
                         <input type="button" class="btn" value="exit" onclick="ExitEACC()"/>
+                        </apex:outputPanel>
                     </div>
 
                     <apex:outputPanel layout="block" rendered="{!step == '2'}" styleClass="bcw">
