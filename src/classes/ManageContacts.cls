@@ -255,43 +255,50 @@ public without sharing class ManageContacts {
 
 
     public static void afterInsert(Contact [] contacts, Contact [] OldContacts) {
+        //If the instance is set to use only AccountContactRelationships
+        Boolean ACRelations = [SELECT Use_AcctCtctRelations__c from WGSettings__mdt
+                WHERE DeveloperName = 'WGDefault' LIMIT 1].Use_AcctCtctRelations__c;
+        If (ACRelations){
 
-        //Now make sure that a new primary ACR is created if the Account doesn't already have one
-        Set<Id> AllAccounts = new Set<Id> ();
-        Set<Id> WithPrimaryAccounts = new Set<Id> ();
-        List<AccountContactRole> NewAccountRoleContacts = new List<AccountContactRole>();
+        } else {
 
-        for (Contact c : contacts) {
-            AllAccounts.add(c.AccountId);
-        }
-        List<Account> UpdateAccts = CountCtctsInAcct(new List<Id>(AllAccounts));
-        //Count up the contacts
-        /*List<Account> Accts = [select id, (select id from Contacts where Deceased__c<>true AND (Active__c = 'Active' OR Active__c = 'Yes' OR Active__c = null)) FROM Account WHERE Id in :AllAccounts];
+            //Now make sure that a new primary ACR is created if the Account doesn't already have one
+            Set<Id> AllAccounts = new Set<Id> ();
+            Set<Id> WithPrimaryAccounts = new Set<Id> ();
+            List<AccountContactRole> NewAccountRoleContacts = new List<AccountContactRole>();
+
+            for (Contact c : contacts) {
+                AllAccounts.add(c.AccountId);
+            }
+            List<Account> UpdateAccts = CountCtctsInAcct(new List<Id>(AllAccounts));
+            //Count up the contacts
+            /*List<Account> Accts = [select id, (select id from Contacts where Deceased__c<>true AND (Active__c = 'Active' OR Active__c = 'Yes' OR Active__c = null)) FROM Account WHERE Id in :AllAccounts];
         for (Account a : Accts) {
             a.Nr_Contacts_In_Acct__c = a.Contacts.size();
         }*/
-        update UpdateAccts;
+            update UpdateAccts;
 
-        for (AccountContactRole acr : [Select AccountId from AccountContactRole where AccountId in :AllAccounts AND IsPrimary = TRUE]) {
-            WithPrimaryAccounts.add(acr.AccountId);
-        }
-
-        for (Contact c : contacts) {
-            if (WithPrimaryAccounts.contains(c.AccountId)) {
-                //do nothing
-            } else {
-                NewAccountRoleContacts.add(new AccountContactRole (
-                        AccountId = c.AccountId,
-                        ContactId = c.Id,
-                        IsPrimary = TRUE,
-                        Role = 'Decision Maker'));
-                //and now we've added it, we don't want to add another, so update the list
-                WithPrimaryAccounts.add(c.AccountId);
+            for (AccountContactRole acr : [Select AccountId from AccountContactRole where AccountId in :AllAccounts AND IsPrimary = TRUE]) {
+                WithPrimaryAccounts.add(acr.AccountId);
             }
-        }
 
-        if (NewAccountRoleContacts.size() > 0) {
-            insert NewAccountRoleContacts;
+            for (Contact c : contacts) {
+                if (WithPrimaryAccounts.contains(c.AccountId)) {
+                    //do nothing
+                } else {
+                    NewAccountRoleContacts.add(new AccountContactRole (
+                            AccountId = c.AccountId,
+                            ContactId = c.Id,
+                            IsPrimary = TRUE,
+                            Role = 'Decision Maker'));
+                    //and now we've added it, we don't want to add another, so update the list
+                    WithPrimaryAccounts.add(c.AccountId);
+                }
+            }
+
+            if (NewAccountRoleContacts.size() > 0) {
+                insert NewAccountRoleContacts;
+            }
         }
         //end method
     }
