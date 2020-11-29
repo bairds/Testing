@@ -1,3 +1,7 @@
+/**
+ * Created by Baird on 11/24/2020.
+ */
+
 public without sharing class ManageContacts {
 
     public List<Contact> cs;
@@ -249,35 +253,60 @@ public without sharing class ManageContacts {
                     NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
                 }
             }
-            }
+        }
         return NewContacts;
     }
 
 
     public static void afterInsert(Contact [] contacts, Contact [] OldContacts) {
+        List<AccountContactRelation> NewAccountRelContacts = new List<AccountContactRelation>();
+        List<AccountContactRole> NewAccountRoleContacts = new List<AccountContactRole>();
+        Boolean UseACRelations = WGHelpers.getUseACRelations();
+
+        Set<Id> AllAccounts = new Set<Id> ();
+        Set<Id> WithPrimaryAccounts = new Set<Id> ();
+        for (Contact c : contacts) {
+            AllAccounts.add(c.AccountId);
+        }
+        List<Account> UpdateAccts = CountCtctsInAcct(new List<Id>(AllAccounts));
+        update UpdateAccts;
+
         //If the instance is set to use only AccountContactRelationships
-        Boolean ACRelations = [SELECT Use_AcctCtctRelations__c from WGSettings__mdt
-                WHERE DeveloperName = 'WGDefault' LIMIT 1].Use_AcctCtctRelations__c;
-        If (ACRelations){
+        If (UseACRelations) {
+            //Map the newly created contact ACRelations to their ContactId;
+            List<Id> ContactIds = new List<Id>();
+            For (contact c : contacts) ContactIds.add(c.Id);
+            Map<id, AccountContactRelation> MapCtctToACRs = new Map<id, AccountContactRelation>();
+            List<Contact> ContactsAndACRs = [
+                    SELECT Id, (
+                            Select ContactId,AccountId,isPrimary__c,Roles
+                            FROM AccountContactRelations
+                    )
+                    FROM Contact
+                    WHERE Id IN:ContactIds
+            ];
+            For (Contact c : ContactsAndACRs) MapCtctToACRs.put(c.Id, c.AccountContactRelations[0]);
 
-        } else {
 
-            //Now make sure that a new primary ACR is created if the Account doesn't already have one
-            Set<Id> AllAccounts = new Set<Id> ();
-            Set<Id> WithPrimaryAccounts = new Set<Id> ();
-            List<AccountContactRole> NewAccountRoleContacts = new List<AccountContactRole>();
-
-            for (Contact c : contacts) {
-                AllAccounts.add(c.AccountId);
+            for (AccountContactRelation acr : [
+                    Select AccountId
+                    from AccountContactRelation
+                    where AccountId in :AllAccounts AND IsPrimary__c = TRUE
+            ]) {
+                WithPrimaryAccounts.add(acr.AccountId);
             }
-            List<Account> UpdateAccts = CountCtctsInAcct(new List<Id>(AllAccounts));
-            //Count up the contacts
-            /*List<Account> Accts = [select id, (select id from Contacts where Deceased__c<>true AND (Active__c = 'Active' OR Active__c = 'Yes' OR Active__c = null)) FROM Account WHERE Id in :AllAccounts];
-        for (Account a : Accts) {
-            a.Nr_Contacts_In_Acct__c = a.Contacts.size();
-        }*/
-            update UpdateAccts;
 
+            List<AccountContactRelation> updateACRelations = new List<AccountContactRelation>();
+            for (Contact c : contacts) {
+                // Only make the new contact Primary if there's not already a Primary.
+                if (!WithPrimaryAccounts.contains(c.AccountId)) {
+                    MapCtctToACRs.get(c.Id).IsPrimary__c = true;
+                    updateACRelations.add(MapCtctToACRs.get(c.Id));
+                    update updateACRelations;
+                }
+            }
+        } else {
+            //Now make sure that a new primary ACR is created if the Account doesn't already have one
             for (AccountContactRole acr : [Select AccountId from AccountContactRole where AccountId in :AllAccounts AND IsPrimary = TRUE]) {
                 WithPrimaryAccounts.add(acr.AccountId);
             }
@@ -295,13 +324,13 @@ public without sharing class ManageContacts {
                     WithPrimaryAccounts.add(c.AccountId);
                 }
             }
-
             if (NewAccountRoleContacts.size() > 0) {
                 insert NewAccountRoleContacts;
             }
         }
-        //end method
     }
+    //end method
+
 
     public static void beforeDelete(Contact [] contacts, Contact [] oldcontacts) {
         AccountIds = new List<Id>();
@@ -378,8 +407,8 @@ public without sharing class ManageContacts {
             volunteerInterestsList.add(new SelectOption(ll.getValue(), ll.getLabel()));
     }
 
-    // In the case of an update, we also need to have the newly injected emails.
-    // That's the triggernew.email.
+// In the case of an update, we also need to have the newly injected emails.
+// That's the triggernew.email.
     public static List<Contact> arrangeEmails(List<Contact> Ctcts, Map<Id, Id> RTIdMap) {
         For (Contact c : Ctcts) {
             If (c.Preferred_Email__c <> null) {

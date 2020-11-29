@@ -11,7 +11,7 @@ private class ManageContactsTEST {
             }
         }
         system.debug('default account.recordType is ' + defaultRecordType.getName());
-        system.assertEquals('Family',defaultRecordType.getName(),'Default Account RecordType not set to Family, causes errors in email mgmt.');
+        system.assertEquals('Family', defaultRecordType.getName(), 'Default Account RecordType not set to Family, causes errors in email mgmt.');
     }
 
     @isTest
@@ -60,10 +60,53 @@ private class ManageContactsTEST {
         // Was the account.Nr_Contacts_In_Acct__c updated?
         system.assertEquals(1, confirmAcct.Nr_Contacts_In_Acct__c);
 
-        //but not now c2        
+        //but not now c2
         try {
             //try to delete contact set as priamry
             delete c2;
+        } Catch (DmlException e) {
+            //Check error message is displayed
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
+        }
+    }
+
+    @isTest
+    static void contactInsertTestAddUpdateRemoveContactRelation() {
+        //Settings UseAcctCtctRelations__c to true
+        WGHelpers.BUseACRelations = true;
+        // Create test data
+        Account a = new Account(Name = 'Test XX 1');
+        insert a;
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org', Active__c = 'Active');
+        insert c;
+        //Since this isn't a list, it will fail the test if more than one row returned
+        AccountContactRelation testacr1 = [Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c from AccountContactRelation where AccountId = :a.Id];
+        system.assertEquals(c.Id, testacr1.ContactId);
+        system.assertequals(true, testacr1.IsPrimary__c);
+        system.assertequals(1, testacr1.account.Nr_Contacts_In_Acct__c);
+        //Insert a second contact
+        Contact c2 = new Contact(LastName = 'Test2', AccountId = a.Id, Active__c = 'Active');
+        insert c2;
+
+        List<AccountContactRelation> resultACR = [
+                Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c
+                from AccountContactRelation
+                where AccountId = :a.Id
+        ];
+        system.assertequals(2, resultACR[0].account.Nr_Contacts_In_Acct__c);
+        LIST<AccountContactRelation> countACR = [select Id from AccountContactRelation where accountid = :a.id];
+        System.assertEquals(2, countACR.size());
+        //Since this isn't a list, it will fail the test if more than one row returned
+        AccountContactRelation testacr2 = [
+                Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c
+                from AccountContactRelation WHERE AccountId = :a.Id AND IsPrimary__c = TRUE
+        ];
+        system.assertequals(2, testacr2.account.Nr_Contacts_In_Acct__c);
+        //And Check still first Contact as Primary
+        system.assertequals(c.Id, testacr2.ContactId);
+        try {
+            //try to delete contact set as primary
+            delete c;
         } Catch (DmlException e) {
             //Check error message is displayed
             System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
@@ -905,5 +948,5 @@ private class ManageContactsTEST {
             system.assertEquals('other2@dontbotherme.org', ResultContacts[0].Other_Email__c);
             system.assertEquals(null, ResultContacts[0].Legacy_Emails__c);
         }
-}
+    }
 }

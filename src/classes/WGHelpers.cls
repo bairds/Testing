@@ -210,7 +210,19 @@ public without sharing class WGHelpers {
         catch (EmailException e) {throw new EmailException('sendTemplatedEmail error. ' + e.getMessage());}
 
     }
-}
+
+
+    @testVisible private static Boolean BUseACRelations;
+    public static Boolean getUseACRelations(){
+        if (BUseACRelations==null){
+        BUseACRelations = [SELECT Use_AcctCtctRelations__c from WGSettings__mdt
+        WHERE DeveloperName = 'WGDefault'
+        LIMIT 1
+        ].Use_AcctCtctRelations__c;
+    }
+    return BUseACRelations;
+    }
+            }
 
 
 /* THIS MAY NOT BE USEFUL, EXCEPT THAT IT DOES ALLOW US TO BE DYNAMIC WITH THE soBJECTNAME
