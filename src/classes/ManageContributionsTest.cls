@@ -799,4 +799,55 @@ static testMethod void LapseTest() {
 	} // end of runAs
 	} // end of testmethod  
 
+	static testMethod void VolunteerContributions() {
+		// Does the Contact.LifetimeVolHours__c field summarize only
+		// Won opportunities?
+
+		id VolRTID = [select id from RecordType where DeveloperName = 'Volunteer_Task'][0].id;
+
+
+//Wrap the test in system.runas so that it doesn't object to mixed DML (from setup and non-setup objects)
+		User thisUser = [ select Id from User where Id = :UserInfo.getUserId() ];
+		System.runAs ( thisUser ) {
+
+			Create_Test_Variables ctv = new Create_Test_Variables();
+			Account testacct = ctv.fetchTestAccount();
+			Contact testctct = ctv.fetchTestContact();
+			Campaign testcamp = ctv.fetchTestCampaign();
+			List<Opportunity> insertOpps = new List<Opportunity>();
+			//First Contribution
+			Opportunity TestContrib1 = new Opportunity (Contact__c = TestCtct.id,
+					AccountID = TestAcct.id,
+					CampaignID = TestCamp.id,
+					Name = 'autofill',
+					StageName = 'Closed/Won',
+					CloseDate = system.today(),
+					recordTypeID = VolRTID,
+					Hours_Actual__c = 10);
+			insertOpps.add(TestContrib1);
+			//Second Contribution
+			Opportunity TestContrib2 = new Opportunity (Contact__c = TestCtct.id,
+					AccountID = TestAcct.id,
+					CampaignID = TestCamp.id,
+					Name = 'autofill',
+					StageName = 'Abandoned',
+					CloseDate = system.today(),
+					recordTypeID = VolRTID,
+					Hours_Actual__c = 10);
+			insertOpps.add(TestContrib2);
+			insert insertOpps;
+
+			Contact checkCtct = [select Id, LifetimeVolHours__c, YearToDate_VolHours__c FROM Contact
+					where Id =: Testctct.Id];
+			system.assertEquals(TestContrib1.Hours_Actual__c,checkCtct.LifetimeVolhours__c,'Should only have included 10 Closed/Won Hours and not 10 Abandoned hours');
+			system.assertEquals(TestContrib1.Hours_Actual__c,checkCtct.YearToDate_Volhours__c,'Should only have included 10 Closed/Won Hours and not 10 Abandoned hours');
+
+					Account checkAcct = [select Last_Contrib_Amount__c, Last_Donate_Amount__c,
+					Last_Membership_Amount__c, Last_Donate_Date__c, Last_Contrib_Date__c, Last_Membership_Date__c,
+			(select amount, ContribOrder__c, Donate_Lapse__c from opportunities order by ContribOrder__c)
+			from Account where name = 'TestAccount'][0];
+
+		} // end of runAs
+	} // end of DoubleContribution
+
 }

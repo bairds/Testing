@@ -461,7 +461,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                         }
                     } // end if OppsForThisCtct[i].recordTypeId in DonationRTIDs
                     // Calculate volunteer hours
-                    if (OppsForThisCtct[i].Hours_Actual__c != null) {
+                    if (OppsForThisCtct[i].Hours_Actual__c != null && OppsForThisCtct[i].IsWon) {
                         // Need to add LifetimeVolHours, Vol_Event_Count to contact
                         LifetimeVolHours += OppsForThisCtct[i].Hours_Actual__c;
                         Vol_Event_Count += 1;
