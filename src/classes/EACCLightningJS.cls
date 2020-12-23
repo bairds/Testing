@@ -30,7 +30,7 @@ Also replace the first line in all thank you letter templates with:
 
 */
 
-public class EACCLightning
+public class EACCLightningJS
 {
     public String a { get; set; } // Set initially to 1, to view contacts; to 3 if updating contact; to 2 if at entering contrib step.
     public String a2 { get; set; }
@@ -63,7 +63,7 @@ public class EACCLightning
     public Map<String, String> fieldLabel { get; set; }
     public Boolean CreateDummyContact { get; set; }  // Set to true to create dummy contact for account
 
-    public EACCLightning()
+    public EACCLightningJS()
     {
         step = System.currentPageReference().getParameters().get('step');
         if(String.isEmpty(step))

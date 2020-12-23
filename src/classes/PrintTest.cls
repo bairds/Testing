@@ -8,7 +8,7 @@ private class PrintTest {
        Test.startTest();
 
        Create_Test_Variables CTV = new Create_Test_Variables();
-       Account TestAcct = CTV.fetchFamilyTestAccount();
+       Account TestAcct = CTV.fetchTestFamilyAccount();
        Contact TestCtct = CTV.fetchTestContact();
        Campaign TestCamp = CTV.fetchTestCampaign();
         

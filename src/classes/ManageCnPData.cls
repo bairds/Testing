@@ -22,6 +22,7 @@
 //  June 2019 Refactor to catch errors without preventing CnP from inserting record.  Errors end up in the WG_Error_Log
 // Sept 2019 Revise Campaign section to handle new campaign list and campaign node within the Order Item.  NOTE:
 //  I take only the first campaignId and name from that list ... why would a single OrderItem have multiple campaigns?
+// Nov 2020 Accept "2 Months" as a valid periodicity value, as well as "Every 2 Months."
 
 public with sharing class ManageCnPData {
     public list<Opportunity> newOpps;
@@ -220,7 +221,7 @@ public with sharing class ManageCnPData {
                     if (parseResults.get('periodicity') == 'Weekly') opp.Membership_End_Date__c = TransDate.adddays(7);
                     if (parseResults.get('periodicity') == 'Every 2 Weeks') opp.Membership_End_Date__c = TransDate.adddays(14);
                     if (parseResults.get('periodicity') == 'Monthly') opp.Membership_End_Date__c = TransDate.addmonths(1);
-                    if (parseResults.get('periodicity') == 'Every 2 Months') opp.Membership_End_Date__c = TransDate.addmonths(1);
+                    if (parseResults.get('periodicity') == 'Every 2 Months' || parseResults.get('periodicity') == '2 Months') opp.Membership_End_Date__c = TransDate.addmonths(1);
                     if (parseResults.get('periodicity') == 'Quarterly') opp.Membership_End_Date__c = TransDate.addmonths(3);
                     if (parseResults.get('periodicity') == 'Every 6 Months') opp.Membership_End_Date__c = TransDate.addmonths(6);
                     if (parseResults.get('periodicity') == 'Annually' || parseResults.get('periodicity') == 'Yearly') opp.Membership_End_Date__c = TransDate.addmonths(12);

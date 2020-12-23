@@ -88,6 +88,8 @@ private class AutoCompleteV2_Con_Test {
     static testMethod void test_LeadsContactsAndConvertedLeads(){
         // If a lead is converted it should not appear in the returned list
         //create some test Lead
+        WGHelpers.BManageContacts = false;
+        WGHelpers.BUseACRelations = false;
         List<Lead> LeadList = new List<Lead>();
         for(Integer i =0 ; i < 200 ; i++){
             LeadList.add(new Lead(Firstname='Test',LastName='Tester'+i,Company='Company'+i));

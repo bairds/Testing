@@ -44,30 +44,6 @@ public without sharing class WGHelpers {
         return UnknownCampaign.Id;
     }
 
-    private static WGSettings__mdt WGSettings;
-
-    public static WGSettings__mdt getWGSettings() {
-        if (WGSettings == null) {
-            string querystring = 'select ';
-            List<String> types = new String[]{
-                    'WGSettings__mdt'
-            };
-            DescribeSObjectResult[] results = Schema.describeSObjects(types);
-            System.debug('Got describe information for ' + results.size() + ' sObjects.');
-            for (Schema.DescribeSobjectResult res : results) {
-                Map<String, Schema.SObjectField> fieldsMap = res.fields.getMap();
-                system.debug('Fields are ' + fieldsMap.keySet());
-                For (string s : fieldsMap.keyset()) {
-                    querystring += s + ', ';
-                }
-                querystring = querystring.LEFT(querystring.length() - 2) + ' from WGSettings__mdt LIMIT 1';
-
-                WGSettings = Database.query(querystring);
-            }
-        }
-        RETURN WGSettings;
-    }
-
     private static List<CampaignStatiMDT__mdt> CampaignStatiMDT;
 
     public static List<CampaignStatiMDT__mdt> getCampaignStatiMDT() {
@@ -212,17 +188,72 @@ public without sharing class WGHelpers {
     }
 
 
-    @testVisible private static Boolean BUseACRelations;
-    public static Boolean getUseACRelations(){
-        if (BUseACRelations==null){
-        BUseACRelations = [SELECT Use_AcctCtctRelations__c from WGSettings__mdt
-        WHERE DeveloperName = 'WGDefault'
-        LIMIT 1
-        ].Use_AcctCtctRelations__c;
-    }
-    return BUseACRelations;
-    }
+    private static WGSettings__mdt WGSettings;
+
+    public static WGSettings__mdt getWGSettings() {
+        if (WGSettings == null) {
+            string querystring = 'select ';
+            List<String> types = new String[]{
+                    'WGSettings__mdt'
+            };
+            DescribeSObjectResult[] results = Schema.describeSObjects(types);
+            System.debug('Got describe information for ' + results.size() + ' sObjects.');
+            for (Schema.DescribeSobjectResult res : results) {
+                Map<String, Schema.SObjectField> fieldsMap = res.fields.getMap();
+                system.debug('Fields are ' + fieldsMap.keySet());
+                For (string s : fieldsMap.keyset()) {
+                    querystring += s + ', ';
+                }
+                querystring = querystring.LEFT(querystring.length() - 2) + ' from WGSettings__mdt LIMIT 1';
+
+                WGSettings = Database.query(querystring);
             }
+        }
+        RETURN WGSettings;
+    }
+
+    @testVisible private static Boolean BUseACRelations;
+
+    public static Boolean getUseACRelations() {
+        if (BUseACRelations == null) {
+            BUseACRelations = [
+                    SELECT Use_AcctCtctRelations__c
+                    from WGSettings__mdt
+                    WHERE DeveloperName = 'WGDefault'
+                    LIMIT 1
+            ].Use_AcctCtctRelations__c;
+        }
+        system.debug('WGHelpers returns Use_AcctCtctRelations__c of ' + BUseACRelations);
+        return BUseACRelations;
+    }
+
+    @testVisible private static Boolean BManageContacts;
+
+    public static Boolean getManageContactsSetting() {
+        if (BManageContacts == null) {
+            BManageContacts = [
+                    SELECT ManageContacts__c
+                    from WGSettings__mdt
+                    WHERE DeveloperName = 'WGDefault'
+                    LIMIT 1
+            ].ManageContacts__c;
+        }
+        return BManageContacts;
+    }
+
+    @testVisible private static Boolean BManageContactEmails;
+    public static Boolean getManageContactEmailsSetting() {
+        if (BManageContactEmails == null) {
+            BManageContactEmails = [
+                    SELECT ManageContactEmails__c
+                    from WGSettings__mdt
+                    WHERE DeveloperName = 'WGDefault'
+                    LIMIT 1
+            ].ManageContactEmails__c;
+        }
+        return BManageContactEmails;
+    }
+}
 
 
 /* THIS MAY NOT BE USEFUL, EXCEPT THAT IT DOES ALLOW US TO BE DYNAMIC WITH THE soBJECTNAME

@@ -41,4 +41,21 @@ static void IsAccountDefaultSetToFamily() {
             system.assert(MapExistingRTs.keySet().CONTAINS(s),'Opportunity RecordTypes is missing ' + s);
         }
     }
+
+    @IsTest
+    static void CheckEmailDeliverability(){
+        Boolean EmailDeliverabilityEnabled = true;
+        try {
+            Messaging.reserveSingleEmailCapacity(1);
+            Messaging.reserveMassEmailCapacity(1);
+        } catch (System.NoAccessException e) {
+            EmailDeliverabilityEnabled = false;
+        }
+        system.assertEquals(true,EmailDeliverabilityEnabled,'Email Deliverability has not been enabled.');
+    }
+
+    @istest static void CheckFields(){
+        Schema.DescribeFieldResult dfr = Contact.Active__c.getDescribe();
+        system.assertEquals('Active',dfr.defaultvalue,'Contact.Active__c is not set to Active, will cause errors in Nr_Contacts_in_Account__c');
+    }
 }
