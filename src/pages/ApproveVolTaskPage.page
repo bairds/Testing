@@ -3,14 +3,16 @@
  -->
 
 <apex:page id="ApproveVolTaskPage" Controller="approveVolTasks" showheader="true"
-           standardStylesheets="false">
-    <!--<apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>-->
+           lightningStylesheets="true"
+           docType="html-5.0">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
     <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
     <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
 
     <header>
         <style>
@@ -56,6 +58,23 @@
                 Margin-left: 16px;
             }
         </style>
+         <script type="text/javascript">
+             let OppApprovalMap = new Map();
+
+             $(document).ready(function () {
+                 OppApprovalMap = JSON.parse('{!OppApprovalMap}');
+                 console.log('The list of ApprovalOptionsString is ' + JSON.stringify(OppApprovalMap));
+                 alert('Alert iterating through OppApprovalArray');
+             })
+
+
+             function ApprovalStatusChanged(OppId,ApprovalString) {
+                 alert('ApprovalStatusChanged to '+ApprovalString);
+                 OppApprovalMap.set(OppId,ApprovalString);
+                 document.getElementById("demo").innerHTML = OppApprovalMap.get(OppId);
+             }
+</script>
+
     </header>
 
     <apex:Form >
@@ -100,9 +119,15 @@
                         <apex:inputField value="{!o.CampaignId}"/><br/>
                     </div>
                     <div class="col-6 col-sm-4 col-md-2">
-                        <br/><br/>
-                        <apex:inputField value="{!o.StageName}" styleClass="form-control"/>
+                    <form id="FormId" name="ApprovalStati">
+                        <label><input type="radio" name="ApprovalStatus" value="Approved" checked="True" onclick="ApprovalStatusChanged('{!o.Id}','Approved')"/>Approved</label>
+                            <label><input type="radio" name="ApprovalStatus" value="Rejected" onclick="ApprovalStatusChanged('{!o.Id}','Rejected')"/>Rejected</label>
+                            <label><input type="radio" name="ApprovalStatus" value="Under Review" onclick="ApprovalStatusChanged('{!o.Id}','Under Review')"/>Under Review</label>
+                        <!--<apex:inputField value="{!o.StageName}" styleClass="form-control"/>-->
+                        </form><br/>
+                        Value is {!OppApprovalMap[o.Id]}.
                     </div>
+                    <p id="demo"></p>
                     <div class="col-md-2">
                         <apex:outputText value=" "/>
                     </div>
