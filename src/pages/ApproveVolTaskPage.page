@@ -61,18 +61,41 @@
          <script type="text/javascript">
              let OppApprovalMap = new Map();
 
-             $(document).ready(function () {
-                 OppApprovalMap = JSON.parse('{!OppApprovalMap}');
-                 console.log('The list of ApprovalOptionsString is ' + JSON.stringify(OppApprovalMap));
-                 alert('Alert iterating through OppApprovalArray');
-             })
-
+             // Alternative to load event
+             document.onreadystatechange = function () {
+                 if (document.readyState === 'complete'){
+                     console.log('OppApprovalMap from Controller is ' + JSON.stringify({!OppApprovalMapString}));
+                     // Parse the JSON map from the controller into an object
+                     try {
+                         obj = JSON.parse('{!OppApprovalMapString}');
+                     } catch (error) {
+                         console.error(error);
+                     }
+                     // Convert object to Map
+                     let OppApprovalMap = new Map(Object.entries(obj));
+                     console.log('OppApprovalMap is ' + OppApprovalMap);
+                     for (let s of Object.keys(obj)) {
+                         console.log('s is ' + s + ' and obj[s] is ' + obj[s]);
+                     }
+                 }
+             }
 
              function ApprovalStatusChanged(OppId,ApprovalString) {
                  alert('ApprovalStatusChanged to '+ApprovalString);
                  OppApprovalMap.set(OppId,ApprovalString);
-                 document.getElementById("demo").innerHTML = OppApprovalMap.get(OppId);
-             }
+                 document.getElementById(OppId).innerHTML = OppApprovalMap.get(OppId);
+                 var SOAM = JSON.stringify(OppApprovalMap);
+                 sendFinalStatus(SOAM);
+                 }
+
+                 function ApproveAll(){
+                 alert('Just entered ApproveAll JS function and OppApprovalMap is ' + JSON.stringify(OppApprovalMap));
+                 for (var of in OppApprovalMap.keys()){
+                     OppApprovalMap.get(s).value='Approved';
+                     console.log('Changed status to ' + OppApprovalMap.get(s));
+                 }
+                 sendFinalStatus(OppApprovalMap);
+                 }
 </script>
 
     </header>
@@ -91,7 +114,7 @@
                     <div class="WGPageTitle2 br6">Campaign</div>
                 </div>
                 <div class="col-xs-4 col-md-2">
-                    <apex:outputText value=" "/>
+                    Approve all: <input type="checkbox" id="ApprovalAllBox" onclick="ApproveAll()"/>
                 </div>
                 <div class="col-md-2">
                     <apex:outputText value=" "/>
@@ -124,10 +147,9 @@
                             <label><input type="radio" name="ApprovalStatus" value="Rejected" onclick="ApprovalStatusChanged('{!o.Id}','Rejected')"/>Rejected</label>
                             <label><input type="radio" name="ApprovalStatus" value="Under Review" onclick="ApprovalStatusChanged('{!o.Id}','Under Review')"/>Under Review</label>
                         <!--<apex:inputField value="{!o.StageName}" styleClass="form-control"/>-->
-                        </form><br/>
-                        Value is {!OppApprovalMap[o.Id]}.
+                        </form>
                     </div>
-                    <p id="demo"></p>
+                    <p id="{!o.Id}"></p>
                     <div class="col-md-2">
                         <apex:outputText value=" "/>
                     </div>
@@ -138,5 +160,8 @@
                 <apex:commandButton value="Submit Approved Tasks and Close" action="{!submitTasks}" styleClass="btn fwb bgprimary"/>
             </div>
         </apex:outputPanel>
+        <apex:actionFunction name="sendFinalStatus" action="{!submitTasks}">
+            <apex:param name="firstParam" value=""/>
+        </apex:actionFunction>
     </apex:Form>
 </apex:page>
