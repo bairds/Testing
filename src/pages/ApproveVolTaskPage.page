@@ -59,42 +59,60 @@
             }
         </style>
          <script type="text/javascript">
-             let OppApprovalMap = new Map();
+             OppApprovalMap = new Map();
+             var obj;
 
              // Alternative to load event
              document.onreadystatechange = function () {
-                 if (document.readyState === 'complete'){
+                 if (document.readyState === 'complete') {
                      console.log('OppApprovalMap from Controller is ' + JSON.stringify({!OppApprovalMapString}));
                      // Parse the JSON map from the controller into an object
-                     try {
-                         obj = JSON.parse('{!OppApprovalMapString}');
-                     } catch (error) {
-                         console.error(error);
-                     }
-                     // Convert object to Map
-                     let OppApprovalMap = new Map(Object.entries(obj));
-                     console.log('OppApprovalMap is ' + OppApprovalMap);
+                     obj = JSON.parse('{!OppApprovalMapString}');
+                     // Set values
                      for (let s of Object.keys(obj)) {
-                         console.log('s is ' + s + ' and obj[s] is ' + obj[s]);
+                         if (obj[s] = 'Task Submitted') {
+                             SubmittedLineString = s + 'SubmittedLine';
+                             document.getElementById(SubmittedLineString).checked = true;
+                         } else {
+                             if (obj[s] = 'Task Approved') {
+                                 SubmittedLineString = s + 'ApprovedLine';
+                                 document.getElementById(SubmittedLineString).checked = true;
+                             } else {
+                                 if (obj[s] = 'Task Approved') {
+                                     SubmittedLineString = s + 'RejectedLine';
+                                     document.getElementById(RejectedLineString).checked = true;
+                                 }
+                             }
+                         }
                      }
                  }
              }
 
              function ApprovalStatusChanged(OppId,ApprovalString) {
-                 alert('ApprovalStatusChanged to '+ApprovalString);
-                 OppApprovalMap.set(OppId,ApprovalString);
-                 document.getElementById(OppId).innerHTML = OppApprovalMap.get(OppId);
-                 var SOAM = JSON.stringify(OppApprovalMap);
-                 sendFinalStatus(SOAM);
+                 obj[OppId] = ApprovalString;
+                 // The following line of code echoes the choice of approval status on the page
+                 // document.getElementById(OppId).innerHTML =  obj[OppId];
+                 console.log('OppApprovalMap is ' + JSON.stringify(obj));
+                 document.getElementById('ApproveAllBox').checked = false;
                  }
 
-                 function ApproveAll(){
-                 alert('Just entered ApproveAll JS function and OppApprovalMap is ' + JSON.stringify(OppApprovalMap));
-                 for (var of in OppApprovalMap.keys()){
-                     OppApprovalMap.get(s).value='Approved';
-                     console.log('Changed status to ' + OppApprovalMap.get(s));
+                 function SubmitAll(){
+                 // alert('Just entered ApproveAll JS function and OppApprovalMap is ' + JSON.stringify(obj));
+                 sendFinalStatus(JSON.stringify(obj));
                  }
-                 sendFinalStatus(OppApprovalMap);
+
+                 function ApproveAll() {
+                     if (document.getElementById('ApproveAllBox').checked == true) {
+                         console.log('ApproveAllMap is ' + JSON.stringify(obj));
+                         for (let s of Object.keys(obj)) {
+                             obj[s] = 'Approved';
+                             ApprovedLineString = s + 'ApprovedLine';
+                             console.log('ApprovedLineString is ' + ApprovedLineString);
+                             document.getElementById(ApprovedLineString).checked = true;
+                             // The following line of code echoes the choice of approval status on the page
+                            //  document.getElementById(s).innerHTML = obj[s];
+                         }
+                     }
                  }
 </script>
 
@@ -114,7 +132,7 @@
                     <div class="WGPageTitle2 br6">Campaign</div>
                 </div>
                 <div class="col-xs-4 col-md-2">
-                    Approve all: <input type="checkbox" id="ApprovalAllBox" onclick="ApproveAll()"/>
+                    Approve all: <input type="checkbox" id="ApproveAllBox" onclick="ApproveAll()"/>
                 </div>
                 <div class="col-md-2">
                     <apex:outputText value=" "/>
@@ -143,10 +161,9 @@
                     </div>
                     <div class="col-6 col-sm-4 col-md-2">
                     <form id="FormId" name="ApprovalStati">
-                        <label><input type="radio" name="ApprovalStatus" value="Approved" checked="True" onclick="ApprovalStatusChanged('{!o.Id}','Approved')"/>Approved</label>
-                            <label><input type="radio" name="ApprovalStatus" value="Rejected" onclick="ApprovalStatusChanged('{!o.Id}','Rejected')"/>Rejected</label>
-                            <label><input type="radio" name="ApprovalStatus" value="Under Review" onclick="ApprovalStatusChanged('{!o.Id}','Under Review')"/>Under Review</label>
-                        <!--<apex:inputField value="{!o.StageName}" styleClass="form-control"/>-->
+                        <label><input id="{!o.Id}ApprovedLine" type="radio" name="ApprovalStatus" value="Approved" onclick="ApprovalStatusChanged('{!o.Id}','Approved')"/>Approved</label>
+                            <label><input id="{!o.Id}RejectedLine" type="radio" name="ApprovalStatus" value="Rejected" onclick="ApprovalStatusChanged('{!o.Id}','Rejected')"/>Rejected</label>
+                            <label><input id="{!o.Id}SubmittedLine" type="radio" name="ApprovalStatus" value="Submitted" onclick="ApprovalStatusChanged('{!o.Id}','Submitted')"/>Submitted</label>
                         </form>
                     </div>
                     <p id="{!o.Id}"></p>
@@ -157,10 +174,11 @@
                 <br/>
             </apex:repeat>
             <div class="tac">
-                <apex:commandButton value="Submit Approved Tasks and Close" action="{!submitTasks}" styleClass="btn fwb bgprimary"/>
+                <input type="button" value="Submit Approved Tasks and Close" onClick="SubmitAll();return false" styleClass="btn fwb bgprimary"/>
             </div>
         </apex:outputPanel>
-        <apex:actionFunction name="sendFinalStatus" action="{!submitTasks}">
+        <apex:outputPanel id="rerenderCode">  </apex:outputPanel>
+        <apex:actionFunction name="sendFinalStatus" action="{!submitTasks}" rerender="rerenderCode">
             <apex:param name="firstParam" value=""/>
         </apex:actionFunction>
     </apex:Form>

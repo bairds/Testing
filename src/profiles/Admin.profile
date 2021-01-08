@@ -106,6 +106,14 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>CopyACRolesTEST</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>CopyACRolesToACRelationships</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>CreateUserExamValues</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -139,6 +147,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>EACCLightning</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>EACCLightningJS</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -258,15 +270,7 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
-        <apexClass>ManageContactsNew</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
         <apexClass>ManageContactsTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>ManageContactsTESTNew</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -426,6 +430,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>TestGUAccess2ACRelations</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>TestSettings</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -514,6 +522,10 @@
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
+        <apexClass>WGSetupTEST</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
         <apexClass>accessData</apexClass>
         <enabled>true</enabled>
     </classAccesses>
@@ -527,10 +539,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>approveGuestUserEditsTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>approveVolTaskTEST</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -599,14 +607,6 @@
     </classAccesses>
     <classAccesses>
         <apexClass>displayVolPortalTEST</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>eACCTEST_backup</apexClass>
-        <enabled>true</enabled>
-    </classAccesses>
-    <classAccesses>
-        <apexClass>eACC_backup</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -867,6 +867,10 @@
     </classAccesses>
     <classAccesses>
         <apexClass>testAlertjs</apexClass>
+        <enabled>true</enabled>
+    </classAccesses>
+    <classAccesses>
+        <apexClass>updatePrimaryContributorCSTest</apexClass>
         <enabled>true</enabled>
     </classAccesses>
     <classAccesses>
@@ -1304,6 +1308,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
+        <field>Account.TestField__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
         <field>Account.TickerSymbol</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -1385,6 +1394,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>AccountContactRelation.IsActive</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>AccountContactRelation.IsPrimary__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -1835,6 +1849,11 @@
     <fieldPermissions>
         <editable>true</editable>
         <field>Campaign.Price__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Campaign.Register_Page_Message_Rich__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -2364,7 +2383,7 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>true</editable>
-        <field>CnPData__c.DataXML</field>
+        <field>CnP_PaaS_Bridge__CnPData__c.CnP_PaaS_Bridge__DataXML__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -3698,11 +3717,6 @@
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
-        <editable>true</editable>
-        <field>Opportunity.C_P_Data__c</field>
-        <readable>true</readable>
-    </fieldPermissions>
-    <fieldPermissions>
         <editable>false</editable>
         <field>Opportunity.Calendar_Year__c</field>
         <readable>true</readable>
@@ -3735,6 +3749,11 @@
     <fieldPermissions>
         <editable>false</editable>
         <field>Opportunity.Close_Date_Text__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>Opportunity.CnPDataRecord__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -4524,6 +4543,11 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
+        <field>WGSettings__mdt.ManageContacts__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>false</editable>
         <field>WGSettings__mdt.ManageContribsTrigger__c</field>
         <readable>true</readable>
     </fieldPermissions>
@@ -4539,12 +4563,17 @@
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
-        <field>WG_Error_Log__c.C_P_Data__c</field>
+        <field>WGSettings__mdt.Use_AcctCtctRelations__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
         <editable>false</editable>
         <field>WG_Error_Log__c.Category__c</field>
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+        <field>WG_Error_Log__c.CnPDataRecord__c</field>
         <readable>true</readable>
     </fieldPermissions>
     <fieldPermissions>
@@ -5245,6 +5274,10 @@
         <enabled>true</enabled>
     </pageAccesses>
     <pageAccesses>
+        <apexPage>EACCLightningJSPage</apexPage>
+        <enabled>true</enabled>
+    </pageAccesses>
+    <pageAccesses>
         <apexPage>EACCLightningPage</apexPage>
         <enabled>true</enabled>
     </pageAccesses>
@@ -5799,10 +5832,6 @@
         <recordType>Opportunity.Volunteer_Task</recordType>
         <visible>true</visible>
     </recordTypeVisibilities>
-    <tabVisibilities>
-        <tab>CnP_PaaS_Bridge__CnPData__c</tab>
-        <visibility>DefaultOn</visibility>
-    </tabVisibilities>
     <tabVisibilities>
         <tab>DataImport</tab>
         <visibility>DefaultOn</visibility>

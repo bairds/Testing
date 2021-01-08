@@ -25,27 +25,26 @@ public without sharing class ManageContacts {
         Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
         List<Contact> CtctsWEmails = new List<Contact>();
 
-        // Check for emails
-        For (Contact ctct : ctcts) {
-            if (ctct.Email != null || ctct.Personal_Email__c != null || ctct.Work_Email__c != null
-                    || ctct.Other_Email__c != null) {
-                CtctsWEmails.add(ctct);
+        // Check for emails unless WGSettings__mdt.ManageContactEmails__c == false
+        if (WGHelpers.getManageContactEmailsSetting()) {
+            For (Contact ctct : ctcts) {
+                if (ctct.Email != null || ctct.Personal_Email__c != null || ctct.Work_Email__c != null
+                        || ctct.Other_Email__c != null) {
+                    CtctsWEmails.add(ctct);
+                }
             }
-        }
 
-        List<Id> AccountIds = new List<Id>();
-        For (Contact c : CtctsWEmails) {
-            if (c.AccountId != null) AccountIds.add(c.AccountId);
+            List<Id> AccountIds = new List<Id>();
+            For (Contact c : CtctsWEmails) {
+                if (c.AccountId != null) AccountIds.add(c.AccountId);
+            }
+            Map<Id, Id> RTIdMap = new Map<id, Id>();
+            List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
+            For (Account acct : Accounts) {
+                RTIdMap.put(acct.Id, acct.RecordTypeId);
+            }
+            arrangeEmails(CtctsWEmails, RTIdMap);
         }
-        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
-        List<Account> Accounts = [SELECT Id, Name, RecordTypeId from Account where Id IN:AccountIds];
-        For (Account acct : Accounts) {
-            RecordTypeMap.put(acct.Id, acct.RecordTypeId);
-        }
-        For (Contact c : CtctsWEmails) {
-            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
-        }
-        arrangeEmails(CtctsWEmails, CtctRTypeMap);
 
 
         // This method catches direction injection of contacts without accounts.
@@ -162,95 +161,105 @@ public without sharing class ManageContacts {
         // Insert old ctct.email in Other_Email.
         // Set Preferred to Other_Email.
 
-        for (integer i = 0; i < NewContacts.size(); i++) {
-            // An internal process or external program has changed the Email field.
-            system.debug('NewContacts[i].Email is ' + NewContacts[i].Email + ' and OldContacts[i].Email is ' + OldContacts[i].Email);
-            // PREVENT SYS ADMINS, EXTERNAL USERS FROM JUST ERASING THE EMAIL FIELD
-            /* if(NewContacts[i].Email == null) {
+        // Only run if WGSettings__mdt.ManageContactEmails__c is true
+        if (WGHelpers.getManageContactEmailsSetting()) {
+
+            for (integer i = 0; i < NewContacts.size(); i++) {
+                // An internal process or external program has changed the Email field.
+                system.debug('NewContacts[i].Email is ' + NewContacts[i].Email + ' and OldContacts[i].Email is ' + OldContacts[i].Email);
+                // PREVENT SYS ADMINS, EXTERNAL USERS FROM JUST ERASING THE EMAIL FIELD
+                /* if(NewContacts[i].Email == null) {
                  NewContacts[i].Email = OldContacts[i].Email;
                  newContacts[0].addError('Please adjust email using the Preferred field and the Personal, Work, and Other_Email.  Do not change the Email field.');
              }*/
-            if (NewContacts[i].Email != OldContacts[i].Email) {
-                // if Preferred & Emails align
-                if (NewContacts[i].Email == OldContacts[i].Personal_Email__c) {
-                    NewContacts[i].Preferred_Email__c = 'Personal';
-                } else {
-                    if (NewContacts[i].Email == OldContacts[i].Work_Email__c) {
-                        NewContacts[i].Preferred_Email__c = 'Work';
+                if (NewContacts[i].Email != OldContacts[i].Email) {
+                    // if Preferred & Emails align
+                    if (NewContacts[i].Email == OldContacts[i].Personal_Email__c) {
+                        NewContacts[i].Preferred_Email__c = 'Personal';
                     } else {
-                        if (NewContacts[i].Preferred_Email__c == null && OldContacts[i].Preferred_Email__c != null) {
-                            NewContacts[i].Email = null;
-                            system.debug('Erased email because Preferred set to None.');
-                        } else {
-                            // Unless there is a match, Other Email has to be moved to Legacy Email
-                            NewContacts[i].Preferred_Email__c = 'Other';
-                            if (OldContacts[i].Other_Email__c != null) {
-                                if (NewContacts[i].Email != OldContacts[i].Other_Email__c)
-                                    NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
-                            }
-                            if (NewContacts[i].Email != null) {
-                                NewContacts[i].Other_Email__c = NewContacts[i].Email;
-                                system.debug('Should have just set NewContacts[i].Other_Email__c to ' + NewContacts[i].Email + ' and it is now ' + NewContacts[i].Other_Email__c);
-                                NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
-                            }
-                            System.debug('NewContacts[i].Last_Email_Overwrite__c is ' + NewContacts[i].Last_Email_Overwrite__c);
-                            // Avoid the storeOldEmail routine below, which is incorrect for this case
-                            continue;
-                        }
-                    }
-                }
-            } else {
-                // Contact.Email was not changed, so the change was to one of the other fields or made through the UI
-                // Do Contact.Email, Preferred and the email field it points to agree?  If yes, do nothing.
-                // If not, insert the Preferred Email into Email.
-                // store old email
-                If (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c != null) {
-                    if (NewContacts[i].Personal_Email__c != NewContacts[i].Email) {
-                        newContacts[i].Email = NewContacts[i].Personal_Email__c;
-                        if (newContacts[i].Personal_Email__c != OldContacts[i].Personal_Email__c) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Personal_Email__c : OldContacts[i].Personal_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
-                    } else continue;
-
-                } else {
-                    if (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c != null) {
-                        if (NewContacts[i].Work_Email__c != NewContacts[i].Email) {
-                            newContacts[i].Email = NewContacts[i].Work_Email__c;
-                            if (newContacts[i].Work_Email__c != OldContacts[i].Work_Email__c) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Work_Email__c : OldContacts[i].Work_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
-                        } else continue;
-                    } else {
-                        if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c != null) {
-                            if (NewContacts[i].Other_Email__c != NewContacts[i].Email) {
-                                newContacts[i].Email = NewContacts[i].Other_Email__c;
-                                if (newContacts[i].Other_Email__c != OldContacts[i].Other_Email__c && OldContacts[i].Other_Email__c != null) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
-                            } else continue;
+                        if (NewContacts[i].Email == OldContacts[i].Work_Email__c) {
+                            NewContacts[i].Preferred_Email__c = 'Work';
                         } else {
                             if (NewContacts[i].Preferred_Email__c == null && OldContacts[i].Preferred_Email__c != null) {
                                 NewContacts[i].Email = null;
                                 system.debug('Erased email because Preferred set to None.');
+                            } else {
+                                // Unless there is a match, Other Email has to be moved to Legacy Email
+                                NewContacts[i].Preferred_Email__c = 'Other';
+                                if (OldContacts[i].Other_Email__c != null) {
+                                    if (NewContacts[i].Email != OldContacts[i].Other_Email__c) {
+                                        if (String.ISNOTBLANK(OldContacts[i].Legacy_Emails__c) && !OldContacts[i].Legacy_Emails__c.CONTAINS(OldContacts[i].Other_Email__c)) {
+                                            NewContacts[i].Legacy_Emails__c = OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
+                                        } else {
+                                            NewContacts[i].Legacy_Emails__c = OldContacts[i].Other_Email__c;
+                                        }
+                                    }
+                                }
+                                // Email is moved to OtherEmail
+                                if (NewContacts[i].Email != null) {
+                                    NewContacts[i].Other_Email__c = NewContacts[i].Email;
+                                    system.debug('Should have just set NewContacts[i].Other_Email__c to ' + NewContacts[i].Email + ' and it is now ' + NewContacts[i].Other_Email__c);
+                                    NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
+                                }
+                                System.debug('NewContacts[i].Last_Email_Overwrite__c is ' + NewContacts[i].Last_Email_Overwrite__c);
+                                // Avoid the storeOldEmail routine below, which is incorrect for this case
+                                continue;
                             }
-                            // Preferred does not point to populated email
-                            // if Email populated, Preferred points to blank field
-                            if (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c == null)
-                                NewContacts[i].Personal_Email__c = NewContacts[i].Email;
-                            if (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c == null)
-                                NewContacts[i].Work_Email__c = NewContacts[i].Email;
-                            if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c == null)
-                                NewContacts[i].Other_Email__c = NewContacts[i].Email;
                         }
                     }
-                }
-                //store old Email
-                if (OldContacts[i].Email != null && OldContacts[i].Email != NewContacts[i].Personal_Email__c &&
-                        OldContacts[i].Email != NewContacts[i].Work_Email__c &&
-                        OldContacts[i].Email != NewContacts[i].Other_Email__c) {
-                    List<string> Emails = new List<String>{
-                            OldContacts[i].Email, OldContacts[i].Other_Email__c, OldContacts[i].Legacy_Emails__c
-                    };
-                    Emails = StoreEmailInLegacy(Emails);
-                    if (NewContacts[i].Other_Email__c != NewContacts[i].Email) {
-                        NewContacts[i].Other_Email__c = Emails[1];
-                        NewContacts[i].Legacy_Emails__c = Emails[2];
+                } else {
+                    // Contact.Email was not changed, so the change was to one of the other fields or made through the UI
+                    // Do Contact.Email, Preferred and the email field it points to agree?  If yes, do nothing.
+                    // If not, insert the Preferred Email into Email.
+                    // store old email
+                    If (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c != null) {
+                        if (NewContacts[i].Personal_Email__c != NewContacts[i].Email) {
+                            newContacts[i].Email = NewContacts[i].Personal_Email__c;
+                            if (newContacts[i].Personal_Email__c != OldContacts[i].Personal_Email__c) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Personal_Email__c : OldContacts[i].Personal_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
+                        } else continue;
+
+                    } else {
+                        if (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c != null) {
+                            if (NewContacts[i].Work_Email__c != NewContacts[i].Email) {
+                                newContacts[i].Email = NewContacts[i].Work_Email__c;
+                                if (newContacts[i].Work_Email__c != OldContacts[i].Work_Email__c) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Work_Email__c : OldContacts[i].Work_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
+                            } else continue;
+                        } else {
+                            if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c != null) {
+                                if (NewContacts[i].Other_Email__c != NewContacts[i].Email) {
+                                    newContacts[i].Email = NewContacts[i].Other_Email__c;
+                                    if (newContacts[i].Other_Email__c != OldContacts[i].Other_Email__c && OldContacts[i].Other_Email__c != null) NewContacts[i].Legacy_Emails__c = OldContacts[i].Legacy_Emails__c == null ? OldContacts[i].Other_Email__c : OldContacts[i].Other_Email__c + ', ' + OldContacts[i].Legacy_Emails__c;
+                                } else continue;
+                            } else {
+                                if (NewContacts[i].Preferred_Email__c == null && OldContacts[i].Preferred_Email__c != null) {
+                                    NewContacts[i].Email = null;
+                                    system.debug('Erased email because Preferred set to None.');
+                                }
+                                // Preferred does not point to populated email
+                                // if Email populated, Preferred points to blank field
+                                if (NewContacts[i].Preferred_Email__c == 'Personal' && NewContacts[i].Personal_Email__c == null)
+                                    NewContacts[i].Personal_Email__c = NewContacts[i].Email;
+                                if (NewContacts[i].Preferred_Email__c == 'Work' && NewContacts[i].Work_Email__c == null)
+                                    NewContacts[i].Work_Email__c = NewContacts[i].Email;
+                                if (NewContacts[i].Preferred_Email__c == 'Other' && NewContacts[i].Other_Email__c == null)
+                                    NewContacts[i].Other_Email__c = NewContacts[i].Email;
+                            }
+                        }
                     }
-                    NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
+                    //store old Email
+                    if (OldContacts[i].Email != null && OldContacts[i].Email != NewContacts[i].Personal_Email__c &&
+                            OldContacts[i].Email != NewContacts[i].Work_Email__c &&
+                            OldContacts[i].Email != NewContacts[i].Other_Email__c) {
+                        List<string> Emails = new List<String>{
+                                OldContacts[i].Email, OldContacts[i].Other_Email__c, OldContacts[i].Legacy_Emails__c
+                        };
+                        Emails = StoreEmailInLegacy(Emails);
+                        if (NewContacts[i].Other_Email__c != NewContacts[i].Email) {
+                            NewContacts[i].Other_Email__c = Emails[1];
+                            NewContacts[i].Legacy_Emails__c = Emails[2];
+                        }
+                        NewContacts[i].Last_Email_Overwrite__c = DateTime.now();
+                    }
                 }
             }
         }
@@ -301,6 +310,7 @@ public without sharing class ManageContacts {
                 // Only make the new contact Primary if there's not already a Primary.
                 if (!WithPrimaryAccounts.contains(c.AccountId)) {
                     MapCtctToACRs.get(c.Id).IsPrimary__c = true;
+                    MapCtctToACRs.get(c.Id).Roles = 'Decision Maker';
                     updateACRelations.add(MapCtctToACRs.get(c.Id));
                     update updateACRelations;
                 }
@@ -335,16 +345,30 @@ public without sharing class ManageContacts {
     public static void beforeDelete(Contact [] contacts, Contact [] oldcontacts) {
         AccountIds = new List<Id>();
         Set<Id> PrimaryOnAccount = new Set<Id> ();
+        if (!WGHelpers.getUseACRelations()) {
+            // Use ACRoles
+            for (AccountContactRole acr : [Select ContactId from AccountContactRole where IsPrimary = TRUE AND ContactId in :oldcontacts]) {
+                PrimaryOnAccount.add(acr.ContactId);
+            }
 
-        for (AccountContactRole acr : [Select ContactId from AccountContactRole where IsPrimary = TRUE AND ContactId in :oldcontacts]) {
-            PrimaryOnAccount.add(acr.ContactId);
-        }
-
-        for (Contact c : oldcontacts) {
-            if (PrimaryOnAccount.contains(c.Id)) {
-                c.AccountId.adderror('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.');
-            } else {
-                AccountIds.add(c.AccountId);
+            for (Contact c : oldcontacts) {
+                if (PrimaryOnAccount.contains(c.Id)) {
+                    c.AccountId.adderror('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.');
+                } else {
+                    AccountIds.add(c.AccountId);
+                }
+            }
+        } else {
+            // Use ACRelations
+            for (AccountContactRelation acr : [Select ContactId from AccountContactRelation where IsPrimary__c = TRUE AND ContactId in :oldcontacts]) {
+                PrimaryOnAccount.add(acr.ContactId);
+            }
+            for (Contact c : oldcontacts) {
+                if (PrimaryOnAccount.contains(c.Id)) {
+                    c.AccountId.adderror('Contact is the Primary Contact Relation on an Account!  Please set another contact to IsPrimary before deleting this one.');
+                } else {
+                    AccountIds.add(c.AccountId);
+                }
             }
         }
 
@@ -460,7 +484,7 @@ public without sharing class ManageContacts {
                                 // Insert into Personal, Work, Other
                                 // Is this a Family account?
                                 system.debug('CtctRTIdMap.get(c.Id) is ' + RTIdMap.get(c.Id));
-                                If (RTIdMap.get(c.Id) == FamilyRTId) {
+                                If (RTIdMap.get(c.AccountId) == FamilyRTId) {
                                     // If this is a lead or contact from a family account
                                     // Order by Personal, Work, Other
                                     If (PersonalEmail == null) {
@@ -564,7 +588,11 @@ public without sharing class ManageContacts {
             if (EmailsLegacy == null) {
                 Emails[2] = EmailOther;
             } else {
-                Emails[2] += ', ' + EmailOther;
+                if(EmailsLegacy.CONTAINS(EmailOther)){
+                    // no change
+                } else {
+                    Emails[2] += ', ' + EmailOther;
+                }
             }
             Emails[1] = Email1;
         }
@@ -578,7 +606,11 @@ public without sharing class ManageContacts {
             if (c.Legacy_Emails__c == null) {
                 c.Legacy_Emails__c = c.Other_Email__c;
             } else {
-                c.Legacy_Emails__c += ', ' + c.Other_Email__c;
+                if(c.Legacy_Emails__c.CONTAINS(c.Other_Email__c)){
+                    // do nothing
+                } else {
+                    c.Legacy_Emails__c += ', ' + c.Other_Email__c;
+                }
             }
             c.Other_Email__c = c.Email;
             Datetime now = Datetime.now();
@@ -587,11 +619,11 @@ public without sharing class ManageContacts {
             c.Last_Email_Overwrite__c = local;
         }
     }
-
+/*
     public static PageReference EmailErrorOnContactInsert() {
         // PageReference PR = page.EmailErrorOnContactInsert;
         // PR.setredirect(false);
         return null;
     }
-
+*/
 }

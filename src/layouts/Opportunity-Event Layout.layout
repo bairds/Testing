@@ -126,10 +126,6 @@
                 <behavior>Edit</behavior>
                 <field>CustomQuestion3__c</field>
             </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>C_P_Data__c</field>
-            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

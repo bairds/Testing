@@ -66,7 +66,60 @@ private class approveVolTasksTEST {
         // Change one more processing status
         // Only 7 should go into the processing
         AVT.ListOpps[1].StageName = 'Task Rejected';
+        // Create the stringified map as in the page js method
+        Map<id,string> ResultsMap = new Map<id,string>();
+        for (Opportunity o : aVT.ListOpps){
+            ResultsMap.put(o.Id,o.StageName);
+        }
+        String resultsstring = JSON.serialize(ResultsMap);
+        apexpages.currentPage().getParameters().put('firstParam',resultsstring);
+        // Now run test
         AVT.submitTasks();
-        system.AssertEquals(7,[SELECT Id from Opportunity where StageName = 'Task Approved'].size(),'Should have found 7 opportunities with Task Approved stage.');
+        system.AssertEquals(7,[SELECT Id from Opportunity where StageName = 'Task Submitted'].size(),'Should have found 7 opportunities with Task Approved stage.');
     }
+
+    @IsTest
+    static void oneSubmittedTask() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Account TestAcct = ctv.fetchTestAccount();
+        Contact TestCtct = ctv.fetchTestContact();
+        Campaign TestCamp = ctv.fetchTestCampaign();
+        Opportunity TestVolTask = new Opportunity(
+                Name = 'autofill',
+                AccountId = TestAcct.Id,
+                Contact__c = TestCtct.Id,
+                CampaignId = TestCamp.Id,
+                StageName = 'Task Submitted',
+                Hours_Actual__c = 2.0,
+                CloseDate = system.now().Date(),
+                RecordTypeId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId()
+        );
+        insert TestVolTask;
+        approveVolTasks aVT = new approveVolTasks();
+        // Test getSelectOptions
+        List<SelectOption> LSO = aVT.getApprovalOptions();
+        For (SelectOption SO : LSO){
+            system.assert(String.valueOf(SO.getvalue()) == 'Task Submitted'
+                    || String.valueOf(SO.getvalue()) == 'Task Approved'
+                    || String.valueOf(SO.getvalue()) == 'Task Rejected',
+                    'Wrong Values in ApproveVolTasks.ApprovalOptions');
+                    }
+        // Should be one more ListOpps than previously
+        system.assertEquals(9,aVT.ListOpps.size());
+        system.assertEquals('Task Submitted',aVT.ListOpps[8].StageName);
+        aVT.ListOpps[8].StageName = 'Task Rejected';
+        // Create the stringified map as in the page js method
+        Map<id,string> ResultsMap = new Map<id,string>();
+        for (Opportunity o : aVT.ListOpps){
+            ResultsMap.put(o.Id,o.StageName);
+        }
+        String resultsstring = JSON.serialize(ResultsMap);
+        apexpages.currentPage().getParameters().put('firstParam',resultsstring);
+        aVT.submitTasks();
+        List<Opportunity> ResultOpps = [SELECT Id, StageName from Opportunity
+            WHERE StageName='Task Rejected'];
+        // Expect one more Opp with "Task Rejected" than was created in the TestSetup
+        system.assertEquals(2,ResultOpps.size());
+    }
+
 }

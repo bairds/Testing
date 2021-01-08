@@ -4,7 +4,7 @@
 @isTest
 private class EACCLightningTEST {
 
-    static testMethod void test()
+    static testMethod void Test1()
     {
         Create_Test_Variables ctv = new Create_Test_Variables();
 
@@ -51,7 +51,7 @@ private class EACCLightningTEST {
 
         eacc.co.FirstName = 'Test';
         eacc.co.LastName = 'Test';
-        eacc.co.Email = 'baird@watergrass.org';
+        eacc.co.Email = 'test@watergrass.org';
 
         eacc.co2.FirstName = 'Test';
         eacc.co2.LastName = 'Test';
@@ -99,12 +99,12 @@ private class EACCLightningTEST {
         eacc.CompMembership.Membership_End_Date__c = Date.today().addYears(1);
 
         eacc.submitContribution();
-
+/*
         eacc.sendEmail();
         eacc.attachLetter();
         eacc.next();
         eacc.exit();
-
+*/
         eacc.co = null;
 
         eacc.personId = ctv.TestAccount.Id;
@@ -217,7 +217,7 @@ private class EACCLightningTEST {
 
         eacc.co.FirstName = 'Test';
         eacc.co.LastName = 'Test';
-        eacc.co.Email = 'baird@watergrass.org';
+        eacc.co.Email = 'test@watergrass.org';
 
         eacc.co2.FirstName = 'Testa';
         eacc.co2.LastName = 'Test';
@@ -271,6 +271,8 @@ private class EACCLightningTEST {
 
         eacc.submitContribution();
 
+
+        eacc.PrimaryContributor = [SELECT Firstname, Lastname, Email from Contact where Email = 'test@watergrass.org' LIMIT 1];
         eacc.sendEmail();
         eacc.attachLetter();
         eacc.next();
@@ -288,7 +290,8 @@ private class EACCLightningTEST {
         eacc.acct = null;
 
         list<selectOption> ConfirmSO = eacc.getNrContacts();
-        system.assertEquals(3,ConfirmSO.size(),'getNrContacts should have return 0,1,2 as options for the nr of contacts to add');
+        system.assertEquals(3,ConfirmSO.size(),'getNrContacts should have returned 0,1,2 as options for the nr of contacts to add');
 
+        eacc.step2();
     }
 }

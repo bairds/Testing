@@ -34,6 +34,9 @@
         <field>CLOSE_DATE</field>
     </columns>
     <columns>
+        <field>Opportunity.Calendar_Year__c</field>
+    </columns>
+    <columns>
         <field>FISCAL_YEAR</field>
     </columns>
     <columns>
@@ -66,6 +69,9 @@
     <columns>
         <field>OWNER_COMPANY</field>
     </columns>
+    <columns>
+        <field>Opportunity.Payment_Type__c</field>
+    </columns>
     <format>Tabular</format>
     <name>Anonymous Contribs for WG Analysis</name>
     <params>
@@ -83,8 +89,8 @@
     <reportType>OpportunityCampaign</reportType>
     <scope>organization</scope>
     <showDetails>true</showDetails>
-    <showGrandTotal>false</showGrandTotal>
-    <showSubTotals>false</showSubTotals>
+    <showGrandTotal>true</showGrandTotal>
+    <showSubTotals>true</showSubTotals>
     <timeFrameFilter>
         <dateColumn>CAMPAIGN_STARTDATE</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>

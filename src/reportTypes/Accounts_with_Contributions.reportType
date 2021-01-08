@@ -390,11 +390,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>C_P_Data__c</field>
-            <table>Account.Opportunities</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Challenge_Target__c</field>
             <table>Account.Opportunities</table>
         </columns>

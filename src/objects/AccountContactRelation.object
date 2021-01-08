@@ -48,6 +48,15 @@
         <fullName>IsDirect</fullName>
     </fields>
     <fields>
+        <fullName>IsPrimary__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If checked, this contact is the one that receives communications addressed to the account.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If checked, this contact is the one that receives communications addressed to the account.</inlineHelpText>
+        <label>IsPrimary</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Roles</fullName>
         <type>Picklist</type>
     </fields>

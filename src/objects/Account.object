@@ -1221,6 +1221,17 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>TestField__c</fullName>
+        <description>Does this field automatically get entered into the Custom Report Types, where it will cause problems during deployments?</description>
+        <externalId>false</externalId>
+        <label>TestField</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>TickerSymbol</fullName>
         <trackFeedHistory>false</trackFeedHistory>
     </fields>

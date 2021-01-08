@@ -1127,11 +1127,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>C_P_Data__c</field>
-            <table>Campaign.ContactCampaignMembers.Contributions__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Calendar_Year__c</field>
             <table>Campaign.ContactCampaignMembers.Contributions__r</table>
         </columns>

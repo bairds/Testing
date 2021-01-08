@@ -40,6 +40,11 @@
         <default>false</default>
         <label>Annually</label>
     </customValue>
+    <customValue>
+        <fullName>2 Months</fullName>
+        <default>false</default>
+        <label>2 Months</label>
+    </customValue>
     <masterLabel>Periodicity</masterLabel>
     <sorted>false</sorted>
 </GlobalValueSet>

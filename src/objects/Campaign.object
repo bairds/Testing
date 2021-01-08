@@ -519,6 +519,16 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Register_Page_Message_Rich__c</fullName>
+        <description>Message used at the top of the emailCampaignSignupBootstrap page.  Rich text.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Message used at the top of the emailCampaignSignupBootstrap page.  Rich text.</inlineHelpText>
+        <label>Register Page Message Rich</label>
+        <length>4000</length>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
         <fullName>Register_Page_Message__c</fullName>
         <description>Text above the registration fields on the Email SignupPageBootstrap page.</description>
         <externalId>false</externalId>

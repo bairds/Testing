@@ -22,6 +22,7 @@
 // Sept 2018 If Campaign.Account_Line_Item is populated, populate Contrib.Account_Line_Item
 // May 2019 Add "yearly" to the periodicity values for recurring payments, in recurring payment section
 // June 2020 Filter out "if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)" on lines 60,77,127,333
+// Dec 2020 Filter out Volunteer Hours which are not Closed/Won.
 
 public with sharing class ManageContributions{
     public static Set<Id> AccountIds;
@@ -337,7 +338,7 @@ public with sharing class ManageContributions{
 
         List<Opportunity> Contribs = [select Id, Membership_End_Date__c, Hours_Actual__c,
                 Amount, CloseDate, RecordTypeId, Contact__c, RecordType.Name, CampaignId, Campaign.Name, Periodicity__c,
-                Start_Date__c, Number_of_Payments__c from Opportunity WHERE (IsWon=true OR StageName LIKE '%Won') AND
+                Start_Date__c, Number_of_Payments__c, IsWon from Opportunity WHERE (IsWon=true OR StageName LIKE '%Won') AND
         Contact__c in :ctctIDs ORDER BY CloseDate DESC, Amount DESC];
         System.debug('List of Contributions for this Contact is ' + Contribs);
         // Populate a map of all the contacts;

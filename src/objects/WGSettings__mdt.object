@@ -170,6 +170,16 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>ManageContacts__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Whether to run ManageContacts operations when a new contact is inserted.  Unchecking this box means that no operations run, including no ManageContactEmails.  If you want to turn off only the ManageContactEmails, use that setting instead.  This replaces ContactBeforeAfterInsertTrigger.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>Whether to run ManageContacts operations when a new contact is inserted.  Unchecking this box means that no operations run, including no ManageContactEmails.  If you want to turn off only the ManageContactEmails, use that setting instead.  This replaces C</inlineHelpText>
+        <label>ManageContacts</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>ManageContribsTrigger__c</fullName>
         <defaultValue>true</defaultValue>
         <description>Turns off the ManageContribsTrigger to facilitate data loads.  Default is on.</description>
@@ -205,6 +215,16 @@
         <required>false</required>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Use_AcctCtctRelations__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>rather than AccountContactRoles.  This is necessary for iATS.</description>
+        <externalId>false</externalId>
+        <fieldManageability>SubscriberControlled</fieldManageability>
+        <inlineHelpText>rather than AccountContactRoles.  This is necessary for iATS.</inlineHelpText>
+        <label>Use AcctCtctRelations</label>
+        <type>Checkbox</type>
     </fields>
     <label>WGSettings</label>
     <pluralLabel>WGSettings</pluralLabel>

@@ -554,18 +554,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>C_P_Data__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <externalId>false</externalId>
-        <label>C&amp;P Data</label>
-        <referenceTo>CnP_PaaS_Bridge__CnPData__c</referenceTo>
-        <relationshipLabel>Opportunities</relationshipLabel>
-        <relationshipName>Opportunities</relationshipName>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Calendar_Year__c</fullName>
         <externalId>false</externalId>
         <formula>YEAR( CloseDate )</formula>
@@ -655,6 +643,20 @@ TEXT(DAY( CloseDate ))
         <required>false</required>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>CnPDataRecord__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The CnP Record which this contribution was created from.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The CnP Record which this contribution was created from.</inlineHelpText>
+        <label>CnPDataRecord</label>
+        <referenceTo>CnPData__c</referenceTo>
+        <relationshipLabel>ContributionCreated</relationshipLabel>
+        <relationshipName>Contributions</relationshipName>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>CnPMasterPledgeID__c</fullName>
@@ -2649,6 +2651,10 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Periodicity__c</picklist>
             <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
             </values>
@@ -2978,6 +2984,10 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Periodicity__c</picklist>
             <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
             </values>
@@ -3298,6 +3308,10 @@ TEXT(DAY(TODAY()))
         </picklistValues>
         <picklistValues>
             <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
             <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
@@ -3980,6 +3994,10 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Periodicity__c</picklist>
             <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
             </values>
@@ -4321,6 +4339,10 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Periodicity__c</picklist>
             <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
             </values>
@@ -4658,6 +4680,10 @@ TEXT(DAY(TODAY()))
         <picklistValues>
             <picklist>Periodicity__c</picklist>
             <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
+            <values>
                 <fullName>Annually</fullName>
                 <default>false</default>
             </values>
@@ -4799,7 +4825,7 @@ TEXT(DAY(TODAY()))
         <active>true</active>
         <businessProcess>Payment For Goods Or Services</businessProcess>
         <description>Payment for goods or services, such as a workshop or t-shirt.</description>
-        <label>Service</label>
+        <label>Payment For Goods Or Services</label>
         <picklistValues>
             <picklist>Dedication_Acknowledgement_Type__c</picklist>
             <values>
@@ -5338,6 +5364,10 @@ TEXT(DAY(TODAY()))
         </picklistValues>
         <picklistValues>
             <picklist>Periodicity__c</picklist>
+            <values>
+                <fullName>2 Months</fullName>
+                <default>false</default>
+            </values>
             <values>
                 <fullName>Annually</fullName>
                 <default>false</default>

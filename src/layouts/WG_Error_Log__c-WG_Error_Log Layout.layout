@@ -23,6 +23,10 @@
                 <behavior>Edit</behavior>
                 <field>Category__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>CnPDataRecord__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -72,12 +76,7 @@
         <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
         <label>CnP Integration Errors</label>
-        <layoutColumns>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>C_P_Data__c</field>
-            </layoutItems>
-        </layoutColumns>
+        <layoutColumns/>
         <layoutColumns/>
         <style>TwoColumnsLeftToRight</style>
     </layoutSections>
@@ -113,6 +112,10 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>CnP_PaaS_Bridge__CnPData__c.Related_Error_Record__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <relatedList>CnPData__c.Related_Error_Record__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -16,11 +16,11 @@
     <tabs>standard-Document</tabs>
     <tabs>standard-report</tabs>
     <tabs>standard-Lead</tabs>
-    <tabs>CnP_PaaS_Bridge__CnPData__c</tabs>
     <tabs>WaterGrass_Help</tabs>
     <tabs>Text_Document__c</tabs>
     <tabs>ImportObject__c</tabs>
     <tabs>Process_Import_Records</tabs>
     <tabs>EACCLightningPage</tabs>
     <tabs>GuestUserUpdate__c</tabs>
+    <tabs>CnPData__c</tabs>
 </CustomApplication>

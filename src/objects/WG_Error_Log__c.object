@@ -154,20 +154,6 @@
     <enableSharing>true</enableSharing>
     <enableStreamingApi>true</enableStreamingApi>
     <fields>
-        <fullName>C_P_Data__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The C&amp;P Data record which triggered this error when it was inserted.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>The C&amp;P Data record which triggered this error when it was inserted.</inlineHelpText>
-        <label>C&amp;P Data</label>
-        <referenceTo>CnP_PaaS_Bridge__CnPData__c</referenceTo>
-        <relationshipLabel>WG_Error_Logs</relationshipLabel>
-        <relationshipName>WG_Error_Logs</relationshipName>
-        <required>false</required>
-        <trackTrending>false</trackTrending>
-        <type>Lookup</type>
-    </fields>
-    <fields>
         <fullName>Category__c</fullName>
         <externalId>false</externalId>
         <label>Category</label>
@@ -219,6 +205,20 @@
                 </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>CnPDataRecord__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>The CnP Data Record that was being processed when this error occurred.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The CnP Data Record that was being processed when this error occurred.</inlineHelpText>
+        <label>CnPDataRecord</label>
+        <referenceTo>CnPData__c</referenceTo>
+        <relationshipLabel>WG_Error_Logs</relationshipLabel>
+        <relationshipName>WG_Error_Logs</relationshipName>
+        <required>false</required>
+        <trackTrending>false</trackTrending>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Description__c</fullName>

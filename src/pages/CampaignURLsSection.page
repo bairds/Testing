@@ -71,10 +71,10 @@
                                 <br/>
                             </div>
                             <div class="row">
-                                <div class="col-sm-3">
+                                <div class="col-sm-2">
                                     <b>Choose the template for <i>selecting</i> a campaign.</b>
                                 </div>
-                                <div class="col-sm-3">
+                                <div class="col-sm-4">
                                     <apex:selectList value="{!camp.Select_Template__c}" size="4"
                                                      onClick="ShowSelectURL(this.value)"
                                                      id="PickSelectTemplate">

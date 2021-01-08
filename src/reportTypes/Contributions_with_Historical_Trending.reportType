@@ -228,11 +228,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>C_P_Data__c</field>
-            <table>Opportunity</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Contact__c</field>
             <table>Opportunity</table>
         </columns>

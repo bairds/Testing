@@ -1639,13 +1639,6 @@ Not interested in volunteering</description>
         <errorMessage>Select an existing email address to be the preferred email.</errorMessage>
     </validationRules>
     <validationRules>
-        <fullName>Contact_must_have_an_account</fullName>
-        <active>true</active>
-        <errorConditionFormula>AND($User.FirstName != &apos;IATSAura&apos;,$User.Alias != &apos;guest&apos;, AccountId == null)</errorConditionFormula>
-        <errorDisplayField>AccountId</errorDisplayField>
-        <errorMessage>Please assign the contact to an account.  Contacts without accounts can only be seen by you, so they get lost.</errorMessage>
-    </validationRules>
-    <validationRules>
         <fullName>Preferred_Email_Choice_Must_Exist</fullName>
         <active>false</active>
         <description>Show error if Preferred Email selection is not populated.</description>

@@ -92,6 +92,10 @@
                 <behavior>Edit</behavior>
                 <field>Description_Rich__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Register_Page_Message_Rich__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>

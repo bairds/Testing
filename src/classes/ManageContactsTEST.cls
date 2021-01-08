@@ -15,7 +15,9 @@ private class ManageContactsTEST {
     }
 
     @isTest
-    static void contactInsertTestAddUpdateRemoveContactRole() {
+    static void contactInsertTestAddUpdateRemoveContactRoleF() {
+        //Settings UseAcctCtctRelations__c to false
+        WGHelpers.BUseACRelations = false;
         // Create test data
         Account a = new Account(Name = 'Test XX 1');
         insert a;
@@ -71,6 +73,65 @@ private class ManageContactsTEST {
     }
 
     @isTest
+    static void contactInsertTestAddUpdateRemoveContactRoleT() {
+        //Settings UseAcctCtctRelations__c to true and test using ACRelations instead of ACRoles
+        WGHelpers.BUseACRelations = true;
+        // Create test data
+        Account a = new Account(Name = 'Test XX 1');
+        insert a;
+        Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org', Active__c = 'Active');
+        insert c;
+        //Since this isn't a list, it will fail the test if more than one row returned
+        AccountContactRelation testacr1 = [Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c from AccountContactRelation where AccountId = :a.Id];
+        system.assertequals(c.Id, testacr1.ContactId);
+        system.assertequals(TRUE, testacr1.IsPrimary__c);
+        system.assertequals('Decision Maker', testacr1.Roles);
+        system.assertequals(1, testacr1.account.Nr_Contacts_In_Acct__c);
+        Contact c2 = new Contact(LastName = 'Test2', AccountId = a.Id, Active__c = 'Active');
+        insert c2;
+        List<AccountContactRelation > testacrelats = [Select ContactId, IsPrimary__c, Roles,
+                Account.Nr_Contacts_In_Acct__c from AccountContactRelation where AccountId = :a.Id];
+        system.assertequals(2, testacrelats[0].account.Nr_Contacts_In_Acct__c);
+        LIST<AccountContactRelation> countACR = [select Id from AccountContactRelation where accountid = :a.id];
+        System.assertEquals(2, countACR.size());
+        //Since this isn't a list, it will fail the test if more than one row returned
+        // AccountContactRelation testacr2 = [Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c from AccountContactRelation where AccountId = :a.Id];
+        system.assertequals(2, testacrelats[0].account.Nr_Contacts_In_Acct__c);
+        //And Check still first Contact as Primary
+        system.assertequals(true, testacrelats[0].IsPrimary__c);
+        system.assertequals(false, testacrelats[1].IsPrimary__c);
+        try {
+            //try to delete contact set as primary
+            delete c;
+        } Catch (DmlException e) {
+            //Check error message is displayed
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Relation on an Account!'), e.getMessage());
+        }
+        // Switch the Primary to the second contact, then delete the first.
+        testacrelats[0].IsPrimary__c = false;
+        testacrelats[1].IsPrimary__c = true;
+        update testacrelats[0];
+        update testacrelats[1];
+
+        delete c;
+        //Is Number of contacts now 1?
+        Account confirmAcct = [Select id, Nr_Contacts_In_Acct__c, (select id from Contacts) from Account where Id = :a.Id];
+        // Was one contact deleted?
+        system.assertEquals(1, confirmAcct.contacts.size());
+        // Was the account.Nr_Contacts_In_Acct__c updated?
+        system.assertEquals(1, confirmAcct.Nr_Contacts_In_Acct__c);
+
+        //but not now c2
+        try {
+            //try to delete contact set as priamry
+            delete c2;
+        } Catch (DmlException e) {
+            //Check error message is displayed
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Relation on an Account!'), e.getMessage());
+        }
+    }
+
+    @isTest
     static void contactInsertTestAddUpdateRemoveContactRelation() {
         //Settings UseAcctCtctRelations__c to true
         WGHelpers.BUseACRelations = true;
@@ -109,30 +170,31 @@ private class ManageContactsTEST {
             delete c;
         } Catch (DmlException e) {
             //Check error message is displayed
-            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Relation on an Account!'), e.getMessage());
         }
     }
 
     @isTest
     static void contactInsertTestBulkAddUpdateRemoveContactRole() {
-        // Test bulk insert
+        // Set UseACRelations to true
+        WGHelpers.BUseACRelations = false;
 
         List<Account> a2 = new List<Account>();
         List<Contact> conl2 = new List<Contact>();
-        for (integer i = 0; i < 99; i++) {
+        for (integer i = 0; i < 25; i++) {
             a2.add(new Account(Name = 'Test Account' + i));
         }
         insert a2;
         test.starttest();
-        for (integer i = 0; i < 99; i++) {
+        for (integer i = 0; i < 25; i++) {
             conl2.add(new Contact(LastName = 'Test Con' + i, AccountId = a2[i].Id));
             conl2.add(new Contact(LastName = 'Test Con' + 100 + i, AccountId = a2[i].Id));
         }
         insert conl2;
         test.stoptest();
         //Check an insert only inserted one Primary, and was frst one - select will fail if count > 1
-        AccountContactRole testacr1 = [Select Contact.LastName, IsPrimary, Role from AccountContactRole where AccountId = :a2[50].Id];
-        system.assertequals('Test Con50', testacr1.Contact.LastName);
+        AccountContactRole testacr1 = [Select Contact.LastName, IsPrimary, Role from AccountContactRole where AccountId = :a2[20].Id];
+        system.assertequals('Test Con20', testacr1.Contact.LastName);
         system.assertequals(TRUE, testacr1.IsPrimary);
         system.assertequals('Decision Maker', testacr1.Role);
         try {
@@ -140,13 +202,14 @@ private class ManageContactsTEST {
             delete conl2;
         } Catch (DmlException e) {
             //Check error message is displayed
-            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!  Please make another Contact Primary before deleting this one.'), e.getMessage());
+            System.assert(e.getMessage().contains('Contact is the Primary Contact Role on an Account!'), e.getMessage());
         }
 
     }
 
     @isTest
     static void insertContactNoAccount() {
+        WGHelpers.BManageContacts = true;
         Contact NewCtct = new Contact(
                 firstname = 'Test',
                 lastname = 'TestContact',
@@ -163,6 +226,7 @@ private class ManageContactsTEST {
 
     @isTest
     static void insertContactNoAccountBulk() {
+        WGHelpers.BManageContacts = true;
         List<Contact> ctctlist = new List<Contact>();
         for (integer i = 0; i < 100; i++) {
             Contact NewCtct = new Contact(
@@ -184,6 +248,7 @@ private class ManageContactsTEST {
     // because by converting the new contact will also receive an accountId
     @isTest
     static void convertLead() {
+        WGHelpers.BManageContacts = true;
         Lead NewLead = new Lead(
                 firstname = 'Test',
                 lastname = 'TestLead',
@@ -197,6 +262,7 @@ private class ManageContactsTEST {
 
     @isTest
     static void insertContactNoAccountMatchExists() {
+        WGHelpers.BManageContacts = true;
         Account a = new Account(Name = 'Test XX 1');
         insert a;
         Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
@@ -218,6 +284,7 @@ private class ManageContactsTEST {
 
     @isTest
     static void insertContactNoAccountNoMatchExists() {
+        WGHelpers.BManageContacts = true;
         Account a = new Account(Name = 'Test XX 1');
         insert a;
         Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
@@ -272,14 +339,11 @@ private class ManageContactsTEST {
         system.debug('LContacts is ' + LContacts);
         List<Id> AccountIds = new List<Id>();
         For (Contact c : LContacts) AccountIds.add(c.AccountId);
-        Map<Id, Id> RecordTypeMap = new Map<id, Id>();
+        Map<Id, Id> RTIdMap = new Map<id, Id>();
         List<Account> Accounts = [SELECT Id, RecordTypeId from Account where Id IN:AccountIds];
-        For (Account a : Accounts) RecordTypeMap.put(a.Id, a.RecordTypeId);
-        Map<Id, Id> CtctRTypeMap = new Map<Id, Id>();
-        For (Contact c : LContacts) {
-            CtctRTypeMap.put(c.Id, RecordTypeMap.get(c.AccountId));
-        }
-        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, CtctRTypeMap);
+        For (Account a : Accounts) RTIdMap.put(a.Id, a.RecordTypeId);
+
+        List<Contact> ResultContacts = ManageContacts.arrangeEmails(LContacts, RTIdMap);
         system.debug('ResultContacts is ' + ResultContacts);
         For (Contact c : ResultContacts) {
             system.assertEquals('testfamilycontact@dontbotherme.org', c.Email);
@@ -330,6 +394,7 @@ private class ManageContactsTEST {
 
     @IsTest
     static void SFEmailWGEmailNoPreferred1() {
+        WGHelpers.BManageContactEmails = true;
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAccount = ctv.fetchTestAccount();
         TestAccount.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Business').getRecordTypeId();
@@ -826,8 +891,10 @@ private class ManageContactsTEST {
 
     @IsTest
     static void TestBeforeTrigger() {
+        WGHelpers.BManageContacts = true;
+        WGHelpers.BManageContactEmails = true;
         Create_Test_Variables CTV = new Create_Test_Variables();
-        Account Testaccount = ctv.fetchFamilyTestAccount();
+        Account Testaccount = ctv.fetchTestFamilyAccount();
         Contact Testcontact = new Contact(
                 firstname = 'Test',
                 lastname = 'TestContact',
@@ -841,6 +908,8 @@ private class ManageContactsTEST {
 
     @isTest
     static void UpdateEmailTests1() {
+        WGHelpers.BManageContacts = true;
+        WGHelpers.BManageContactEmails = true;
         Account a = new Account(Name = 'Test XX 1');
         insert a;
         Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
@@ -854,9 +923,11 @@ private class ManageContactsTEST {
             system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Email);
             system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
         }
+        c = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
         // An external program like Salsa injects an email
         c.email = 'changedemail@dontbotherme.org';
         update c;
+        System.Debug('Does the contact have different email and personal email? ' + c);
         if (EETrigger.Status == 'Inactive') {
             return;
         } else {
@@ -920,6 +991,8 @@ private class ManageContactsTEST {
 
     @IsTest
     static void UpdateEmailTests2() {
+        WGHelpers.BManageContacts = true;
+        WGHelpers.BManageContactEmails = true;
         Account a = new Account(Name = 'Test XX 1');
         insert a;
         Contact c = new Contact(LastName = 'Test', AccountId = a.Id, email = 'testcontact@dontbotherme.org');
@@ -947,6 +1020,47 @@ private class ManageContactsTEST {
             system.assertEquals(null, ResultContacts[0].Work_Email__c);
             system.assertEquals('other2@dontbotherme.org', ResultContacts[0].Other_Email__c);
             system.assertEquals(null, ResultContacts[0].Legacy_Emails__c);
+        }
+    }
+
+    @IsTest
+    static void DuplicateLegacyEmail() {
+        // Does ManageContacts avoid duplicating an existing LegacyEmail?
+        WGHelpers.BManageContacts = true;
+        WGHelpers.BManageContactEmails = true;
+        Account a = new Account(Name = 'Test XX 1');
+        insert a;
+        Contact c = new Contact(LastName = 'Test',
+                AccountId = a.Id,
+                email = 'testcontact@dontbotherme.org',
+                Legacy_Emails__c = 'duplicate@dontbotherme.org',
+                Other_Email__c = 'duplicate@dontbotherme.org');
+        insert c;
+        ApexTrigger EETrigger = [Select Id, Status from ApexTrigger where name = 'ManageContacts' LIMIT 1];
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.assertEquals('Personal', ResultContacts[0].Preferred_Email__c);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Email);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+        }
+        c.Email = 'insertedemail@dontbotherme.org';
+        update c;
+        if (EETrigger.Status == 'Inactive') {
+            return;
+        } else {
+            List<Contact> ResultContacts = [SELECT email, Legacy_Emails__c, Preferred_Email__c, Personal_Email__c, Work_Email__c, Other_Email__c from Contact where id = :c.Id];
+            system.debug('ResultContacts is ' + ResultContacts);
+            // New Email is inserted into email field
+            system.assertEquals('insertedemail@dontbotherme.org', ResultContacts[0].email);
+            system.assertEquals('testcontact@dontbotherme.org', ResultContacts[0].Personal_Email__c);
+            system.assertEquals(null, ResultContacts[0].Work_Email__c);
+            // Also inserted into OtherEmail field, and PreferredEmail set to Other
+            system.assertEquals('insertedemail@dontbotherme.org', ResultContacts[0].Other_Email__c);
+            system.assertEquals('Other', ResultContacts[0].Preferred_Email__c);
+            // Old Other Email was pushed into Legacy, did it create duplicate?
+            system.assertEquals('duplicate@dontbotherme.org', ResultContacts[0].Legacy_Emails__c);
         }
     }
 }

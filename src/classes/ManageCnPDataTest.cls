@@ -616,7 +616,7 @@ test.stoptest();
         XMlstring += '<ExpirationDate>1208</ExpirationDate></CreditCard></PaymentMethod></TransactionDetail>';
         XMlstring += '<Recurring><TransactionResult>Authorized</TransactionResult><RecurringID>47212</RecurringID>';
         XMlstring += '<MasterTransactionNumber>1307101607584781111</MasterTransactionNumber><Installments>3</Installments>';
-        XMlstring += '<RecurringMethod>Subscription</RecurringMethod><Periodicity>Monthly</Periodicity>';
+        XMlstring += '<RecurringMethod>Subscription</RecurringMethod><Periodicity>2 Months</Periodicity>';
         XMlstring += '<InstallmentNumber>1</InstallmentNumber><NextInstallmentDate>2013-08-10 16:08:00</NextInstallmentDate>';
         XMlstring += '<InstallmentAmount>1.00</InstallmentAmount><TotalAmount>1.00</TotalAmount><TotalCommitted>3.00</TotalCommitted>';
         XMlstring += '<TotalMade>1.00</TotalMade><TotalDue>2.00</TotalDue></Recurring>';
@@ -661,10 +661,12 @@ test.stoptest();
         dom.XmlNode xr2paymentmethodCCNr = xr2paymentmethodCC.getchildelement('CardNumber', null) ; //
         dom.XmlNode xr2paymentmethodCCExp = xr2paymentmethodCC.getchildelement('ExpirationDate', null) ; //
         dom.XmlNode xrrecurring = xroot.getchildelement('Recurring', null) ; //
+        dom.XmlNode xrrecurringperiod = xrrecurring.getchildelement('Periodicity',null);
         
             system.debug('xr2paymentmethodCCName.getText() is ' + xr2paymentmethodCCName.getText());
             system.debug('xr2paymentmethodCCExp.gettext() is ' + xr2paymentmethodCCExp.gettext());
         system.assertEquals(xr2paymentmethodCCNr.gettext(), '41111111');
+        system.assertEquals(xrrecurringperiod.gettext(),'2 Months');
         
         // Has one donation and one pledge been created?
         system.debug('TestAcct.id is ' + TestAcct.ID);
@@ -688,7 +690,7 @@ test.stoptest();
         system.AssertEquals(TestCtct.ID, Payments[0].Contact__c);
         system.AssertEquals(TestMemberCamp.ID,Payments[0].CampaignId);
 
-// Create a second pledge payment
+// Create a second payment against the pledge
 // 
         XMLstring ='<?xml version="1.0" encoding="UTF-8"?><CnPTransactionData><Version>40</Version><Patron>';
         XMLstring += '<BillingInformation><BillingFirstName>Tester</BillingFirstName><BillingMI></BillingMI>';

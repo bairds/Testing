@@ -47,6 +47,10 @@
                 <behavior>Edit</behavior>
                 <field>Nr_Contacts_In_Acct__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>TestField__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
