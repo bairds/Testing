@@ -82,7 +82,7 @@ public with sharing class displayVolPortal {
         VolMilesThisYear = 0;
         VolTasks = [
                 SELECT id, name,Hours_Actual__c,Miles_Driven__c,CloseDate,RecordTypeId,Description,Supervisor_Satisfaction__c,
-                        CampaignId, Campaign.Name, Type
+                        CampaignId, Campaign.Name, Type, IsWon
                 from Opportunity
                 where RecordTypeId = :VolTaskRTID AND Contact__c = :cid
                 AND IsClosed = TRUE AND IsWon = TRUE
@@ -110,7 +110,8 @@ public with sharing class displayVolPortal {
         VolInterestCampExs = new List<CampEx>();
         Id SignupRTID = Schema.SObjectType.Campaign.getRecordTypeInfosByName().get('Signup').getRecordTypeId();
         VolInterestCamps = [
-                SELECT Id, Description, Name, Type, Signup_Image__c, Register_Page_Message__c, (
+                SELECT Id, Description, Name, Type, Signup_Image__c,
+                        Register_Page_Message__c, Register_Page_Message_Rich__c, (
                         SELECT Unsubscribed__c,Id,Status
                         from CampaignMembers
                         WHERE ContactId = :cid

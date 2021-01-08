@@ -106,7 +106,7 @@
             <apex:outputPanel rendered="{!VolunteerFound=='Found'}">
                 <div class="form container register-form">
                     <div class="note WGPageTitle" html-style="width: 60%">
-                        <p>We sent an updated link to your email address.<br/>Please find the email and click on the link there in it.</p>
+                        <p>We sent an updated link to your email address.<br/><b>The new link replaces all old links, which will no longer work.</b><br/>Please find the email and click on the link there in it.</p>
                     </div>
                 </div>
             </apex:outputPanel>
