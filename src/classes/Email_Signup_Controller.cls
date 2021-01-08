@@ -2,6 +2,8 @@
 // When they sign up for a campaign, the name of the campaign is inserted into contact.mailing_lists__c.
 // Jan 7 2017 Included the insertEmailListContact so that the Prescott Creeks RESTEmail controller can use this too.
 // 23 May 2019 Added code to append new Dsscription to exisitng description field for Lead and Contact
+// 8 Jan 2021 Added Register_Page_Message_Rich__c to top bar in case the page is being used to sign up for a campaign.
+// 8 Jan 2021 Nr_in_Group__c is set to 1.
 global without sharing class Email_Signup_Controller {
     
     public Contact pcontact;
@@ -23,7 +25,8 @@ global without sharing class Email_Signup_Controller {
             string CampID = ApexPages.currentPage().getParameters().get('cid');
             Camp = [select campaign.name, id, Description, Description_Long__c, Event_Location__c, Event_Date_Time__c, 
                     recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c,
-                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type, Thank_You_Message__c from Campaign where
+                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type, Thank_You_Message__c,
+                    Description_Rich__c, Register_Page_Message_Rich__c from Campaign where
                     id = :CampID];
         }
         if (Camp!=null) {
@@ -91,10 +94,11 @@ global without sharing class Email_Signup_Controller {
                 Leadid = stype == 'Lead'?  tempLead.id : null,
                 ContactId = stype == 'Contact'?  tempContact.id : null,
                 CampaignId = camp.id,
+                    Campaign_Member_Source__c = 'EmailSignupPage',
                 Questions_or_Comments__c = 'Signed up for ' + OrgName + ' with comments ' + pcontact.Description,
                     SignupQuestionAnswer__c = CustomQuestion1Answer==null ? null : CustomQuestion1Answer,
                     SignupQuestionAnswer2__c = CustomQuestion2Answer==null ? null : CustomQuestion2Answer,
-                Status = 'Responded Yes');
+                Status = 'Responded Yes', Nr_in_Group__c = 1);
             CMList.add(cm);
         }
         if (CMList.size() > 0) {

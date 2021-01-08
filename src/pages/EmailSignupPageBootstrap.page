@@ -1,8 +1,10 @@
-<!--  Revised March 2020, for bootstrap, using exisitng Email_Signup_Controller -->
+<!--  Revised March 2020, for bootstrap, using exisitng Email_Signup_Controller
+/* 8 Jan 2021 Added Register_Page_Message_Rich__c to top bar in case the page is being used to sign up for a campaign.
+ 8 Jan 2021 In case they only have Register_Page_Message, page will use that instead.-->
 <apex:page standardController="Contact" extensions="Email_Signup_Controller" showHeader="false"
            standardStylesheets="false">
-    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>
-    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>-->
+    <apex:stylesheet value="{!$Resource.wg_styles}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
@@ -62,10 +64,15 @@
         <apex:form >
             <apex:outputPanel html-class="container register-form">
                 <apex:outputPanel rendered="{!NOT(ThanksPage)}">
-                    <apex:outputPanel rendered="{!if(CampaignExists && !ISNULL(Camp.Register_Page_Message__c),true,false)}">
-                            <div class="note">
-                                {!Camp.Register_Page_Message__c}
+                    <apex:outputPanel rendered="{!CampaignExists && !ISNULL(Camp.Register_Page_Message_Rich__c)}">
+                            <div class="note titlebar">
+                               <apex:outputText value="{!Camp.Register_Page_Message_Rich__c}" escape="false"/>
                             </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel rendered="{!CampaignExists && ISNULL(Camp.Register_Page_Message_Rich__c) && !ISNULL(Camp.Register_Page_Message__c)}">
+                        <div class="note titlebar">
+                            <apex:outputText value="{!Camp.Register_Page_Message__c}" escape="false"/>
+                        </div>
                     </apex:outputPanel>
 
                     <div class="form-content">
