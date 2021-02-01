@@ -152,6 +152,16 @@ private class enterAccountContactContributionTest {
         enterAccountContactContribution eacc = new enterAccountContactContribution();
         System.currentPageReference().getParameters().put('a', '2');
         eacc.setEnterContrib();
+        
+        // Test dummy contact
+        eacc.ContactsInAccount = '0';
+        eacc.CreateDummyContact = true;
+        eacc.setContacts();
+        system.assertEquals('Unknown',eacc.co.LastName,'Set CreateDummyContact, lastname should be Unknown instead of ' + eacc.co.LastName);
+        // Get rid of dummy contact
+        eacc.co.clear();
+        eacc.CreateDummyContact = false;
+
         eacc.ContactsInAccount = '2';
         eacc.setContacts();
         

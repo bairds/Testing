@@ -8,6 +8,7 @@ global with sharing class approveVolTasks {
     public String VolTaskRTId;
     public String OppApprovalMapString { get; set; }
     public Map<id, string> OppApprovalMap { get; set;}
+    public Boolean TasksSubmitted {get;set;}
 
     public approveVolTasks() {
         VolTaskRTId = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Volunteer Task').getRecordTypeId();
@@ -51,6 +52,7 @@ global with sharing class approveVolTasks {
         }
         update UPdateOpps;
         withoutSharingDMLs.UpdateOppsWoutSharing(ListOpps);
+        TasksSubmitted=true;
         return null;
         /*
         PageReference OppsPage = new ApexPages.StandardController(opportunity).view();

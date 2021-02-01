@@ -56,4 +56,11 @@ static testMethod void getNamespaceTest() {
         system.debug('resultStringis ' + resultString);
         system.assertEquals(64,resultString.length(),'Should have returned token 64 characters long');
     }
+
+    @IsTest
+    static private void TestgetManageOCRs(){
+        WGHelpers.BManageOCRs = true;
+        Boolean result = WGHelpers.getManageOCRs();
+        system.debug(result,true);
+    }
 }

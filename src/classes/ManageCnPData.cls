@@ -465,7 +465,6 @@ LE.LogOppInsertError(errorList);
         return OptyCampaignId;
     }
 
-
     public Id AssignOppRTId(string SKUstring) {
         Id RTID = OppRTMap.get('Donation');
         if (SKUstring != null) {

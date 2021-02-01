@@ -241,6 +241,20 @@ public without sharing class WGHelpers {
         return BManageContacts;
     }
 
+    @testVisible private static Boolean BManageACRelations;
+
+    public static Boolean getManageACRelations() {
+        if (BManageACRelations == null) {
+            BManageACRelations = [
+                    SELECT ManageACRelations__c
+                    from WGSettings__mdt
+                    WHERE DeveloperName = 'WGDefault'
+                    LIMIT 1
+            ].ManageACRelations__c;
+        }
+        return BManageACRelations;
+    }
+
     @testVisible private static Boolean BManageContactEmails;
     public static Boolean getManageContactEmailsSetting() {
         if (BManageContactEmails == null) {
@@ -252,6 +266,19 @@ public without sharing class WGHelpers {
             ].ManageContactEmails__c;
         }
         return BManageContactEmails;
+    }
+
+    @testVisible private static Boolean BManageOCRs;
+    public static Boolean getManageOCRs() {
+        if (BManageOCRs == null) {
+            BManageOCRs = [
+                    SELECT ManageOCRs__c
+                    from WGSettings__mdt
+                    WHERE DeveloperName = 'WGDefault'
+                    LIMIT 1
+            ].ManageOCRs__c;
+        }
+        return BManageOCRS;
     }
 }
 

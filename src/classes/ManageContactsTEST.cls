@@ -85,7 +85,6 @@ private class ManageContactsTEST {
         AccountContactRelation testacr1 = [Select ContactId, IsPrimary__c, Roles, Account.Nr_Contacts_In_Acct__c from AccountContactRelation where AccountId = :a.Id];
         system.assertequals(c.Id, testacr1.ContactId);
         system.assertequals(TRUE, testacr1.IsPrimary__c);
-        system.assertequals('Decision Maker', testacr1.Roles);
         system.assertequals(1, testacr1.account.Nr_Contacts_In_Acct__c);
         Contact c2 = new Contact(LastName = 'Test2', AccountId = a.Id, Active__c = 'Active');
         insert c2;

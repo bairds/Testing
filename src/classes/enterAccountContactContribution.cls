@@ -83,6 +83,7 @@ public class enterAccountContactContribution
 
     public void setEnterContrib()
     {
+        System.debug('Current URL is ' + system.currentPageReference());
         String acId = System.currentPageReference().getParameters().get('ac');
 
         if(String.isNotBlank(acId)) {
@@ -312,9 +313,17 @@ public class enterAccountContactContribution
     {
         system.debug('CreateDummyContact is ' + CreateDummyContact);
         if(CreateDummyContact) {
-            co.FirstName = 'Sir';
-            co.LastName = 'Unknown';
-            co.Dear__c = co.Dear__c == null ? co.FirstName : co.Dear__c;
+            if (co==null){
+                co = new Contact(
+                        Firstname = 'Sir',
+                        Lastname = 'Unknown',
+                        Dear__c = 'Sir'
+                );
+            } else {
+                co.FirstName = 'Sir';
+                co.LastName = 'Unknown';
+                co.Dear__c = co.Dear__c == null ? co.FirstName : co.Dear__c;
+            }
         }
         else {
             if(ContactsInAccount != '0') {

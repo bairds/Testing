@@ -93,9 +93,7 @@ public with sharing class approveGuestUserEdits {
         List<Account> UpdateAcctsList = new List<Account>();
         UpdateAcctsList.addAll(UpdateAcctsSet);
         Update UpdateAcctsList;
-        PageReference ref = new PageReference('/003');
-        ref.setRedirect(true);
-        return ref;
+        return null;
     }
 /*
     public PageReference rejectEdits() {

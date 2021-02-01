@@ -10,6 +10,7 @@
 // 1 Sept 2016 Amended to accepted SKU's with the the RecordType anywhere in the SKU.
 // 15 Nov added code to catch Connect CampaignIds, to identify recurring donations, added GravityForms code
 // 26 June 2019 Added secure catch
+// 1 Dec 2020 Accept "2 Months" as a valid periodicity
 @isTest
 private class ManageCnPDataSingleTest {
 

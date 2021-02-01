@@ -280,9 +280,9 @@ public without sharing class ManageContacts {
         List<Account> UpdateAccts = CountCtctsInAcct(new List<Id>(AllAccounts));
         update UpdateAccts;
 
-        //If the instance is set to use only AccountContactRelationships
-        If (UseACRelations) {
-            //Map the newly created contact ACRelations to their ContactId;
+        //If the instance is set to use only AccountContactRoles
+        If (!UseACRelations) {
+/*            //Map the newly created contact ACRelations to their ContactId;
             List<Id> ContactIds = new List<Id>();
             For (contact c : contacts) ContactIds.add(c.Id);
             Map<id, AccountContactRelation> MapCtctToACRs = new Map<id, AccountContactRelation>();
@@ -315,7 +315,7 @@ public without sharing class ManageContacts {
                     update updateACRelations;
                 }
             }
-        } else {
+        } else {*/
             //Now make sure that a new primary ACR is created if the Account doesn't already have one
             for (AccountContactRole acr : [Select AccountId from AccountContactRole where AccountId in :AllAccounts AND IsPrimary = TRUE]) {
                 WithPrimaryAccounts.add(acr.AccountId);
@@ -339,6 +339,7 @@ public without sharing class ManageContacts {
             }
         }
     }
+
     //end method
 
 

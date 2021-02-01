@@ -820,7 +820,7 @@ static testMethod void LapseTest() {
 					AccountID = TestAcct.id,
 					CampaignID = TestCamp.id,
 					Name = 'autofill',
-					StageName = 'Closed/Won',
+					StageName = 'Completed',
 					CloseDate = system.today(),
 					recordTypeID = VolRTID,
 					Hours_Actual__c = 10);
