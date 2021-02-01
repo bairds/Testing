@@ -1,0 +1,114 @@
+<!--
+ - Created by Baird on 6/16/2020.
+ -->
+
+<apex:page id="ApproveGuestUserEdit" Controller="approveGuestUserEdit" showHeader="false"
+           standardStylesheets="false">
+    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+    <header>
+        <style>
+            .titlebar {
+                text-align: center;
+                height: auto;
+                background-color: #406B8C;
+                color: #fff;
+                font-size: large;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
+            }
+
+            .form-content {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin: 10px;
+                background-color: ghostwhite;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+            }
+
+            .btnSubmit {
+                border: none;
+                border-radius: 1.5rem;
+                spadding: 1%;
+                cursor: pointer;
+                background: #2C6636;
+                color: #fff;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
+            }
+
+            .CustomQuestion{
+                Margin-left: 16px;
+            }
+        </style>
+
+    </header>
+
+    <body bgcolor="#dce9f7">
+
+    <apex:outputpanel id="errorInfo">
+        <apex:messages style="color: #red;"/>
+
+        <apex:Form >
+            <apex:outputPanel html-class="container register-form">
+                <div class="row">
+                    <div class="col-md-3">
+                        <apex:outputText value=" "/>
+                    </div>
+                    <div class="col-xs-6 col-md-3">
+                        <div class="WGPageTitle2">Current Contact Info</div>
+                        {!Ctct.FirstName}<br/>
+                        {!Ctct.LastName}<br/>
+                        {!Ctct.HomePhone}<br/>
+                        {!Ctct.MailingCity}<br/>
+                        {!Ctct.MailingStreet}<br/>
+                        {!Ctct.MailingState}<br/>
+                        {!Ctct.MailingPostalCode}<br/>
+                        {!Ctct.MobilePhone}<br/>
+                        {!Ctct.Phone}<br/>
+                    </div>
+                    <div class="col-xs-6 col-md-3">
+                        <div class="WGPageTitle2">Proposed Contact Info</div>
+                        {!GUU.FirstName__c}<br/>
+                        {!GUU.LastName__c}<br/>
+                        {!GUU.HomePhone__c}<br/>
+                        {!GUU.MailingCity__c}<br/>
+                        {!GUU.MailingStreet__c}<br/>
+                        {!GUU.MailingState__c}<br/>
+                        {!GUU.MailingPostalCode__c}<br/>
+                        {!GUU.MobilePhone__c}<br/>
+                        {!GUU.Phone__c}<br/>
+                        {!GUU.Processing_Status__c}<br/>
+                    </div>
+                    <div class="col-md-3">
+                        <apex:outputText value=" "/>
+                    </div>
+                </div>
+                <apex:outputPanel rendered="{!!ContactProcessed}">
+                    <div class="text-center">
+                        <apex:commandButton action="{!approveEdits}" value="Approve Changes" styleclass="btnSubmit"/>
+                    </div>
+                    <div class="text-center">
+                        <apex:commandButton action="{!cancelEdits}" value="Reject Changes" styleclass="btnSubmit"/>
+                    </div>
+                </apex:outputPanel>
+            </apex:outputPanel>
+        </apex:Form>
+    </apex:outputpanel>
+
+    </body>
+
+</apex:page>

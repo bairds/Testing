@@ -1,0 +1,14 @@
+<!--
+ - Created by Baird on 8/6/2020.
+  rendered = "{!EmailUpdateError.emailUpdateError()}"
+ -->
+
+<apex:page id="EmailErrorOnContactInsert">
+    <apex:outputPanel >
+        <script>
+                {
+                    alert("<p>Error: You are saving a contact without a Preferred Email</p>\n    <p>OR</p>\n    <P>Preferred Email points to a Personal_Email, Work_Email, or Other_Email which is empty.</P>");
+                }
+        </script>
+    </apex:outputPanel>
+</apex:page>

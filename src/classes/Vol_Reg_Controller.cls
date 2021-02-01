@@ -1,3 +1,5 @@
+// 16 Aug 2020 I switched the Lead.Volunteer_Interests__c to a global value set.
+// So before we deploy this again, change line 65 to get the picklist values from the global value set.
 public class Vol_Reg_Controller {
 
 
@@ -127,7 +129,7 @@ results = new String[2];
         lcheck[0].postalCode=pcontact.MailingPostalCode;
         lcheck[0].Over_18__c=pcontact.Over_18__c;
         lcheck[0].phone=pcontact.Phone;
-        lcheck[0].volunteer_interests__c=pcontact.Volunteer_Interests__c;
+        lcheck[0].Volunteer_Interests__c=pcontact.Volunteer_Interests__c;
         lcheck[0].volunteer_skills__c=pcontact.Volunteer_Skills__c;
         lcheck[0].description+='Comments upon registering as volunteer: ' + Comments + '\n\nHow heard about HRWC? ' + HowHeardAbout;
         update lcheck[0];
@@ -171,7 +173,7 @@ results = new String[2];
                 lcheck[0].postalCode=pcontact.MailingPostalCode;
                 lcheck[0].Over_18__c=pcontact.Over_18__c;
                 lcheck[0].phone=pcontact.Phone;
-                lcheck[0].volunteer_interests__c=pcontact.Volunteer_Interests__c;
+                lcheck[0].Volunteer_Interests__c=pcontact.Volunteer_Interests__c;
                 lcheck[0].volunteer_skills__c=pcontact.Volunteer_Skills__c;
                 lcheck[0].description+='Comments upon registering as volunteer: ' + Comments + '\n\nHow heard about HRWC? ' + HowHeardAbout;
                 update lcheck[0];
@@ -194,7 +196,7 @@ results = new String[2];
                         postalCode=pcontact.MailingPostalCode,
                         phone=pcontact.Phone,
                         over_18__c=pcontact.Over_18__c,
-                        volunteer_interests__c=pcontact.Volunteer_Interests__c,
+                        Volunteer_Interests__c=pcontact.Volunteer_Interests__c,
                         volunteer_skills__c=pcontact.Volunteer_Skills__c,
                         leadsource='Online Event Signup',
                         description='Comments upon registering as volunteer: ' + Comments + '\n\nHow heard about HRWC? ' + HowHeardAbout,

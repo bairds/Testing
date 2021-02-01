@@ -204,7 +204,8 @@ private class registerForCampaignTest
         ve.coc.howHeard = 'Google';
          
         ve.updateSignee();
-       
+
+        ve.co = ctv.fetchTestContact();
         ve.signUp();
         
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);

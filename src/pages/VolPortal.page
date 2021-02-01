@@ -1,0 +1,590 @@
+<!--
+ - Created by Baird on 6/12/2020.
+ -->
+
+<apex:page id="VolPortal" controller="displayVolPortal" lightningStylesheets="true" showHeader="false"
+           docType="html-5.0">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+    <header>
+        <style>
+            .titlebar {
+                text-align: center;
+                height: auto;
+                background-color: #406B8C;
+                color: #fff;
+                font-size: large;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin-top: 18px;
+            }
+
+            .form-content {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin: 10px;
+                background-color: white;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+            }
+
+            .btnSubmit {
+                border: none;
+                border-radius: 1.5rem;
+                padding-right: 8px;
+                padding-left: 8px;
+                cursor: pointer;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
+            }
+
+            .CustomQuestion {
+                Margin-left: 16px;
+            }
+
+            /*
+                        .unselectedStyle {
+                            width: 100%;
+                            padding: 10px;
+                            font-size: 15px;
+                            box-sizing: border-box;
+                        }*/
+            .registeredStyle {
+                display: block;
+            }
+
+            .unsubscribedStyle {
+                display: none;
+            }
+
+            .unregisteredStyle {
+                display: none;
+            }
+
+
+            .fullimage {
+                opacity: 1;
+                display: block;
+                width: 100%;
+                height: auto;
+                transition: .5s ease;
+                backface-visibility: hidden;
+            }
+
+            .middle {
+                transition: .5s ease;
+                opacity: 0;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                -ms-transform: translate(-50%, -50%);
+                text-align: center;
+            }
+
+            .photo-image:hover .fullimage {
+                opacity: 0.5;
+            }
+
+            .photo-image:hover .middle {
+                opacity: 1;
+            }
+
+            .hovertext {
+                /*background-color: #4CAF50;*/
+                color: white;
+                font-size: medium;
+                padding: 8px 8px;
+                border-radius: 8px;
+            }
+
+            .checkboximage {
+                position: absolute;
+                right: 20px;
+                top: 60px;
+                z-index: 1;
+            }
+
+        </style>
+
+        <script>
+            var CampToExMap;
+            var AddingVolTask;
+
+            $(document).ready(function () {
+                var CampaignArray, MyArray;
+                var SubscribedCampaignsArray = [];
+                CampaignArray = {!JSONVICExs};
+                console.log('The list of CampExs is ' + JSON.stringify(CampaignArray));
+                for (i = 0; i < CampaignArray.length; i++) {
+                    console.log('Processing myArray.' + CampaignArray[i].InitialStatus);
+                    var CampId = eval("CampaignArray[i].camp.Id");
+                    console.log('CampId is ' + CampId);
+                    var element = document.getElementById(CampId);
+                    if (CampaignArray[i].InitialStatus == 'registered') {
+                        element.classList.toggle("unregisteredStyle");
+                        console.log(CampId + ' has a matching member registered');
+                        console.log('Name of campaign is ' + JSON.stringify(CampaignArray[i].camp.Name));
+                        SubscribedCampaignsArray.push(JSON.stringify(CampaignArray[i].camp.Name));
+                    } else {
+                        if (CampaignArray[i].InitialStatus == 'unsubscribed') {
+                            console.log(CampId + ' has a matching member Unsubscribed');
+                        } else {
+                            // element.classList.toggle("unregisteredStyle");
+                            console.log(CampId + ' has no matching member');
+                        }
+                    }
+                }
+                if (SubscribedCampaignsArray.length == 0) SubscribedCampaignsArray.push("You are not signed up for invitations to volunteer events.")
+                console.log('You are subscribed to ' + SubscribedCampaignsArray);
+
+                // document.getElementById(SubscribedCampaigns).innerHTML = 'You are subscribed to ' + SubscribedCampaignsArray;
+            }) // Loop through buttons and assign them the right color
+
+            function WillTakeEffectLater() {
+                alert("Your changes will be saved provisionally.  They won't take effect fully until they have been approved.");
+                editContactInfoApex();
+            }
+
+            function ConfirmSelection() {
+                confirm("Press a button!");
+            }
+
+            function selectCampaign(CampId) {
+                console.log('CampId ' + CampId);
+                var checkmark = document.getElementById(CampId);
+                if (CampToExMap == null) CampToExMap = {!JSONCTECs};
+                console.log('CampToExMap is ' + JSON.stringify(CampToExMap));
+                var InitStat = CampToExMap[CampId].InitialStatus;
+                var FinalStat = CampToExMap[CampId].FinalStatus;
+                console.log('InitStat is ' + InitStat + ' and FinalStat is ' + FinalStat);
+                if (InitStat == 'unregistered' || InitStat == null) {
+                    var r = confirm("You will be receive invitations to this type of activity.")
+                    if (r==true) {
+                        checkmark.classList.toggle("unregisteredStyle");
+                        CampToExMap[CampId].FinalStatus = 'registered';
+                        console.log('Changed status from unregistered to registered');
+                    }
+                } else {
+                    // if originally registered, unsubscribe.
+                    if ((InitStat == 'registered' && FinalStat === null) || (FinalStat == 'registered')) {
+                        var r = confirm("You will be unsubscribed from invitations for this type of activity.")
+                        if (r==true) {
+                            // if initially registered, change to unsubscribed
+                            checkmark.classList.toggle("unregisteredStyle");
+                            CampToExMap[CampId].FinalStatus = 'unsubscribed';
+                            console.log('Changed status from registered to unsubscribed');
+                        }
+                    } else if ((FinalStat == null && InitStat == 'unsubscribed') || FinalStat == 'unsubscribed') {
+                        // if initially unsubscribed, reregister
+                        var r = confirm("You will be resubscribed to invitations for this type of activity.")
+                        if (r==true) {
+                            checkmark.classList.toggle("unregisteredStyle");
+                            CampToExMap[CampId].FinalStatus = 'registered';
+                            console.log('Changed status from unsubscribed to registered');
+                        }
+                    }
+                }
+                console.log('FinalStatus is ' + CampToExMap[CampId].FinalStatus);
+                console.log('At end of js function selectCAmpaign js CampToExMap is ' + JSON.stringify(CampToExMap));
+                console.log('That goes to the actionFunction.');
+                var CTXM = JSON.stringify(CampToExMap);
+                sendFinalStatus(CTXM);
+            }
+
+            function reload() {
+                window.location.reload();
+            }
+
+            function addVolTask() {
+                console.log('Reached js AddVolTask()');
+                var x = document.getElementById("AddVolTaskSection");
+                x.style.display = "block";
+                var y = document.getElementById("AddVolTaskButton");
+                y.style.display = "none";
+                location.href = "#";
+                location.href = "#AddVolTask";
+                x.scrollIntoView(true);
+            }
+
+            function closeVolTask() {
+                var x = document.getElementById("AddVolTaskSection");
+                x.style.display = "none";
+                var y = document.getElementById("AddVolTaskButton");
+                y.style.display = "block";
+                var teststring = document.getElementById("VolPortal:j_id5:VolTaskDescription").value;
+                console.log('Vol Task Description contains ' + teststring);
+                document.getElementById("VolPortal:j_id5:VolTaskDescription").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskHours").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskStart").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskEnd").value="";
+                document.getElementById("VolPortal:j_id5:VolTaskCampGuess").value="";
+            }
+
+            function submitVolTask() {
+                submitVolTaskAF();
+            }
+
+            function signupVolInterest() {
+                confirm('\n' +
+                    'Every summer hundreds of your neighbors join together to pull trash out our streams. It\'s fun and rewarding and a great way to get to know your community. Add your information below, and we\'ll notify you the next time.')
+            }
+        </script>
+    </header>
+
+    <body>
+    <apex:form >
+        <div class="container centercontainer register-form" id="pContactInfo">
+            <apex:messages style="color: #red;"/>
+
+            <apex:outputPanel title="No Record Found" rendered="{!!URLCorrect}">
+                <div class="note">
+                    Please contact {!OrgName} for the correct link to your page.<br/>
+                </div>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!URLCorrect}">
+                <apex:outputPanel >
+                    <div class="titlebar">
+                        {!GUU.FirstName__c} {!GUU.LastName__c}'s Volunteer Record with the {!Orgname}
+                    </div>
+                    <apex:outputPanel id="ContactInfoOP">
+                        <apex:actionRegion id="ContactInfoSection">
+                            <div class="row form-content bbg">
+                                <div class="col-sm-6">
+                                    <apex:outputPanel rendered="{!editmode=='display'}">
+                                        Volunteer Hours This Year: {!VolHoursThisYear}<br/>
+                                        Volunteer Hours All Time: {!VolHoursAll}<br/>
+                                        Volunteer Miles Driven This Year: {!VolMilesThisYear}
+                                    </apex:outputPanel>
+                                </div>
+                                <div class="col-sm-6">
+                                    <apex:outputPanel rendered="{!HasUnprocessedGUUs}" styleClass="alerttext">
+                                        You have submitted changes to your contact information which will appear here
+                                        provisionally. They have not yet been approved, and are not yet stored
+                                        permanently.<br/>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="outputContactInfo" rendered="{!editmode=='display'}">
+                                        Mailing address: {!GUU.MailingStreet__c}, {!GUU.MailingCity__c}
+                                        , {!GUU.MailingState__c}  {!GUU.MailingPostalCode__c}<br/>
+                                        Email: {!GUU.Email__c}<br/>
+                                        Preferred phone: {!GUU.Phone__c}
+                                        <div id="DisplayContactInfo" styleclass="btnSubmit">
+                                            <apex:commandbutton action="{!editContactInfo}"
+                                                                value="Edit my contact information."
+                                                                rerender="ContactInfoOP"/>
+                                        </div>
+                                    </apex:outputPanel>
+                                    <apex:outputPanel id="inputContactInfo" rendered="{!editmode=='editContactInfo'}">
+                                        <div class="col-xs-12">
+                                            <i>Edit your contact information below:</i><br/>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Firstname:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.FirstName__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Lastname:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.LastName__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Mailing street:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.MailingStreet__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    City:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.MailingCity__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Mailing state:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.MailingState__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Zip code:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.MailingPostalCode__c}"
+                                                                     styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Email:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.Email__c}" styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    Preferred phone:
+                                                </div>
+                                                <div class="col-6">
+                                                    <apex:inputField value="{!GUU.Phone__c}" styleClass="form-control"
+                                                                     ignoreEditPermissionForRendering="true"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </apex:outputPanel>
+                                </div>
+
+                            </div>
+                            <apex:outputPanel id="outputContactInfoButton" rendered="{!editmode=='display'}">
+                            </apex:outputPanel>
+                            <apex:outputPanel id="inputContactInfoButton" rendered="{!editmode=='editContactInfo'}">
+                                <div id="EditContactInfo" class="tar">
+                                    <apex:commandbutton action="{!submitContactInfo}" value="Save my changes."
+                                                        onClick="WillTakeEffectLater()"/>
+                                    <apex:commandbutton action="{!cancelEditContactInfo}" value="Cancel."
+                                                        rerender="ContactInfoOP"/>
+                                </div>
+                            </apex:outputPanel>
+                        </apex:actionRegion>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        <div class="form-content">
+                        </div>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+                <div class="titlebar">
+                    Notify Me About Upcoming Opportunities for:
+                </div>
+                <div class="instruction">
+                    Click on your choices.
+                </div>
+                <apex:outputPanel id="VolInterestSection">
+                    <div class="row">
+                        <apex:repeat value="{!VolInterestCamps}" var="VIC">
+                            <div class="col-lg-4 col-sm-6 col-xs-12">
+                                <div class="row">
+                                    <!--Peter: Why does removing the alert below cause the checkmark not to appear?-->
+                                    <button class="btnSubmit"
+                                            onclick="selectCampaign('{!VIC.Id}'); return false;">{!VIC.Name}
+                                    </button>
+                                </div>
+                                <div class="row photo-image">
+                                    <img src="https://watergrass-testing-dev-ed--c.documentforce.com/servlet/servlet.ImageServer?id=0152J000003NztF&oid=00D50000000NoFE&lastMod=1594744295000"
+                                         class="checkboximage unregisteredStyle"
+                                         id="{!VIC.Id}"/>
+                                    <img src="{!VIC.Signup_Image__c}" id="{VIC.Id}" class="rounded img-fluid fullimage"
+                                         onclick="selectCampaign('{!VIC.Id}'); return false;"/>
+                                    <div class="middle">
+                                        <div class="hovertext ReverseColor">{!VIC.Register_Page_Message__c}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </apex:repeat>
+                    </div>
+                </apex:outputPanel>
+                <div class="titlebar">
+                    Your Volunteer History
+                </div>
+                <apex:outputPanel id="VolTaskSection">
+                    <apex:PageBlock title="Your Approved Tasks" rendered="{!URLCorrect}">
+                        <apex:dataTable value="{!VolTasks}" var="v" cellPadding="4" border="1" width="80%">
+                            <apex:column >
+                                <apex:facet name="header">Event or Campaign</apex:facet>
+                                {!v.Campaign.Name}
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Start Date</apex:facet>
+                                <apex:outputField value="{!v.CloseDate}"/>
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Hours</apex:facet>
+                                {!v.Hours_Actual__c}
+                            </apex:column>
+                            <apex:column >
+                                <apex:facet name="header">Description</apex:facet>
+                                {!v.Description}
+                            </apex:column>
+                        </apex:dataTable>
+                    </apex:PageBlock>
+                    <br/>
+                    <apex:outputPanel id="NewTaskSection">
+                        <apex:PageBlock title="Your Submitted Tasks (pending review)"
+                                        id="YourSubmittedTasks" rendered="{!HasSubmittedTasks}">
+                            <apex:dataTable value="{!SubmittedTasks}" var="v" cellPadding="4" border="1" width="80%">
+                                <apex:column >
+                                    <apex:facet name="header">Event or Campaign</apex:facet>
+                                    {!v.Campaign_Guess__c}
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Start Date</apex:facet>
+                                    <apex:outputField value="{!v.Date_and_Time_Start__c}"/>
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Hours</apex:facet>
+                                    {!v.Hours_Actual__c}
+                                </apex:column>
+                                <apex:column >
+                                    <apex:facet name="header">Description</apex:facet>
+                                    {!v.Description}
+                                </apex:column>
+                            </apex:dataTable>
+                        </apex:PageBlock>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        <div id="AddVolTaskButton">
+                            <div class="row">
+                                <div class="col-12 text-center">
+                                    <input id="AddVolTask" class="btn text-center" type="button"
+                                           value="Submit A New Task"
+                                           onclick="addVolTask()"/>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                    <apex:outputPanel id="AddVolTaskSectionOP">
+                        <div id="AddVolTaskSection" class="dn">
+                            <div class="form-content">
+                                <div class="row">
+                                    <div class="col-12 text-center WGPageTitle2">
+                                        Enter a New Task
+                                    </div>
+                                </div>
+                                <br/>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Describe the work you did:
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <apex:inputField value="{!Opp.Description}" styleclass="form-control" id="VolTaskDescription"
+                                                         html-placeholder="What you did, with whom, results, etc."
+                                                         ignoreEditPermissionForRendering="true"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        How many hours did you spend?
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <apex:inputField value="{!Opp.Hours_Actual__c}" styleclass="form-control" id="VolTaskHours"
+                                                         html-placeholder="Can be sum of hours for multi-day tasks."
+                                                         ignoreEditPermissionForRendering="true"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Date and Time You Began:
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <apex:inputField value="{!Opp.Date_and_Time_Start__c}" styleclass="form-control" id="VolTaskStart"
+                                                         html-placeholder="MM/dd/YYYY HH:mm AM/PM"
+                                                         showDatePicker="true" ignoreEditPermissionForRendering="true"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Date and Time You Ended:
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <apex:inputField value="{!Opp.Date_and_Time_End__c}" styleclass="form-control" id="VolTaskEnd"
+                                                         html-placeholder="MM/dd/YYYY HH:mm AM/PM"
+                                                         showDatePicker="true" ignoreEditPermissionForRendering="true"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        Volunteer Event or Campaign This Was a Part Of:
+                                    </div>
+                                    <div class="form-group col-6">
+                                        <apex:inputField value="{!Opp.Campaign_Guess__c}" styleclass="form-control" id="VolTaskCampGuess"
+                                                         html-placeholder="name of the event, event or your best guess"
+                                                         showDatePicker="true"
+                                                         ignoreEditPermissionForRendering="true"/>
+                                    </div>
+                                </div>
+                                <div>
+                                    <apex:repeat value="{!$ObjectType.Opportunity.FieldSets.VolTaskFieldSet}" var="f">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                {!$ObjectType.Opportunity.fields[f].inlineHelpText}
+
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <apex:inputField value="{!Opp[f]}" ignoreEditPermissionForRendering="true"
+                                                                 styleClass="form-control"/>
+                                            </div>
+                                        </div>
+                                    </apex:repeat>
+                                </div>
+
+                            </div>
+                            <input id="CloseVolTask" class="btn" value="Cancel" type="button"
+                                   onclick="closeVolTask()"/>
+                            <input id="SubmitVolTask" class="btn" value="Submit" type="button"
+                                   onclick="submitVolTask()" oncomplete="rerenderSubmittedTasks()"/>
+                        </div>
+                        <br/>
+                    </apex:outputPanel>
+                    <apex:outputPanel >
+                        <br/>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+            <apex:outputPanel id="rerenderCode">
+                <script>
+                    // CampToExMap = {!JSONCTECs};
+                    // console.log('In the actionFunction CampToExMap is ' + JSON.stringify(CampToExMap));
+                </script>
+            </apex:outputPanel>
+
+            <apex:actionFunction name="sendFinalStatus" action="{!setCMStatus}" rerender="rerenderCode">
+                <apex:param name="firstParam" value=""/>
+            </apex:actionFunction>
+
+            <apex:actionFunction name="submitVolTaskAF" action="{!submitVolTask}" rerender="VolTaskSection">
+            </apex:actionFunction>
+
+            <apex:actionFunction name="rerenderSubmittedTasks" rerender="NewTaskSection">
+            </apex:actionFunction>
+
+        </div>
+    </apex:form>
+    </body>
+</apex:page>

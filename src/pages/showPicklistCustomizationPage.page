@@ -1,0 +1,24 @@
+<!--
+ - Created by Baird on 4/8/2019.
+ -->
+
+<apex:page id="showPickListCustomizationPage" controller="showPicklistCustomization">
+    <apex:form >
+        <apex:pageBlock title="Fields in this Instance">
+            <apex:dataTable value="{!OuterResultsMap}" var="r">
+                <apex:column >
+                    <apex:facet name="header">{!r}</apex:facet>
+                        <apex:pageBlockTable value="{!OuterResultsMap[r]}" var="f">
+                    <apex:column >
+                        <apex:facet name="header">{!f}</apex:facet>
+                        {!r}.{!f}<br/>
+                        <apex:repeat value="{!OuterResultsMap[r][f]}" var="pves">
+                            <apex:outputText value="{!pves}"/><br/>
+                        </apex:repeat>
+                    </apex:column>
+                    </apex:pageBlockTable>
+            </apex:column>
+            </apex:dataTable>
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

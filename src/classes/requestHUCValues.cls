@@ -110,12 +110,12 @@ public class requestHUCValues {
                                     Map<String, Object> sMapFeatures = (Map<String, Object>)sMapAttributes.get('attributes');
                                     system.debug('sMapFeatures is ' + sMapFeatures);
                                     for (String s2: sMapFeatures.KeySet()) {
-                                        system.debug('s2 is ' + s2);
-                                        if (HUCValues.containsKey(s2)) {
-                                            If (s2 == 'NAME' && s=='10') HUCValues.put('Watershed', (String)sMapFeatures.get(s2));
-                                            If (s2 == 'HUC10' && sMapFeatures.get(S2) != null) HUCValues.put('HUC10',(String)sMapFeatures.get(S2));
-                                            If (s2 == 'NAME' && s=='12') HUCValues.put('Subwatershed', (String)sMapFeatures.get(s2));
-                                            If (s2 == 'HUC12' && sMapFeatures.get(S2) != null) HUCValues.put('HUC12',(String)sMapFeatures.get(S2));
+                                        system.debug('s2 is ' + s2 + ' and HUCValues is ' + HUCValues);
+                                        if (HUCValues.containsKey(s2.ToUpperCase())) {
+                                            If (s2.toUpperCase() == 'NAME' && s=='10') HUCValues.put('Watershed', (String)sMapFeatures.get(s2));
+                                            If (s2.toUpperCase() == 'HUC10' && sMapFeatures.get(S2) != null) HUCValues.put('HUC10',(String)sMapFeatures.get(S2));
+                                            If (s2.toUpperCase() == 'NAME' && s=='12') HUCValues.put('Subwatershed', (String)sMapFeatures.get(s2));
+                                            If (s2.toUpperCase() == 'HUC12' && sMapFeatures.get(S2) != null) HUCValues.put('HUC12',(String)sMapFeatures.get(S2));
                                         }
                                     }
                                     HUCVALUES.put('Status','Current');
@@ -231,7 +231,17 @@ public class requestHUCValues {
         FailedWLatestURL = true;
         return LatestURL;  
     }
-    
+/*
+    public list<Decimal> getHUCTolerance(){
+            List<Decimal> GHT = new List<Decimal>();
+            String HUCTolString = WGHelpers.getWGSettings().HUCTolerance__c;
+            if (HUCTolString == null) HUCTolString = '5.67546681849675499509185629536401E-13';
+            Decimal HUCTol = Decimal.valueOf(HUCTolString);
+            GHT.add(1/HUCTol);
+            GHT.add(1/system.now().getTime());
+        return GHT;
+            }
+*/
     public HTTPResponse getResp(string URLINfo, string level, integer bracket){
         String[] urlParts = URLInfo.split('\\|', 6);
         system.debug('URLParts is ' + URLParts);

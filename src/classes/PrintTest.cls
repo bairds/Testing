@@ -6,12 +6,16 @@ private class PrintTest {
    static testMethod void PrintTest()
    {
        Test.startTest();
-        
-        Campaign cmp = new Campaign(Name = 'Tesst');
-        insert cmp;
+
+       Create_Test_Variables CTV = new Create_Test_Variables();
+       Account TestAcct = CTV.fetchTestFamilyAccount();
+       Contact TestCtct = CTV.fetchTestContact();
+       Campaign TestCamp = CTV.fetchTestCampaign();
         
        Opportunity opp = new Opportunity(Name = 'Test Contribution',
-                               CampaignId = cmp.Id,
+               Contact__c = TestCtct.Id,
+               AccountId = TestAcct.Id,
+               CampaignId = TestCamp.Id,
                                StageName = 'Payment Received',
                                CloseDate = Date.Today() + 5);
         insert opp;

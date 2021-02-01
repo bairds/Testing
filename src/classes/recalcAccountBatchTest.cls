@@ -126,8 +126,12 @@ private class recalcAccountBatchTest {
                     from Account
                     where Id = :Testaccount.Id
             ];
-
-            System.assertEquals(100.00, a.Last_Donate_Amount__c);
+// If user has set Grant as an individual giving type, avoid this test.
+        List<String> ICTs = new List<String>();
+        List<IndividualContribTypes__mdt> ICMDTs = [SELECT label from IndividualContribTypes__mdt];
+        For (IndividualContribTypes__mdt i : ICMDTs) ICTs.add(i.label);
+            If (!ICTs.CONTAINS('Grant')) System.assertEquals(100.00, a.Last_Donate_Amount__c);
+        
             System.assertEquals('Testcampaign', a.Last_Contrib_Source__c);
             System.assertEquals(101, a.Last_Membership_Amount__c);
             System.assertEquals(system.now().date().addyears(-1), a.Last_Membership_Date__c);

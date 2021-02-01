@@ -1,11 +1,11 @@
 @istest
 private class PLPBairdTEST {
 
-    @testsetup static void setup(){
+    @testsetup static void setup() {
         createCustomSettings.createCustomSettings();
     }
 
-    static testMethod void test() {
+    @istest static void TestContactInCampaignAlready() {
 
         Create_Test_Variables ctv = new Create_Test_Variables();
 
@@ -13,230 +13,224 @@ private class PLPBairdTEST {
         Campaign Testcampaign = ctv.fetchTestCampaign();
         Contact co = ctv.fetchTestContact();
         CampaignMember cm = ctv.fetchTestCM();
-        cm.Status='Responded Yes';
+        cm.Status = 'Responded Yes';
         update cm;
-        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
         PageReference pageRef = Page.PLPBairdPage;
         Test.setCurrentPage(pageRef);
-        
-        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
-        system.assertEquals(1,PLPC.UnprocessedCMs.size());
-        // These two fire when the AutoComplete chooses a person
-        PLPC.attendee.PersonId = co.Id;
-        PLPC.newContactForm = false;
-        PLPC.attendee.addToList();
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
 
-        //Now run page to show all AttendeesRSVPed
-        //Give attendee hours
-        PLPC.attendee.Hours = 4;
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        system.assertEquals(1, PLPC.UnprocessedAttendees.size());
+        PLPC.getStati();
+
+        // These two fire when the AutoComplete chooses a person
+        PLPC.newContactForm = false;
+
+
+        //        //Give attendee hours
+        PLPC.UnprocessedAttendees[0].Hours = 4;
 
         PLPC.processSelected();
-        system.assertEquals(1,PLPC.UnprocessedAttendees.size());
-        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.UnprocessedAttendees);
+        system.assertEquals(1, PLPC.UpdateAttendees.size());
+        system.debug('After processing list with one attendee with 4 hours, AttendeesAttended is ' + PLPC.UpdateAttendees);
 
         // PLPC.setCM(PLPC.AttendeesAttended[0]);
         PLPC.submitData();
-        List<Opportunity> ConfirmOpps = [select id, hours_actual__c from Opportunity where campaignId =: Testcampaign.Id];
-        system.assertEquals(4,ConfirmOpps[0].Hours_Actual__c,'PLP failed to create opportunity with 4 hours for existing campaign member');
+        List<Opportunity> ConfirmOpps = [select id, hours_actual__c from Opportunity where campaignId = :Testcampaign.Id];
+        system.assertEquals(4, ConfirmOpps[0].Hours_Actual__c, 'PLP failed to create opportunity with 4 hours for existing campaign member');
 
+        PLPC.exitToWaterGrass();
+    }
 
+    @istest static void NewAttendeeAddedToList() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Campaign Testcampaign = ctv.fetchTestCampaign();
+        Contact TestCtct = ctv.fetchTestContact();
+        CampaignMember TestCM = new CampaignMember(
+                campaignId = Testcampaign.Id,
+                contactId = Testctct.Id,
+                status = 'Responded Yes'
+        );
+        Insert TestCM;
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
 
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
 
-        ///////////////////////////////////////////////
-        Opportunity opp;
-        List<Opportunity> Opps;
-        Lead l = ctv.fetchTestLead();
+        PLPC.addNewContact();
+        PLPC.NewContact.firstname = 'LeadFirstName';
+        PLPC.NewContact.lastname = 'LeadLastName';
+        PLPC.NewContact.email = 'newlead@dontbotherme.org';
+        PLPC.NewContact.MailingPostalCode = '22222';
+        system.debug('Just before savePerson(), NewContact is ' + PLPC.NewContact);
+        system.debug('At this point there should be one contact.  There are: ' + [SELECT ID FROM CONTACT].SIZE());
+        PLPC.savePerson();
 
-        PLPC.attendee.PersonId = l.Id;
-        PLPC.attendee.Hours = 4;
+        system.assertEquals(2, PLPC.UnprocessedAttendees.size());
+        system.assertEquals(2, PLPC.UnprocessedAttWrapped.size());
 
-        PLPC.attendee.addToList();
+        PLPC.UnprocessedAttendees[0].Hours = 4;
 
-        PLPC.all.cm.Status = 'Attended';
-        PLPC.all.Hours = 5;
+        //PLPC.addToList(PLPC.NewContact.Id);
+//        SYSTEM.debug(ApexPages.getMessages());
+//        System.assert(STRING.VALUEOF(Apexpages.getMessages()).CONTAINS('Campaign Member is already in this list.'));
+
+        // ADD HOURS, STATUS
+        PLPC.allStatus = 'Attended';
+        PLPC.allHours = 5;
 
         PLPC.setAllStatus();
         PLPC.setAllHours();
 
-        PLPC.all.Hours = 0;
-        PLPC.setAllHours();
-
-        PLPC.createContribution(PLPC.attendee);
-
-        ///////////////////////////////////////////////
-
-        PLPC.attendee = new PLPBaird.Attendee(PLPC);
-        PLPC.attendee.PersonId = co.Id;
-
-        PLPC.attendee.addToList();
-        PLPC.attendee.addToList();
-
-        //////////////////////////////////////////////////////////////
-
-        PLPC.account.addNewContact();
-
-        //Normally a user would have to insert a recordType in order to use the EnterAccountContact page
-        //But we reprogrammed the controller to guard against recordTypeId == null
-
-        PLPC.account.newContact.firstName = 'TestFN';
-        PLPC.account.newContact.lastName = 'TestLN';
-
-        PLPC.account.SaveContact();
-
-        /////////////////////////////////////////////////////////////////////////
-
+        // GO TO REVIEW PAGE
         PLPC.processSelected();
+        system.assertEquals(2, PLPC.UpdateAttendees.size());
 
-        List<SelectOption> stati = PLPC.getStati();
-
-    }
-
-    // PLPC.submitData();
-/*
-         ////////////////////////////////////
-        // Baird Specific Requested Tests //
-       ////////////////////////////////////
-
-       // 1) If a user changes only status, then the campaignMember record is updated, but no opportunity is created.
-
-        PLPC.attendee = createTestAttendee(PLPC);
-
-        System.assertEquals('Attended', PLPC.attendee.CM.Status);
-
-        PLPC.attendee.CM.Status = 'Contributed';
-
-        PLPC.setCM(PLPC.attendee);
-
-        update PLPC.attendee.CM;
-
-        Opp = PLPC.createContribution(PLPC.attendee);
-
-        CampaignMember cmTest = [SELECT Id, Status FROM CampaignMember WHERE Id = :PLPC.attendee.CM.Id];
-        // Opportunity[] opps = [SELECT Id, account.addressee__c FROM Opportunity WHERE Contact__c = :PLPC.attendee.Id AND CampaignId = :PLPC.Camp.Id];
-
-        System.assertEquals('CONTRIBUTED', cmTest.Status.TOUPPERCASE());	// Updated Status
-        System.assertEquals(0, opps.size());	// No Contribution Created
-
-        // 2) Controller is changing the CM status from attended to "responded yes" in all cases.  Test that this isn't happening.
-
-        PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.attendee.hours = 2;
-
-        System.assertEquals('Attended', PLPC.attendee.CM.Status);
-
-        PLPC.setCM(PLPC.attendee);
-
-        update PLPC.attendee.CM;
-
-        opp = PLPC.createContribution(PLPC.attendee);
-
-        insert opp;
-
-        cmTest = [SELECT Id, Status FROM CampaignMember WHERE Id = :PLPC.attendee.CM.Id];
-        System.assertEquals('Attended', cmTest.Status);	// Status remains the same
-
-        // 3) If a user adds only a comment, then the comment is added to campaignmember record, but no opportunity is created.
-
-        PLPC.attendee = createTestAttendee(PLPC);
-
-        PLPC.attendee.comments = 'Testing comments';
-
-        System.assertEquals('Testing comments', PLPC.attendee.comments);
-
-        PLPC.setCM(PLPC.attendee);
-
-        update PLPC.attendee.CM;
-
-        opp = PLPC.createContribution(PLPC.attendee);
-
-        cmTest = [SELECT Id, Comments__c FROM CampaignMember WHERE Id = :PLPC.attendee.CM.Id];
-        opps = [SELECT Id FROM Opportunity WHERE Contact__c = :PLPC.attendee.Id AND CampaignId = :PLPC.Camp.Id];
-
-        System.assertEquals('Testing comments', cmTest.Comments__c);	// Updated Comments
-        System.assertEquals(0, opps.size());	// No Contribution Created
-
-        // 4) If a user changes hours, or adds a comment, or changes supervisor rating, then the campaignMember is added to the Attended list.
-
-        PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.setCM(PLPC.attendee);
-        System.assertEquals(false, PLPC.addToAttendedList(PLPC.attendee));
-
-        PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.attendee.hours = 4;
-        PLPC.setCM(PLPC.attendee);
-        System.assertEquals(true, PLPC.addToAttendedList(PLPC.attendee));
-
-        PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.attendee.comments = 'Testing comments';
-        PLPC.setCM(PLPC.attendee);
-        System.assertEquals(true, PLPC.addToAttendedList(PLPC.attendee));
-
-        PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.attendee.Contribution.Supervisor_Satisfaction__c = '5 - Amazing!';
-        PLPC.setCM(PLPC.attendee);
-        System.assertEquals(true, PLPC.addToAttendedList(PLPC.attendee));
-        PLPC.exitToWaterGrass();
-        PLPC.returnToEditList();
- */
-    // 5) Does account.addressee__c and dear__c get set?
-
-    @istest static void test2(){
-        Create_Test_Variables ctv = new Create_Test_Variables();
-        Campaign c = ctv.fetchTestCampaign();
-        Contact co = ctv.fetchTestContact();
-
-        ApexPages.currentPage().getParameters().put('cid', c.Id);
-        system.debug('campaign c is ' + c);
-
-        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(new CampaignMember()));
-
-        List<SelectOption> stati = PLPC.getStati();
-        // Create attendee
-        PLPBaird.Attendee attendee = new PLPBaird.Attendee(PLPC);
-
-        attendee.PersonId = co.Id;
-        system.debug('just before error campaign c is ' + c);
-
-        attendee.addToList();
-
-        attendee.Comments = '';
-        attendee.OriginalStatus = attendee.CM.Status;
-        attendee.Contribution.Supervisor_Satisfaction__c = '3 - Good';
-        //PLPC.attendee = createTestAttendee(PLPC);
-        PLPC.attendee.hours = 4;
-        PLPC.processSelected();
-
-        PLPC.setCM(PLPC.attendee);
-        System.assertEquals(true, PLPC.addToAttendedList(PLPC.attendee));
-
-        update PLPC.attendee.CM;
-
-        Opportunity opp = PLPC.createContribution(PLPC.attendee);
+        //AFTER REVIEW SUBMIT DATA
         PLPC.submitData();
-
-        List<Opportunity> Opps = [SELECT Id, account.addressee__c, account.name, account.dear__c FROM Opportunity WHERE CampaignId = :PLPC.Camp.Id];
-
-        System.assertEquals(1, opps.size(), 'Either none or more than one opportunity came through.  Should be 1.');
-        System.assertEquals('null TestContact', Opps[0].account.addressee__c,'No addressee for '+ Opps[0].account.name);
-        System.assertEquals(null, Opps[0].account.dear__c,'No dear for '+ Opps[0].account.name);
+        List<Opportunity> ConfirmOpps = [select id, hours_actual__c from Opportunity where campaignId = :Testcampaign.Id];
+        system.assertEquals(5, ConfirmOpps[0].Hours_Actual__c, 'PLP failed to create opportunity with 5 hours for existing lead in campaign.');
+        PLPC.returnToEditList();
     }
 
-    static private PLPBaird.Attendee createTestAttendee(PLPBaird PLPC) {
+    @istest static void AddExistingContactToCampaign() {
+
         Create_Test_Variables ctv = new Create_Test_Variables();
 
+        // Testcontact is signed up for TestCampaign
+        Campaign Testcampaign = ctv.fetchTestCampaign();
         Contact co = ctv.fetchTestContact();
 
-        system.assertEquals('null TestContact', co.firstname + ' ' + co.lastname);
-        PLPBaird.Attendee attendee = new PLPBaird.Attendee(PLPC);
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
 
-        attendee.PersonId = co.Id;
-
-        attendee.addToList();
-
-        attendee.Comments = '';
-        attendee.OriginalStatus = attendee.CM.Status;
-        attendee.Contribution.Supervisor_Satisfaction__c = '3 - Good';
-
-        return attendee;
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        system.assertEquals(0, PLPC.UnprocessedAttendees.size());
+        // These two fire when the AutoComplete chooses a person
+        PLPC.newContactForm = false;
+        PLPC.addToList(co.Id);
+        system.assertEquals(1, PLPC.UnprocessedAttendees.size());
+        system.assertEquals(1, PLPC.UnprocessedAttWrapped.size());
     }
+
+
+    @istest static void AddExistingCMToCampaign() {
+
+        Create_Test_Variables ctv = new Create_Test_Variables();
+
+        // Testcontact is signed up for TestCampaign
+        Campaign Testcampaign = ctv.fetchTestCampaign();
+        Contact co = ctv.fetchTestContact();
+        CampaignMember TestCM = new CampaignMember(
+                ContactId = co.Id,
+                CampaignId = Testcampaign.Id,
+                Status = 'Responded Yes'
+        );
+        insert TestCM;
+
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
+
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        system.assertEquals(1, PLPC.UnprocessedAttendees.size());
+        // These two fire when the AutoComplete chooses a person
+        PLPC.newContactForm = false;
+        PLPC.addToList(co.Id);
+        List<Apexpages.Message> msgs = ApexPages.getMessages();
+        system.assertEquals('ApexPages.Message["Campaign Member is already in this list."]', STRING.ValueOf(msgs[0]), 'PLP should have said campaign member already in campaign');
+    }
+
+
+    @istest static void MissingCampaignId() {
+
+        Create_Test_Variables ctv = new Create_Test_Variables();
+
+        // Testcontact is signed up for TestCampaign
+        Campaign Testcampaign = ctv.fetchTestCampaign();
+        Contact co = ctv.fetchTestContact();
+        CampaignMember cm = ctv.fetchTestCM();
+        cm.Status = 'Responded Yes';
+        update cm;
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('cid', null);
+
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        List<Apexpages.Message> msgs = ApexPages.getMessages();
+        system.assertEquals('ApexPages.Message["Error: Not sure which Campaign to use.  Did you start from the campaign detail page?  Please send a copy of this message to support@watergrass.org."]', STRING.ValueOf(msgs[0]), 'PLP should have said no campaign Id.  Has the error message string changed?');
+    }
+
+    @istest static void BadCampaignId() {
+
+        Create_Test_Variables ctv = new Create_Test_Variables();
+
+        // Testcontact is signed up for TestCampaign
+        Campaign Testcampaign = ctv.fetchTestCampaign();
+        Contact co = ctv.fetchTestContact();
+        CampaignMember cm = ctv.fetchTestCM();
+        cm.Status = 'Responded Yes';
+        update cm;
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        string idstring = string.valueOf(Testcampaign.Id);
+        ApexPages.currentPage().getParameters().put('cid', idstring.left(idstring.length()-1)+'6');
+
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        List<Apexpages.Message> msgs = ApexPages.getMessages();
+        system.assertEquals('ApexPages.Message["That Campaign Id is not correct.  Please send a copy of this message to support@watergrass.org."]', STRING.ValueOf(msgs[0]), 'PLP should have said bad campaign Id.  Has the error message string changed?');
+    }
+
+
+    @istest static void DeleteExistingCMFromCampaign() {
+
+        Create_Test_Variables ctv = new Create_Test_Variables();
+
+        // Testcontact is signed up for TestCampaign
+        Campaign Testcampaign = ctv.fetchTestCampaign();
+        Account Testacct = ctv.fetchTestAccount();
+        List<CampaignMember> ListCMs = new List<CampaignMember>();
+        List<Contact> ListCtcts = new List<Contact>();
+        for (integer i=0;i<10;i++) {
+            Contact co = new Contact(
+                    accountId = Testacct.Id,
+                    lastname = 'Testcontact' + i
+            );
+            ListCtcts.add(co);
+        }
+        insert ListCtcts;
+        For (Contact c : ListCtcts){
+            CampaignMember TestCM = new CampaignMember(
+                    ContactId = c.Id,
+                    CampaignId = Testcampaign.Id,
+                    Status = 'Responded Yes'
+            );
+            ListCMs.add(TestCM);
+        }
+        insert ListCMs;
+
+        PageReference pageRef = Page.PLPBairdPage;
+        Test.setCurrentPage(pageRef);
+        ApexPages.currentPage().getParameters().put('cid', Testcampaign.Id);
+
+        system.debug('TestCampaign is ' + TestCampaign);
+        PLPBaird PLPC = new PLPBaird(new ApexPages.StandardController(Testcampaign));
+        system.assertEquals(10, PLPC.UnprocessedAttendees.size());
+        CampaignMember DeleteCM = [select id, contact.lastname from CampaignMember where contact.lastname = 'Testcontact4' LIMIT 1];
+        // This should be index 5 in the AttendeeWrapper
+        PLPC.CMToDelete.Id = DeleteCM.Id;
+        PLPC.AttendeeToDeleteIndex = 5;
+        PLPC.deleteCM();
+
+        system.assertEquals(9,PLPC.UnProcessedAttendees.size());
+        Boolean CorrectCMDeleted = true;
+        For (PLPBaird.Attendee a : PLPC.UnProcessedAttendees){
+            if (a.cm.name.CONTAINS('TestContact4')) CorrectCMDeleted = false;
+        }
+        System.assertEquals(true,CorrectCMDeleted,'DeleteCM() deleted an attendee but not the right one.');
+
+    }
+
 }

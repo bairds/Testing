@@ -1,15 +1,22 @@
 // Added ability to append campaign id so that people can sign up for a campaign.
 // When they sign up for a campaign, the name of the campaign is inserted into contact.mailing_lists__c.
 // Jan 7 2017 Included the insertEmailListContact so that the Prescott Creeks RESTEmail controller can use this too.
-global with sharing class Email_Signup_Controller {
+// 23 May 2019 Added code to append new Dsscription to exisitng description field for Lead and Contact
+// 8 Jan 2021 Added Register_Page_Message_Rich__c to top bar in case the page is being used to sign up for a campaign.
+// 8 Jan 2021 Nr_in_Group__c is set to 1.
+global without sharing class Email_Signup_Controller {
     
     public Contact pcontact;
     WGSettings__mdt Setting;
-    public static string mailing_list;
+    public string mailing_list;
     public Campaign camp {get; set;}
-    public string DisplayName {get; set;}
-    
-    
+    public string OrgName {get; set;}
+    public Boolean Thankspage {get; set;}
+    public Boolean CampaignExists {get; set;}
+    public Boolean SetUpTrial {get; set;}
+    public String CustomQuestion1Answer {get;set;}
+    public String CustomQuestion2Answer {get;set;}
+    public Boolean ThanksMessageExists {get;set;}
     public Email_Signup_Controller(ApexPages.StandardController Controller) {
         this.pcontact=(Contact)Controller.getRecord();
         // In the case that the page is signing up a person for a specific campaign
@@ -17,11 +24,21 @@ global with sharing class Email_Signup_Controller {
         if (ApexPages.currentPage().getParameters().get('cid')!=null) {
             string CampID = ApexPages.currentPage().getParameters().get('cid');
             Camp = [select campaign.name, id, Description, Description_Long__c, Event_Location__c, Event_Date_Time__c, 
-                    recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c, type from Campaign where 
+                    recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, RequireAddress__c, Add_New_Mailing_List__c,
+                    Register_Page_Message__c, Custom_Signup_Question__c, Custom_Signup_Question_2__c, type, Thank_You_Message__c,
+                    Description_Rich__c, Register_Page_Message_Rich__c from Campaign where
                     id = :CampID];
         }
-        Setting= WGHelpers.getWGSettings();
-        mailing_list = Setting.online_signup_newsletter__c;
+        if (Camp!=null) {
+            CampaignExists = true;
+            ThanksMessageExists = Camp.Thank_You_Message__c != null;
+        } else {
+            CampaignExists = false;
+        }
+        mailing_list = WGHelpers.getWGSettings().Online_signup_newsletter__c;
+        system.debug('In constructor, mailing_list is ' + mailing_list);
+        ThanksPage = false;
+        
     }
     
     // public Email_Signup_Controller(){}
@@ -46,6 +63,7 @@ global with sharing class Email_Signup_Controller {
                            MailingPostalCode, email, Mailing_Lists__c from contact where id = :sID];
             // Update email
             tempContact.email = pcontact.email;
+            tempContact.Description = tempContact.Description==null ? pcontact.Description : tempContact.Description + '; ' + pcontact.Description;
             // If Mailing_Lists__c is blank, send it to the first method.
             if (string.isBlank(tempContact.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                 tempContact.Mailing_Lists__c = getMailingList();
@@ -56,10 +74,13 @@ global with sharing class Email_Signup_Controller {
         }
         else {
             if (stype=='Lead') {
-                tempLead = [select id, firstname, lastname, PostalCode, email, Mailing_Lists__c from lead where id = :sID];
+                tempLead = [select id, firstname, lastname, Description, PostalCode, email, Mailing_Lists__c from lead where id = :sID];
+                system.debug('TempLead.Mailing_Lists__c is ' + TempLead.Mailing_Lists__c);
                 /*if (templead.email == null) */ templead.email = pcontact.email;
                 tempLead.LeadSource = 'Online Email Signup';
                 tempLead.email=pcontact.email;
+                tempLead.Description = tempLead.Description==null ? pcontact.Description : tempLead.Description + '; ' + pcontact.Description;
+                if (OrgName!=null) tempLead.Company=OrgName;
                 if (string.isBlank(tempLead.Mailing_Lists__c) && ((Camp != null && Camp.Add_New_Mailing_List__c) || Camp == null ))
                     tempLead.Mailing_Lists__c = getMailingList();
                 // If not blank, send to second method
@@ -73,8 +94,11 @@ global with sharing class Email_Signup_Controller {
                 Leadid = stype == 'Lead'?  tempLead.id : null,
                 ContactId = stype == 'Contact'?  tempContact.id : null,
                 CampaignId = camp.id,
-                Questions_or_Comments__c = pcontact.Description,
-                Status = 'Responded Yes');
+                    Campaign_Member_Source__c = 'EmailSignupPage',
+                Questions_or_Comments__c = 'Signed up for ' + OrgName + ' with comments ' + pcontact.Description,
+                    SignupQuestionAnswer__c = CustomQuestion1Answer==null ? null : CustomQuestion1Answer,
+                    SignupQuestionAnswer2__c = CustomQuestion2Answer==null ? null : CustomQuestion2Answer,
+                Status = 'Responded Yes', Nr_in_Group__c = 1);
             CMList.add(cm);
         }
         if (CMList.size() > 0) {
@@ -85,138 +109,104 @@ global with sharing class Email_Signup_Controller {
                 }
             }
         }
+        if (SetUpTrial==true){
+            String Taskname = String.IsEmpty(Orgname) ? 'unidentified organization' : Orgname;
+            Task tsk = new Task(
+                    Subject = 'Create trial database for ' + Taskname,
+                    // WhatId = [select Id from Opportunity Limit 1].Id,
+                    ownerId = UserInfo.getUserId(),
+                    WhoId = sresults[0],
+                    Status = 'New',
+                    Type = 'Call',
+                    Description = pcontact.description,
+                    ActivityDate = system.today().addDays(2),
+                    IsReminderSet=true,
+                    ReminderDateTime=system.now().addHours(24)
+            );
+            insert tsk;
+        }
         // Right here insert Lead or contact into method call
         // sendAcknowledgementEmail(stype);
+        string APString = string.ValueOf(apexPages.currentPage());
+        system.debug('APString is ' + APstring);
         PageReference Thanks_Page = Page.Email_Signup_Thank_Page;
-        Thanks_Page.setRedirect(false);
-        return Thanks_Page;
-        //return null;
+        if (APString.TOUPPERCASE().CONTAINS('EMAILSIGNUPPAGEBOOTSTRAP')){
+            ThanksPage = true;
+            return null;
+        } else {
+            Thanks_Page = Page.Email_Signup_Thank_Page;
+            Thanks_Page.setRedirect(false);
+            return Thanks_Page;
+        }
     }
     
-    //No mailing list exists
+    //Add Campaign.Name to MailingLists values
     public string getMailingList() {
-        if(Camp!=null && Camp.Add_New_Mailing_List__c == true) {return Camp.Name;
-                       } else {
-                           return mailing_List;
-                       }
+        if (Camp != null && Camp.Add_New_Mailing_List__c == true) {
+            return Camp.Name;
+        } else {
+            if (mailing_list != null)
+                return mailing_list;
+        }
+        return null;
     }
     
     //Mailing List already exists
     public string getMailingList(string ML){
+        system.debug('Mailing_List string is ' + ML);
         if(Camp!=null && Camp.Add_New_Mailing_List__c == true) {
             if (!ML.contains(Camp.Name)) {
                 return ML + '; ' + Camp.Name;
             } else {
+                system.debug('getMailngList returned ' + ML);
                 return ML;
             }
         } else {
-            system.debug('ML.containsNone(mailing_list) evaluates to ' + ML.containsNone(mailing_list) + ' and mailing_list is ' + mailing_list);
-            if (!ML.contains(mailing_list)) {
-                           return ML + '; ' + mailing_list;
+            if (ML.contains(mailing_list)) {
+                return ML;
             } else {
-                           return ML;
+                return ML + '; ' + mailing_list;
                        }
         }
     }
-    
-    
-    // The following code for a Captcha button    
-    @RemoteAction 
+
+
+    // The following code for a Captcha button
+    @RemoteAction
     global static boolean validCaptcha(string challenge, string response)
     {
         boolean correctResponse = false;
         string secret = '6LcoI9kSAAAAAAABNpurbDy8hTEyRi2tW81n4yTz';
         string publicKey = '6LcoI9kSAAAAAJ-eFtBToTbDqT6s8BZ5-QMXMCDJ';
-        string baseUrl = 'https://www.google.com/recaptcha/api/verify'; 
-        
+        string baseUrl = 'https://www.google.com/recaptcha/api/verify';
+
         string body ='privatekey='+ secret +  '&remoteip=' + remoteHost() + '&challenge=' + challenge + '&response=' + response + '&error=incorrect-captcha-sol';
-        
-        HttpRequest req = new HttpRequest();   
+
+        HttpRequest req = new HttpRequest();
         req.setEndpoint( baseUrl );
         req.setMethod('POST');
         req.setBody (body);
-        try 
+        try
         {
             Http http = new Http();
             HttpResponse captchaResponse = http.send(req);
             System.debug('response: '+ captchaResponse);
             System.debug('body: '+ captchaResponse.getBody());
-            if ( captchaResponse != null ) 
-            {  
+            if ( captchaResponse != null )
+            {
                 correctResponse = ( captchaResponse.getBody().contains('true') );
-            }          
-            
-        } 
-        catch( System.Exception e) 
+            }
+
+        }
+        catch( System.Exception e)
         {
             System.debug('ERROR: '+ e);
-        }                             
+        }
         return correctResponse;
     }
-    
-    global static string remoteHost() 
-    { 
-        string ret = '127.0.0.1';
-        // also could use x-original-remote-host 
-        try
-        {
-            map<string , string> hdrs = ApexPages.currentPage().getHeaders();
-            if ( hdrs.get('x-original-remote-addr') != null)
-            {
-                ret =  hdrs.get('x-original-remote-addr');
-            }
-            else if ( hdrs.get('X-Salesforce-SIP') != null)
-            {   
-                ret =  hdrs.get('X-Salesforce-SIP');
-            }
-        }
-        catch(exception e)
-        {
-            
-        }
-        return ret;
-    }
-/*    
-    public void sendAcknowledgementEmail(string stype) {
-        List<EmailTemplate> ETs;
-        // Will only fire if there's a corresponding email template.
-        // If no campaign, finds the EAlert template.  Otherwise, finds the ECampaign template
-        if (stype == 'Contact') {
-            ETs = Camp == null ?
-                [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_Signing_Up_for_EAlerts'] :
-            [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signup_for_eCampaign_Contact'] ;
-                }
-        else {
-            ETs = Camp == null ?
-                [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signing_up_for_emails'] :
-            [SELECT id FROM EmailTemplate WHERE developerName = 'Thanks_for_signup_for_eCampaign_Lead'] ;
-                }
-        if(ETs.size() > 0) {
-            Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
-            
-            mail.setSenderDisplayName(DisplayName);
-            // mail.setWhatID JOSE THIS NEEDS TO CONNECT TO THE RELATEDTO IN THE EMAIL.
-            // WHATID CAN ONLY BE LEAD, OPPORTUNITY, CONTACT, CAMPAIGN, ETC.
-            // SO WE COULD USE CAMPAIGN.
-            mail.setTargetObjectId(sid); // Specify who the email should be sent to.
-            mail.setTemplateId(ETs[0].id);
-            
-            Try{
-            Messaging.sendEmail(new Messaging.SingleEmailMessage[] {mail});
-            }
-            Catch(EmailException e) {
-                system.debug('EmailException is ' + e);
-                //LogError.LogEmailError(e);
-            }
-        }
-    } 
-*/
-// JAGMOHAN, THIS IS THE METHOD THAT THE REST API SHOULD FEED THE CONTACT PARAMETERS INTO.
-// IT TAKES CONTACT.FIRSTNAME, LASTNAME, EMAIL, MAILINGSTREET, MAILINGCITY, MAILINGSTATE, MAILINGPOSTALCODE, PHONE
-// FIRST AND LASTNAME, EMAIL, AND MAILINGPOSTALCODE ARE ALL REQUIRED BECAUSE THEY ARE USED IN THE identifyorcreatePerson method.
 
- 
 public string insertEmailListContact(contact pcontact) {
+    system.debug('in insertEmailListContact mailing_list is ' + mailing_list);
     String[] sresults = identifyorcreatePerson.IdentifyOrCreatePerson(pContact);
     sID = sresults[0];
     stype = sresults[1];
@@ -242,12 +232,35 @@ public string insertEmailListContact(contact pcontact) {
                                    tempLead.Mailing_Lists__c = mailing_list;
                                         }
                                         else {
-                                        tempLead.Mailing_Lists__c += '; ' + mailing_list;      
+                                        tempLead.Mailing_Lists__c += '; ' + mailing_list;
                                         }            
                         update tempLead;
             }
         } // END ELSE CHECK IF 
         return 'Inserted ' + stype + ' with ID ' + sID;
 }
-    
+
+
+    global static string remoteHost()
+    {
+        string ret = '127.0.0.1';
+        // also could use x-original-remote-host
+        try
+        {
+            map<string , string> hdrs = ApexPages.currentPage().getHeaders();
+            if ( hdrs.get('x-original-remote-addr') != null)
+            {
+                ret =  hdrs.get('x-original-remote-addr');
+            }
+            else if ( hdrs.get('X-Salesforce-SIP') != null)
+            {
+                ret =  hdrs.get('X-Salesforce-SIP');
+            }
+        }
+        catch(exception e)
+        {
+
+        }
+        return ret;
+    }
 }

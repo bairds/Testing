@@ -13,6 +13,7 @@
     <filter>
         <criteriaItems>
             <column>Account.VolHours_in_Timeframe_X__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterThan</operator>
             <value>0</value>

@@ -1,0 +1,14 @@
+<!--
+ - Created by Baird on 3/18/2019.
+ -->
+
+<apex:page Controller="moveHUCToAccountInvokeBatch" showheader="false"
+           action="{!InvokeBatch}">
+    <h1>You will receive an email when WaterGrass is done moving all the data from the HUC table into the HUC fields on Account.</h1><br/>
+    <br/>
+    It may take an hour or more to go through the whole database.<br/>
+    <br/>
+    <apex:form >
+        <apex:commandButton action="{!Finished}" value="Back to WaterGrass"/>
+    </apex:form>
+</apex:page>

@@ -4,7 +4,7 @@
 // if Lead.company = 'none' then creates Account Family 'Lastname, Firstname Household'
 // if Lead.compoany = 'anythingelse' then creates Account type Business 'anythingelse'
 // Tests included within this controller
-public class ConvertLeadToContact{
+public without sharing class ConvertLeadToContact{
     public static Boolean leadBeingConverted = false;
     
     public ConvertLeadToContact() {}

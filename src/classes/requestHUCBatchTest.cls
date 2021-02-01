@@ -3,7 +3,7 @@ private class requestHUCBatchTest {
     
 @testSetup static void methodName() {
 	  List<Account> testAccts = new List<Account>();
-        for(Integer i=0;i<40;i++) {
+        for(Integer i=0;i<24;i++) {
             testAccts.add(new Account(Name = 'TestAcct'+i));
         }
         insert testAccts;     
@@ -12,7 +12,7 @@ private class requestHUCBatchTest {
 @istest
 static void requestHUCBatchTest(){
 	List<Account> accts = [SELECT id, HUC_Status__c, BillingStreet from Account];
-    system.assertEquals(40,accts.size());
+    system.assertEquals(24,accts.size());
     For (Account a : accts) a.BillingStreet = 'new street address';
     requestHUCInvokeBatch rHIB = new requestHUCInvokeBatch();
     Test.startTest();

@@ -1,210 +1,204 @@
-<!-- Created by Baird on 9/14/2018.-->
-<apex:page docType="html-5.0" standardController="CampaignMember" title="Post Event Hours" extensions="processParticipantList" sidebar="false" showheader="false" >
+<!--
+ - Created by Baird on 3/29/2019.
+ -->
+
+<apex:page id="processParticipantListPage" docType="html-5.0" standardController="Campaign" title="Post Event Hours"
+           extensions="processParticipantList" sidebar="false" showheader="false">
     <apex:stylesheet value="{!$Resource.JoseCSS}"/>
     <apex:stylesheet value="{!$Resource.customCSS}"/>
     <apex:includeScript value="{!$Resource.customJS}"/>
     <apex:includeScript value="{!$Resource.JoseJS}"/>
+    <apex:form >
+        <apex:outputPanel id="errorMsgs">
+            <div style="margin-top: 5px">
+                <apex:pageMessages id="msgs"/>
+            </div>
+        </apex:outputPanel>
+        <apex:pageBlock title="Assign Status and Hours to Participants in {!Camp.name}" id="participant_list_processing">
+            <apex:pageBlock rendered="{!review==false}">
 
-    <apex:pageMessages />
+                <apex:pageBlockSection columns="6">
+                    <apex:pageBlockSectionItem >
+                        <div class="fwb m5 tar">  Not in the list?  </div>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Lead;Contact"
+                                              valueField="Id" targetField="{!personId}"
+                                              syncManualEntry="false" style="width:200px">
+                        </c:AutoCompleteV2>
+                        <apex:commandButton value="Add To List" action="{!addToList}" rerender="PeopleWhoRSVPed, errorMsgs"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem >
+                        <div class="fwb m5">  Can't find them in WaterGrass? </div>
+                        <apex:commandButton styleclass="tac m10" value="Add New Contact" action="{!addNewContact}" immediate="true" rerender="new_contact, errorMsgs"/>
+                    </apex:pageBlockSectionItem>
+                </apex:pageBlockSection>
+            </apex:pageBlock>
+            <apex:outputPanel layout="block" id="new_contact">
+
+                <apex:outputPanel layout="block" rendered="{!newContactForm && review==false}">
+                    <h2> New Contact </h2>
+                    <div class="section">
+                        <apex:pageBlockSection columns="2">
+
+                            <apex:pageBlockSectionItem >
+                                <apex:outputLabel value="Existing Account?" />
+                                <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account"
+                                                      valueField="Id" targetField="{!newContact.AccountId}"
+                                                      syncManualEntry="false" style="width:200px">
+                                </c:AutoCompleteV2>
+
+                            </apex:pageBlockSectionItem>
+                            <apex:pageBlockSectionItem />
+
+                            <apex:inputField value="{!newContact.FirstName}" required="true"/>
+                            <apex:inputField value="{!newContact.LastName}" required="true"/>
+                            <apex:inputField value="{!newContact.Email}" />
+                            <apex:inputField value="{!newContact.Phone}" />
+                            <apex:inputField value="{!newContact.MailingStreet}" />
+                            <apex:inputField value="{!newContact.MailingCity}" />
+                            <apex:inputField value="{!newContact.MailingState}" />
+                            <apex:inputField value="{!newContact.MailingPostalCode}" />
+                        </apex:pageBlockSection>
+                    </div>
+
+                    <apex:outputPanel layout="block" styleClass="section tac">
+
+                        <apex:commandButton action="{!savePerson}" value="Save" rerender="PeopleWhoRSVPed, new_contact">
+                            <!--<apex:param value="{!newCtct}" assignTo="{!newContact}"/>
+                            <apex:param value="{!newCtct.AccountId}" assignTo="{!Acct.Id}"/>-->
+                        </apex:commandButton>
+
+                        <!--<apex:actionRegion >-->
+                        <apex:commandButton action="{!cancelContact}" value="Cancel" immediate="true" rerender="new_contact" />
+                        <!--</apex:actionRegion>-->
+                    </apex:outputPanel>
+                </apex:outputPanel>
+            </apex:outputPanel>
+
+            <apex:outputPanel layout="block" rendered="{!UnprocessedAttendees.size > 0 && review==false}" styleClass="section df">
+                <div class="section">
+                    <label class="labelCol">
+                        Date of the event:
+                    </label>
+                    <div>
+                        <apex:inputField value="{!Camp.Event_Date_Time__c}">
+                            <apex:actionSupport oncomplete="if({!allHours} != '') setAllHours();"/>
+                            <apex:actionSupport oncomplete="if({!allStatus} != '') setAllHours();"/>
+                        </apex:inputField>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <label class="labelCol">
+                        Set all status to:
+                    </label>
+                    <div>
+                        <apex:selectList value="{!allStatus}" size="1" onchange="setAllStatus(this.value)">
+                            <apex:selectOption itemLabel="" itemValue="" />
+                            <apex:selectOptions value="{!stati}"/>
+                        </apex:selectList>
+                        <apex:actionFunction name="setAllStatus" action="{!setAllStatus}" oncomplete="showLoading('1')" reRender="PeopleWhoRSVPed,errorMsgs">
+                            <apex:param name="allStatus" value=""/>
+                        </apex:actionFunction>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <label class="labelCol">
+                        Set all hours to:
+                    </label>
+                    <div>
+                        <apex:input value="{!allHours}" style="width:100px" type="number" html-step="0.01" html-pattern="[0-9]" onchange="if(this.valueAsNumber>0) setAllHours(this.value);" />
+                        <apex:param name="allHours" value=""/>
+                        <apex:actionFunction name="setAllHours" action="{!setAllHours}" oncomplete="showLoading('1')" reRender="PeopleWhoRSVPed,errorMsgs" />
+                    </div>
+                </div>
 
 
-    <apex:PageBlock title="Assign Status and Hours to Participants in {!Camp.name}" id="participant_list_processing">
+                <div class="section">
+                    <label class="labelCol">
+                        Set all roles to:
+                    </label>
+                    <div>
+                        <apex:selectList value="{!allRoles}" size="1" style="width:100px" onchange="setAllRoles(this.value)">
+                            <apex:selectOption itemLabel="" itemValue=""/>
+                            <apex:selectOptions value="{!Roles}"/>
+                        </apex:selectList>
+                        <apex:actionFunction name="setAllRoles" action="{!setAllRoles}" oncomplete="showLoading('1')"
+                                             reRender="PeopleWhoRSVPed,errorMsgs">
+                            <apex:param name="allStatus" value=""/>
+                        </apex:actionFunction>
+                    </div>
+                </div>
+            </apex:outputPanel>
+            <apex:actionFunction name="rerenderList" rerender="PeopleWhoRSVPed"/>
 
+            <apex:pageBlock id="PeopleWhoRSVPed">
+                <apex:pageBlock rendered="{!review==false}">
+                    <apex:variable value="{!0}" var="rowNum"/>
+                    <apex:pageBlockTable value="{!UnprocessedAttWrapped}" var="ar" rendered="{!UnprocessedAttendees.size > 0}">
 
-        <apex:pageBlock title="People Who RSVPed or Attended" rendered="{!!review}" id="participant_list">
-            <apex:form >
-                <apex:outputpanel layout="block" styleClass="cell section">
-                    <div class="section tac">
+                        <apex:column >
+                            <apex:commandLink value="X" reRender="PeopleWhoRSVPed, errorMsgs" action="{!deleteCM}"
+                                              onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
+                                <apex:param name="cmId" value="{!ar.at.cm.id}" assignTo="{!CMToDelete.Id}"/>
+                                <apex:param name="arId" value="{!ar.counter}" assignTo="{!AttendeeToDeleteIndex}"/>
+                            </apex:commandLink>
+                            <br/>
+                        </apex:column>
+
+                        <apex:column >
+                            <apex:facet name="header">First Name</apex:facet>
+                            <apex:outputText value="{!if(ar.at.cm.contact.firstname==null,ar.at.cm.lead.firstname,ar.at.cm.contact.firstname)}"/>
+                        </apex:column>
+
+                        <apex:column >
+                            <apex:facet name="header">Last Name</apex:facet>
+                            <apex:outputText value="{!if(ar.at.cm.contact.lastname==null,ar.at.cm.lead.lastname,ar.at.cm.contact.lastname)}"/>
+                        </apex:column>
+
+                        <apex:column >
+                            <apex:facet name="header">Status</apex:facet>
+                            <apex:selectList id="Stati" value="{!ar.at.cm.status}" size="1">
+                                <apex:selectOptions value="{!stati}"/>
+                            </apex:selectList>
+                        </apex:column>
+                        <apex:column >
+                            <apex:facet name="header">Hours</apex:facet>
+                            <apex:input value="{!ar.at.Hours}" style="width:50px" type="number" html-step="0.01"/>
+                        </apex:column>
+
+                        <apex:column >
+                            <apex:facet name="header">Role</apex:facet>
+                            <apex:inputField value="{!ar.at.cm.Role__c}"/>
+                        </apex:column>
+
+                        <apex:repeat value="{!pPLFieldSetMembers}" var="plff">
+                            <apex:column >
+                                <apex:facet name="header">{!plff.Label}</apex:facet>
+                                <apex:inputField value="{!ar.at.contribution[plff.fieldPath]}" required="{!plff.required}"/>
+                            </apex:column>
+                        </apex:repeat>
+
+                        <apex:column >
+                            <apex:facet name="header">Comments</apex:facet>
+                            <apex:inputText value="{!ar.at.Comments}" size="40"/>
+                        </apex:column>
+                        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+                    </apex:pageBlockTable>
+                    <apex:outputPanel layout="block" styleClass="section tac" rendered="{!UnprocessedAttendees.size > 0}">
+                        <apex:commandButton value="Review List" action="{!processSelected}" reRender="participant_list_processing, errorMsgs"/>
+                        <!--<div class="section tac">-->
 
                         <apex:commandButton value="Back to WaterGrass" action="{!exitToWaterGrass}"/>
-                    </div>
+                        <!--</div>-->
 
-                    <div class="section">
-                        <div class="fwb m5">  Not in the list?  </div>
-
-
-                        <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact;Lead" valueField="Id" targetField="{!attendee.Id}"
-                                          syncManualEntry="false" style="width:200px" filterclause="" preSubmit="true" placeholder="Search WaterGrass"/>
-
-                        <apex:actionFunction immediate="true" action="{!attendee.preAddToList}" name="preSubmit" oncomplete="addToList()" />
-                        <apex:actionFunction action="{!attendee.addToList}" name="addToList" rerender="participant_list"  />
-
-
-                        <!-- <apex:inputHidden value="{!attendee.Id}" id="attendeeId" />-->
-
-                    </div>
-
-                    <div class="section">
-                        <div class="fwb m5">  Can't find them in WaterGrass? </div>
-
-                        <div class="tac m10">
-                            <apex:actionRegion >
-                                <apex:commandButton value="Add New Contact" action="{!account.addNewContact}" rerender="new_contact"/>
-                            </apex:actionRegion>
-                        </div>
-                    </div>
-                </apex:outputpanel>
-
-                <apex:outputpanel layout="block" styleClass="cell section w75" id="attendees">
-
-                    <apex:outputPanel layout="block" id="new_contact">
-                        <div style="margin-top: 5px">
-                            <apex:pageMessages id="msgs"/>
-                        </div>
-                        <apex:outputPanel layout="block" rendered="{newContactForm}">
-
-
-                            <h2> New Contact </h2>
-
-                            <div class="section">
-
-
-                                <apex:pageBlockSection columns="2">
-
-                                    <apex:pageBlockSectionItem >
-                                        <apex:outputLabel value="Existing Account?" />
-                                        <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" valueField="Id"
-                                                          syncManualEntry="false" targetField="{!account.Id}" style="width:200px"/>
-
-                                    </apex:pageBlockSectionItem>
-                                    <apex:pageBlockSectionItem />
-
-                                    <apex:inputField value="{!account.newContact.FirstName}" required="true"/>
-                                    <apex:inputField value="{!account.newContact.LastName}" required="true"/>
-                                    <apex:inputField value="{!account.newContact.Email}" />
-                                    <apex:inputField value="{!account.newContact.Phone}" />
-                                    <apex:inputField value="{!account.newContact.MailingStreet}" />
-                                    <apex:inputField value="{!account.newContact.MailingCity}" />
-                                    <apex:inputField value="{!account.newContact.MailingPostalCode}" />
-
-                                </apex:pageBlockSection>
-                            </div>
-
-                            <apex:outputPanel layout="block" styleClass="section tac">
-
-                                <apex:commandButton action="{!account.saveContact}" value="Save" rerender="attendees" />
-
-                                <apex:actionRegion >
-                                    <apex:commandButton action="{!account.cancelContact}" value="Cancel" rerender="new_contact" />
-                                </apex:actionRegion>
-                            </apex:outputpanel>
-
-                        </apex:outputpanel>
-                    </apex:outputpanel>
-
-                    <apex:actionRegion >
-
-
-                        <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size == 0}">No records to display </apex:outputPanel>
-
-                        <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size > 0}" styleClass="section df">
-                            <div class="section">
-                                <label class="labelCol">
-                                    Date of the event:
-                                </label>
-                                <div>
-                                    <apex:inputField value="{!attendee.Contribution.CloseDate}" required="true"/>
-                                </div>
-                            </div>
-
-                            <div class="section">
-                                <label class="labelCol">
-                                    Set all status to:
-                                </label>
-                                <div>
-                                    <apex:selectList value="{!all.cm.status}" size="1" onchange="if(this.value != '')showLoading('2'); setAllStatus()">
-                                        <apex:selectOption itemLabel="" itemValue="" />
-                                        <apex:selectOptions value="{!stati}"/>
-                                    </apex:selectList>
-
-                                    <apex:actionFunction name="setAllStatus" action="{!setAllStatus}" reRender="participant_list"  />
-                                </div>
-                            </div>
-
-                            <div class="section">
-                                <label class="labelCol">
-                                    Set all hours to:
-                                </label>
-                                <div>
-                                    <apex:input value="{!all.Hours}" style="width:100px" type="number" html-min="1" html-step="0.01" html-pattern="[0-9]" onchange="showLoading('2'); setAllHours()" />
-                                    <apex:actionFunction name="setAllHours" action="{!setAllHours}" reRender="participant_list" />
-                                </div>
-                            </div>
-                        </apex:outputPanel>
-
-
-                        <apex:pageBlockTable value="{!UnprocessedCMs}" var="ar" id="People_Who_RSVPed" rendered="{!UnprocessedCMs.size > 0}">
-
-                            <apex:column >
-                                <apex:commandLink value="X" action="{!attendee.deleteCM}" reRender="attendees" onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
-                                    <apex:param name="cmId" value="{!ar.cm.id}" assignTo="{!attendee.selected.Id}" />
-                                </apex:commandLink>
-                            </apex:column>
-
-                            <apex:column >
-                                <apex:facet name="header">First Name</apex:facet>
-                                <apex:outputText value="{!if(ar.cm.contact.firstname==null,ar.cm.lead.firstname,ar.cm.contact.firstname)}"/>
-                            </apex:column>
-
-                            <apex:column >
-                                <apex:facet name="header">Last Name</apex:facet>
-                                <apex:outputText value="{!if(ar.cm.contact.lastname==null,ar.cm.lead.lastname,ar.cm.contact.lastname)}"/>
-                            </apex:column>
-
-
-                            <apex:column >
-                                <apex:facet name="header">Status</apex:facet>
-                                <apex:selectList id="Stati" value="{!ar.cm.status}" size="1">
-                                    <apex:selectOptions value="{!stati}"/>
-                                </apex:selectList>
-                            </apex:column>
-                            <apex:column >
-                                <apex:facet name="header">Hours</apex:facet>
-                                <apex:input value="{!ar.Hours}" style="width:50px" type="number" html-min="1" html-step="0.01" />
-                            </apex:column>
-                            <apex:column >
-                                <apex:facet name="header">Supervisor Rating </apex:facet>
-                                <apex:inputField value="{!ar.Contribution.Supervisor_Satisfaction__c}" required="true"/>
-                            </apex:column>
-
-                            <apex:column >
-                                <apex:facet name="header">Leadership Level</apex:facet>
-                                <apex:inputField value="{!ar.Contribution.Leadership_Level__c}" required="true" />
-                            </apex:column>
-
-                            <apex:column >
-                                <apex:facet name="header">Role</apex:facet>
-                                <apex:inputField value="{!ar.cm.Role__c}" />
-                            </apex:column>
-
-
-                            <apex:column >
-                                <apex:facet name="header">Comments</apex:facet>
-                                <apex:inputText value="{!ar.Comments}" size="50"/>
-                            </apex:column>
-
-                        </apex:pageBlockTable>
-
-
-                        <apex:outputPanel layout="block" styleClass="section tac" rendered="{!UnprocessedCMs.size > 0}">
-                            <apex:commandButton value="Review List" action="{!processSelected}" reRender="participant_list_processing"/>
-
-                        </apex:outputPanel>
-
-
-                    </apex:actionRegion>
-
-                    <c:Loading Id="2" />
-                </apex:outputpanel>
-
-            </apex:form>
-
-        </apex:pageBlock>
-
-
-        <apex:pageBlock title="Review Your List" rendered="{!review}">
-            <apex:form >
-                <apex:pageBlockTable value="{!UnprocessedAttendees}" var="aa" id="AttendeesAttended">
+                    </apex:outputPanel>
+                </apex:pageBlock>
+            </apex:pageBlock>
+            <apex:pageBlock title="Review Your List" rendered="{!review}">
+                <apex:pageBlockTable value="{!UpdateAttendees}" var="aa" id="AttendeesAttended">
 
                     <apex:column width="50px">
                         <apex:facet name="header">First Name</apex:facet>
@@ -222,38 +216,34 @@
                     <apex:column width="50px">
                         <apex:facet name="header">Hours</apex:facet>
                         <apex:outputText value="{!aa.Hours}" style="width:50px"/>
-
                         <apex:facet name="footer">{!TotalHours}</apex:facet>
                     </apex:column>
-                    <apex:column width="50px">
-                        <apex:facet name="header">Supervisor Rating</apex:facet>
-                        <apex:outputText value="{!aa.Contribution.Supervisor_Satisfaction__c}" style="width:50px"/>
-                    </apex:column>
 
-                    <apex:column width="50px">
-                        <apex:facet name="header">Leadership Level</apex:facet>
-                        <apex:outputText value="{!aa.Contribution.Leadership_Level__c}" style="width:50px"/>
-                    </apex:column>
-                    <apex:column width="50px">
+                    <apex:column >
                         <apex:facet name="header">Role</apex:facet>
                         <apex:outputText value="{!aa.cm.Role__c}"/>
                     </apex:column>
+
+                    <apex:repeat value="{!pPLFieldSetMembers}" var="plff">
+                        <apex:column >
+                            <apex:facet name="header">{!plff.Label}</apex:facet>
+                            <apex:outputField value="{!aa.contribution[plff.fieldPath]}"/>
+                        </apex:column>
+                    </apex:repeat>
 
                     <apex:column footerValue="" width="50px">
                         <apex:facet name="header">Comments</apex:facet>
                         <apex:outputText value="{!aa.Comments}" style="width:500px"/>
                     </apex:column>
-
-
                 </apex:pageBlockTable>
 
                 <div class="section tac">
                     <apex:commandButton value="Back to List of Attendees" action="{!returnToEditList}"/>
                     <apex:commandButton value="Submit Your Data Sheet" action="{!submitData}"/>
                 </div>
-            </apex:form>
+            </apex:pageBlock>
+            <c:Loading Id="2" />
         </apex:pageBlock>
-    </apex:PageBlock>
 
-
+    </apex:form>
 </apex:page>

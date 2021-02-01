@@ -26,13 +26,4 @@ global class recalcAccountBatch implements Database.Batchable<sObject>{
         ID batchprocessid = Database.executeBatch(RCB);
         // The email is sent from recalcContactBatch
     }
-/*
-    webservice static void recalcGiving()
-    {
-        recalcAccountBatch RAB = new recalcAccountBatch();
-        RAB.query = 'select id from Account';
-
-        Id batchId = Database.executeBatch(RAB);
-    }
-    */
 }

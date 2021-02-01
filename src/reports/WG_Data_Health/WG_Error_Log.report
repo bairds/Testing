@@ -7,6 +7,9 @@
         <field>WG_Error_Log__c.Import_Object__c</field>
     </columns>
     <columns>
+        <field>CUST_LAST_UPDATE</field>
+    </columns>
+    <columns>
         <field>WG_Error_Log__c.Description__c</field>
     </columns>
     <format>Tabular</format>

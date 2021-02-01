@@ -10,8 +10,11 @@
     <apex:PageBlock title="Assign Status and Hours to Participants in {!Camp.name}" id="participant_list_processing">
 
 
-    <apex:pageBlock title="People Who RSVPed or Attended" rendered="{!!review}" id="participant_list">
+    <apex:pageBlock title="People Who RSVPed or Attended" rendered="{!!review}">
         <apex:form >
+            <apex:actionFunction action="{!addToList}" name="addToList" rerender="People_Who_RSVPed">
+                <!--<apex:param name="firstParam" assignTo="{!PersonId}" value="" />-->
+            </apex:actionFunction>
 <apex:outputPanel layout="block" styleClass="cell section"> 
                <div class="section tac">
                  
@@ -19,18 +22,16 @@
                </div>
                
             <div class="section">
-              <div class="fwb m5">  Not in the list?  </div>     
-                
-                       
-                <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact" valueField="Id" targetField="{!attendee.PersonId}"
-                                  syncManualEntry="false" style="width:200px" filterClause="IsConverted=false" preSubmit="true" placeholder="Search WaterGrass"/>
-                  
-                     <apex:actionFunction immediate="true" action="{!attendee.preAddToList}" name="preSubmit" oncomplete="addToList()" /> 
-                     <apex:actionFunction action="{!attendee.addToList}" name="addToList" rerender="participant_list"  /> 
-           
+              <div class="fwb m5">  Not in the list?  </div>
 
-               <!-- <apex:inputHidden value="{!attendee.Id}" id="attendeeId" />-->
-    
+                <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact;Lead" valueField="Id" targetField="{!personId}"
+                                  syncManualEntry="false" style="width:200px" filterclause="" preSubmit="true" placeholder="Search WaterGrass">
+                <!--<c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Contact;Lead" valueField="Id" targetField="{!personId}"
+                                  syncManualEntry="false" style="width:200px" placeholder="Search WaterGrass" onchange="addToList()"> filterClause="IsConverted=false" preSubmit="true"  -->
+                </c:AutoCompleteV2>
+                <!-- <apex:actionFunction immediate="true" name="preSubmit" oncomplete="addToList" />  action="{!attendee.preAddToList}"
+                     <apex:actionFunction immediate="true" action="{!addToList()}" name="addToList" rerender="participant_list"  />-->
+
           </div>
                
                  <div class="section">
@@ -38,7 +39,7 @@
                          
                      <div class="tac m10">
                   <apex:actionRegion >
-                   <apex:commandButton value="Add New Contact" action="{!account.addNewContact}" rerender="new_contact"/>
+                   <apex:commandButton value="Add New Contact" action="{!addNewContact}" rerender="new_contact"/>
                          </apex:actionRegion>
                      </div>
           </div>
@@ -50,7 +51,7 @@
             <div style="margin-top: 5px">
                 <apex:pageMessages id="msgs"/>
             </div>          
-               <apex:outputPanel layout="block" rendered="{!account.newContactForm}">             
+               <apex:outputPanel layout="block" rendered="{!newContactForm}">
           
                 
                 <h2> New Contact </h2>
@@ -63,28 +64,31 @@
                     <apex:pageBlockSectionItem >
                                     <apex:outputLabel value="Existing Account?" /> 
                     <c:AutoCompleteV2 allowClear="true" importJquery="true" labelField="Name" SObject="Account" valueField="Id" 
-                                      syncManualEntry="false" targetField="{!account.Id}" style="width:200px"/>
+                                      syncManualEntry="false" targetField="{!newContact.AccountId}" style="width:200px"/>
                         
                     </apex:pageBlockSectionItem>
                     <apex:pageBlockSectionItem />
                         
-                    <apex:inputField value="{!account.newContact.FirstName}" required="true"/>
-                    <apex:inputField value="{!account.newContact.LastName}" required="true"/>
-                    <apex:inputField value="{!account.newContact.Email}" />
-                    <apex:inputField value="{!account.newContact.Phone}" />
-                    <apex:inputField value="{!account.newContact.MailingStreet}" />
-                    <apex:inputField value="{!account.newContact.MailingCity}" />
-                    <apex:inputField value="{!account.newContact.MailingPostalCode}" />
+                    <apex:inputField value="{!newContact.FirstName}" required="true"/>
+                    <apex:inputField value="{!newContact.LastName}" required="true"/>
+                    <apex:inputField value="{!newContact.Email}" />
+                    <apex:inputField value="{!newContact.Phone}" />
+                    <apex:inputField value="{!newContact.MailingStreet}" />
+                    <apex:inputField value="{!newContact.MailingCity}" />
+                    <apex:inputField value="{!newContact.MailingPostalCode}" />
                    
             </apex:pageBlockSection>
                     </div>               
                 
                  <apex:outputPanel layout="block" styleClass="section tac">
                  
-                                <apex:commandButton action="{!account.saveContact}" value="Save" rerender="attendees" />
+                                <apex:commandButton action="{!savePerson}" value="Save" rerender="attendees">
+                                    <apex:param value="{!newContact}" assignTo="{!newContact}"/>
+                                    <apex:param value="{!newContact.AccountId}" assignTo="{!Acct.Id}"/>
+                                </apex:commandButton>
                      
                            <apex:actionRegion >
-                                <apex:commandButton action="{!account.cancelContact}" value="Cancel" rerender="new_contact" />        
+                                <apex:commandButton action="{!cancelContact}" value="Cancel" rerender="new_contact" />
                      </apex:actionRegion>
                             </apex:outputPanel>
   		
@@ -94,9 +98,9 @@
              <apex:actionRegion >
                  
                  
-                 <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size == 0}">No records to display </apex:outputPanel>
+                 <apex:outputPanel layout="block" rendered="{!UnprocessedAttendees.size == 0}">No records to display </apex:outputPanel>
            
-                 <apex:outputPanel layout="block" rendered="{!UnprocessedCMs.size > 0}" styleClass="section df">
+                 <apex:outputPanel layout="block" rendered="{!UnprocessedAttendees.size > 0}" styleClass="section df">
                      <div class="section">
                          <label class="labelCol">
                              Date of the event:
@@ -115,7 +119,6 @@
                                  <apex:selectOption itemLabel="" itemValue="" />  
                                 <apex:selectOptions value="{!stati}"/>  
                             </apex:selectList>
-                             
                              <apex:actionFunction name="setAllStatus" action="{!setAllStatus}" reRender="participant_list"  />
                          </div>
                      </div>
@@ -132,60 +135,61 @@
                  </apex:outputPanel>
 
         
-                 <apex:pageBlockTable value="{!UnprocessedCMs}" var="ar" id="People_Who_RSVPed" rendered="{!UnprocessedCMs.size > 0}">
+                 <apex:pageBlockTable value="{!UnprocessedAttWrapped}" var="ar" id="People_Who_RSVPed" rendered="{!UnprocessedAttendees.size > 0}">
             
              <apex:column >
-            <apex:commandLink value="X" action="{!attendee.deleteCM}" reRender="attendees" onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
-            <apex:param name="cmId" value="{!ar.cm.id}" assignTo="{!attendee.selected.Id}" />
+            <apex:commandLink value="X" action="{!deleteCM}" reRender="attendees" onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
+                <apex:param name="cmId" value="{!ar.at.cm.id}" assignTo="{!CMToDelete.Id}" />
+                <apex:param name="arId" value="{!ar.counter}" assignTo="{!AttendeeToDeleteIndex}" />
             </apex:commandLink>
         </apex:column>
             
                <apex:column >
             <apex:facet name="header">First Name</apex:facet>
-            <apex:outputText value="{!if(ar.cm.contact.firstname==null,ar.cm.lead.firstname,ar.cm.contact.firstname)}"/>
+            <apex:outputText value="{!if(ar.at.cm.contact.firstname==null,ar.at.cm.lead.firstname,ar.at.cm.contact.firstname)}"/>
             </apex:column>    
             
         <apex:column >
             <apex:facet name="header">Last Name</apex:facet>
-            <apex:outputText value="{!if(ar.cm.contact.lastname==null,ar.cm.lead.lastname,ar.cm.contact.lastname)}"/>
+            <apex:outputText value="{!if(ar.at.cm.contact.lastname==null,ar.at.cm.lead.lastname,ar.at.cm.contact.lastname)}"/>
             </apex:column>
                  
        
         <apex:column >
             <apex:facet name="header">Status</apex:facet>
-            <apex:selectList id="Stati" value="{!ar.cm.status}" size="1">
+            <apex:selectList id="Stati" value="{!ar.at.cm.status}" size="1">
                 <apex:selectOptions value="{!stati}"/>  
             </apex:selectList>
             </apex:column>
         <apex:column >
             <apex:facet name="header">Hours</apex:facet>
-            <apex:input value="{!ar.Hours}" style="width:50px" type="number" html-min="1" html-step="0.01" />
+            <apex:input value="{!ar.at.Hours}" style="width:50px" type="number" html-min="1" html-step="0.01" />
             </apex:column>
         <apex:column >
             <apex:facet name="header">Supervisor Rating </apex:facet>
-            <apex:inputField value="{!ar.Contribution.Supervisor_Satisfaction__c}" required="true"/>
+            <apex:inputField value="{!ar.at.Contribution.Supervisor_Satisfaction__c}" required="true"/>
             </apex:column>
             
               <apex:column >
             <apex:facet name="header">Leadership Level</apex:facet>
-            <apex:inputField value="{!ar.Contribution.Leadership_Level__c}" required="true" />
+            <apex:inputField value="{!ar.at.Contribution.Leadership_Level__c}" required="true" />
             </apex:column>
             
             <apex:column >
             <apex:facet name="header">Role</apex:facet>
-            <apex:inputField value="{!ar.cm.Role__c}" />
+            <apex:inputField value="{!ar.at.cm.Role__c}" />
             </apex:column>
                      
             
         <apex:column >
             <apex:facet name="header">Comments</apex:facet>
-            <apex:inputText value="{!ar.Comments}" size="50"/>
+            <apex:inputText value="{!ar.at.Comments}" size="50"/>
             </apex:column>  
       
         </apex:pageBlockTable>
              
             
-            <apex:outputPanel layout="block" styleClass="section tac" rendered="{!UnprocessedCMs.size > 0}">
+            <apex:outputPanel layout="block" styleClass="section tac" rendered="{!UnprocessedAttendees.size > 0}">
             	<apex:commandButton value="Review List" action="{!processSelected}" reRender="participant_list_processing"/>
 			
             </apex:outputPanel> 
@@ -203,7 +207,7 @@
     
     <apex:pageBlock title="Review Your List" rendered="{!review}">
         <apex:form >
-        <apex:pageBlockTable value="{!UnprocessedAttendees}" var="aa" id="AttendeesAttended">
+        <apex:pageBlockTable value="{!UpdateAttendees}" var="aa" id="AttendeesAttended">
        
         <apex:column width="50px">
             <apex:facet name="header">First Name</apex:facet>

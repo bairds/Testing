@@ -5,7 +5,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>AdvancedSetup</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AdvancedSetup</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AdvancedSetup</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -13,7 +33,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -21,7 +61,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -29,7 +89,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -37,11 +117,41 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Tab</actionName>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
@@ -175,6 +285,16 @@
         <visibleLines>3</visibleLines>
     </fields>
     <fields>
+        <fullName>Description_Rich__c</fullName>
+        <description>Description Long field with images and formatting</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Description Long field with images and formatting</inlineHelpText>
+        <label>Description_Rich</label>
+        <length>2000</length>
+        <type>Html</type>
+        <visibleLines>15</visibleLines>
+    </fields>
+    <fields>
         <fullName>EndDate</fullName>
     </fields>
     <fields>
@@ -236,6 +356,17 @@
         <required>false</required>
         <scale>2</scale>
         <type>Currency</type>
+    </fields>
+    <fields>
+        <fullName>FollowOnEvent__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <externalId>false</externalId>
+        <label>FollowOnEvent</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Campaigns</relationshipLabel>
+        <relationshipName>FollowOnEvent_for</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Goal__c</fullName>
@@ -388,6 +519,25 @@
         <type>Currency</type>
     </fields>
     <fields>
+        <fullName>Register_Page_Message_Rich__c</fullName>
+        <description>Message used at the top of the emailCampaignSignupBootstrap page.  Rich text.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Message used at the top of the emailCampaignSignupBootstrap page.  Rich text.</inlineHelpText>
+        <label>Register Page Message Rich</label>
+        <length>4000</length>
+        <type>Html</type>
+        <visibleLines>25</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Register_Page_Message__c</fullName>
+        <description>Text above the registration fields on the Email SignupPageBootstrap page.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Text above the registration fields on the Email SignupPageBootstrap page.</inlineHelpText>
+        <label>Register Page Message</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
         <fullName>Register_Template__c</fullName>
         <description>Name of the template used for online signup for a campaign.</description>
         <externalId>false</externalId>
@@ -417,6 +567,15 @@
         <required>false</required>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Signup_Image__c</fullName>
+        <description>Image that appears on signup campaign.  Like a picture  of  monitors for Water Quality Monitoring.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Image that appears on signup campaign.  Like a picture  of  monitors for Water Quality Monitoring.</inlineHelpText>
+        <label>Signup Image</label>
+        <required>false</required>
+        <type>Url</type>
     </fields>
     <fields>
         <fullName>Signup_Questions__c</fullName>
@@ -578,20 +737,106 @@
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>SubCamp_Date_Time__c</fullName>
+        <description>Date and time of start of subcampaign of Volunteer Interest Campaign, for emails</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date and time of start of subcampaign of Volunteer Interest Campaign, for emails</inlineHelpText>
+        <label>SubCamp Date Time</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>SubCamp_Description_Long__c</fullName>
+        <description>Detailed description of subcampaign of Volunteer Interest Campaign, for emails</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Detailed description of subcampaign of Volunteer Interest Campaign, for emails</inlineHelpText>
+        <label>SubCamp Description_Long</label>
+        <length>5000</length>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
+        <fullName>SubCamp_Description__c</fullName>
+        <description>Description of subcampaign of Volunteer Interest Campaign, for emails</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Description of subcampaign of Volunteer Interest Campaign, for emails</inlineHelpText>
+        <label>SubCamp Description</label>
+        <required>false</required>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>SubCamp_Id__c</fullName>
+        <description>Id of subcampaign of Volunteer Interest Campaign, for emails</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Id of subcampaign of Volunteer Interest Campaign, for emails</inlineHelpText>
+        <label>SubCamp Id</label>
+        <length>252</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>SubCamp_Name__c</fullName>
+        <description>Name of subcampaign of Volunteer Interest Campaign, for emails</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Name of subcampaign of Volunteer Interest Campaign, for emails</inlineHelpText>
+        <label>SubCamp Name</label>
+        <length>252</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Thank_You_Message__c</fullName>
+        <description>Message for the Thank You Page after a person signs up.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Message for the Thank You Page after a person signs up.</inlineHelpText>
+        <label>Thank You Message</label>
+        <length>1000</length>
+        <type>Html</type>
+        <visibleLines>10</visibleLines>
+    </fields>
+    <fields>
         <fullName>Type</fullName>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Under_18_Parental_Waiver__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If true, registrants are instructed to bring a signed paper waiver from the parents for participants under the age of 18.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If true, registrants are instructed to bring a signed paper waiver from the parents for participants under the age of 18.</inlineHelpText>
+        <label>Under 18 Parental Waiver</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Vol_Interest_Campaign__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>This campaign is categorized under which of the Volunteer Interest Campaigns?  All persons who sign up for that Volunteer Interest Campaign will be notified about this campaign.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>This campaign is categorized under which of the Volunteer Interest Campaigns?  All persons who sign up for that Volunteer Interest Campaign will be notified about this campaign.</inlineHelpText>
+        <label>Vol Interest Campaign</label>
+        <referenceTo>Campaign</referenceTo>
+        <relationshipLabel>Campaigns (Vol Interest Campaign)</relationshipLabel>
+        <relationshipName>Campaigns_in_Vol_Interest</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Waiver_Required__c</fullName>
         <defaultValue>false</defaultValue>
+        <description>Does the registrant have to accept the waiver in order to register?  (After January 2020, this field is not used.  Instead, programming assumes that if the Waiver field is populated the waiver is required.)</description>
         <externalId>false</externalId>
+        <inlineHelpText>Does the registrant have to accept the waiver in order to register?  (After January 2020, this field is not used.  Instead, programming assumes that if the Waiver field is populated the waiver is required.)</inlineHelpText>
         <label>Waiver_Required</label>
         <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Waiver__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
+        <description>Which Text Document is used as a waiver.  If this field is populated, users will be REQUIRED to accept the waiver in order to register.  Leave this field blank if no waiver is required.</description>
         <externalId>false</externalId>
+        <inlineHelpText>Which Text Document is used as a waiver.  If this field is populated, users will be REQUIRED to accept the waiver in order to register.  Leave this field blank if no waiver is required.</inlineHelpText>
         <label>Waiver</label>
         <referenceTo>Text_Document__c</referenceTo>
         <relationshipLabel>Campaigns</relationshipLabel>
@@ -625,8 +870,40 @@
         </filters>
         <label>My Active Campaigns</label>
     </listViews>
+    <listViews>
+        <fullName>Signup_Campaigns</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.END_DATE</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.STATUS</columns>
+        <columns>CAMPAIGN.BUDGETED_COST</columns>
+        <columns>CAMPAIGN.ACTUAL_COST</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>CAMPAIGN.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Campaign.Signup</value>
+        </filters>
+        <label>Signup Campaigns</label>
+    </listViews>
+    <listViews>
+        <fullName>Volunteer_Interest_Campaigns</fullName>
+        <columns>CAMPAIGN.NAME</columns>
+        <columns>CAMPAIGN.START_DATE</columns>
+        <columns>CAMPAIGN.END_DATE</columns>
+        <columns>CAMPAIGN.CAMPAIGN_TYPE</columns>
+        <columns>CAMPAIGN.STATUS</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CAMPAIGN.CAMPAIGN_TYPE</field>
+            <operation>equals</operation>
+            <value>Volunteer Interest</value>
+        </filters>
+        <label>Volunteer Interest Campaigns</label>
+    </listViews>
     <recordTypes>
-        <fullName>FundraisingActivity</fullName>
+        <fullName>Fundraising_Activity</fullName>
         <active>true</active>
         <description>Fundraising Campaign Activity (Can have sub-activities, like Renewal Letters.)</description>
         <label>Fundraising Activity</label>
@@ -1101,6 +1378,10 @@
                 <fullName>Email</fullName>
                 <default>false</default>
             </values>
+            <values>
+                <fullName>Volunteer Interest</fullName>
+                <default>false</default>
+            </values>
         </picklistValues>
     </recordTypes>
     <recordTypes>
@@ -1220,6 +1501,10 @@
             </values>
             <values>
                 <fullName>Email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Volunteer Interest</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -1346,12 +1631,17 @@
                 <fullName>Email</fullName>
                 <default>false</default>
             </values>
+            <values>
+                <fullName>Volunteer Interest</fullName>
+                <default>false</default>
+            </values>
         </picklistValues>
     </recordTypes>
     <searchLayouts>
         <customTabListAdditionalFields>CAMPAIGN.NAME</customTabListAdditionalFields>
         <customTabListAdditionalFields>CAMPAIGN.STATUS</customTabListAdditionalFields>
         <customTabListAdditionalFields>CAMPAIGN.START_DATE</customTabListAdditionalFields>
+        <listViewButtons>Approve_Vol_Tasks</listViewButtons>
         <lookupDialogsAdditionalFields>CAMPAIGN.NAME</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CAMPAIGN.NAME</lookupPhoneDialogsAdditionalFields>
         <searchResultsAdditionalFields>CAMPAIGN.NAME</searchResultsAdditionalFields>
@@ -1364,6 +1654,37 @@
         <searchResultsAdditionalFields>CORE.USERS.ALIAS</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>FullAccess</sharingModel>
+    <webLinks>
+        <fullName>Approve_Vol_Tasks</fullName>
+        <availability>online</availability>
+        <description>User approved or rejects submitted volunteer tasks which have come in throughte Volunteer Portal</description>
+        <displayType>massActionButton</displayType>
+        <encodingKey>UTF-8</encodingKey>
+        <linkType>url</linkType>
+        <masterLabel>Approve Vol Tasks</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>/apex/ApproveVolTaskPage</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Invite_Interested_Volunteers</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Invite Interested Volunteers</masterLabel>
+        <openType>newWindow</openType>
+        <page>Email_Vols_in_Interest_Campaign</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
     <webLinks>
         <fullName>List_Campaign_Members</fullName>
         <availability>online</availability>

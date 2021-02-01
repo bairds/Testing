@@ -162,11 +162,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Grant_Application_Website__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Industry</field>
             <table>Account</table>
         </columns>
@@ -213,11 +208,6 @@
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Legacy_Account_ID__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Major_Donor_Now__c</field>
             <table>Account</table>
         </columns>
         <columns>
@@ -312,22 +302,12 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Subwatershed__c</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>TickerSymbol</field>
             <table>Account</table>
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
             <field>Type</field>
-            <table>Account</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <field>Watershed__c</field>
             <table>Account</table>
         </columns>
         <columns>
@@ -455,11 +435,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Marital_Status__c</field>
-            <table>Account.Contacts</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Dear__c</field>
             <table>Account.Contacts</table>
         </columns>
@@ -525,7 +500,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Other_emails__c</field>
+            <field>Legacy_Emails__c</field>
             <table>Account.Contacts</table>
         </columns>
         <columns>

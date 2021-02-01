@@ -5,7 +5,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>AddCampaign</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -13,7 +33,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>ConvertLead</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ConvertLead</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ConvertLead</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -21,7 +61,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>CreateOpportunity</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CreateOpportunity</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -29,11 +89,41 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>SaveEdit</actionName>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
@@ -326,6 +416,17 @@
         <label>Emergency Contact Phone</label>
         <required>false</required>
         <type>Phone</type>
+    </fields>
+    <fields>
+        <fullName>Event_Date__c</fullName>
+        <description>Pulls event date from Campaign Event Date Time field, then is used to trigger time dependent workflow emails for volunteer events.</description>
+        <externalId>false</externalId>
+        <formula>Campaign.Event_Date_Time__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <inlineHelpText>Pulls event date from Campaign Event Date Time field, then is used to trigger time dependent workflow emails for volunteer events.</inlineHelpText>
+        <label>Event Date</label>
+        <required>false</required>
+        <type>Date</type>
     </fields>
     <fields>
         <fullName>Fax</fullName>
@@ -621,6 +722,16 @@
         <visibleLines>3</visibleLines>
     </fields>
     <fields>
+        <fullName>Request_Body__c</fullName>
+        <description>Body of the post request from the app,</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Body of the post request from the app,</inlineHelpText>
+        <label>Request Body</label>
+        <length>1000</length>
+        <type>LongTextArea</type>
+        <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
         <fullName>Role__c</fullName>
         <externalId>false</externalId>
         <label>Role</label>
@@ -630,11 +741,6 @@
             <valueSetDefinition>
                 <sorted>false</sorted>
                 <value>
-                    <fullName>Volunteer</fullName>
-                    <default>true</default>
-                    <label>Volunteer</label>
-                </value>
-                <value>
                     <fullName>Site captain</fullName>
                     <default>false</default>
                     <label>Site captain</label>
@@ -643,6 +749,11 @@
                     <fullName>Group leader</fullName>
                     <default>false</default>
                     <label>Group leader</label>
+                </value>
+                <value>
+                    <fullName>Volunteer</fullName>
+                    <default>true</default>
+                    <label>Volunteer</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -699,6 +810,17 @@
                 </value>
             </valueSetDefinition>
         </valueSet>
+    </fields>
+    <fields>
+        <fullName>SignaturePDFId__c</fullName>
+        <description>The Id of the attachment record for the image of the campaign member&apos;s signature.  Stored under the Contact.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The Id of the attachment record for the image of the campaign member&apos;s signature.  Stored under the Contact.</inlineHelpText>
+        <label>SignaturePDFId</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>SignupQuestionAnswer2__c</fullName>
@@ -833,6 +955,15 @@
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
         <label>To_Delete</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Unsubscribed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If a volunteer unsubscribes in their volunteer portal, set this field to true.  If the resubscribe, unset it.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>If a volunteer unsubscribes in their volunteer portal, set this field to true.  If the resubscribe, unset it.</inlineHelpText>
+        <label>Unsubscribed</label>
         <type>Checkbox</type>
     </fields>
     <fields>

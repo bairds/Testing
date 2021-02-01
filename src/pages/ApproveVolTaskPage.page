@@ -1,0 +1,185 @@
+<!--
+ - Created by Baird on 8/27/2020.
+ -->
+
+<apex:page id="ApproveVolTaskPage" Controller="approveVolTasks" showheader="true"
+           lightningStylesheets="true"
+           docType="html-5.0">
+    <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"/>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+
+    <header>
+        <style>
+
+            .titlebar {
+                text-align: center;
+                height: auto;
+                background-color: #406B8C;
+                color: #fff;
+                font-size: large;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
+            }
+
+            .form-content {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin: 10px;
+                background-color: ghostwhite;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+            }
+
+            .btnSubmit {
+                border: none;
+                border-radius: 1.5rem;
+                spadding: 1%;
+                cursor: pointer;
+                background: #2C6636;
+                color: #fff;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
+            }
+
+            .CustomQuestion{
+                Margin-left: 16px;
+            }
+        </style>
+         <script type="text/javascript">
+             OppApprovalMap = new Map();
+             var obj;
+
+             // Alternative to load event
+             document.onreadystatechange = function () {
+                 if (document.readyState === 'complete') {
+                     console.log('OppApprovalMap from Controller is ' + JSON.stringify({!OppApprovalMapString}));
+                     // Parse the JSON map from the controller into an object
+                     obj = JSON.parse('{!OppApprovalMapString}');
+                     // Set values
+                     for (let s of Object.keys(obj)) {
+                         if (obj[s] = 'Task Submitted') {
+                             SubmittedLineString = s + 'SubmittedLine';
+                             document.getElementById(SubmittedLineString).checked = true;
+                         } else {
+                             if (obj[s] = 'Task Approved') {
+                                 SubmittedLineString = s + 'ApprovedLine';
+                                 document.getElementById(SubmittedLineString).checked = true;
+                             } else {
+                                 if (obj[s] = 'Task Approved') {
+                                     SubmittedLineString = s + 'RejectedLine';
+                                     document.getElementById(RejectedLineString).checked = true;
+                                 }
+                             }
+                         }
+                     }
+                 }
+             }
+
+             function ApprovalStatusChanged(OppId,ApprovalString) {
+                 obj[OppId] = ApprovalString;
+                 // The following line of code echoes the choice of approval status on the page
+                 // document.getElementById(OppId).innerHTML =  obj[OppId];
+                 console.log('OppApprovalMap is ' + JSON.stringify(obj));
+                 document.getElementById('ApproveAllBox').checked = false;
+                 }
+
+                 function SubmitAll(){
+                 // alert('Just entered ApproveAll JS function and OppApprovalMap is ' + JSON.stringify(obj));
+                 sendFinalStatus(JSON.stringify(obj));
+                 }
+
+                 function ApproveAll() {
+                     if (document.getElementById('ApproveAllBox').checked == true) {
+                         console.log('ApproveAllMap is ' + JSON.stringify(obj));
+                         for (let s of Object.keys(obj)) {
+                             obj[s] = 'Approved';
+                             ApprovedLineString = s + 'ApprovedLine';
+                             console.log('ApprovedLineString is ' + ApprovedLineString);
+                             document.getElementById(ApprovedLineString).checked = true;
+                             // The following line of code echoes the choice of approval status on the page
+                            //  document.getElementById(s).innerHTML = obj[s];
+                         }
+                     }
+                 }
+</script>
+
+    </header>
+
+    <apex:Form >
+        <div class="WGPageTitle">Volunteers Submitted Tasks and Hours</div>
+        <apex:outputPanel html-class="container register-form">
+            <div class="row">
+                <div class="col-md-2">
+                    <apex:outputText value=" "/>
+                </div>
+                <div class="col-sm-4 col-md-3">
+                    <div class="WGPageTitle2 br6 d-none d-sm-block">Volunteer and Task</div>
+                </div>
+                <div class="col-sm-4 col-md-3 d-none d-sm-block">
+                    <div class="WGPageTitle2 br6">Campaign</div>
+                </div>
+                <div class="col-xs-4 col-md-2">
+                    Approve all: <input type="checkbox" id="ApproveAllBox" onclick="ApproveAll()"/>
+                </div>
+                <div class="col-md-2">
+                    <apex:outputText value=" "/>
+                </div>
+            </div>
+            <apex:repeat value="{!ListOpps}" var="o">
+                <div class="row">
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                    <div class="col-2 d-sm-none">
+                        Task:
+                    </div>
+                    <div class="col-10 col-sm-4 col-md-3">
+                        {!o.Contact__r.FirstName} {!o.Contact__r.LastName}<br/>
+                        <apex:outputField value="{!o.Date_and_Time_Start__c} "/> to <apex:outputText value=" "/><apex:outputField value="{!o.Date_and_Time_End__c}"/><br/>
+                        {!o.Hours_Actual__c} hours<br/>
+                        <i>Description: </i>{!o.Description}<br/>
+                    </div>
+                    <div class="col-2 d-sm-none">
+                    </div>
+                    <div class="col-10 col-sm-4 col-md-3">
+                        <i>Volunteer's guess:</i> {!o.Campaign_Guess__c}<br/>
+                        <div class="alerttext">Correct Campaign:</div>
+                        <apex:inputField value="{!o.CampaignId}"/><br/>
+                    </div>
+                    <div class="col-6 col-sm-4 col-md-2">
+                    <form id="FormId" name="ApprovalStati">
+                        <label><input id="{!o.Id}ApprovedLine" type="radio" name="ApprovalStatus" value="Approved" onclick="ApprovalStatusChanged('{!o.Id}','Approved')"/>Approved</label>
+                            <label><input id="{!o.Id}RejectedLine" type="radio" name="ApprovalStatus" value="Rejected" onclick="ApprovalStatusChanged('{!o.Id}','Rejected')"/>Rejected</label>
+                            <label><input id="{!o.Id}SubmittedLine" type="radio" name="ApprovalStatus" value="Submitted" onclick="ApprovalStatusChanged('{!o.Id}','Submitted')"/>Submitted</label>
+                        </form>
+                    </div>
+                    <p id="{!o.Id}"></p>
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                </div>
+                <br/>
+            </apex:repeat>
+            <div class="tac">
+                <input type="button" value="Submit Approved Tasks and Close" onClick="SubmitAll();return false" styleClass="btn fwb bgprimary"/>
+            </div>
+        </apex:outputPanel>
+        <apex:outputPanel id="rerenderCode">  </apex:outputPanel>
+        <apex:actionFunction name="sendFinalStatus" action="{!submitTasks}" rerender="rerenderCode">
+            <apex:param name="firstParam" value=""/>
+        </apex:actionFunction>
+    </apex:Form>
+</apex:page>

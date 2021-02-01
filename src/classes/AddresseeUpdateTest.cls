@@ -15,7 +15,9 @@ private class AddresseeUpdateTest {
 	}
 	
 static testMethod void AccountOneContact() {
+	WGHelpers.BManageContacts = false;
 		Account testacct = new Account(
+				RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Family').getRecordTypeId(),
 		name = 'Test Account'); 		
 		insert testacct;
 		Contact testctct = new Contact(

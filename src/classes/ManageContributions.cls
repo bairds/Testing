@@ -20,8 +20,11 @@
 // Aug 2018 Revised contact.first_contrib_cat and source, which weren't working before.
 // Aug 2018 Revisions for 2018 Upgrade.  Lifetime_Donations__c now calculated, not rollup.  First_member_date corrected.
 // Sept 2018 If Campaign.Account_Line_Item is populated, populate Contrib.Account_Line_Item
+// May 2019 Add "yearly" to the periodicity values for recurring payments, in recurring payment section
+// June 2020 Filter out "if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)" on lines 60,77,127,333
+// Dec 2020 Filter out Volunteer Hours which are not Closed/Won.
 
-public class ManageContributions{
+public with sharing class ManageContributions{
     public static Set<Id> AccountIds;
     public static Set<Id> PledgeIds;
     public static Set<Id> ContactIDs;
@@ -32,9 +35,11 @@ public class ManageContributions{
     // NOTE: REDUCE FOLLOWING 2 SOQL QUERIES TO ONE LIST QUERY.
     public static void beforeDelete(Opportunity []  Contribs) {
         AccountIds = new Set<Id>();
+        ContactIds = new Set<Id>();
         PledgeIds = new Set<Id>();
         for (Opportunity o : Contribs) {
             AccountIds.add(o.AccountId);
+            ContactIds.add(o.Contact__c);
             System.debug('List to delete includes opportunities in ' + AccountIds.size() + ' separate accounts.');
             if (o.Matches_Which_Challenge_or_Pledge__c!=null) PledgeIds.add(o.Matches_Which_Challenge_or_Pledge__c);
         }
@@ -48,15 +53,19 @@ public class ManageContributions{
         membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
         PledgeRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Pledge').getRecordTypeId();
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
 
         // List<Individual_Contrib_Types__c> DonationRTtypes = Individual_Contrib_Types__c.getAll().values();
         List<String> DonationRTstrings = new List<String>();
-        // for (Individual_Contrib_Types__c ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
+        for (String s : DonationRTstrings) {
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s) != null) {
+                DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            }
+        }
         AvoidRecursiveContributionTrigger.setWorking();
         ManageContributions.recalcAccountMethod(AccountIds);
+        ManageContributions.recalcContactMethod(ContactIds);
         AvoidRecursiveContributionTrigger.setClosed();
         if (PledgeIds.size()>0) updatePledges(PledgeIds);
     }
@@ -68,14 +77,16 @@ public class ManageContributions{
         membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
         PledgeRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Pledge').getRecordTypeId();
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
 
         for (String s : DonationRTstrings)  {
             system.debug('s is ' + s);
-            system.debug('Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId() is ' + Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
-            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s)!=null) {
+                system.debug('Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId() is ' + Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+                DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+            }
         }
         System.debug('DonationRTIDs is ' + DonationRTIDs);
         ManageContributions.setContribOrder(Contribs);
@@ -91,7 +102,6 @@ public class ManageContributions{
     } //end after insert
 
     public static void setContribOrder(Opportunity [] Contribs) {
-
         // If there are multiple donations from one person, we have to know which is the most recent.
         // Because all triggers fire before roll-ups are recalculated, we can't rely on roll-ups.
         // (see http://www.salesforce.com/us/developer/docs/apexcode/Content/apex_triggers_order_of_execution.htm)
@@ -114,13 +124,16 @@ public class ManageContributions{
         if (PledgeIds == null) PledgeIds = new Set<Id>();
         // Get the list of fields considered individual contributions from the custom setting
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        membershipRTID = Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get('Membership').getRecordTypeId();
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
+        for (String s : DonationRTstrings)
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosbyName().get(s)!=null)
+            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
 
         List<Account> ContribsByAcct = [select Id, Name, Last_Contrib_Date__c, Last_Donate_Date__c,
-                Account_Membership_Expires__c, (select Id, Membership_End_Date__c,
+                Account_Membership_Expires__c, (select Id, Membership_End_Date__c, Contact__c,
                 Amount, CloseDate, RecordTypeId, RecordType.Name, CampaignId, Campaign.Name, Periodicity__c,
                 Start_Date__c, Number_of_Payments__c from Opportunities WHERE (IsWon=true OR StageName LIKE '%Won')
         order by CloseDate DESC, Amount DESC)
@@ -146,15 +159,20 @@ public class ManageContributions{
             Date nextMembershipDate;
             Date nextDonationDate;
             a.Lifetime_Donations__c = 0;
+            a.Lifetime_Donation_Count__c = 0;
             a.Largest_Contrib__c = 0;
             a.Largest_Contrib_Date__c = null;
             a.Last_Contrib_Amount__c = 0;
             a.Last_Contrib_Date__c = null;
             a.Last_Donate_Amount__c = 0;
             a.Last_Membership_Amount__c = 0;
+            a.First_Contrib_Date__c = null;
             a.Last_Donate_Date__c = null;
             a.First_Donate_Date__c = null;
+            a.First_Donate_Amount__c = 0;
             a.Last_Membership_Date__c = null;
+            a.First_Member_Date__c = null;
+            a.First_Member_Source__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
             Decimal pytddonations = 0; //Last Year Giving and Count
             Decimal ppytddonations = 0;
@@ -190,8 +208,10 @@ public class ManageContributions{
                             a.Last_Donate_Date__c = a.Opportunities[i].CloseDate;
                             foundDonation = true;
                         }
+                        a.First_Donate_Amount__c = a.Opportunities[i].Amount;
                         a.First_Donate_Date__c = a.Opportunities[i].CloseDate;
                         a.Lifetime_Donations__c += a.Opportunities[i].Amount;
+                        a.Lifetime_Donation_Count__c += 1;
                         // Is this the most recent donation?
                         if (nextDonationDate==null) {
                             //This is the most recent donation set Lapse to null
@@ -212,8 +232,6 @@ public class ManageContributions{
                             System.debug('MembershipCnt is ' + MembershipCnt + ' and MembershipsInAcct.get(a.id) is ' + MembershipsInAcct.get(a.Id));
                             if (MembershipCnt == MembershipsInAcct.get(a.Id))  {
                                 a.Opportunities[i].Membership_Type__c = 'New Membership';
-                                // a.first_member_source__c = a.opportunities[i].campaign.Name;
-                                // a.First_Member_Date__c = a.Opportunities[i].CloseDate;
                                 System.debug('In MembershipCnt==MembershipsInacct.get(a.Id) and set First_Member_Date__c to ' + a.First_Member_Date__c);
                             } else {
                                 a.Opportunities[i].Membership_Type__c = 'Renewal';
@@ -278,6 +296,7 @@ public class ManageContributions{
                     if (i==a.Opportunities.size()-1) {
                         a.First_Contrib_Source__c = a.Opportunities[i].Campaign.Name;
                         a.First_Contrib_Cat__c = a.Opportunities[i].RecordType.Name;
+                        a.First_Contrib_Date__c = a.Opportunities[i].CloseDate;
                     }
                     //Largest contribution
                     if(a.Largest_Contrib__c < a.Opportunities[i].Amount) {
@@ -297,28 +316,29 @@ public class ManageContributions{
 
             updateAccts.add(a);
         } // end account loop
-        try {
-            update updateAccts;
-        }
-        // Caution: Because of the try/catch, in some cases, the previous changes saved (ie the update UpdateOpps in the method)
-        // won't be rolled back.  In this case, that wouldn't be a problem.  Try/catch overrides normal rollback behavior.
-        Catch (Exception Ex) {System.debug(Ex);}
+            withoutSharingDMLs.UpdateAcctsWoutSharing(updateAccts);
+        // The UpdateACCtsWoutSharing method uses database.update() so it will tolerate some errors;
+        // Still need to catch those errors and process them.  Oct 2020.
         System.debug('UpdateContribs is ' + UpdateContribs);
         AvoidRecursiveContributionTrigger.setWorking();
-        update UpdateContribs;
+        withoutSharingDMLs.UpdateOppsWoutSharing(UpdateContribs); // update UpdateContribs;
         AvoidRecursiveContributionTrigger.setClosed();
     } // end method
 
     public static void recalcContactMethod(Set<Id> ctctIDs) {
         DonationRTIDs = new Set<Id>();
-        List<IndividualContribTypes__mdt> DonationRTtypes = [select label, Contrib_Record_Type__c from IndividualContribTypes__mdt];
+        List<IndividualContribTypes__mdt> DonationRTtypes = [select label from IndividualContribTypes__mdt];
         List<String> DonationRTstrings = new List<String>();
-        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Contrib_Record_Type__c);
-        for (String s : DonationRTstrings)  DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        for (IndividualContribTypes__mdt ict : DonationRTtypes) DonationRTstrings.add(ict.Label);
+        for (String s : DonationRTstrings) {
+            if (Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s)!=null)
+            DonationRTIDs.add(Schema.SObjectType.Opportunity.getRecordTypeInfosByName().get(s).getRecordTypeId());
+        }
+
 
         List<Opportunity> Contribs = [select Id, Membership_End_Date__c, Hours_Actual__c,
                 Amount, CloseDate, RecordTypeId, Contact__c, RecordType.Name, CampaignId, Campaign.Name, Periodicity__c,
-                Start_Date__c, Number_of_Payments__c from Opportunity WHERE (IsWon=true OR StageName LIKE '%Won') AND
+                Start_Date__c, Number_of_Payments__c, IsWon from Opportunity WHERE (IsWon=true OR StageName LIKE '%Won') AND
         Contact__c in :ctctIDs ORDER BY CloseDate DESC, Amount DESC];
         System.debug('List of Contributions for this Contact is ' + Contribs);
         // Populate a map of all the contacts;
@@ -360,12 +380,15 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             Date nextMembershipDate;
             Date nextDonationDate;
             c.Lifetime_Giving__c = 0;
+            c.Lifetime_Donation_Count__c = 0;
             c.Largest_Contrib_Amt__c = 0;
             c.Largest_Contrib_Date__c = null;
             c.Last_Contrib_Amt__c = 0;
             c.Last_Contrib_Date__c = null;
             c.Last_Donate_Amt__c = 0;
             c.Last_Donate_Date__c = null;
+            c.First_Contrib_Date__c = null;
+            c.First_Donate_Amount__c = 0;
             c.First_Donate_Date__c = null;
             Decimal ytddonations = 0; //YTD Giving and count
             Decimal pytddonations = 0; //Last Year Giving and Count
@@ -394,9 +417,12 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                 //iterate through the opportunities from the most recent to the oldest
                 for(Integer i=0; i<OppsForThisCtct.size(); i++) {
 
-                    if (OppsForThisCtct[i].Amount > 0) c.Lifetime_Giving__c += OppsForThisCtct[i].Amount;
+                    if (OppsForThisCtct[i].Amount > 0) {
+                        c.Lifetime_Giving__c += OppsForThisCtct[i].Amount;
+                    }
                     c.First_Contrib_Source__c = OppsForThisCtct[i].Campaign.Name;
                     c.First_Contrib_Cat__c = OppsForThisCtct[i].RecordType.Name;
+                    c.First_Contrib_Date__c = OppsForThisCtct[i].CloseDate;
 
                     // Assign pledges to PledgeIds for further processing
                     if (OppsForThisCtct[i].RecordTypeId == PledgeRTID) PledgeIds.add(OppsForThisCtct[i].Id);
@@ -404,6 +430,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                     // Set Lapse Till Next Donation
                     // Only process individual donation records now
                     if (DonationRTIDs.contains(OppsForThisCtct[i].RecordTypeId )) {
+                        c.Lifetime_Donation_Count__c += 1;
 /*                        // Is this the most recent donation?
                         if (NextDonationDate==null) {
                             //This is the most recent donation set Lapse to null
@@ -435,7 +462,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                         }
                     } // end if OppsForThisCtct[i].recordTypeId in DonationRTIDs
                     // Calculate volunteer hours
-                    if (OppsForThisCtct[i].Hours_Actual__c != null) {
+                    if (OppsForThisCtct[i].Hours_Actual__c != null && OppsForThisCtct[i].IsWon) {
                         // Need to add LifetimeVolHours, Vol_Event_Count to contact
                         LifetimeVolHours += OppsForThisCtct[i].Hours_Actual__c;
                         Vol_Event_Count += 1;
@@ -461,6 +488,8 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                     if (DonationRTIDs.contains(OppsForThisCtct[i].RecordTypeId)){
                         // update first_donation_date each time, since we loop through in decreasing order
                         c.First_Donate_Date__c = OppsForThisCtct[i].CloseDate;
+                        c.First_Donate_Amount__c = OppsForThisCtct[i].Amount;
+
                         // update last_donate_date only once
                         if (foundCtctDonation == false) {
                             c.Last_Donate_Amt__c = OppsForThisCtct[i].Amount;
@@ -468,13 +497,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
                             foundCtctDonation = true;
                         } // end update last_donate_amt__c
                     }
-                    // Baird not sure why three lines below are necessary.  I handled this above.
-                    /*               if (i==OppsForThisCtct.size()-1) {
-                                       c.first_contrib_source__c = OppsForThisCtct[i].Campaign.Name;
-                                       c.first_contrib_cat__c = OppsForThisCtct[i].RecordType.Name;
-                                   }
-                   */
-                    //Largest contribution
+                   //Largest contribution
                     if(c.Largest_Contrib_Amt__c < OppsForThisCtct[i].Amount) {
                         c.Largest_Contrib_Amt__c = OppsForThisCtct[i].Amount;
                         c.Largest_Contrib_Date__c = OppsForThisCtct[i].CloseDate;
@@ -501,7 +524,7 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
         } // end contact loop
         try{
             AvoidRecursiveContactTrigger.setWorking();
-            update updateCtcts;
+            withoutSharingDMLs.UpdateCtctsWoutSharing(updateCtcts);
             AvoidRecursiveContactTrigger.setClosed();
         }
         // Caution: Because of the try/catch, in some cases, the previous changes saved (ie the update UpdateOpps in the method)
@@ -517,12 +540,13 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
         List<Opportunity> updateOpps = new List<Opportunity>();
         Map<Id,Opportunity> PledgeMap = new Map<Id,Opportunity>([select Id, Periodicity__c, Number_of_Payments__c, Next_Payment_Date__c, Total_Paid__c,
                 Start_Date__c, CloseDate, Pledge_Amount__c from Opportunity where Id in :pledgeIdsToUpdate]);
-        AggregateResult[] TotalsByPledge = [SELECT Matches_Which_Challenge_or_Pledge__c pledge,
+        AggregateResult[] TotalsByPledge = [SELECT Matches_Which_Challenge_or_Pledge__c pledge, count(Amount) NrPayments,
                 Sum(Amount) sum, Max(CloseDate) LastPaymentDate FROM Opportunity where Matches_Which_Challenge_or_Pledge__c
                 in :pledgeIdsToUpdate
         GROUP BY Matches_Which_Challenge_or_Pledge__c];
 
         For (AggregateResult ar : TotalsByPledge) {
+            system.debug('For this pledge, I found ' + (Decimal)ar.get('NrPayments') + ' payments.');
             Opportunity opp = PledgeMap.get((id)ar.get('pledge'));
             opp.Total_Paid__c = (Decimal)ar.get('sum');
             System.debug('Total_Paid__c is ' + opp.Total_Paid__c + ' and Pledge Amount is ' + opp.Pledge_Amount__c);
@@ -532,8 +556,10 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             } else {
                 opp.StageName = 'Pledge Recorded';
                 Date LastPaymentDate = (Date)ar.get('LastPaymentDate');
+                system.debug('before updating the pledge, LastPaymentDate is ' + LastPaymentDate);
                 opp.Next_Payment_Date__c = CalcNextPaymentDate(opp.Periodicity__c, LastPaymentDate);
             }
+            system.debug('Periodicity is ' + opp.Periodicity__c + ' and Next_Payment_Date__c is ' + opp.Next_Payment_Date__c);
 
             PledgeMap.put((id)ar.get('pledge'),opp);
             AvoidRecursiveContributionTrigger.setWorking();
@@ -570,13 +596,14 @@ system.debug('Account ' + a.name + ' has ' + MembershipsInAcct.get(a.id) + ' mem
             NextPaymentDate = LastPaymentDate.addMonths(3);
         } else if (periodicity=='Every 6 Months') {
             NextPaymentDate = LastPaymentDate.addMonths(6);
-        } else if (periodicity=='Annually') {
+        } else if (periodicity=='Annually' || periodicity=='Yearly') {
             NextPaymentDate = LastPaymentDate.addYears(1);}
         else if (periodicity=='Irregularly') {
             NextPaymentDate = null;
         } else {
             NextPaymentDate = null;
         }
+        system.debug('At end of CalcNextPaymentDate, NextPaymentDate is ' + NextPaymentDate);
         return NextPaymentDate;
     }
 }

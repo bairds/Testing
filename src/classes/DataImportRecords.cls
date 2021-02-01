@@ -72,7 +72,6 @@ public with sharing class DataImportRecords {
                 }
             }
         }
-
     }
 
     private void setRecords() {
@@ -149,7 +148,8 @@ public with sharing class DataImportRecords {
                     //Set Parent matched record
                     List<sObject> tempSOList;
                     for (EnhancedIOProcess.enhancedIOResult eiorTemp : processedListTemp.eioResults) {
-                        if (eiorTemp.bUseThisRecord == TRUE && eiorTemp.matchedsObject.Id != NULL) {
+                        //if (eiorTemp.bUseThisRecord == TRUE && eiorTemp.matchedsObject.Id != NULL) {
+                        if (eiorTemp.bUseThisRecord == TRUE) {
                             processedListTemp.matchedsObject = eiorTemp.matchedsObject;
 
                             if (matchedRecordsToUpdate.containsKey(processedListTemp.matchedsObject)) {
@@ -196,6 +196,10 @@ public with sharing class DataImportRecords {
                     if (leadstoConvert.isEmpty() == FALSE) {
                         convertinbulk.ConvertLeadToContact(leadstoConvert.values());
                         //system.debug(convertinbulk.LeadtoContactMap);
+                        //Add to AccountLookupMap
+                        for (Id acctId: convertinbulk.AccountToLeadMap.keyset()) {
+                            matchprocess.accountContactLookupMap.put(acctId, new Map<String, Contact>() );
+                        }
                     }
 
                     //process matched records with data from import records
@@ -217,21 +221,43 @@ public with sharing class DataImportRecords {
 
         //Create Second Contacts
         Map<Id, Contact> secondContacts = new Map<Id, Contact>();
+        Map<Id, Contact> secondContactsMatched = new Map<Id, Contact>();
         List<Id> matchIds = new List<Id>();
         for (List<EnhancedIOProcess> processedLists : matchprocess.EIMatches) {
             for (EnhancedIOProcess processedListTemp : processedLists) {
                 if (String.IsBlank(processedListTemp.matchIO.Person2_LastName__c) == FALSE) {
-                    Contact cTemp = new Contact();
-                    cTemp.FirstName = processedListTemp.matchIO.Person2_FirstName__c;
-                    cTemp.lastName = processedListTemp.matchIO.Person2_LastName__c;
-                    cTemp.MailingStreet = MatchOrCreatePerson.getStreetValue(processedListTemp.matchIO);
-                    cTemp.MailingCity = processedListTemp.matchIO.Address_City__c;
-                    cTemp.MailingState = processedListTemp.matchIO.Address_State__c;
-                    cTemp.MailingPostalCode = processedListTemp.matchIO.Address_ZipCode__c;
-                    cTemp.MailingCountry = processedListTemp.matchIO.Address_Country__c;
+                    //Get Contact 1 along with Account Id
                     List<Id> ContactDetails = getContactDetails(processedListTemp);
-                    cTemp.AccountId = ContactDetails[1];
-                    secondContacts.put(processedListTemp.matchIO.Id, cTemp);
+                    Map<String, Contact> contact2Map = matchprocess.accountContactLookupMap.get(ContactDetails[1]);
+                    system.debug('contact2Map' + contact2Map);
+
+                            String sCon2Match = processedListTemp.matchIO.Person2_FirstName__c + ':' + processedListTemp.matchIO.Person2_LastName__c;
+                    //if not contact with same First and Last Name at Account, create it new
+                    Contact cTemp;
+                    if (contact2Map.containsKey(sCon2Match) == FALSE ) {
+                        cTemp = new Contact();
+                        cTemp.FirstName = processedListTemp.matchIO.Person2_FirstName__c;
+                        cTemp.lastName = processedListTemp.matchIO.Person2_LastName__c;
+                        cTemp.MailingStreet = MatchOrCreatePerson.getStreetValue(processedListTemp.matchIO);
+                        cTemp.MailingCity = processedListTemp.matchIO.Address_City__c;
+                        cTemp.MailingState = processedListTemp.matchIO.Address_State__c;
+                        cTemp.MailingPostalCode = processedListTemp.matchIO.Address_ZipCode__c;
+                        cTemp.MailingCountry = processedListTemp.matchIO.Address_Country__c;
+                        cTemp.AccountId = ContactDetails[1];
+                        secondContacts.put(processedListTemp.matchIO.Id, cTemp);
+                        String sCon2Key = cTemp.FirstName + ':' + cTemp.lastName;
+                        contact2Map.put(sCon2Key, cTemp);
+                        matchprocess.accountContactLookupMap.put(ContactDetails[1],contact2Map);
+                        secondContactsMatched.put(processedListTemp.matchIO.Id, cTemp);
+                    }
+                    else {
+                        //if (contact2Map.get(sCon2Match) != NULL) {
+                            cTemp = contact2Map.get(sCon2Match);
+                            secondContactsMatched.put(processedListTemp.matchIO.Id, cTemp);
+                        //}
+
+                    }
+                    //secondContacts.put(processedListTemp.matchIO.Id, cTemp);
                     matchIds.add(processedListTemp.matchIO.Id);
                 }
             }
@@ -250,6 +276,9 @@ public with sharing class DataImportRecords {
         }
         insert errors;
 
+        //Now add matched to new list for later processing
+        system.debug ('secondContactsMatched' + secondContactsMatched);
+        secondContacts.putAll(secondContactsMatched);
 
         // Make sure Unknown Campaign exists just in case
         Campaign defaultCampaign = getDefaultCampaign();
@@ -406,7 +435,7 @@ public with sharing class DataImportRecords {
                     ioTemp = new ImportObject__c(Id = processedListTemp.matchIO.Id, Processed_Date__c = system.today());
                 }
 
-                if (processedListTemp.matchedsObject == NULL) {
+                if (processedListTemp.matchedsObject == NULL || processedListTemp.matchedsObject.Id == NULL) {
                     ioTemp.Match_Status__c = 'Error with New Record Creation';
                     ioTemp.Status__c = 'Error with Processing';
                 } else {
@@ -482,7 +511,7 @@ public with sharing class DataImportRecords {
 
     private List<Id> getContactDetails(EnhancedIOProcess processedListTemp) {
         List<Id> idTemp = new List<Id>();
-
+        system.debug(processedListTemp);
         if (processedListTemp.matchedsObject.getSObjectType().getDescribe().getName() == 'Contact') {
             Contact cDonor = (Contact) processedListTemp.matchedsObject;
             idTemp.add(cDonor.Id);

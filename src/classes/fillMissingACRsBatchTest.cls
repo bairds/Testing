@@ -2,6 +2,8 @@
 private class fillMissingACRsBatchTest {
         
     @TestSetup static void methodName() {
+        WGHelpers.BManageContacts = false;
+        WGHelpers.BUseACRelations = false;
         List<Account> testAccts = new Account[100];
             for (Integer i=0;i<100;i++) {
             testAccts[i] = new Account(
@@ -39,6 +41,8 @@ private class fillMissingACRsBatchTest {
     }
     
     public static testMethod void fillMissingACRsBatchTest(){
+        WGHelpers.BManageContacts = false;
+        WGHelpers.BUseACRelations = false;
         fillMissingACRsInvokeBatch FMAIB = new fillMissingACRsInvokeBatch();
         Test.startTest();
         FMAIB.invokeBatch();

@@ -43,6 +43,7 @@
     <filter>
         <criteriaItems>
             <column>Account.First_Contrib_Source__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value></value>

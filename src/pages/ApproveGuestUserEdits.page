@@ -1,0 +1,132 @@
+<!--
+ - Created by Baird on 7/17/2020.
+ -->
+
+<apex:page id="ApproveMultipleGUUEdits" Controller="approveGuestUserEdits"
+           standardStylesheets="false" showHeader="true">
+    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
+
+    <header>
+        <style>
+            .titlebar {
+                text-align: center;
+                height: auto;
+                background-color: #406B8C;
+                color: #fff;
+                font-size: large;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
+            }
+
+            .form-content {
+                font-family: Arial, Helvetica, sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin: 10px;
+                background-color: ghostwhite;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+            }
+
+            .btnSubmit {
+                border: none;
+                border-radius: 1.5rem;
+                spadding: 1%;
+                cursor: pointer;
+                background: #2C6636;
+                color: #fff;
+                font-size: large;
+                font-weight: bolder;
+                margin: 10px;
+            }
+
+            .CustomQuestion{
+                Margin-left: 16px;
+            }
+        </style>
+
+    </header>
+
+    <body bgcolor="#dce9f7">
+
+    <apex:outputpanel id="errorInfo">
+        <apex:messages style="color: #red;"/>
+
+        <apex:Form >
+            <div class="WGPageTitle">Changes Not Yet Approved</div>
+            <apex:outputPanel html-class="container register-form">
+                <!--HEADER ROW-->
+                <div class="row">
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                    <div class="col-sm-4 col-md-3">
+                        <div class="WGPageTitle2 br6 d-none d-sm-block">Current Info</div>
+                    </div>
+                    <div class="col-sm-4 col-md-3 d-none d-sm-block">
+                        <div class="WGPageTitle2 br6">Proposed</div>
+                    </div>
+                    <div class="col-xs-4 col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                    <div class="col-md-2">
+                        <apex:outputText value=" "/>
+                    </div>
+                </div>
+                <!--LIST ROWS-->
+                <apex:repeat value="{!GUUs}" var="GUU">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <apex:outputText value=" "/>
+                        </div>
+                        <div class="col-2 d-sm-none">
+                            Current:
+                        </div>
+                        <div class="col-10 col-sm-4 col-md-3">
+                            {!CtctMap[GUU.RelatedContact__c].FirstName} {!CtctMap[GUU.RelatedContact__c].LastName}<br/>
+                            {!CtctMap[GUU.RelatedContact__c].MailingStreet}   {!CtctMap[GUU.RelatedContact__c].MailingCity}, {!CtctMap[GUU.RelatedContact__c].MailingState}   {!CtctMap[GUU.RelatedContact__c].MailingPostalCode}<br/>
+                            Mobile: {!CtctMap[GUU.RelatedContact__c].MobilePhone}<br/>
+                            Phone: {!CtctMap[GUU.RelatedContact__c].Phone}<br/>
+                        </div>
+                        <div class="col-2 d-sm-none">
+                            Proposed:
+                        </div>
+                        <div class="col-10 col-sm-4 col-md-3">
+                            {!GUU.FirstName__c} {!GUU.LastName__c}<br/>
+                            {!GUU.MailingCity__c}   {!GUU.MailingStreet__c}, {!GUU.MailingState__c}    {!GUU.MailingPostalCode__c}<br/>
+                            {!GUU.MobilePhone__c}<br/>
+                            {!GUU.Phone__c}<br/>
+                            {!GUU.Processing_Status__c}<br/>
+                        </div>
+                        <div class="col-6 col-sm-4 col-md-2">
+                            <apex:inputField value="{!GUU.Processing_Status__c}" styleClass="form-control"/>
+                        </div>
+                        <div class="col-md-2">
+                            <apex:outputText value=" "/>
+                        </div>
+                    </div>
+                    <br/>
+                </apex:repeat>
+                <div class="row">
+                    <div class="col-3"><apex:outputText value=" "/></div>
+                    <div class="col-9">
+                        <apex:commandButton value="Submit Approved Changes" action="{!submitEdits}" styleClass="btn fwb bgprimary"/>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        </apex:Form>
+    </apex:outputpanel>
+
+    </body>
+
+</apex:page>

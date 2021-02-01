@@ -7,8 +7,8 @@ private class enterContribTest{
 
     @isTest static void enterContribmyTest(){
         Test.startTest();
-        getRecordTypeId();
-        Campaign cmp = getCampaign(strCampaignRecordTypeId);
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Campaign cmp = ctv.fetchTestCampaign();
         insert cmp;
         Opportunity opp = getOpportunity(strOppRecordTypeId, cmp.Id);
         ApexPages.StandardController sc = new ApexPages.StandardController(opp);
@@ -27,13 +27,10 @@ private class enterContribTest{
     
     @isTest static void submitAndNextTest(){
         Test.startTest();
-        getRecordTypeId();
-        Account acc = getAccount(strAccountRecordTypeId);
-        insert acc;
-        Campaign cmp = getCampaign(strCampaignRecordTypeId);
-        insert cmp;
-        Opportunity opp = getOpportunity(strOppRecordTypeId, cmp.Id);
-        insert opp;
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Campaign cmp = ctv.fetchTestCampaign();
+        Account acc = ctv.fetchTestAccount();
+        Opportunity opp = ctv.fetchTestOpportunity();
         ApexPages.StandardController sc = new ApexPages.StandardController(opp);
         enterContrib eContrib = new enterContrib(sc);
         List<SelectOption> options = eContrib.getItems();

@@ -11,20 +11,20 @@
     <bandwidthExceededPage>BandwidthExceeded</bandwidthExceededPage>
     <browserXssProtection>false</browserXssProtection>
     <clickjackProtectionLevel>AllowAllFraming</clickjackProtectionLevel>
-    <contentSniffingProtection>false</contentSniffingProtection>
+    <contentSniffingProtection>true</contentSniffingProtection>
     <cspUpgradeInsecureRequests>true</cspUpgradeInsecureRequests>
+    <enableAuraRequests>true</enableAuraRequests>
     <fileNotFoundPage>FileNotFound</fileNotFoundPage>
     <genericErrorPage>Exception</genericErrorPage>
     <inMaintenancePage>InMaintenance</inMaintenancePage>
     <inactiveIndexPage>InMaintenance</inactiveIndexPage>
-    <indexPage>SignInPage</indexPage>
+    <indexPage>EmailSignupPageBootstrap</indexPage>
     <masterLabel>Signup</masterLabel>
     <referrerPolicyOriginWhenCrossOrigin>false</referrerPolicyOriginWhenCrossOrigin>
     <requireHttps>true</requireHttps>
-    <requireInsecurePortalAccess>false</requireInsecurePortalAccess>
     <siteAdmin>testing@watergrass.org</siteAdmin>
+    <siteGuestRecordDefaultOwner>testing@watergrass.org</siteGuestRecordDefaultOwner>
     <siteTemplate>SiteTemplate</siteTemplate>
     <siteType>Visualforce</siteType>
     <subdomain>wgtesting-developer-edition</subdomain>
-    <urlPathPrefix>Signup</urlPathPrefix>
 </CustomSite>

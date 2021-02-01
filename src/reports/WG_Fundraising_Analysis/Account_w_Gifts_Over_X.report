@@ -46,6 +46,7 @@
     <filter>
         <criteriaItems>
             <column>Account.Active__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>notEqual</operator>
             <value>Obsolete contact info</value>

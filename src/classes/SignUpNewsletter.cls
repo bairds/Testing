@@ -1,6 +1,4 @@
 public with sharing class SignUpNewsletter{
-
-
 //Identify Contact or Lead
 public static String SignUpNewsletter(List<String> results) {
 	WGSettings__mdt Settings = WGHelpers.getWGSettings();

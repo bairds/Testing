@@ -166,7 +166,7 @@ public without sharing class registerForCampaign
                         this.coc.city = this.l.City;
                         this.coc.state = this.l.State;
                         
-                        if(String.isNotBlank(this.l.Volunteer_Interests__c)) 
+                        if(String.isNotBlank(this.l.Volunteer_Interests__c))
                             this.coc.volunteerInterests = this.l.Volunteer_Interests__c.split(';', 0);
                         
                         this.coc.howHeard =  this.l.How_Heard__c;
@@ -369,6 +369,8 @@ public without sharing class registerForCampaign
             this.o.StageName = 'Unpaid';
             this.o.CloseDate = Date.today();
             this.o.RecordTypeId = rt.Id;
+            this.o.Contact__c = this.co.Id;
+            system.debug('Primary Contact is ' + co);
             insert this.o; 
             
             //STORE NR_IN_GROUP IN COMMENTS FIELD AND SET NR_IN_GROUP TO 1 ONLY FOR FIRST SIGNUP IN A CORPORATE VOLUNTEER EVENT

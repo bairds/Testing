@@ -40,10 +40,6 @@
 <td align="left" valign="top"><apex:outputField value="{!camp.Event_Location__c}" /></td></tr>
 
 <tr>
-<td width="100px" align="left" valign="top"><apex:outputLabel value="Cost per person:" ></apex:outputLabel></td>
-<td align="left" valign="top"><apex:outputField value="{!camp.Event_Cost__c}" /></td></tr>
-
-<tr>
 <td width="100px" align="left" valign="top"><apex:outputLabel value="Spaces remaining:" ></apex:outputLabel></td>
 <td align="left" valign="top"><apex:outputText value="{!if(camp.Slots_Remaining__c==0,'Event Full',text(camp.Slots_Remaining__c))}" >
                      </apex:outputText></td>

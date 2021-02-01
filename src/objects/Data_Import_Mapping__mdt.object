@@ -28,6 +28,7 @@
         <externalId>false</externalId>
         <fieldManageability>DeveloperControlled</fieldManageability>
         <label>Target_Field</label>
+        <metadataRelationshipControllingField>Data_Import_Mapping__mdt.Target_Object__c</metadataRelationshipControllingField>
         <referenceTo>FieldDefinition</referenceTo>
         <relationshipLabel>Data_Import_Mappings</relationshipLabel>
         <relationshipName>Data_Import_Mappings</relationshipName>

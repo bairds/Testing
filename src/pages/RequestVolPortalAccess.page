@@ -1,0 +1,127 @@
+<!--
+ - Created by Baird on 6/12/2020.
+ -->
+
+<apex:page id="RequestVolPortalAccess" controller="requestVolPortalAccess" showHeader="false" standardStylesheets="false">
+    <!--<apex:stylesheet value="{!$Resource.wg_styles}"/>-->
+    <!--<apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>-->
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+
+    <header>
+
+        <style>
+            /*.note {
+                text-align: center;
+                height: 80px;
+                background-color: #406B8C;
+                color: #fff;
+                font-weight: bold;
+                border-radius: 1.5rem;
+                padding: 5px;
+                margin: 10px;
+            }*/
+
+            .form-content {
+                font-family: Arial,Helvetica,sans-serif;
+                padding: 0%;
+                border: 0px solid #406B8C;
+                margin-bottom: 0%;
+                background-color: ghostwhite;
+            }
+
+            .form-control {
+                border: 2px solid #406B8C;
+                border-radius: .5rem;
+                width: 90%;
+            }
+            .btnSubmit {
+                border: none;
+                border-radius: 0.5rem;
+                padding: 1%;
+                width: 20%;
+                cursor: pointer;
+                background: cornflowerblue;
+                color: #fff;
+                font-weight: bolder;
+                margin: 10px;
+            }
+            .WGPageTitle{
+                padding-left: 10px;
+                padding-top:0px;
+                margin: auto;
+            }
+        </style>
+
+
+    </header>
+
+    <body bgcolor="#dce9f7">
+
+    <apex:outputpanel id="pContactInfo">
+        <apex:messages style="color: #red;"/>
+
+        <apex:form >
+            <apex:outputPanel html-class="container register-form">
+                <div class="form">
+                    <div class="note WGPageTitle">
+                        <p><strong>Review Your Current Volunteer Record</strong></p>
+                    </div>
+
+                    <div class="form-content">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <apex:inputField value="{!Ctct.FirstName}" styleclass="form-control"
+                                                     html-placeholder="First Name" required="true"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <apex:inputField value="{!Ctct.LastName}" styleclass="form-control"
+                                                     html-placeholder="Last Name" required="true"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <apex:inputText value="{!Ctct.MailingPostalCode}" styleclass="form-control"
+                                                    html-placeholder="Your Zip Code" required="true"/>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <div class="form-group">
+                                    <apex:inputField value="{!Ctct.Email}" styleclass="form-control"
+                                                     html-placeholder="Your Email" required="true"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <apex:commandButton action="{!submit}" value="Submit" styleclass="btnSubmit"/>
+                        </div>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel rendered="{!VolunteerFound=='Found'}">
+                <div class="form container register-form">
+                    <div class="note WGPageTitle" html-style="width: 60%">
+                        <p>We sent an updated link to your email address.<br/><b>The new link replaces all old links, which will no longer work.</b><br/>Please find the email and click on the link there in it.</p>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+            <apex:outputPanel rendered="{!VolunteerFound=='NotFound'}">
+                <div class="form container register-form">
+                    <div class="note WGPageTitle" html-style="width: 60%">
+                        <p>We did not find you in our list of Master Naturalists.<br/>Did you use a different email?</p>
+                    </div>
+                </div>
+            </apex:outputPanel>
+
+        </apex:form>
+    </apex:outputpanel>
+
+    </body>
+
+</apex:page>

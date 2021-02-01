@@ -8,18 +8,19 @@ public class AddresseeUpdateController{
 
 //Set<ID> AcctIDs = new Set<ID>();
 
-public AddresseeUpdateController(ApexPages.StandardController controller) {
-	}
-	
-List<AccountContactRole> UpdateACR = new List<AccountContactRole>();
+    List<AccountContactRole> UpdateACR = new List<AccountContactRole>();
+    Set<ID> AcctIDSet = new Set<ID>();
 
-Set<ID> AcctIDSet = new Set<ID>();
+    public AddresseeUpdateController(ApexPages.StandardController controller) {
+	}
+
 public List<Account> updateAddressee(Set<Account> updateSet) {
 	contact firstAddressee;
 	contact secondAddressee;
 for (account a : updateSet) {
 	AcctIDSet.add(a.id);
 }
+
 List<Account> updateAccts = [select account.id, account.name, account.RecordType.name,
       (select accountContactRole.contact.firstname, 
       accountContactRole.contact.lastname, accountContactRole.isPrimary, 

@@ -23,7 +23,7 @@
             alert('Sorry, we only have ' + {!c.Slots_Remaining__c} + ' slots left.');
             document.getElementById('{!$Component.j_id0:j_id6:NrInGroup}').value = 0;  
             Slotsdesired = 0;
-        	console.log('Slots desired has been reduced to: ' + slotsdesired + ' and HTML component to ' + document.getElementById('{!$Component.j_id0:j_id6:NrInGroup}').value);
+            console.log('Slots desired has been reduced to: ' + slotsdesired + ' and HTML component to ' + document.getElementById('{!$Component.j_id0:j_id6:NrInGroup}').value);
             document.getElementById('{!$Component.j_id0:j_id6:NrInGroup}').focus();
         }
     }

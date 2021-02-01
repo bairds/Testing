@@ -13,24 +13,27 @@
         <field>Affiliation__c.Start_Date__c</field>
     </columns>
     <columns>
-        <field>Affiliation__c.End_date__c</field>
+        <field>Affiliation__c.End_Date__c</field>
     </columns>
     <description>Listing of all affiliations with a role related to board membership (contains the word Board).  It will include board members from other organizations if you&apos;ve added that information.</description>
     <filter>
         <criteriaItems>
             <column>Affiliation__c.Affiliation_Role__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>contains</operator>
             <value>Board</value>
         </criteriaItems>
         <criteriaItems>
             <column>Affiliation__c.Start_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>lessThan</operator>
             <value>TODAY</value>
         </criteriaItems>
         <criteriaItems>
-            <column>Affiliation__c.End_date__c</column>
+            <column>Affiliation__c.End_Date__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>greaterOrEqual</operator>
             <value>TODAY</value>
@@ -53,7 +56,7 @@
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>false</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Affiliation__c.End_date__c</dateColumn>
+        <dateColumn>Affiliation__c.End_Date__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

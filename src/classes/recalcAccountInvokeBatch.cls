@@ -11,7 +11,7 @@ public with sharing class recalcAccountInvokeBatch {
 
     public pageReference invokeBatch() {
         // Get the names of al the record types
-        querystring = 'select id from Account';
+        querystring = 'select id from Account   ';
         recalcAccountBatch RAB = new recalcAccountBatch();
         RAB.query = querystring;
         //pass UnknownCampaignId into batch using instance name.variablename

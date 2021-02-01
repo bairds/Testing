@@ -4,17 +4,16 @@
 
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
     <apex:includeScript value="{!$Resource.JoseJS}"/>
-    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
-    <apex:stylesheet value="{!$Resource.BairdCSS}"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <style>
-    .alignleft {
-        padding-left:0px;
-    }
+        .alignleft {
+            padding-left:0px;
+        }
     </style>
 
     <apex:form >
@@ -31,12 +30,12 @@
                     </div>
                 </div>
 
-                <div class="row match-my-cols bcb">
-                    <div class="col-xs-12 WGPageTitle" color="SectionColor">
+                <div class="row match-my-cols">
+                    <div class="col-xs-12 WGPageTitle2" color="SectionColor">
                         Please Select an Event.<b/>
                     </div>
                 </div>
-                <div class="row bcg2 fs16">
+                <div class="row bcprimary-mid fs15">
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> NAME</div>
                     <div class="col-md-2 hidden-xs hidden-sm alignleft"> LOCATION</div>
                     <div class="col-md-3 hidden-sm hidden-xs alignleft"> DESCRIPTION</div>
@@ -47,7 +46,7 @@
                 </div>
 
                 <apex:repeat value="{!cs}" var="c">
-                    <div class="row repeatrow bcg2">
+                    <div class="row repeatrow bcprimary-mid">
                         <div class="col-md-2 col-xs-12">
                             <div class="row">
                                 <div class="hidden-md hidden-lg hidden-xl col-xs-4 cw">
@@ -69,15 +68,15 @@
                             </div>
                         </div>
                         <div class="col-md-3 col-xs-12">
-                                <div class="row">
-                                    <div class="hidden-md hidden-lg col-xs-4 alignleft">
-                                        DESCRIPTION
-                                    </div>
-                                    <div class="col-md-12 col-xs-8 alignleft">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4 alignleft">
+                                    DESCRIPTION
+                                </div>
+                                <div class="col-md-12 col-xs-8 alignleft">
                                     <apex:outputField value="{!c.Description}"/>
-                                    </div>
                                 </div>
                             </div>
+                        </div>
                         <div class="col-md-2 col-xs-12 alignleft">
                             <div class="row">
                                 <div class="hidden-md hidden-lg col-xs-4 ">
@@ -109,15 +108,15 @@
                             </div>
                         </div>
                         <div class="col-md-1 col-xs-12 alignleft">
-                                <div class="row">
-                                    <div class="hidden-md hidden-lg col-xs-4">
-                                        SPACES:
-                                    </div>
-                                    <div class="col-md-12 col-xs-8">
+                            <div class="row">
+                                <div class="hidden-md hidden-lg col-xs-4">
+                                    SPACES:
+                                </div>
+                                <div class="col-md-12 col-xs-8">
                                     <apex:outputText value="{!if(c.Slots_Remaining__c==0,'Event Full',text(c.Slots_Remaining__c))}"/>
-                                    </div>
                                 </div>
                             </div>
+                        </div>
                     </div>
                 </apex:repeat>
                 <div class="text">

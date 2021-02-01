@@ -6,7 +6,7 @@ trigger ManageCnPDataTrigger on CnP_PaaS_Bridge__CnPData__c (before insert, afte
 //        }
     if(Trigger.isInsert && Trigger.isAfter){
         ManageCnPData MCD = new ManageCnPData();
-        MCD.AfterInsert(Trigger.New,Trigger.Old); 
+       // MCD.AfterInsert(Trigger.New,Trigger.Old);
     }
 
 }

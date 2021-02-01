@@ -92,8 +92,8 @@ private class enterAccountContactContributionTest {
         eacc.o.CampaignId = ctv.TestCampaign.Id;
         eacc.oc.thankYouLetter = eacc.oc.thankYouLetters[1].getValue();
         
-        eacc.cm.Membership_Start_Date__c = Date.today();
-        eacc.cm.Membership_End_Date__c = Date.today().addYears(1);
+        eacc.CompMmbership.Membership_Start_Date__c = Date.today();
+        eacc.CompMmbership.Membership_End_Date__c = Date.today().addYears(1);
         
         eacc.submitContribution();
         
@@ -152,6 +152,16 @@ private class enterAccountContactContributionTest {
         enterAccountContactContribution eacc = new enterAccountContactContribution();
         System.currentPageReference().getParameters().put('a', '2');
         eacc.setEnterContrib();
+        
+        // Test dummy contact
+        eacc.ContactsInAccount = '0';
+        eacc.CreateDummyContact = true;
+        eacc.setContacts();
+        system.assertEquals('Unknown',eacc.co.LastName,'Set CreateDummyContact, lastname should be Unknown instead of ' + eacc.co.LastName);
+        // Get rid of dummy contact
+        eacc.co.clear();
+        eacc.CreateDummyContact = false;
+
         eacc.ContactsInAccount = '2';
         eacc.setContacts();
         
@@ -208,8 +218,8 @@ private class enterAccountContactContributionTest {
         eacc.o.CampaignId = ctv.TestCampaign.Id;
         eacc.oc.thankYouLetter = eacc.oc.thankYouLetters[1].getValue();
         
-        eacc.cm.Membership_Start_Date__c = Date.today();
-        eacc.cm.Membership_End_Date__c = Date.today().addYears(1);
+        eacc.CompMmbership.Membership_Start_Date__c = Date.today();
+        eacc.CompMmbership.Membership_End_Date__c = Date.today().addYears(1);
         
         eacc.submitContribution();
         

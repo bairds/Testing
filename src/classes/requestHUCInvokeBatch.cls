@@ -9,7 +9,7 @@ public class requestHUCInvokeBatch {
             
 // Invoke the batch job. 
     
-        ID batchprocessid = Database.executeBatch(rHB, 50);
+        ID batchprocessid = Database.executeBatch(rHB, 25);
         System.debug('Returned batch process ID: ' + batchProcessId);
         return null;
         }

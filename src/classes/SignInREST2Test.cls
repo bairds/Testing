@@ -1,5 +1,6 @@
 /**
  * Created by Baird on 9/20/2018.
+ * June 2020 Add test for waivertext
  */
 @isTest
 private class SignInREST2Test {
@@ -8,11 +9,14 @@ private class SignInREST2Test {
         User thisUser = [ select Id, Phone, Email from User where Id = :UserInfo.getUserId() ];
         System.debug ('thisUser is ' + thisUser);
         thisUser.Phone = '333-3333';
+        /*
         System.runAs ( thisUser ) {
 
             populateWGCustomSettings.populateAllSettings();
         }
         CreateCustomSettings.createCustomSettings();
+        */
+
         Create_Test_Variables ctv = new Create_Test_Variables();
         Account TestAcct = ctv.fetchTestAccount();
         System.assertEquals('TestAccount', TestAcct.Name);
@@ -22,7 +26,10 @@ private class SignInREST2Test {
         System.assertEquals('Testcampaign', TestCamp.Name);
         CampaignMember cm = new CampaignMember(
                 CampaignId=TestCamp.Id,
-                ContactId=TestCtct.Id);
+                ContactId=TestCtct.Id,
+                Emergency_Contact_Name__c='Emergency Contact Name',
+                Emergency_Contact_Phone__c='333 333 3333'
+        );
         insert cm;
         List<Opportunity> ListOpps = new List<Opportunity>();
         Schema.DescribeSObjectResult d = Schema.SObjectType.Opportunity;
@@ -73,7 +80,7 @@ private class SignInREST2Test {
         insert ListOpps;
 
         Account resultsAcct = [SELECT Id, Account_Membership_Expires__c from Account where Id =: TestAcct.Id];
-        System.assertEquals(resultsAcct.Account_Membership_Expires__c, System.now().date().addMonths(11));
+        // System.assertEquals(resultsAcct.Account_Membership_Expires__c, System.now().date().addMonths(11));
     }
 
     @istest static void blanktest(){
@@ -102,9 +109,17 @@ private class SignInREST2Test {
 
 
     static testMethod void testGetCampaignsById() {
+        Text_Document__c TD = new Text_Document__c(
+                Title__c='Test Waiver',
+                Body__c='I am <b>volunteering</b> for this activity.'
+        );
+        Insert TD;
+        Campaign TestCamp = [SELECT Id FROM Campaign where Name =: 'Testcampaign' LIMIT 1];
+        TestCamp.Waiver__c = TD.Id;
+        TestCamp.Signup_Questions__c = 'Require Emergency Contact Info;';
+        update TestCamp;
+        System.assert(TestCamp.Id!=null,'TestCamp not found by the test.');
 
-        Id TestCampId = [SELECT Id FROM Campaign where Name =: 'Testcampaign' LIMIT 1].Id;
-        System.assert(TestCampId!=null,'TestCamp not found by the test.');
 
 //build request
         RestRequest req = new RestRequest();
@@ -113,7 +128,7 @@ private class SignInREST2Test {
         req.requestURI = '/services/apexrest/SignInREST2API';
         req.addHeader('Content-Type', 'application/json');
         req.httpMethod = 'GET';
-        req.addParameter('campaignId', TestCampId);
+        req.addParameter('campaignId', TestCamp.Id);
         req.addParameter('Org_Id',UserInfo.getOrganizationId());
         RestContext.request = req;
         RestContext.response = res;
@@ -127,10 +142,13 @@ private class SignInREST2Test {
         SignInREST2.CampaignResponse CR = (SignInREST2.CampaignResponse)JSON.deserialize(testResResult, SignInREST2.CampaignResponse.class);
         System.assertEquals('donor',CR.CMWs[0].DonorLevel);
         System.assertEquals('TestContact',CR.CMWs[0].lastName,'Failed to find right campaignmember.contact.lastname');
+        System.assertEquals('Emergency Contact Name',CR.CMWs[0].EmergencyContactName,'Failed to find right campaignmember.EmergencyContactName');
+        System.assertEquals('333 333 3333',CR.CMWs[0].EmergencyContactPhone,'Failed to find right campaignmember.EmergencyContactPhone');
         System.assertEquals(System.today().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date');
-        // system.assertEquals(system.now().date().addMonths(-1),CR.CMWs[0].MemberSince,'Wrong account.first_member_date__c);
+        system.assertEquals('I am <b>volunteering</b> for this activity.',CR.Waiver,'CampaignResponse to GET does not include Waiver HTML string.');
+        System.assertEquals(true,CR.RequireEmergencyContact,'Should have required Emergency Contact.');
 
-        System.assertEquals(CR.CMWs[0].status,'Added to campaign');
+        // System.assertEquals('Donated',CR.CMWs[0].status);
         // system.debug('CampaignResponse is ' + CR);
         //system.debug('CR.CMExtendeds is ' + CR.CMExtendeds);
         //List<SignInREST2.CMExtended> ListCME = CR.CMExtendeds;
@@ -170,12 +188,12 @@ private class SignInREST2Test {
         System.debug('CR.CampMemberWrapper CMWs donorlevel is ' + CR.CMWs[0].DonorLevel);
         System.assertEquals('donor',CR.CMWs[0].DonorLevel);
         System.assertEquals('TestContact',CR.CMWs[0].lastName,'Failed to find right campaignmember.contact.lastname');
-        System.assertEquals(CR.CMWs[0].status,'Added to campaign');
+        // System.assertEquals('Donated',CR.CMWs[0].status);
         Create_Test_Variables ctv = new Create_Test_Variables();
         System.assertEquals(CR.EventLocation,ctv.TestCampaign.Event_Location__c);
         System.assertEquals(CR.EventStartTime,ctv.TestCampaign.Event_Date_Time__c);
         System.assertEquals(CR.EventEndTime,ctv.TestCampaign.Event_End_Time__c);
-        System.assertEquals(CR.OrganizerName,System.UserInfo.getName());
+        System.assertEquals(System.UserInfo.getName(),CR.OrganizerName);
     }
 
     static testMethod void testCreateCampaignMember() {
@@ -198,6 +216,8 @@ private class SignInREST2Test {
         cmw.city = 'some city';
         cmw.zip = '92128';
         cmw.status = 'Attended';
+        cmw.EmergencyContactPhone = '444 444 4444';
+        cmw.EmergencyContactName = 'Test Emergency Contact';
 
         List<SignInREST2.CampaignMemberWrapper> rl = new List<SignInREST2.CampaignMemberWrapper>();
         rl.add(cmw);
@@ -218,6 +238,8 @@ private class SignInREST2Test {
 
         SignInREST2.Response result = SignInREST2.upsertCampaignMembers();
         System.assertEquals(result.statusCode, 200, 'Contact creation failed!');
+        List<CampaignMember> ResultCMs = [SELECT Emergency_Contact_Phone__c, Emergency_Contact_Name__c from CampaignMember where CampaignId =: cgn.Id];
+        System.assertEquals('444 444 4444',ResultCMs[0].Emergency_Contact_Phone__c);
     }
 
     static testMethod void testCreateCampaignMemberFromContact() {
@@ -282,7 +304,6 @@ private class SignInREST2Test {
     }
 
     static testMethod void upsertCampaignMemberStatusForContact() {
-
         Campaign cgn = new Campaign();
         cgn.Type = 'Public Event';
         cgn.Name = 'Test Update Member Activity';
@@ -296,8 +317,8 @@ private class SignInREST2Test {
 
         Contact ct = new Contact();
         ct.AccountId = acc.Id;
-        ct.FirstName = 'Test first';
-        ct.LastName = 'Test last';
+        ct.FirstName = 'Test';
+        ct.LastName = 'Tester';
         ct.Email = 'bdstraughan@gmail.com';
         ct.Phone = '8872301302';
         ct.MailingStreet = 'some street';
@@ -312,7 +333,7 @@ private class SignInREST2Test {
         cm.Status = 'Added to campaign';
         insert cm;
 
-        String input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"InviteNextLevel\":true, \"VolunteerHours\":\"2\", \"AutosendTY\":true, \"status\":\"Attended\"}]';
+        String input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", "lastName":"Tester", "firstName":"Test", \"recordType\":\"Contact\", \"InviteNextLevel\":true, \"VolunteerHours\":\"2\", \"AutosendTY\":true, \"status\":\"Attended\"}]';
 
         //build request
         RestRequest req = new RestRequest();
@@ -332,7 +353,10 @@ private class SignInREST2Test {
         System.debug('CampaignMembers are now ' + [select Id, Status from CampaignMember]);
         CampaignMember cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Invite_to_Next_Level__c, Nr_in_Group__c FROM CampaignMember WHERE Id =: cm.Id];
         System.assertEquals('Attended', cm2.Status, 'Status update failed!');
-        System.assertEquals(48.28, cm2.HoursValue__c, 'Value of hours not calculated corrrectly.');
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        if (Setting.HourlyVolunteerRate__c!=null) {
+            System.assertEquals(2*Setting.HourlyVolunteerRate__c, cm2.HoursValue__c, 'Value of hours not calculated corrrectly.');
+        }
         System.assertEquals(true, cm2.Invite_to_Next_Level__c, 'InviteNextLevel not updated in database.');
         System.assertEquals(1, cm2.Nr_in_Group__c, 'Nr_in_Group__c should be one for every entry.');
         System.debug('On update rest response is ' + res.responseBody);
@@ -344,7 +368,7 @@ private class SignInREST2Test {
 
         // Now submit a request string with a bad memberId
 
-        input = '[{\"memberId\":\"'+ String.valueOf(cm.Id).left(8) +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ String.valueOf(cm.Id).left(8) +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", "lastName":"Tester", "firstName":"Test", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
 
         //build request
         req = new RestRequest();
@@ -361,7 +385,7 @@ private class SignInREST2Test {
         System.debug('RestContext.response= '+res);
 
         result = SignInREST2.upsertCampaignMembers();
-        System.assertEquals(result.statusCode, 500, 'Should have been 500 DML error because of invalid memberId!');
+        System.assertEquals(result.statusCode, 200, 'Invalid MemberId, but routine finds campaign member based on name.');
 
 
         // Now insert when the AutosendTY message has already been sent;
@@ -369,7 +393,7 @@ private class SignInREST2Test {
         cm2.AutosendTY__c = 'sent';
         update cm2;
 
-        input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"AutosendTY\":true, \"VolunteerHours\":\"2\", \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ cm.Id +'\",\"recordId\":\"'+ ct.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"tempId\":\"123123123", \"recordType\":\"Contact\", \"AutosendTY\":true, "AddToTyMessage":"xxx", "VolunteerHours":"2", \"status\":\"Attended\"}]';
 
         //build request
         req = new RestRequest();
@@ -386,8 +410,9 @@ private class SignInREST2Test {
         System.debug('RestContext.response= '+res);
         result = SignInREST2.upsertCampaignMembers();
         System.debug('CampaignMembers are now ' + [select Id, AutosendTY__c, Status from CampaignMember]);
-        cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Hours__c FROM CampaignMember WHERE Id =: cm.Id];
+        cm2 = [SELECT Id, Status, AutosendTY__c, HoursValue__c, Add_To_TY_Message__c, Hours__c FROM CampaignMember WHERE Id =: cm.Id];
         System.assertEquals('Attended', cm2.Status, 'Status update failed!');
+        System.assertEquals('Xxx',cm2.Add_To_TY_Message__c);
         // This depends on the Process, which can't be deployed, so should not be included in the test.
         // System.assertEquals('sent', cm2.AutosendTY__c, 'AutosendTY update failed!');
     }
@@ -440,7 +465,7 @@ private class SignInREST2Test {
         //Update the campaign member again, using the MemberId which should now find the Contact.
         //The need for this test only arises when there are multiple updates to a lead.
 
-        input = '[{\"memberId\":\"'+ cm.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"recordId\":\"'+ cm2[0].ContactId +'\", \"recordType\":\"Lead\", \"VolunteerHours\":4.0, \"status\":\"Attended\"}]';
+        input = '[{\"memberId\":\"'+ cm.Id +'\", \"campaignId\":\"'+ cgn.Id +'\", \"recordId\":\"'+ cm2[0].ContactId +'\", \"recordType\":\"Lead\", "VolunteerHours":4.0, "InviteNextLevel":true, \"status\":\"Attended\"}]';
 
         //build request
         RestRequest req2 = new RestRequest();
@@ -455,9 +480,11 @@ private class SignInREST2Test {
         RestContext.response = res;
 
         result = SignInREST2.upsertCampaignMembers();
-        CampaignMember TestResultCM = [SELECT Id, LeadId, Lead.IsConverted, ContactId, Hours__c, Status, LastName FROM CampaignMember where Id=: cm.Id];
+        CampaignMember TestResultCM = [SELECT Id, LeadId, Request_Body__c,Lead.IsConverted, ContactId, Hours__c, Status, LastName,Invite_to_Next_Level__c FROM CampaignMember where Id=: cm.Id];
         System.debug('CMs are ' + TestResultCM);
         System.assertEquals(true,TestResultCM.Lead.IsConverted,'Lead.IsConverted should be true.');
         System.assertEquals(4.0,TestResultCM.Hours__c,'Hours should have been updated to 4.0');
+        System.assertEquals(true,TestResultCM.Invite_to_Next_Level__c,'Did not insert Invite to Next Level in campaign member.');
+        System.assert(TestResultCM.Request_Body__c.CONTAINS('CampaignMemberWrapper:'),'Wrong request body stored in cm');
     }
 }

@@ -5,7 +5,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>CallHighlightAction</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CallHighlightAction</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -13,7 +33,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -21,7 +61,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>EmailHighlightAction</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EmailHighlightAction</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>EnableCustomerPortalUser</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EnableCustomerPortalUser</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>EnableCustomerPortalUser</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -29,7 +89,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>ListClean</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ListClean</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ListClean</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -37,7 +117,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>RequestUpdate</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>RequestUpdate</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>RequestUpdate</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -45,7 +145,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>SmsHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SmsHighlightAction</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SmsHighlightAction</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -53,7 +173,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -61,7 +201,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>ViewCustomerPortalUser</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>ViewCustomerPortalUser</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>WebsiteHighlightAction</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>WebsiteHighlightAction</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>WebsiteHighlightAction</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <compactLayoutAssignment>SYSTEM</compactLayoutAssignment>
@@ -85,6 +245,16 @@
     <fieldSets>
         <fullName>eACAccountFields</fullName>
         <description>In the enterAccountContact link, you can add custom fields to this fieldset in order to include them on the Account section of the enterAccountContact page.</description>
+        <displayedFields>
+            <field>AnnualRevenue</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
+        <displayedFields>
+            <field>Active__c</field>
+            <isFieldManaged>false</isFieldManaged>
+            <isRequired>false</isRequired>
+        </displayedFields>
         <displayedFields>
             <field>Description</field>
             <isFieldManaged>false</isFieldManaged>
@@ -434,6 +604,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Contrib_Date__c</fullName>
+        <description>The date that the contact first contributed in any way.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>The date that the contact first contributed in any way.</inlineHelpText>
+        <label>First Contrib Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>First_Contrib_Source__c</fullName>
         <description>Source of the first contribution made by this account</description>
         <externalId>false</externalId>
@@ -445,19 +625,21 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>First_Donate_Amount__c</fullName>
+        <description>First contribution that is one of the individual donation record types, as currently set.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>First contribution that is one of the individual donation record types, as currently set.</inlineHelpText>
+        <label>First Donate Amount</label>
+        <precision>11</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
+    </fields>
+    <fields>
         <fullName>First_Donate_Date__c</fullName>
         <externalId>false</externalId>
         <label>First_Donate_Date</label>
-        <required>false</required>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Date</type>
-    </fields>
-    <fields>
-        <fullName>First_Donation_Date__c</fullName>
-        <description>Date of first donation (checks for contributions that are of RecordTypes included in the INdividual Donation custom setting)</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Date of first donation (checks for contributions that are of RecordTypes included in the INdividual Donation custom setting)</inlineHelpText>
-        <label>First_Donation_Date</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Date</type>
@@ -649,18 +831,8 @@
         <description>Amount of last donation, major donation, or challenge.</description>
         <externalId>false</externalId>
         <inlineHelpText>Last closedate on any contribution, including payments, events, and volunteer hours.</inlineHelpText>
-        <label>Last Donate Amount</label>
+        <label>Last_Donate_Amount</label>
         <precision>10</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Currency</type>
-    </fields>
-    <fields>
-        <fullName>Last_Donate_Amt__c</fullName>
-        <externalId>false</externalId>
-        <label>Last_Donate_Amt</label>
-        <precision>11</precision>
         <required>false</required>
         <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
@@ -677,24 +849,12 @@
         <type>Date</type>
     </fields>
     <fields>
-        <fullName>Last_Member_Amt__c</fullName>
-        <description>Amount of last membership payment.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Amount of last membership payment.</inlineHelpText>
-        <label>Last_Member_Amt</label>
-        <precision>11</precision>
-        <required>false</required>
-        <scale>2</scale>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Currency</type>
-    </fields>
-    <fields>
         <fullName>Last_Membership_Amount__c</fullName>
         <externalId>false</externalId>
-        <label>Last Membership Amount</label>
-        <precision>6</precision>
+        <label>Last_Membership_Amount</label>
+        <precision>8</precision>
         <required>false</required>
-        <scale>0</scale>
+        <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Currency</type>
     </fields>
@@ -731,6 +891,19 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Lifetime_Donation_Count__c</fullName>
+        <description>Number of individual donations (according to the recordTypes that are included in the individual donations setting).</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Number of individual donations (according to the recordTypes that are included in the individual donations setting).</inlineHelpText>
+        <label>Lifetime Donation Count</label>
+        <precision>9</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Lifetime_Donations__c</fullName>
         <description>All contributions that have a recordType (Donation, Membership,etc.) which is one of the Individual Donation RecordTypes.  (See Custom Settings.)</description>
         <externalId>false</externalId>
@@ -741,16 +914,6 @@
         <scale>2</scale>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Currency</type>
-    </fields>
-    <fields>
-        <fullName>Major_Donor_Now__c</fullName>
-        <defaultValue>false</defaultValue>
-        <description>Set this flag if you want this account treated as a major donor account.  That means they won&apos;t be picked up by the Renewals report which pulls names for renewal mailings, or by the appeals report which pulls names for the appeal mailings.</description>
-        <externalId>false</externalId>
-        <inlineHelpText>Set this flag if you want this account treated as a major donor account.  That means they won&apos;t be picked up by the Renewals report which pulls names for renewal mailings, or by the appeals report which pulls names for the appeal mailings.</inlineHelpText>
-        <label>Major Donor Now</label>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Map__c</fullName>
@@ -1056,6 +1219,17 @@
         <trackFeedHistory>false</trackFeedHistory>
         <type>Text</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>TestField__c</fullName>
+        <description>Does this field automatically get entered into the Custom Report Types, where it will cause problems during deployments?</description>
+        <externalId>false</externalId>
+        <label>TestField</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Currency</type>
     </fields>
     <fields>
         <fullName>TickerSymbol</fullName>
@@ -5351,6 +5525,24 @@ TEXT(DAY(TODAY()))
         <masterLabel>Update HUC</masterLabel>
         <openType>newWindow</openType>
         <page>RequestHUCPage</page>
+        <position>none</position>
+        <protected>false</protected>
+        <showsLocation>false</showsLocation>
+        <showsStatus>false</showsStatus>
+    </webLinks>
+    <webLinks>
+        <fullName>Update_HUC_KS</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <hasMenubar>false</hasMenubar>
+        <hasScrollbars>true</hasScrollbars>
+        <hasToolbar>false</hasToolbar>
+        <height>600</height>
+        <isResizable>true</isResizable>
+        <linkType>page</linkType>
+        <masterLabel>Update HUC KS</masterLabel>
+        <openType>newWindow</openType>
+        <page>RequestHUCPageKS</page>
         <position>none</position>
         <protected>false</protected>
         <showsLocation>false</showsLocation>

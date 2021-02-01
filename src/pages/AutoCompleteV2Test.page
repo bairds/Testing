@@ -1,0 +1,77 @@
+<!--
+ - Created by Baird on 3/29/2019.
+ -->
+
+<apex:page id="AutoCompleteV2Test" docType="html-5.0" standardController="Campaign" title="Post Event Hours" extensions="PLPBaird" sidebar="false" showheader="false" >
+<apex:form >
+    <apex:pageBlock >
+        <apex:pageBlockSection >
+        <c:AutoCompleteV2Full allowClear="true" importJquery="true" labelField="Name" SObject="Contact" valueField="Id" targetField="{!personId}"
+                          syncManualEntry="false" style="width:200px">
+        </c:AutoCompleteV2Full>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection >
+        <apex:commandButton value="Add To List" action="{!addToList}" rerender="People_Who_RSVPed,displayTheId"/>
+        </apex:pageBlockSection>
+        <apex:pageBlockSection id="displayTheId">
+        personId is {!personId}.
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    <apex:actionFunction name="rerenderList" rerender="People_Who_RSVPed" />
+    <apex:pageBlock id="People_Who_RSVPed">
+        <apex:variable value="{!0}" var="rowNum"/>
+    <apex:pageBlockTable value="{!UnprocessedAttendees}" var="ar" rendered="{!UnprocessedAttendees.size > 0}">
+
+        <apex:column >
+            <apex:commandLink value="X" reRender="People_Who_RSVPed" action="{!deleteCM}" onclick="if(!confirm('Are you sure you want to remove this person from membership in this campaign?  Doing so will also remove other data related to their campaign membership.')){return false};">
+                <apex:param name="cmId" value="{!ar.cm.id}" assignTo="{!CMToDelete.Id}" />
+                <apex:param name="rowIndex" value="rowNum" assignTo="{!AttendeeToDeleteIndex}" />
+            </apex:commandLink><br/>
+        </apex:column>
+
+        <apex:column >
+            <apex:facet name="header">First Name</apex:facet>
+            <apex:outputText value="{!if(ar.cm.contact.firstname==null,ar.cm.lead.firstname,ar.cm.contact.firstname)}"/>
+        </apex:column>
+
+        <apex:column >
+            <apex:facet name="header">Last Name</apex:facet>
+            <apex:outputText value="{!if(ar.cm.contact.lastname==null,ar.cm.lead.lastname,ar.cm.contact.lastname)}"/>
+        </apex:column>
+
+
+        <apex:column >
+            <apex:facet name="header">Status</apex:facet>
+            <apex:selectList id="Stati" value="{!ar.cm.status}" size="1">
+                <apex:selectOptions value="{!stati}"/>
+            </apex:selectList>
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Hours</apex:facet>
+            <apex:input value="{!ar.Hours}" style="width:50px" type="number" html-min="1" html-step="0.01" />
+        </apex:column>
+        <apex:column >
+            <apex:facet name="header">Supervisor Rating </apex:facet>
+            <apex:inputField value="{!ar.Contribution.Supervisor_Satisfaction__c}" required="true"/>
+        </apex:column>
+
+        <apex:column >
+            <apex:facet name="header">Leadership Level</apex:facet>
+            <apex:inputField value="{!ar.Contribution.Leadership_Level__c}" required="true" />
+        </apex:column>
+
+        <apex:column >
+            <apex:facet name="header">Role</apex:facet>
+            <apex:inputField value="{!ar.cm.Role__c}" />
+        </apex:column>
+
+
+        <apex:column >
+            <apex:facet name="header">Comments</apex:facet>
+            <apex:inputText value="{!ar.Comments}" size="50"/>
+        </apex:column>
+        <apex:variable var="rowNum" value="{!rowNum + 1}"/>
+    </apex:pageBlockTable>
+    </apex:pageBlock>
+</apex:form>
+</apex:page>

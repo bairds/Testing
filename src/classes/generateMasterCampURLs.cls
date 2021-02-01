@@ -46,8 +46,8 @@ public with sharing class generateMasterCampURLs {
     public List<SelectOption> getSelectCampaignOptions() {
         List<SelectOption> SelectCampaignOptions = new List<SelectOption>();
         SelectCampaignOptions.add(new SelectOption('', '-none-'));
-        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE Name like '%select%' ORDER BY Description];
-        For (apexPage p : VFPages) if (p.Description != null) {
+        List<apexPage> VFPages = [select Name, id, Description from apexPage WHERE (Name like '%select%' OR Description like '%MCampaignURLList%') AND (NOT Description LIKE 'Default Force.com User%') AND (NOT Description like '%Deprecated%') ORDER BY Description];
+        For (apexPage p : VFPages) if (p.Description != null && !p.Description.TOUPPERCASE().CONTAINS('DEPRECATED')) {
             SelectCampaignOptions.add(new selectOption(p.id, String.ValueOf(p.description).LEFT(50)));
             VFPageMap.put(p.Id, p);
         }

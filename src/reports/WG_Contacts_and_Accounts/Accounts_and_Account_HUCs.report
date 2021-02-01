@@ -10,6 +10,15 @@
         <field>Account.HUC_Code__c</field>
     </columns>
     <columns>
+        <field>Account.HUC_Watershed__c</field>
+    </columns>
+    <columns>
+        <field>Account.HUC_Subwatershed__c</field>
+    </columns>
+    <columns>
+        <field>Account.HUC_Errors__c</field>
+    </columns>
+    <columns>
         <field>ADDRESS1_LINE1</field>
     </columns>
     <columns>

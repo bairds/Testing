@@ -1,45 +1,48 @@
+<!-- Updated Baird July 2020 to allow users to override standard WaterGrassCSS with the WGCustomizedCSS
+August 2020 create field, outputPanel to control request for Parental Waiver.
+-->
 <apex:page id="Test2" controller="VolunteerEventRegisterBootstrap" showheader="false" sidebar="false" docType="html-5.0"
            action="{!setSignUp}" cache="false">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 
     <apex:includeScript value="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"/>
     <apex:includeScript value="{!$Resource.JoseJS}"/>
-    <apex:stylesheet value="{!$Resource.JoseCSS}"/>
-    <apex:stylesheet value="{!$Resource.BairdCSS}"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css"/>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+    <apex:stylesheet value="{!$Resource.WGCustomizedCSS}"/>
 
     <script>
         function SorryYouCantSign() {
-        alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with our organization in the future.");
-        CallRestOfDeclineWaiver();
-    }
+            alert("We're sorry you can't participate in the event which requires a waiver.  Please consider getting involved with our organization in the future.");
+            CallRestOfDeclineWaiver();
+        }
 
         function MinorsBringWaivers() {
             var TotalInGroup = document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value;
             var AdultsInGroup = document.getElementById('{!$Component.Test2:j_id6:NrAdultsInGroup}').value;
             if (TotalInGroup != null && AdultsInGroup != null && TotalInGroup - AdultsInGroup > 0) {
-        alert("Participants under the age of 18 must bring a paper copy of the waiver.");
+                alert("Participants under the age of 18 must bring a paper copy of the waiver.");
+            }
         }
-    }
 
-    function Oversubscribed() {
-        var slotsremaining = '{!c.Slots_Remaining__c}';
-        var slotsdesired = document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value;
-        if (slotsdesired.toString().length == 1) {
-            slotsdesired = "0" + slotsdesired;
+        function Oversubscribed() {
+            var slotsremaining = '{!c.Slots_Remaining__c}';
+            var slotsdesired = document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value;
+            if (slotsdesired.toString().length == 1) {
+                slotsdesired = "0" + slotsdesired;
+            }
+            console.log('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired + '.');
+            if (slotsremaining.valueOf() < slotsdesired.valueOf()) {
+                alert('Sorry, we only have ' + {!c.Slots_Remaining__c} + ' slots left.');
+                document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value = 0;
+                Slotsdesired = 0;
+                console.log('Slots desired has been reduced to: ' + slotsdesired + ' and HTML component to ' + document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value);
+                document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').focus();
+            }
         }
-        console.log('Slots remaining: ' + slotsremaining + ' and slots desired: ' + slotsdesired + '.');
-        if (slotsremaining.valueOf() < slotsdesired.valueOf()) {
-            alert('Sorry, we only have ' + {!c.Slots_Remaining__c} + ' slots left.');
-            document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value = 0;
-            Slotsdesired = 0;
-            console.log('Slots desired has been reduced to: ' + slotsdesired + ' and HTML component to ' + document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').value);
-            document.getElementById('{!$Component.Test2:j_id6:NrInGroup}').focus();
-        }
-    }
 
     </script>
 
@@ -55,28 +58,32 @@
                 </apex:outputPanel>
 
                 <apex:outputPanel >
-                    <div class="row match-my-cols bcw2">
-                        <div class="col-sm-4 WGPageTitle" color="TitleColor">
-                            <apex:image value="{!$Resource.OrgLogo}" styleclass="logo-image" width="100px"/>  <!--img-responsive -->
+                    <div class="row match-my-cols bcw2 ReverseColor">
+                        <div class="col-sm-4 WGPageTitle">
+                            <apex:image value="{!$Resource.OrgLogo}" styleclass="logo-image" height="100px"/>  <!--img-responsive -->
                         </div>
                         <apex:outputPanel rendered="{!step!='4'}">
                             <div class="WGPageTitle col-sm-8 text-left" color="TitleColor">
                                 {!title}
                             </div>
                         </apex:outputPanel>
+                        <apex:outputPanel rendered="{!step=='4'}">
+                            <div class="WGPageTitle col-sm-8 align-middle" color="TitleColor"><br/>
+                                Thank you for signing up for our {!c.name}.
+                            </div>
+                        </apex:outputPanel>
+
                     </div>
                 </apex:outputPanel>
 
                 <apex:outputPanel rendered="{!step=='5'}">
-                    <div class="WGPageTitle col-xs-12" color="TitleColor">
+                    <div class="WGPageTitle2 col-xs-12" color="TitleColor">
                         INFORMATION ABOUT {!c.name}.
                     </div>
                 </apex:outputPanel>
 
                 <apex:outputPanel rendered="{!step=='4'}">
-                    <div class="WGPageTitle col-xs-12 align-middle" color="TitleColor"><br/>
-                        Thank you for signing up for our {!c.name}.
-                        <br/><br/>
+                    <div class="WGPageTitle2 col-xs-12 align-middle" color="TitleColor"><br/>
                         You'll receive a confirmation email shortly.
                         <br/>
                         <br/>
@@ -154,6 +161,10 @@
                                 <apex:outputField value="{!c.Description_Long__c}"
                                                   rendered="{!step == '1' || step == '4'}"/>
                             </div>
+                            <div class="col-xs-8 col-md-10 tdlabel">
+                                <apex:outputField value="{!c.Description_Rich__c}"
+                                                  rendered="{!step == '1' || step == '4'}"/>
+                            </div>
                         </div> <!--End of third row-->
                     </apex:outputPanel>
                 </apex:outputPanel>
@@ -161,16 +172,16 @@
             </div> <!--End of errors, titles-->
             <!--<br></br><br></br>-->
 
-
+            <br/>
             <div class="bPageBlock" color="SectionColor">
                 <apex:outputPanel rendered="{!step == '1' && c.Slots_Remaining__c > 0}" layout="none">
                     <div class="row match-my-cols bcb">
-                        <div class="col-xs-12 WGPageTitle" color="SectionColor">
+                        <div class="col-xs-12 WGPageTitle2" color="SectionColor">
                             Ready to Sign Up?
                         </div>
                     </div>
 
-                    <div class="row bcg"><br></br>
+                    <div class="row bgprimary"><br></br>
                         <div class="col-md-6">
                             <div class="row">
                                 <div class="col-xs-4 tdlabel">
@@ -203,9 +214,9 @@
                         </div>
                     </div>
 
-                    <div class="row bcg">
+                    <div class="row bgprimary">
                         <div class="col-md-6">
-                            <div class="row bcg">
+                            <div class="row">
                                 <div class="col-xs-4 tdlabel"> EMAIL</div>
                                 <div class="col-xs-8 tdlabel alignleft">
                                     <div class="requiredInput">
@@ -218,7 +229,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <div class="row bcg">
+                            <div class="row">
                                 <div class="col-xs-4 tdlabel">
                                     ZIP CODE
                                 </div>
@@ -233,9 +244,9 @@
                         </div>
                     </div>
 
-                    <div class="row bcg">
+                    <div class="row bgprimary">
                         <div class="col-md-6">
-                            <div class="row bcg">
+                            <div class="row">
                                 <div class="col-xs-4 tdlabel"> PHONE</div>
                                 <div class="col-xs-8 tdlabel alignleft">
                                     <div class="requiredInput">
@@ -249,20 +260,14 @@
                         <div class="col-md-6">
                         </div>
                     </div>
-
                 </apex:outputPanel>
 
                 <apex:outputPanel rendered="{!step='1'}">
                     <div class="buttons btn-lg" color="blue">
-                        <!--<div class="col-xs-6 tar">
-                            <input type="button"
-                                   onclick="window.location='{!$Site.Prefix}/apex/volunteerEventSelectPageBootstrap?mid={!cc.MasterCampaign}{!query}'"
-                                   value="return to list of events" class="btn" color="SectionColor"/>
-                        </div>-->
                         <br></br>
 
                         <apex:outputPanel rendered="{!c.Slots_Remaining__c > 0}">
-                            <div class="buttons btn-lg">
+                            <div class="buttons btn-lg mw100 bcprimary-mid">
                                 <apex:commandButton action="{!setSignee}" value="NEXT"/>
                             </div>
                         </apex:outputPanel>
@@ -271,13 +276,13 @@
 
                 <apex:outputPanel rendered="{!step == '2'}">
                     <div class="row  bcg">
-                        <div class="col-xs-12 WGPageTitle" color="SectionColor">
+                        <div class="col-xs-12 WGPageTitle2" color="SectionColor">
                             We're missing the following information about you:
                         </div>
                     </div>
 
-                    <div class="row bcg">
-                        <div class="col-md-6 bcg">
+                    <div class="row bgprimary">
+                        <div class="col-md-6">
                             <apex:outputPanel rendered="{!coc.street == null}" layout="none">
                                 <div class=" row">
                                     <div class="col-xs-4 tdlabel"> Your street address</div>
@@ -332,31 +337,40 @@
                         </div>
                     </div>
 
-                    <div class="row bcg">
-                        <div class="col-xs-6 tar">
-                            <input type="button" class="btn"
-                                   onclick="window.location='{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?{!query}&step=1'"
-                                   value="back"/>
-                        </div>
-                        <div class="col-xs-6">
-                            <apex:commandButton action="{!updateSignee}" value="next"/>
+                    <div class="row">
+                        <div class="buttons btn-lg" color="blue">
+                            <div class="buttons btn-lg  col-md-2 col-xs-4 tar">
+                                <input type="button" class="btn"
+                                       onclick="window.location='{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?{!query}&step=1'"
+                                       value="back"/>
+                            </div>
+                            <div class="col-xs-1">
+                                <apex:outputText value=" "/>
+                            </div>
+                            <div class="buttons btn-lg  col-md-2 col-xs-4 tar">
+                                <apex:commandButton action="{!updateSignee}" value="next"/>
+                            </div>
                         </div>
                     </div>
                 </apex:outputPanel>
 
 
                 <apex:outputPanel rendered="{!step == '3'}" layout="none">
+                    <apex:outputPanel rendered="{!DuplicateCampMember}">
+                        <script>alert('You are already registered.  You can continue and modify your registration, but your new signup information will overwrite your old signup information.  If you do not want to register again, simply close the browser tab.');
+                        </script>
+                    </apex:outputPanel>
                     <apex:outputPanel rendered="{!(c.Type == 'Corporate volunteer event' && (c.Slots_Reserved__c == null || c.Slots_Reserved__c == 0)) || (c.Type != 'Corporate volunteer event' && c.Allow_Group_Signup__c == true)}"
                                       layout="none">
-                        <div class="row bcg">
-                            <div class="col-xs-12 WGPageTitle" color="SectionColor">
+                        <div class="row"><br/>
+                            <div class="col-xs-12 WGPageTitle2" color="SectionColor">
                                 Who are you signing up for?
                             </div>
                         </div>
 
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
-                                Signing up for:
+                                <apex:outputText value=" "/>
                             </div>
                             <div class="col-xs-8">
                                 <apex:actionRegion >
@@ -377,7 +391,7 @@
 
                                 <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Group'),true,false)}"
                                                   layout="none">
-                                    <div class="row bcg">
+                                    <div class="row bgprimary">
                                         <div class="col-xs-4 tdlabel">
                                             What is the name of your group?
                                         </div>
@@ -390,7 +404,7 @@
 
                                 <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Nr_in_Group'),true,false)}"
                                                   layout="none" id="OversubscriptionPanel">
-                                    <div class="row bcg">
+                                    <div class="row bgprimary">
                                         <div class="col-xs-4 tdlabel">
                                             How many individuals will be in your group (including yourself)?
                                         </div>
@@ -400,17 +414,17 @@
                                                              onchange="Oversubscribed()"/>
                                         </div>
                                     </div>
-                                    <div class="row bcg">
-                                        <div class="col-xs-12 tdlabel" color="orange">
-                                            All participants must read and sign the <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">waiver</a>. Group members must either sign the online <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">waiver</a> or bring a signed copy to the event.<br></br>
-                                        </div>
-                                    </div>
+                                    <!--      <div class="row bcb2">
+                                              <div class="col-xs-12 tdlabel" color="orange">
+                                                  All participants must read and sign the <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">waiver</a>. Group members must either sign the online <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">waiver</a> or bring a signed copy to the event.<br></br>
+                                              </div>
+                                          </div> -->
                                 </apex:outputPanel>
 
 
                                 <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Adults in group'),true,false)}"
                                                   layout="none">
-                                    <div class="row bcg">
+                                    <div class="row bgprimary">
                                         <div class="col-xs-4 tdlabel">
                                             How many participants will be over the age of 18?
                                         </div>
@@ -423,7 +437,7 @@
 
                                 <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Teammates'),true,false)}"
                                                   layout="none">
-                                    <div class="row bcg">
+                                    <div class="row bgprimary">
                                         <div class="col-xs-4 tdlabel">
                                             Please list full name of anyone you would like on your team, as well as ages
                                             of any children. <br/>
@@ -438,13 +452,13 @@
                         </apex:outputPanel>
                     </apex:outputPanel>
 
-                    <div class="row bcg"><br></br>
-                        <div class="col-xs-12 WGPageTitle" color="SectionColor">
-                            ABOUT YOU:
+                    <div class="row"><br/>
+                        <div class="col-xs-12 WGPageTitle2" color="SectionColor">
+                            About You:
                         </div>
                     </div>
 
-                    <div class="row bcg">
+                    <div class="row bgprimary">
                         <div class="col-xs-4 tdlabel">
                             How did you hear about this activity?
                         </div>
@@ -458,7 +472,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Availability'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 When will you be available for this work? What days of the week? Morning or afternoon?
                                 What periods will you be unavailable?
@@ -471,7 +485,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Carpool'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Car pooling
                             </div>
@@ -483,7 +497,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Pref_Location'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Tell us if you have any sampling location or activity preferences.e.g. preferred sites,
                                 no storm sampling, etc.
@@ -496,7 +510,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Special_Needs'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Check here if you prefer not to be on brambly or uneven ground.
                             </div>
@@ -508,7 +522,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Waders'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Will you need to borrow waders?
                             </div>
@@ -519,7 +533,7 @@
                     </apex:outputPanel>
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Boat'),true,false)}" layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Do you have a canoe, kayak, or other boat that you can use? If so, what is it and do you
                                 have room for others?
@@ -532,7 +546,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Shirt_Size'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Your shirt size
                             </div>
@@ -547,7 +561,7 @@
 
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Dietary_Restrictions'),true,false)}"
                                       layout="none">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 Your dietary restrictions
                             </div>
@@ -558,7 +572,7 @@
                     </apex:outputPanel>
 
                     <apex:outputPanel layout="none" rendered="{!c.Custom_Signup_Question__c != null}">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 {!c.Custom_Signup_Question__c} </div>
                             <div class="col-xs-8">
@@ -569,7 +583,7 @@
                     </apex:outputPanel>
 
                     <apex:outputPanel layout="none" rendered="{!c.Custom_Signup_Question_2__c != null}">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 {!c.Custom_Signup_Question_2__c} </div>
                             <div class="col-xs-8">
@@ -580,7 +594,7 @@
                     </apex:outputPanel>
 
                     <apex:repeat value="{!cofs}" var="cof">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 {!cof.Label} </div>
                             <div class="col-xs-8">
@@ -607,7 +621,7 @@
                     </apex:repeat>
 
                     <apex:repeat value="{!cmfs}" var="cmf">
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-xs-4 tdlabel">
                                 {!cmf.Label}
                             </div>
@@ -634,68 +648,60 @@
                         </div>
                     </apex:repeat>
 
-                    <div class="row bcg">
+                    <div class="row bgprimary">
                         <div class="col-xs-4 tdlabel">
-                            QUESTIONS, COMMENTS, CONCERNS
+                            Questions, Comments, Concerns:
                         </div>
                         <div class="col-xs-8">
                             <apex:inputField value="{!cm.Questions_or_Comments__c}" style="width:350px"/>
                         </div>
                     </div>
-
+                    <br/>
                     <apex:outputPanel rendered="{!IF(CONTAINS(c.Signup_Questions__c,'Require Emergency Contact Info'),true,false)}">
-                        <div class="row bcg">
-                            <div class="col-xs-12 WGPageTitle" color="SectionColor">
+                        <div class="row bcprimary-mid">
+                            <div class="col-xs-12 WGPageTitle2" color="SectionColor">
                                 Emergency Contact (Required)
                             </div>
                         </div>
 
-                        <div class="row bcg">
+                        <div class="row bgprimary">
                             <div class="col-md-6"><!--First column of output fields-->
                                 <div class="row"><!--First row of output fields-->
                                     <div class="col-xs-4 tdlabel">
                                         name:
                                     </div>
-                                    <div class="col-xs-8 tdlabel alignleft">
-                                        <apex:inputField value="{!cm.Emergency_Contact_Name__c}"/>
+                                    <div class="col-xs-8 tdlabel alignleft cw">
+                                        <apex:inputField value="{!cm.Emergency_Contact_Name__c}" required="true"/>
                                     </div>
                                 </div>
                             </div>
 
                             <div class="col-md-6">
-                                <div class="row bcg">
+                                <div class="row bgprimary">
                                     <div class="col-xs-4 tdlabel">
                                         phone:
                                     </div>
-                                    <div class="col-xs-8 tdlabel alignleft">
-                                        <apex:inputField value="{!cm.Emergency_Contact_Phone__c}"/>
+                                    <div class="col-xs-8 tdlabel alignleft cw">
+                                        <apex:inputField value="{!cm.Emergency_Contact_Phone__c}" required="true"/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </apex:outputPanel>
                     <apex:actionRegion id="WaiverActionRegion">
-                        <apex:outputPanel layout="none" rendered="{!c.Waiver__c != null&&c.Waiver_Required__c==true}">
-                            <div class="row bcg"><br></br>
-                                <div class="col-xs-12 WGPageTitle" color="AlertColor">
-                                    Liability Waiver
-                                </div>
-                            </div>
-                            <div class="row bcr">
-                                <div class="col-xs-12 legaldoc" color="AlertColor">
-                                    Please read our liability waiver below and indicate that you accept it.<br/>
-                                    By checking the box below, you are digitally signing the  <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">waiver</a>.
+                        <apex:outputPanel layout="none" rendered="{!WaiverRequired}">
+                            <div class="row bc"><br></br>
+                                <div class="col-xs-12 WGAlertTitle" >
+                                    Liability Waiver (Required)
                                 </div>
                             </div>
 
-
-                            <div class="row legaldoc bcr box-centerside" color="red">
+                            <div class="row legaldoc bcr box-centerside bcalert">
                                 <apex:outputText style="height:800px" value="{!c.Waiver__r.Body__c}" escape="false"/>
                             </div>
 
-
                             <apex:outputPanel id="AcceptDeclineWaiverRegion">
-                                <div class="row bcg">
+                                <div class="row bcalert">
                                     <div class="col-xs-6 tdlabel">
                                         I agree to the terms and conditions above
                                     </div>
@@ -717,7 +723,7 @@
                                     </div>
 
                                 </div>
-                                <div class="row bcg">
+                                <div class="row bcalert">
                                     <div class="col-xs-6 tdlabel"> I decline the terms and conditions above.
                                     </div>
                                     <div class="col-xs-6 checkboxlarger">
@@ -736,7 +742,7 @@
                                     </div>
                                 </div>
 
-                                <div class="row bcg">
+                                <div class="row bcalert">
                                     <div class="col-xs-6 tdlabel">
                                         I am 18 years of age or older.
                                     </div>
@@ -744,12 +750,15 @@
                                         <apex:inputCheckbox value="{!coc.Over18}"
                                                             styleClass="checkbox"/>
                                     </div>
-                                    <div class="row bcg" color="orange">
-                                        <div class="col-xs-12 tdlabel" color="orange">
-                                            Participants under the age of 18 must bring a paper copy of the <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">Waiver</a> signed by a parent
-                                            or guardian.
-                                        </div>
-                                    </div>
+                                    <apex:outputPanel rendered="{!c.Under_18_Parental_Waiver__c}">
+                                        <br/>
+                                    <div class="row bcb2">
+                                           <div class="col-xs-12 tdlabel" color="orange">
+                                               Participants under the age of 18 must bring a paper copy of the <a href="https://www.milwaukeeriverkeeper.org/wp-content/uploads/2019/01/SCWaiver_2019.pdf" target="_blank">Waiver</a> signed by a parent
+                                               or guardian.
+                                           </div>
+                                       </div>
+                            </apex:outputPanel>
 
 
                                 </div>
@@ -777,12 +786,15 @@
                     </apex:outputPanel>
 
                     <div class="buttons btn-lg" color="blue">
-                        <div class="buttons btn-lg col-xs-1 tar">
+                        <div class="buttons btn-lg  col-md-2 col-xs-4 tar">
                             <input type="button" class="btn"
                                    onclick="window.location='{!$Site.Prefix}/apex/volunteerEventRegisterPageBootstrap?{!query}&step=1'"
                                    value="BACK"/>
                         </div>
-                        <div class="buttons btn-lg col-xs-1">
+                        <div class="col-xs-1">
+                            <apex:outputText value=" "/>
+                        </div>
+                        <div class="buttons btn-lg  col-md-2 col-xs-4">
                             <apex:commandButton action="{!signUp}" value="SUBMIT"/>
                         </div>
                     </div>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <HomePageComponent xmlns="http://soap.sforce.com/2006/04/metadata">
-    <body>&lt;img align=&quot;left&quot; style=&quot;width: 179px; height: 52px;&quot; alt=&quot;&quot; src=&quot;/servlet/servlet.FileDownload?file=Logos/WaterGrass_logo.jpg&quot; border=&quot;0&quot;&gt;&lt;/img&gt;</body>
+    <body>&lt;img align=&quot;left&quot; style=&quot;width: 179px; height: 52px;&quot; alt=&quot;&quot; src=&quot;/servlet/servlet.FileDownload?file=Logos/WaterGrass_Logo.jpg&quot; border=&quot;0&quot;&gt;&lt;/img&gt;</body>
     <pageComponentType>imageOrNote</pageComponentType>
 </HomePageComponent>

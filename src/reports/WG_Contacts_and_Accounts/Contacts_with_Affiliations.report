@@ -22,7 +22,7 @@
         <field>Affiliation__c.Start_Date__c</field>
     </columns>
     <columns>
-        <field>Affiliation__c.End_date__c</field>
+        <field>Affiliation__c.End_Date__c</field>
     </columns>
     <columns>
         <field>FK_CNTC_PHONE1</field>

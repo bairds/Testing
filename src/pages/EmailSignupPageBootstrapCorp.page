@@ -1,0 +1,137 @@
+<!--
+ - Created by Baird on 1/29/2020.
+ - This version is for our corporate use; it asks if people want a trial database.
+ -->
+
+<apex:page id="EmailSignupPageBootstrapCorp" standardController="Contact" extensions="Email_Signup_Controller" showHeader="false"
+               standardStylesheets="false">
+        <apex:stylesheet value="{!$Resource.wg_styles}"/>
+        <apex:stylesheet value="{!$Resource.WaterGrassCSS}"/>
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+        <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"/>
+
+        <header>
+            <style>.titlebar {
+                    text-align: center;
+                    height: 80px;
+                    background-color: #406B8C;
+                    color: #fff;
+                    font-weight: bold;
+                    border-radius: 1.5rem;
+                }
+
+                .form-content {
+                    padding: 0%;
+                    border: 0px solid #406B8C;
+                    margin-bottom: 0%;
+                    background-color: ghostwhite;
+                }
+
+                .form-control {
+                    border: 2px solid #406B8C;
+                    border-radius: .5rem;
+                    width: 90%;
+                }
+
+                .btnSubmit {
+                    border: none;
+                    border-radius: 1.5rem;
+                    padding: 1%;
+                    width: 20%;
+                    cursor: pointer;
+                    background: #2C6636;
+                    color: #fff;
+                }
+                .WGPageTitle{
+                    padding-top: 0px;
+                }
+            </style>
+
+        </header>
+
+        <body bgcolor="#dce9f7">
+
+        <apex:outputpanel id="pContactInfo">
+            <apex:messages style="color: #red;"/>
+
+            <apex:form >
+                <apex:outputPanel html-class="container register-form">
+                    <apex:outputPanel rendered="{!NOT(ThanksPage)}">
+                        <div class="form">
+                            <div rendered="{!CampaignExists}">
+                                <div class="note WGPageTitle">
+                                    <p>{!Camp.Description_Long__c}</p>
+                                </div>
+                            </div>
+
+                            <div class="form-content">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputField value="{!contact.FirstName}" styleclass="form-control"
+                                                             html-placeholder="First Name" required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputField value="{!contact.LastName}" styleclass="form-control"
+                                                             html-placeholder="Last Name" required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputText value="{!contact.MailingPostalCode}" styleclass="form-control"
+                                                            html-placeholder="Your Zip Code" required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputField value="{!contact.Email}" styleclass="form-control"
+                                                             html-placeholder="Your Email" required="true"/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputText value="{!Orgname}" styleclass="form-control"
+                                                            html-placeholder="Your Organization" required="true"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <apex:inputCheckbox id="SetUpTrial" value="{!SetUpTrial}"/>
+                                        Please create a trial for me and send me the login information.
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <apex:inputField value="{!contact.Description}"
+                                                             html-placeholder="Your Requests, Comments or Questions"
+                                                             styleclass="form-control" style="width: 480px; height: 100px"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <apex:commandButton action="{!submit}" value="Submit" styleclass="btnSubmit"/>
+                                </div>
+                            </div>
+                        </div>
+                    </apex:outputPanel>
+                </apex:outputPanel>
+
+                <apex:outputPanel rendered="{!ThanksPage}">
+                    <div class="form container register-form">
+                        <div class="note WGPageTitle" html-style="width: 60%">
+                            <p>Thanks for signing up.<br/>We'll be in touch shortly.</p>
+                        </div>
+                    </div>
+                </apex:outputPanel>
+
+            </apex:form>
+        </apex:outputpanel>
+
+        </body>
+
+    </apex:page>

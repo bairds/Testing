@@ -40,8 +40,9 @@ public static testMethod void Volunteer_Event_Test() {
     Testcampaign.Capacity__c = 2;
     Testcampaign.Event_Date_Time__c = Datetime.newInstance(2050, 12, 1, 12, 30, 2);
     Testcampaign.Description = 'description';
+    Testcampaign.isActive = true;
     Testcampaign.Event_Cost__c = 20.00;
-    Testcampaign.Waiver_Required__c = true;
+    //Testcampaign.Waiver_Required__c = true;
     Testcampaign.Waiver__c = waivertext.Id;
     Testcampaign.RecordTypeId = [select Id from RecordType where Name = 'Volunteer Event'].Id;
     insert Testcampaign;        
@@ -436,6 +437,7 @@ Campaign Testcampaign2 = new Campaign(Name = 'Testcampaign2',
     Event_Date_Time__c = Datetime.newInstance(2050, 12, 1, 12, 30, 2),
     Description = 'description',
     Event_Cost__c = 20.00,
+        isActive = true,
     Waiver_Required__c = true,
     RecordTypeId = [select Id from RecordType where Name = 'Volunteer Event'].Id,
     Master_Campaign__c = mastercamp.Id);

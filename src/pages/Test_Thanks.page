@@ -1,5 +1,7 @@
 <apex:page standardController="Contact" extensions="AddPicklistValue">
   <!-- Begin Default Content REMOVE THIS -->
+
   <h1>Please enter</h1>
+  <script type="text/javascript" src="https://www.iatspayments.com/AURA/AURA.aspx?PID=PAF64CA6D49DABA574"></script>
   <!-- End Default Content REMOVE THIS -->
 </apex:page>

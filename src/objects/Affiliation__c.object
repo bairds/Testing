@@ -5,7 +5,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>CancelEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>CancelEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -13,7 +33,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -21,7 +61,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -29,7 +89,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>SaveEdit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>SaveEdit</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
@@ -37,7 +117,27 @@
         <type>Default</type>
     </actionOverrides>
     <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <formFactor>Small</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
         <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Large</formFactor>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <formFactor>Small</formFactor>
         <type>Default</type>
     </actionOverrides>
     <allowInChatterGroups>false</allowInChatterGroups>
@@ -49,6 +149,7 @@
     <enableEnhancedLookup>true</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
+    <enableLicensing>false</enableLicensing>
     <enableReports>true</enableReports>
     <enableSearch>true</enableSearch>
     <enableSharing>true</enableSharing>
@@ -84,66 +185,82 @@
                 <value>
                     <fullName>Board Chair</fullName>
                     <default>false</default>
+                    <label>Board Chair</label>
                 </value>
                 <value>
                     <fullName>Board of Directors</fullName>
                     <default>false</default>
+                    <label>Board of Directors</label>
                 </value>
                 <value>
                     <fullName>Director</fullName>
                     <default>false</default>
+                    <label>Director</label>
                 </value>
                 <value>
                     <fullName>Staff</fullName>
                     <default>false</default>
+                    <label>Staff</label>
                 </value>
                 <value>
                     <fullName>Manager</fullName>
                     <default>false</default>
+                    <label>Manager</label>
                 </value>
                 <value>
                     <fullName>Owner</fullName>
                     <default>false</default>
+                    <label>Owner</label>
                 </value>
                 <value>
                     <fullName>Executive Officer</fullName>
                     <default>false</default>
+                    <label>Executive Officer</label>
                 </value>
                 <value>
                     <fullName>Spouse</fullName>
                     <default>false</default>
+                    <label>Spouse</label>
                 </value>
                 <value>
                     <fullName>Father</fullName>
                     <default>false</default>
+                    <label>Father</label>
                 </value>
                 <value>
                     <fullName>Mother</fullName>
                     <default>false</default>
+                    <label>Mother</label>
                 </value>
                 <value>
                     <fullName>Wife</fullName>
                     <default>false</default>
+                    <label>Wife</label>
                 </value>
                 <value>
                     <fullName>Husband</fullName>
                     <default>false</default>
+                    <label>Husband</label>
                 </value>
                 <value>
                     <fullName>Son</fullName>
                     <default>false</default>
+                    <label>Son</label>
                 </value>
                 <value>
                     <fullName>Daughter</fullName>
                     <default>false</default>
+                    <label>Daughter</label>
                 </value>
                 <value>
                     <fullName>Child</fullName>
                     <default>false</default>
+                    <label>Child</label>
                 </value>
                 <value>
                     <fullName>Friend</fullName>
                     <default>false</default>
+                    <label>Friend</label>
                 </value>
             </valueSetDefinition>
         </valueSet>
@@ -180,14 +297,14 @@
     <fields>
         <fullName>Current__c</fullName>
         <externalId>false</externalId>
-        <formula>IF( AND(Start_Date__c &lt;= TODAY(), TODAY() &lt;=  End_date__c) , TRUE, FALSE)</formula>
+        <formula>IF( AND(Start_Date__c &lt;= TODAY(), TODAY() &lt;=  End_Date__c) , TRUE, FALSE)</formula>
         <label>Current?</label>
         <trackHistory>false</trackHistory>
         <trackTrending>false</trackTrending>
         <type>Checkbox</type>
     </fields>
     <fields>
-        <fullName>End_date__c</fullName>
+        <fullName>End_Date__c</fullName>
         <description>Date the affiliation ended.  For instance, date that Helen was no longer on the Board.</description>
         <externalId>false</externalId>
         <inlineHelpText>Date the affiliation ended.  For instance, date that Helen was no longer on the Board.</inlineHelpText>
@@ -218,4 +335,5 @@
     <pluralLabel>Affiliations</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
+    <visibility>Public</visibility>
 </CustomObject>

@@ -1,0 +1,69 @@
+<!--
+ - Created by Baird on 8/7/2020.
+ -->
+
+<apex:page id="Invite_Vols_in_Interest_Campaign" showHeader="false" sidebar="false"
+           standardController="Campaign" extensions="inviteVolsInInterestCampaign">
+    <!--
+     - Created by  on 10/31/2018.
+     -->
+
+        <apex:form >
+            <apex:sectionHeader id="contactsList" title="{!numberMembers} members interested in volunteering for {!campaignName}"/>
+            <apex:dataTable value="{!CmpMmbrs}" var="cmx" cellPadding="10" border="0">
+                <apex:column width="100px" style="vertical-align: top;">
+                    <apex:actionRegion >
+                    <apex:facet name="header">Delete?</apex:facet>
+                    <apex:inputCheckbox value="{!cmx.ToDelete}">
+                        <apex:ActionSupport rerender="sendInvitationsButton"/>
+                    </apex:inputCheckbox>
+                    </apex:actionRegion>
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">First Name</apex:facet>
+                    {!cmx.cm.firstname}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Last Name</apex:facet>
+                    {!cmx.cm.lastname}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Account or Company</apex:facet>
+                    {!IF(cmx.cm.contactId==null, cmx.cm.lead.company, cmx.cm.contact.account.name)}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Email</apex:facet>
+                    {!cmx.cm.email}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Status</apex:facet>
+                    {!cmx.cm.status}
+                </apex:column>
+                <apex:column style="vertical-align: top;">
+                    <apex:facet name="header">Lead?</apex:facet>
+                    {!IF(cmx.cm.contactId==null, 'Lead', '')}
+                </apex:column>
+
+            </apex:dataTable>
+
+            <apex:commandButton action="{!deleteRefresh}" value="Delete checked persons from campaign." id="deleteRefreshButton" />
+            <apex:commandButton action="{!sendInvitationEmails}" value="Send invitations to the list." id="sendInvitationsButton"/>
+            <!--Would like to disable the sendInvitationsButton if none of the Delete checkboxes are checked.-->
+
+            <apex:outputPanel rendered="{!FinishedStatus=='All Done'}">
+                <br/><br/>
+                <table>
+                    <tr>
+                        <td width="100px">
+                            <apex:outputText value=" "/>
+                        </td>
+                        <td>
+                <h1>DONE.</h1>
+                <p>Please close this window.</p>
+                        </td>
+                    </tr>
+                </table>
+            </apex:outputPanel>
+
+        </apex:form>
+    </apex:page>

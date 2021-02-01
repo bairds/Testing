@@ -29,12 +29,11 @@
             console.log('Site.UrlPathPrefix is ' + sitio.UrlPathPrefix);
             console.log('Site.Name is ' + sitio.Name);
             console.log('Site.MasterLabel is ' + sitio.MasterLabel);
-            console.log('URL.getSalesforceBaseUrl is {!SalesforceBaseUrl}');
             console.log('$Site.Domain is '  + siteDomain);
             if (selectedvalue!='') {
                 var selectedSelectPage = jsPageMap[selectedvalue];
                 // alert('selected page is ' + selectedSelectPage.Name);
-                document.getElementById('ShowSelectCampaignURL').innerHTML = 'Signup page URL is ' + BaseURL + PathPrefix + selectedSelectPage.Name + '?mid={!MCampId};
+                document.getElementById('ShowSelectCampaignURL').innerHTML = 'Signup page URL is <a target="_blank" href="' + BaseURL + PathPrefix + selectedSelectPage.Name + '">' + BaseURL + PathPrefix + selectedSelectPage.Name + '?mid={!MCampId}</a>';
             }
         }
 

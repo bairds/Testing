@@ -22,12 +22,13 @@
         <field>Affiliation__c.Start_Date__c</field>
     </columns>
     <columns>
-        <field>Affiliation__c.End_date__c</field>
+        <field>Affiliation__c.End_Date__c</field>
     </columns>
     <description>All contacts with affiliation account = Board of Directors</description>
     <filter>
         <criteriaItems>
             <column>Affiliation__c.Account__c</column>
+            <columnToColumn>false</columnToColumn>
             <isUnlocked>false</isUnlocked>
             <operator>equals</operator>
             <value>Test Account</value>
@@ -45,7 +46,7 @@
     <showGrandTotal>false</showGrandTotal>
     <showSubTotals>false</showSubTotals>
     <timeFrameFilter>
-        <dateColumn>Affiliation__c.End_date__c</dateColumn>
+        <dateColumn>Affiliation__c.End_Date__c</dateColumn>
         <interval>INTERVAL_CUSTOM</interval>
     </timeFrameFilter>
 </Report>

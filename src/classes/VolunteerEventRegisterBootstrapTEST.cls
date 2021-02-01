@@ -2,23 +2,28 @@
  * Created by Baird on 2/8/2019.
  */
 
-@IsTest
+@isTest
 private class VolunteerEventRegisterBootstrapTEST {
 
-    @IsTest
-    public static void test() {
+    @istest
+    public static void NewLeadSignsUp() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         ctv.TestCampaign.Capacity__c = 3;
         ctv.TestCampaign.Event_End_Time__c = Datetime.NewInstance(2018, 12, 25, 8, 0, 0);
         ctv.TestCampaign.Waiver_Required__c = true;
+        Text_Document__c TD = ctv.fetchWaiver();
+        ctv.TestCampaign.Waiver__c = TD.Id;
         update ctv.TestCampaign;
+        Id TestLeadId;
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'TestMasterCamp');
-
+        // This time we are not specifying the master_campaign_id;
+        // The setMasterCAmpaign() method should run even without the master_campaign_Id;
         insert mc;
 
-        System.currentPageReference().getParameters().put('mid', mc.Id);
+        // System.currentPageReference().getParameters().put('mid', mc.Id);
         System.currentPageReference().getParameters().put('cid', ctv.TestCampaign.Id);
+        TestLeadId = ctv.TestLead.Id;
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
 
@@ -52,6 +57,7 @@ private class VolunteerEventRegisterBootstrapTEST {
         ve.updateSignee();
         ve.DeclineWaiver = true;
         ve.toggleAccept();
+        ve.coc.newsletter = true;
         system.assertEquals(true, ve.DeclineWaiver);
         system.assertEquals(false, ve.AcceptWaiver);
 
@@ -66,6 +72,9 @@ private class VolunteerEventRegisterBootstrapTEST {
         List<CampaignMember> testresult = [select id, Nr_in_Group__c from campaignmember where campaignid = :ve.c.id];
         system.assertEquals(1, testresult.size());
         system.assertEquals(1, testresult[0].Nr_in_Group__c, 'CM inserted without specifying Nr_in_Group__c and should have been set to 1.');
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        Lead ResultLead = [SELECT Mailing_Lists__c from Lead where id =: TestLeadId];
+        System.assertEquals(Setting.Online_signup_newsletter__c,ResultLead.Mailing_Lists__c,'Should have set mailing_lists to e-newsletter');
 
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         ve.setSignUp();
@@ -121,14 +130,20 @@ private class VolunteerEventRegisterBootstrapTEST {
     public static void signUpExistingContact() {
         Create_Test_Variables ctv = new Create_Test_Variables();
         Contact TestContact = ctv.fetchTestContact();
+        Campaign camp = ctv.fetchTestCampaign();
+        Camp.CompletionURL__c='https://google.com';
         system.debug('TestContact is ' + TestContact);
 
         Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
-
         insert mc;
+        camp.Master_Campaign__c = mc.Id;
+
+//        Text_Document__c TD = ctv.fetchWaiver();
+//        ctv.TestCampaign.Waiver__c = TD.Id;
+        update camp;
 
         System.currentPageReference().getParameters().put('mid', mc.Id);
-        System.currentPageReference().getParameters().put('cid', ctv.TestCampaign.Id);
+        System.currentPageReference().getParameters().put('cid', camp.Id);
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
         // System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
 
@@ -153,16 +168,23 @@ private class VolunteerEventRegisterBootstrapTEST {
 
         ve.coc.volunteerInterests.add('Education and Outreach');
         ve.coc.howHeard = 'Google';
+        ve.AcceptWaiver=true;
+
         system.debug('Contact Custom is now ' + ve.coc);
 
         List<CampaignMember> CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
 
-        ve.signUp();
+        PageReference CompletionURLRef = new PageReference('https://google.com');
+        // Run the signup() method.
+        // Does the ExitToCompletionURL method give the right URl?
+        PageReference TestPR = ve.Signup();
+        system.debug('Resulting PageReference is ' + TestPR);
+        //system.assertEquals(CompletionURLRef.getURL(),ve.signUp().getURL());
         CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
         system.debug('CampaignMembers are ' + CMs);
         system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
-
+        system.assertEquals(STRING.VALUEOF(CompletionURLRef.getURL()),ve.ExitToCompletionURL().getURL(), 'ExitToCompletionURL method not working');
     }
 
     @istest
@@ -214,6 +236,7 @@ private class VolunteerEventRegisterBootstrapTEST {
 
         ve.updateSignee();
 
+        ve.co = ctv.fetchTestContact();
         ve.signUp();
 
         System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
@@ -272,6 +295,75 @@ private class VolunteerEventRegisterBootstrapTEST {
 // Test that slots_reserved are being calculated correctly
         TestCampResults = [select id, Slots_Reserved__c from Campaign where id = :c.Id];
         system.assertEquals(2, TestCampResults[0].Slots_Reserved__c, 'Volunter signed up and did not change the count in number_in_group');
+    }
+
+    @istest
+    public static void DuplicateCampaignMember() {
+        Create_Test_Variables ctv = new Create_Test_Variables();
+        Contact TestContact = ctv.fetchTestContact();
+        Campaign camp = ctv.fetchTestCampaign();
+        Camp.CompletionURL__c='google.com';
+        system.debug('TestContact is ' + TestContact);
+
+        Master_Campaign__c mc = new Master_Campaign__c(Name = 'Test');
+        insert mc;
+        camp.Master_Campaign__c = mc.Id;
+
+//        Text_Document__c TD = ctv.fetchWaiver();
+//        ctv.TestCampaign.Waiver__c = TD.Id;
+        update camp;
+
+        System.currentPageReference().getParameters().put('mid', mc.Id);
+        System.currentPageReference().getParameters().put('cid', camp.Id);
+        System.currentPageReference().getParameters().put('coid', ctv.TestContact.Id);
+        // System.currentPageReference().getParameters().put('lid', ctv.TestLead.Id);
+
+        VolunteerEventRegisterBootstrap ve = new VolunteerEventRegisterBootstrap();
+
+        ve.setMasterCampaign();
+
+        ve.setSignUp();
+        system.debug('After setSignup, Contact Custom is ' + ve.coc);
+
+        ve.setSignee();
+
+        ve.coc.email = ctv.TestContact.Email;
+        ve.coc.lastName = ctv.TestContact.LastName;
+
+        ve.setSignee();
+        ve.coc.setVolunteerInterests();
+
+        ve.coc.volunteerInterests.add('Education and Outreach');
+        ve.coc.howHeard = 'Google';
+        ve.AcceptWaiver=true;
+
+        system.debug('Contact Custom is now ' + ve.coc);
+
+        List<CampaignMember> CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
+        system.debug('CampaignMembers are ' + CMs);
+
+        PageReference CompletionURLRef = new PageReference('http://google.com');
+        // Run the signup() method.
+        // Does the ExitToCompletionURL method give the right URl?
+        PageReference TestPR = ve.Signup();
+        system.debug('Resulting PageReference is ' + TestPR);
+        //system.assertEquals(CompletionURLRef.getURL(),ve.signUp().getURL());
+        CMs = [select id, contact.email, contactId, leadId, lead.email from CampaignMember where campaignId = :ve.c.Id];
+        system.debug('CampaignMembers are ' + CMs);
+        system.assertEquals(TestContact.Id, CMs[0].ContactId, 'The contact should now be a campaignMember.');
+
+        // SIGN THEM UP AGAIN
+
+        System.currentPageReference().getParameters().put('cid', camp.Id);
+        ve = new VolunteerEventRegisterBootstrap();
+        ve.setMasterCampaign();
+        ve.setSignup();
+        system.debug('TestContact is ' + TestContact);
+        ve.coc.email = TestContact.Email;
+        ve.coc.lastName = TestContact.LastName;
+        ve.setSignee();
+        system.assertEquals(true,ve.DuplicateCampMember,'After adding same contact to campaign twice, should have found the Duplicate');
+
     }
 
 }

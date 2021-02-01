@@ -49,6 +49,14 @@
                 <behavior>Edit</behavior>
                 <field>Nr_Contacts_In_Acct__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>First_Contrib_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>TestField__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>
@@ -79,10 +87,6 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Last_Contrib_Amount__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>Major_Donor_Now__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -237,7 +241,7 @@
         <fields>Contact__c</fields>
         <fields>Affiliation_Role__c</fields>
         <fields>Start_Date__c</fields>
-        <fields>End_date__c</fields>
+        <fields>End_Date__c</fields>
         <relatedList>Affiliation__c.Account__c</relatedList>
         <sortField>Start_Date__c</sortField>
         <sortOrder>Desc</sortOrder>

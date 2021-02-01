@@ -28,12 +28,32 @@
     <objectMapping>
         <inputObject>Lead</inputObject>
         <mappingFields>
+            <inputField>Communication_Preference__c</inputField>
+            <outputField>Communication_Preference__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Dear__c</inputField>
+            <outputField>Dear__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Do_Not__c</inputField>
+            <outputField>Do_Not__c</outputField>
+        </mappingFields>
+        <mappingFields>
             <inputField>ImportObjectSource__c</inputField>
             <outputField>ImportObjectSource__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Jurisdiction__c</inputField>
             <outputField>Jurisdiction__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Last_Email_Overwrite__c</inputField>
+            <outputField>Last_Email_Overwrite__c</outputField>
+        </mappingFields>
+        <mappingFields>
+            <inputField>Legacy_Emails__c</inputField>
+            <outputField>Legacy_Emails__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Legacy_Contact_ID__c</inputField>
@@ -46,10 +66,6 @@
         <mappingFields>
             <inputField>Original_LeadSource__c</inputField>
             <outputField>Original_LeadSource__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Other_emails__c</inputField>
-            <outputField>Other_emails__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Other_Email__c</inputField>
@@ -69,27 +85,11 @@
         </mappingFields>
         <mappingFields>
             <inputField>Volunteer_Interests__c</inputField>
-            <outputField>Volunteer_Interests__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Volunteer_Skills__c</inputField>
             <outputField>Volunteer_Skills__c</outputField>
         </mappingFields>
         <mappingFields>
             <inputField>Work_Email__c</inputField>
             <outputField>Work_Email__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Communication_Preference__c</inputField>
-            <outputField>Communication_Preference__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Dear__c</inputField>
-            <outputField>Dear__c</outputField>
-        </mappingFields>
-        <mappingFields>
-            <inputField>Do_Not__c</inputField>
-            <outputField>Do_Not__c</outputField>
         </mappingFields>
         <outputObject>Contact</outputObject>
     </objectMapping>

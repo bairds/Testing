@@ -1,43 +1,45 @@
-public without sharing class VolunteerEventRegisterBootstrap
-{
+public without sharing class VolunteerEventRegisterBootstrap {
     public List<Campaign> cs { get; set; }
     // public List<CampaignPlus> cps {get; set;}
     public Campaign c { get; set; }
     public CampaignCustom cc { get; set; }
     public CampaignMember cm { get; set; }
-    public datetime DateTimeStartAdjusted {get; set;}
-    public datetime DateTimeEndAdjusted {get; set;}
+    public datetime DateTimeStartAdjusted { get; set; }
+    public datetime DateTimeEndAdjusted { get; set; }
     public Contact co { get; set; }
     public ContactCustom coc { get; set; }
     public List<FieldSetCustom> cofs { get; set; }
     public List<FieldSetCustom> cmfs { get; set; }
     public Lead l { get; set; }
     public Opportunity o { get; set; }
-    public List<CampaignMember> checkCM {get; set;}
-    public boolean WaiverExists {get; set;}
-    public boolean AcceptWaiver {get; set;}
-    public boolean DeclineWaiver {get; set;}
-    public boolean LastAccepted {get;set;}
-    public boolean NoAvailableCampaigns {get; set;}
+    public List<CampaignMember> checkCM { get; set; }
+    public boolean WaiverRequired { get; set; }
+    public boolean AcceptWaiver { get; set; }
+    public boolean DeclineWaiver { get; set; }
+    public boolean LastAccepted { get; set; }
+    public boolean NoAvailableCampaigns { get; set; }
+    public boolean DuplicateCampMember { get; set; }
 
 
     public String step { get; set; } //step
     public String query { get; set; }
+    public String mid { get; set; }
 
     public String lo { get; set; } //logo
     public String title { get; set; }
     public String errors { get; set; }
-    public double tzoffset {get; set;}
-    public timezone tz {get; set;}
-    public url initialurl {get; set;}
+    public double tzoffset { get; set; }
+    public timezone tz { get; set; }
+    public url initialurl { get; set; }
 
-    public VolunteerEventRegisterBootstrap()
-    {
+    public VolunteerEventRegisterBootstrap() {
         this.query = '';
 
         this.step = System.currentPageReference().getParameters().get('step');
+        string DuplicateCampMemberStr = System.currentPageReference().getParameters().get('DuplicateCampMember');
+        if (DuplicateCampMemberStr=='true') DuplicateCampMember = true;
 
-        if(String.isBlank(this.step))
+        if (String.isBlank(this.step))
             this.step = '1';
 
         this.lo = 'OrgLogoLarge';
@@ -45,22 +47,22 @@ public without sharing class VolunteerEventRegisterBootstrap
         this.tzoffset = WGHelpers.getoffset();
     }
 
-    public void setMasterCampaign()
-    {
+    public void setMasterCampaign() {
         // cps = new List<CampaignPlus>();
-        String mid = System.currentPageReference().getParameters().get('mid');
+        mid = System.currentPageReference().getParameters().get('mid');
 
         String query = 'SELECT Id, Name, Description, Event_Date_Time__c, Event_End_Time__c, Event_Location__c, Recordtypeid, Event_Cost__c,  Slots_Remaining__c, Waiver_Required__c, ' +
-                'Slots_Reserved__c, Type, Master_Campaign__r.Name, (select id, Role__c from CampaignMembers) FROM Campaign ' +
+                'Slots_Reserved__c, Type, Master_Campaign__r.Name, Under_18_Parental_Waiver__c, (select id, Role__c from CampaignMembers) FROM Campaign ' +
                 'WHERE Event_Date_Time__c >= TODAY AND (recordtype.name = \'Public Event\' OR recordtype.name = \'Volunteer Event\') AND IsActive = true';
-        if (mid!=null) query += ' AND Master_Campaign__c = \'' + mid + '\'';
+        if (mid != null) query += ' AND Master_Campaign__c = \'' + mid + '\'';
         query += ' ORDER BY Event_Date_Time__c, Name';
+        system.debug('Query is ' + query);
 
         cs = Database.query(query);
 
         // Remove campaign from list if it's a Corporate volunteer event with a Group Leader
         system.debug('Before looping through Corporate Event CMs to remove Group Leader, cs is ' + cs);
-        for (integer i=0;i<cs.size();i++){
+        for (integer i = 0; i < cs.size(); i++) {
             if (cs[i].Type == 'Corporate volunteer event') {
                 for (CampaignMember campmmbr : cs[i].CampaignMembers) {
                     if (campmmbr.Role__c == 'Group leader') {
@@ -77,11 +79,10 @@ public without sharing class VolunteerEventRegisterBootstrap
             cps.add(new CampaignPlus(c));
         }
 */
-        if (cs.size()==0) NoAvailableCampaigns = true;
+        if (cs.size() == 0) NoAvailableCampaigns = true;
     }
 
-    public void setSignUp()
-    {
+    public void setSignUp() {
         String cid = System.currentPageReference().getParameters().get('cid');
         String coid = System.currentPageReference().getParameters().get('coid');
         String lid = System.currentPageReference().getParameters().get('lid');
@@ -95,51 +96,56 @@ public without sharing class VolunteerEventRegisterBootstrap
 
         this.cc.setSignUpScopeTypes();
 
-        if(String.isNotBlank(cid)) {
+        if (String.isNotBlank(cid)) {
             this.query += '&cid=' + cid;
 
-            this.c = [SELECT Id, Name, Description, Description_Long__c, Event_Cost__c, Event_Location__c, Event_Date_time__c, Event_End_Time__c, Logo__c, Waiver_Required__c, Slots_Remaining__c,
-                    Host__c, Waiver__c, Waiver__r.Body__c, Master_Campaign__c, Signup_Questions__c, Type, AllGroupMmbrsRegister__c, CompletionURL__c, Slots_Reserved__c,
-                    Custom_Signup_Question__c, Custom_Signup_Question_2__c, Allow_Group_Signup__c
-            FROM Campaign WHERE Id =: cid LIMIT 1];
+            this.c = [
+                    SELECT Id, Name, Description, Description_Long__c, Description_Rich__c, Event_Cost__c, Event_Location__c, Event_Date_time__c,
+                            Event_End_Time__c, Logo__c, Waiver_Required__c, Slots_Remaining__c,
+                            Host__c, Waiver__c, Waiver__r.Body__c, Master_Campaign__c, Signup_Questions__c,
+                            Type, AllGroupMmbrsRegister__c, CompletionURL__c, Slots_Reserved__c,
+                            Custom_Signup_Question__c, Custom_Signup_Question_2__c, Allow_Group_Signup__c, Under_18_Parental_Waiver__c,
+                            (SELECT Id, LeadId, ContactId from CampaignMembers)
+                    FROM Campaign
+                    WHERE Id = :cid
+                    LIMIT 1
+            ];
 
- /*           //Adjust the times for timezone and dst
-            CampaignPlus CP = new CampaignPlus(c);
-            DateTimeStartAdjusted = cp.datetimelocal;
-            DateTimeEndAdjusted = cp.datetimelocalend;
-*/
+            /*           //Adjust the times for timezone and dst
+                       CampaignPlus CP = new CampaignPlus(c);
+                       DateTimeStartAdjusted = cp.datetimelocal;
+                       DateTimeEndAdjusted = cp.datetimelocalend;
+           */
             title = 'Sign Up for ' + this.c.Name;
 
-            WaiverExists = (c.Waiver__c != null && c.Waiver__r.Body__c != null);
+            WaiverRequired = (c.Waiver__r.Body__c != null);
 
-            if(String.isNotEmpty(this.c.Logo__c))
+            if (String.isNotEmpty(this.c.Logo__c))
                 this.lo = this.c.Logo__c;
 
             this.cc.MasterCampaign = this.c.Master_Campaign__c;
             this.cc.sethowHeardAboutEvent();
             this.cc.setShirtSizes();
 
-            if(this.c.Type == 'Corporate volunteer event') {
-                this.checkCM = [SELECT Id, Group__c, Nr_Adults__c, Nr_in_Group__c FROM CampaignMember WHERE Campaignid =: this.c.Id AND Role__c = 'Group leader' LIMIT 1 ];
+            if (this.c.Type == 'Corporate volunteer event') {
+                this.checkCM = [SELECT Id, Group__c, Nr_Adults__c, Nr_in_Group__c FROM CampaignMember WHERE Campaignid = :this.c.Id AND Role__c = 'Group leader' LIMIT 1];
                 //BAIRD: THISIS TOO EARLY TO SET THE NR_IN_GROUP VALUE.
-                if(checkCM.size() > 0) {
+                if (checkCM.size() > 0) {
                     CampaignMember cml = checkCM[0];
                     this.cm.Role__c = 'Volunteer';
                     this.cm.Group__c = cml.Group__c;
                     this.title += ' with ' + this.cm.Group__c;
-                }
-                else {
+                } else {
                     this.cm.Role__c = 'Group leader';
                     this.o = new Opportunity();
                 }
-            }
-            else {
-                if(this.c.Slots_Remaining__c <= 0)
+            } else {
+                if (this.c.Slots_Remaining__c <= 0)
                     this.errors = 'This event is full. Please try a different one.';
             }
         }
 
-        if(String.isNotBlank(coid)) {
+        if (String.isNotBlank(coid)) {
             this.query += '&coid=' + coid;
             this.co = this.getContact(coid);
 
@@ -148,11 +154,10 @@ public without sharing class VolunteerEventRegisterBootstrap
             this.coc.email = this.co.Email;
             this.coc.zip = this.co.MailingPostalCode;
             this.coc.phone = this.co.Phone;
-        }
-        else {
+        } else {
             this.co = new Contact();
 
-            if(String.isNotBlank(lid)) {
+            if (String.isNotBlank(lid)) {
                 this.query += '&lid=' + lid;
                 this.l = this.getLead(lid);
 
@@ -162,7 +167,7 @@ public without sharing class VolunteerEventRegisterBootstrap
                 this.coc.zip = this.l.PostalCode;
                 this.coc.phone = this.l.Phone;
 
-                if((String.isBlank(this.l.Street) || String.isBlank(this.l.City) || String.isBlank(this.l.State) ||
+                if ((String.isBlank(this.l.Street) || String.isBlank(this.l.City) || String.isBlank(this.l.State) ||
                         String.isBlank(this.l.Volunteer_Interests__c) || String.isBlank(this.l.How_Heard__c)) && this.step == '3') {
                     this.step = '2';
                     this.coc.setVolunteerInterests();
@@ -171,21 +176,20 @@ public without sharing class VolunteerEventRegisterBootstrap
                     this.coc.city = this.l.City;
                     this.coc.state = this.l.State;
 
-                    if(String.isNotBlank(this.l.Volunteer_Interests__c))
+                    if (String.isNotBlank(this.l.Volunteer_Interests__c))
                         this.coc.volunteerInterests = this.l.Volunteer_Interests__c.split(';', 0);
 
-                    this.coc.howHeard =  this.l.How_Heard__c;
+                    this.coc.howHeard = this.l.How_Heard__c;
                 }
             }
         }
     }
 
-    private Contact getContact(String i)
-    {
+    private Contact getContact(String i) {
         //if (co != null){
-        String q =  'SELECT Id, FirstName, LastName, Email, Phone, MailingPostalCode';
+        String q = 'SELECT Id, FirstName, LastName, Email, Phone, Mailing_Lists__c, MailingPostalCode';
 
-        for(Schema.FieldSetMember f : SObjectType.Contact.FieldSets.volunteerEventRegister.getFields())
+        for (Schema.FieldSetMember f : SObjectType.Contact.FieldSets.volunteerEventRegister.getFields())
             q += ', ' + f.getFieldPath();
 
         q += ' FROM Contact WHERE Id = \'' + i + '\' LIMIT 1';
@@ -195,13 +199,12 @@ public without sharing class VolunteerEventRegisterBootstrap
         return co;
     }
 
-    private Lead getLead(String i)
-    {
-        return [SELECT Id, FirstName, LastName, Email, Phone, PostalCode, Street, City, State, Volunteer_Interests__c, How_Heard__c FROM Lead WHERE IsConverted=false AND Id =: i LIMIT 1];
+    private Lead getLead(String i) {
+        return [SELECT Id, FirstName, LastName, Email, Phone, PostalCode, Street, City, State, Mailing_Lists__c, Volunteer_Interests__c, How_Heard__c FROM Lead WHERE IsConverted = false AND Id = :i LIMIT 1];
     }
 
-    public PageReference setSignee()
-    {
+    public PageReference setSignee() {
+        PageReference url;
         String u = '/apex/volunteerEventRegisterPageBootstrap?cid=' + this.c.Id;
 
         this.co.FirstName = this.coc.FirstName;
@@ -212,17 +215,16 @@ public without sharing class VolunteerEventRegisterBootstrap
 
         String [] r = identifyorcreatePerson.identifyorCreatePerson(this.co);
         System.debug('IdentifyOrCreatePerson brought back ' + r);
-        Id PersonId = (Id)r[0];
+        Id PersonId = (Id) r[0];
         system.debug('PersonId is ' + PersonId);
 
-        if(r[1] == 'Lead') {
+        if (r[1] == 'Lead') {
             this.l.Id = PersonId;
 
             u += '&lid=' + PersonId;
 
             update this.l;
-        }
-        else {
+        } else {
             this.co.Id = PersonId;
 
             u += '&coid=' + PersonId;
@@ -231,31 +233,44 @@ public without sharing class VolunteerEventRegisterBootstrap
             system.debug('Just updated contact ' + co);
         }
 
-        PageReference url = new PageReference(u + '&step=3');
+        List<Id> CampMemberIds = new List<Id>();
+        For (Campaignmember cm : c.CampaignMembers) {
+            if (r[1] == 'Lead') {
+                CampMemberIds.add(cm.LeadId);
+            } else {
+                if (r[1] == 'Contact') CampMemberIds.add(cm.ContactId);
+            }
+        }
+        system.debug('CampMemberIds include ' + CampMemberIds);
+        If (CampMemberIds.CONTAINS(PersonId)) {
+            u += '&DuplicateCampMember=true';
+            DuplicateCampMember = true;
+        }
+        system.debug('DuplicateCampMember is ' + DuplicateCampMember);
+        url = new PageReference(u + '&step=3');
         url.setRedirect(true);
 
         return url;
     }
 
     // CHANGE THIS: NEEDS TO WORK FOR EITHER CONTACT OR LEAD
-    public PageReference updateSignee()
-    {
+    public PageReference updateSignee() {
         PageReference url = new PageReference('/apex/volunteerEventRegisterPageBootstrap?cid=' + this.c.Id + '&lid=' + this.l.Id + '&step=3');
         url.setRedirect(true);
 
-        if(this.coc.volunteerInterests.size() > 0)
+        if (this.coc.volunteerInterests.size() > 0)
             this.l.Volunteer_Interests__c = String.valueOf(this.coc.volunteerInterests).substringBetween('(', ')').replace(',', ';');
 
-        if(String.isNotBlank(this.coc.street))
+        if (String.isNotBlank(this.coc.street))
             this.l.Street = this.coc.street;
 
-        if(String.isNotBlank(this.coc.city))
+        if (String.isNotBlank(this.coc.city))
             this.l.City = this.coc.city;
 
-        if(String.isNotBlank(this.coc.state))
+        if (String.isNotBlank(this.coc.state))
             this.l.State = this.coc.state;
 
-        if(String.isNotBlank(this.coc.howHeard))
+        if (String.isNotBlank(this.coc.howHeard))
             this.l.How_Heard__c = this.coc.howHeard;
 
         update this.l;
@@ -263,11 +278,12 @@ public without sharing class VolunteerEventRegisterBootstrap
         return url;
     }
 
-    public PageReference signUp()
-    {
+    public PageReference signUp() {
         String u = '/apex/ConfirmVolunteerEventRegistration?cid=' + this.c.Id;
         system.debug('Beginning signUp, AcceptWaiver is ' + AcceptWaiver + ' and DeclineWaiver is ' + DeclineWaiver);
-        if (c.Waiver_Required__c==true&&acceptWaiver!=true) {
+        system.debug('WaiverRequired is ' + WaiverRequired);
+        WGSettings__mdt Setting = WGHelpers.getWGSettings();
+        if (WaiverRequired == true && acceptWaiver != true) {
 
             PageReference url;
             this.errors = 'You must accept the waiver in order to sign up for this event.';
@@ -278,27 +294,25 @@ public without sharing class VolunteerEventRegisterBootstrap
             if (this.errors == 'You must accept the waiver in order to sign up for this event.') this.errors = null;
         }
 
-        for(FieldSetCustom fsc : this.cofs) {
-            if(fsc.Type != 'field') {
-                if(fsc.Type == 'MULTIPICKLIST') {
-                    if(fsc.Value.StrL.size() > 0)
-                        this.co.put(fsc.Name, String.valueOf(fsc.Value.StrL).substringBetween('(', ')').replace(',', ';'));
-                    else
+        for (FieldSetCustom fsc : this.cofs) {
+            if (fsc.Type != 'field') {
+                if (fsc.Type == 'MULTIPICKLIST') {
+                    if (fsc.Value.StrL.size() > 0)
+                        this.co.put(fsc.Name, String.valueOf(fsc.Value.StrL).substringBetween('(', ')').replace(',', ';')); else
                             this.co.put(fsc.Name, null);
-                }
-                else
+                } else
                         this.co.put(fsc.Name, fsc.Value.Str);
             }
         }
 
         this.cm.Status = 'Responded Yes';
         this.cm.Which_Waiver_Agreed__c = this.c.Waiver__c;
-        this.cm.Agreed_to_Waiver__c = AcceptWaiver==true? true: false;
+        this.cm.Agreed_to_Waiver__c = AcceptWaiver == true ? true : false;
         this.cm.Campaign_Member_Source__c = 'Web signup';
 
         System.debug('Campaign.Type is ' + c.Type + ' and cm.Role__c is ' + cm.Role__c + '.  Expected Corporate volunteer event.');
         if (c.Type == 'Corporate volunteer event') {
-            if (cm.Role__c=='Group leader') {
+            if (cm.Role__c == 'Group leader') {
                 if (this.cm.Comments__c == null) {
                     this.cm.Comments__c = 'Entered ' + this.cm.Nr_in_Group__c + ' for number in group';
                 } else {
@@ -307,31 +321,32 @@ public without sharing class VolunteerEventRegisterBootstrap
             }
             this.cm.Nr_in_Group__c = 1;
         } else {
-            if (this.cm.Nr_in_Group__c==null) this.cm.Nr_in_Group__c=1;
+            if (this.cm.Nr_in_Group__c == null) this.cm.Nr_in_Group__c = 1;
         }
 
-        for(FieldSetCustom fsc : this.cmfs) {
-            if(fsc.Type != 'field') {
-                if(fsc.Type == 'MULTIPICKLIST') {
-                    if(fsc.Value.StrL.size() > 0)
-                        this.cm.put(fsc.Name, String.valueOf(fsc.Value.StrL).substringBetween('(', ')').replace(',', ';'));
-                    else
+        for (FieldSetCustom fsc : this.cmfs) {
+            if (fsc.Type != 'field') {
+                if (fsc.Type == 'MULTIPICKLIST') {
+                    if (fsc.Value.StrL.size() > 0)
+                        this.cm.put(fsc.Name, String.valueOf(fsc.Value.StrL).substringBetween('(', ')').replace(',', ';')); else
                             this.cm.put(fsc.Name, null);
-                }
-                else
+                } else
                         this.cm.put(fsc.Name, fsc.Value.Str);
             }
         }
 
         List<CampaignMember> cmCheck;
 
-        if(this.l.Id != null) {
+        if (this.l.Id != null) {
             this.cm.LeadId = this.l.Id;
 
-            if(this.coc.Newsletter)
-                this.l.HasOptedOutOfEmail = false;
-            else
-                    this.l.HasOptedOutOfEmail = true;
+            if (this.coc.Newsletter) {
+                if (l.Mailing_Lists__c == null) {
+                    l.Mailing_Lists__c = Setting.Online_signup_newsletter__c;
+                } else {
+                    l.Mailing_Lists__c += ', ' + Setting.Online_signup_newsletter__c;
+                }
+            }
 
             Set<String> lf = SObjectType.Lead.fields.getMap().keySet();
 
@@ -339,29 +354,31 @@ public without sharing class VolunteerEventRegisterBootstrap
 
             String n;
 
-            for(FieldSetMember f : fs) {
+            for (FieldSetMember f : fs) {
                 n = f.getFieldPath();
 
-                if(lf.contains(n.toLowerCase()))
+                if (lf.contains(n.toLowerCase()))
                     this.l.put(n, this.co.get(n));
             }
 
             update this.l;
 
-            cmCheck= [SELECT Id FROM CampaignMember WHERE LeadId =: this.l.Id AND CampaignId =: this.c.Id];
-        }
-        else {
+            cmCheck = [SELECT Id FROM CampaignMember WHERE LeadId = :this.l.Id AND CampaignId = :this.c.Id];
+        } else {
             system.debug('cm is ' + cm + ' co is ' + co);
             this.cm.ContactId = this.co.Id;
 
-            if(this.coc.Newsletter)
-                this.co.HasOptedOutOfEmail = false;
-            else
-                    this.co.HasOptedOutOfEmail = true;
+            if (this.coc.Newsletter) {
+                if (co.Mailing_Lists__c == null) {
+                    co.Mailing_Lists__c = Setting.Online_signup_newsletter__c;
+                } else {
+                    co.Mailing_Lists__c += ', ' + Setting.Online_signup_newsletter__c;
+                }
 
+            }
             update this.co;
 
-            cmCheck= [SELECT Id FROM CampaignMember WHERE ContactId =: this.co.Id AND CampaignId =: this.c.Id];
+            cmCheck = [SELECT Id FROM CampaignMember WHERE ContactId = :this.co.Id AND CampaignId = :this.c.Id];
         }
 
 
@@ -374,6 +391,7 @@ public without sharing class VolunteerEventRegisterBootstrap
             this.o.StageName = 'Unpaid';
             this.o.CloseDate = Date.today();
             this.o.RecordTypeId = rt.Id;
+            this.o.Contact__c = co.Id;
             insert this.o;
 
             //STORE NR_IN_GROUP IN COMMENTS FIELD AND SET NR_IN_GROUP TO 1 ONLY FOR FIRST SIGNUP IN A CORPORATE VOLUNTEER EVENT
@@ -381,34 +399,33 @@ public without sharing class VolunteerEventRegisterBootstrap
         }
 
 
-        if(cmCheck.size() == 0) {
+        if (cmCheck.size() == 0) {
             this.cm.CampaignId = this.c.Id;
             insert this.cm;
             system.debug('At insertion this.cm is ' + this.cm);
-        }
-        else {
+        } else {
             this.cm.Id = cmCheck[0].Id;
 
             update this.cm;
         }
 
         step = '4';
-        return null;
+        return ExitToCompletionURL();
     }
 
 
     public PageReference toggleAccept() {
         system.debug('toggleAccept begun, AcceptWaiveris ' + AcceptWaiver + ' and DeclineWaiver is ' + DeclineWaiver);
-        if (AcceptWaiver==true && LastAccepted!=true) {
-            DeclineWaiver=false;
-            LastAccepted=true;
+        if (AcceptWaiver == true && LastAccepted != true) {
+            DeclineWaiver = false;
+            LastAccepted = true;
         } else {
-            if (DeclineWaiver==true){
-                AcceptWaiver=false;
-                LastAccepted=false;
+            if (DeclineWaiver == true) {
+                AcceptWaiver = false;
+                LastAccepted = false;
             } else {
-                AcceptWaiver=false;
-                DeclineWaiver=true;
+                AcceptWaiver = false;
+                DeclineWaiver = true;
             }
         }
         system.debug('toggleAccept ended, AcceptWaiveris ' + AcceptWaiver + ' and DeclineWaiver is ' + DeclineWaiver);
@@ -417,8 +434,10 @@ public without sharing class VolunteerEventRegisterBootstrap
 
     public PageReference ExitToCompletionURL() {
         string u = null;
-        if(String.isNotBlank(this.c.CompletionURL__c)) {
-            u = 'http://' + this.c.CompletionURL__c.replace('http://', '');
+        if(String.isNotBlank(c.CompletionURL__c)) {
+            u = 'https://' + c.CompletionURL__c.replace('https://', '');
+        } else {
+            return null;
         }
 
         PageReference url = new PageReference(u);

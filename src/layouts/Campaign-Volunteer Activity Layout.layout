@@ -2,6 +2,7 @@
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <customButtons>List_Campaign_Members</customButtons>
     <customButtons>Process_Participant_List</customButtons>
+    <customButtons>Invite_Interested_Volunteers</customButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>true</customLabel>
@@ -68,6 +69,14 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Register_Template__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>FollowOnEvent__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Under_18_Parental_Waiver__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -155,6 +164,10 @@
                 <behavior>Edit</behavior>
                 <field>Description_Long__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Description_Rich__c</field>
+            </layoutItems>
         </layoutColumns>
         <style>OneColumn</style>
     </layoutSections>
@@ -238,6 +251,7 @@
         <fields>Role__c</fields>
         <fields>EMAIL</fields>
         <fields>Agreed_to_Waiver__c</fields>
+        <fields>Processed__c</fields>
         <relatedList>RelatedCampaignMemberList</relatedList>
         <sortField>LAST_NAME</sortField>
         <sortOrder>Asc</sortOrder>
@@ -257,6 +271,12 @@
     <relatedLists>
         <fields>NAME</fields>
         <relatedList>VFE__c.Campaign__c</relatedList>
+    </relatedLists>
+    <relatedLists>
+        <fields>CAMPAIGN.NAME</fields>
+        <fields>CAMPAIGN.STATUS</fields>
+        <fields>CAMPAIGN.START_DATE</fields>
+        <relatedList>Campaign.FollowOnEvent__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>false</showHighlightsPanel>

@@ -12,15 +12,15 @@
     <tabs>standard-Opportunity</tabs>
     <tabs>standard-Campaign</tabs>
     <tabs>Master_Campaign__c</tabs>
+    <tabs>standard-Case</tabs>
     <tabs>standard-Document</tabs>
     <tabs>standard-report</tabs>
     <tabs>standard-Lead</tabs>
-    <tabs>CnP_PaaS_Bridge__CnPData__c</tabs>
     <tabs>WaterGrass_Help</tabs>
     <tabs>Text_Document__c</tabs>
     <tabs>ImportObject__c</tabs>
-    <tabs>DataImport</tabs>
-    <tabs>Data_Import_Batch__c</tabs>
     <tabs>Process_Import_Records</tabs>
-    <tabs>WG_Error_Log__c</tabs>
+    <tabs>EACCLightningPage</tabs>
+    <tabs>GuestUserUpdate__c</tabs>
+    <tabs>CnPData__c</tabs>
 </CustomApplication>
